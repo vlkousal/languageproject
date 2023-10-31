@@ -1,11 +1,12 @@
-import {Component} from '@angular/core';
-import {hsk3, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "./constants";
+import { Component } from '@angular/core';
+import {hsk3, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
+
 @Component({
-  selector: 'app-root',
-  templateUrl: "./app.component.html",
-  styleUrls: ['./app.component.css'],
+  selector: 'app-vocabulary',
+  templateUrl: './vocabulary.component.html',
+  styleUrls: ['./vocabulary.component.css']
 })
-export class AppComponent {
+export class VocabularyComponent {
   title = 'homes';
   words = getRandom10();
   index: number = 0;
@@ -68,7 +69,7 @@ export class AppComponent {
 
 function getRandom10(){
   let used = new Set<number>;
-  let vocabulary = hsk3.split("\n");
+  let vocabulary = getVocabulary();
   let words = [];
   while(words.length != vocabulary.length){
     let index = Math.floor(Math.random() * vocabulary.length);
@@ -95,3 +96,7 @@ function getRandom10(){
   }
   return words;
 }
+function getVocabulary(){
+  return hsk3.split("\n");
+}
+

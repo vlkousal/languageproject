@@ -1,0 +1,34 @@
+body{
+  text-align: center;
+}
+.xd{
+  text-align: center;
+  font-size: 40px;
+}
+
+.end{
+  text-align: center;
+  font-size: 40px;
+}
+.buttons{
+  text-align: center;
+  font-size: 60px;
+  padding: 40px;
+}
+
+.buttons button{
+  width: 256px;
+  height: 128px;
+  margin-right: 20px;
+  font-size: 18px;
+}
+
+.hearts{
+  scale: 4;
+  padding-right: 5px;
+  display: inline-block;
+}
+
+.score{
+  font-size: 40px;
+}

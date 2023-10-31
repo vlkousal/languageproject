@@ -1,0 +1,26 @@
+<div class="xd" [hidden]="hidden">
+  <p>{{ index + 1 }}/{{ words.length }}</p>
+  <p class="score">{{ score }}</p>
+  <p>Streak: {{ streak }}</p>
+  <div class="hearts" *ngFor="let item of [].constructor(lives); let i = index">
+    <img src="../../assets/srdce.png" alt="Lives">
+  </div>
+</div>
+
+<button (click)="speak(current.question)">Play </button>
+<div class="buttons" [hidden]="hidden">
+  <p>{{ current.question }}</p>
+  <p>{{ current.phonetic }}</p>
+  <button (click)="checkAnswer(current.answer1)">{{ current.answer1 }}</button>
+  <button (click)="checkAnswer(current.answer2)">{{ current.answer2 }}</button>
+  <button (click)="checkAnswer(current.answer3)">{{ current.answer3 }}</button>
+</div>
+
+<div class="end" [hidden]="!hidden">
+  <h1>Final score: {{ score }}</h1>
+  <h3>{{correctAnswers}}/{{ words.length }} ({{ Math.floor(correctAnswers / (words.length / 100)) }}%)</h3>
+  <button (click)="restart()">Restart</button>
+  <div *ngFor="let word of wrong">
+    <p><button (click)="speak(word.question)">{{ word.question }}</button> - {{ word.correct }}</p>
+  </div>
+</div>
