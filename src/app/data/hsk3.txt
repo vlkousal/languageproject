@@ -1,17 +1,17 @@
 零;líng;zero
 一;yī;one
 二;èr;two
-三;sān three
+三;sān;three
 四;sì;four
 五;wǔ;five
-六;liù six
+六;liù;six
 七;qī;seven
 八;bā;eight
 九;jiǔ;nine
 十;shí;ten
 两;liǎng;two
 百;bǎi;hundred
-千;qiān; thousand
+千;qiān;thousand
 万;wàn;ten thousand
 第一;dì-yī;first
 半;bàn;half
@@ -28,7 +28,6 @@
 别人;biéren;other people
 这/这儿;zhè/zhèr;this/here
 那/那儿;nà/nàr;that/there
-
 哪/哪儿;nǎ/nǎr;which/where
 谁;shéi;who
 什么;shénme;what
@@ -37,7 +36,6 @@
 怎么;zěnme;how
 怎么样;zěnmeyàng;how about
 为什么;wèi shénme;why
-
 现在;xiànzài;now
 刚才;gāngcái;just now
 今天;jīntiān;today
@@ -72,14 +70,13 @@
 冬;dōng;winter
 节日;jiérì;festival
 生日;shēngrì;birthday
-
 人;rén;person
 男人;nánrén;man
 女人;nǚrén;woman
 名字;míngzì;name
 妈妈;māma;mom
 爸爸;bàba;dad
-丈夫;zhàngfuhusband
+丈夫;zhàngfu;husband
 妻子;qīzi;wife
 孩子;háizi;child
 儿子;érzi;son
@@ -193,7 +190,7 @@
 马;mǎ;horse
 熊猫;xióngmāo;panda
 鸟;niǎo;bird
-树;shùtree
+树;shù;tree
 天气;tiānqì;weather
 太阳;tàiyáng;sun
 月亮;yuèliang;moon
@@ -249,7 +246,7 @@
 教室;jiàoshì;classroom
 图书馆;túshūguǎn;library
 公司;gōngsī;company
-办公室 bàngōngshì;office
+办公室;bàngōngshì;office
 饭馆;fànguǎn;restaurant
 宾馆;bīngguǎn;hotel
 商店;shāngdiàn;shop
@@ -273,7 +270,7 @@
 前面;qiánmiàn;front
 后面;hòumiàn;back
 里;lǐ;inside
-外;wàioutside
+外;wài;outside
 东;dōng;east
 南;nán;south
 西;xī;west
@@ -299,7 +296,6 @@
 双;shuāng;pair
 段;duàn;span of time or distance
 刻;kè;quarter (time)
-
 做;zuò;to do
 是;shì;to be
 姓;xìng;to be surnamed
@@ -409,7 +405,7 @@
 同意;tóngyì;to agree
 解决;jiějué;to solve
 担心;dānxīn;to worry
-生气;shēngqìto get angry
+生气;shēngqì;to get angry
 欢迎;huānyíng;to welcome
 搬;bān;to move
 还;huán;to return (sth)

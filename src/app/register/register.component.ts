@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
-import {map, Observable, Subscription} from "rxjs";
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -9,18 +9,19 @@ import {map, Observable, Subscription} from "rxjs";
 })
 export class RegisterComponent {
   constructor(private http: HttpClient) { }
-
-  test: string = "xdd";
-  username: FormControl<string | null> = new FormControl("");
-  password: FormControl<string | null> = new FormControl("");
-  xd:any;
-  // @ts-ignore
-  d =  this.Django();
+  username = new FormControl("") as FormControl<string>;
+  password = new FormControl("") as FormControl<string>;
+  password_again = new FormControl("") as FormControl<string>;
+  isValid = false;
+  feedback = "Enter a username.";
 
   onRegister(){
-    const data =
-      {"username": this.username.getRawValue(),
-      "password": this.password.getRawValue()};
+    if(!this.isValid){
+      return;
+    }
+      const data =
+        {"username": this.username.getRawValue(),
+          "password": this.password.getRawValue()};
 
     fetch('http://localhost:8000/r/', {
       method: 'POST',
@@ -28,8 +29,15 @@ export class RegisterComponent {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
+    }).then(response => {
+      if(!response.ok){
+        this.feedback = "A user with this username already exists.";
+      }
+      if(response.ok){
+        window.location.href = '/'; // Změňte '/other-page' na vaši cílovou cestu
+      }
     })
-      .then(response => response.json())
+
   }
 
   Django(){
@@ -39,4 +47,48 @@ export class RegisterComponent {
     });
     return result;
   }
+
+  onInputChange(){
+    let username = this.username.getRawValue();
+    let password = this.password.getRawValue();
+    let password_again = this.password_again.getRawValue();
+
+    this.isValid = false;
+    if(username.length == 0){
+      this.feedback = "Enter a username.";
+      return;
+    }
+    if(username.length < 2){
+      this.feedback = "Your username is too short.";
+      return;
+    }
+    if(username.length > 16){
+      this.feedback = "Your username is too long.";
+      return;
+    }
+
+    if(password.length == 0){
+      this.feedback = "Enter a password.";
+      return;
+    }
+
+    if(password.length < 5){
+      this.feedback = "Your password is too short.";
+      return;
+    }
+
+    if(password.length == 0){
+      this.feedback = "Enter your password again.";
+      return;
+    }
+
+    if(password != password_again){
+      this.feedback = "Your passwords don't match.";
+      return;
+    }
+    this.feedback = "Perfect!";
+    this.isValid = true;
+  }
+
+  protected readonly oninput = oninput;
 }

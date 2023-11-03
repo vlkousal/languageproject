@@ -1,24 +1,65 @@
-<p>register works!</p>
-<p>{{ test }}</p>
-
+<div>
   <label for="username">Username:</label>
-  <input id="username" type="text" [formControl]="username" required>
-  <br>
+  <input (input)="onInputChange()" id="username" type="text" [formControl]="username" required>
   <label for="password">Password:</label>
-  <input id=password type="password" [formControl]="password" required>
-  <br>
+  <input (input)="onInputChange()" id=password type="password" [formControl]="password" required>
+  <label for="password">Password again:</label>
+  <input (input)="onInputChange()" id=password_again type="password" [formControl]="password_again" required>
   <button (click)="onRegister()">Register</button>
-
-
-<br>
-<p>Přezdívka je: {{ username.value }}</p>
-<p>Heslo je: {{ password.value }}</p>
-<p>{{ xd }}</p>
-<p>{{ d[0] }}</p>
+  <p>{{ feedback }}</p>
+</div>
 
 
 <style>
-  body{
-    background-color: aliceblue;
+  /* Styling the container div */
+  div {
+    width: 300px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Styling the labels */
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  /* Styling the input fields */
+  input[type="text"],
+  input[type="password"] {
+    width: calc(100% - 22px);
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  /* Styling the button */
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
+
+  /* Styling the feedback paragraph */
+  p {
+    margin-top: 10px;
+    font-style: italic;
+    color: #666;
   }
 </style>
