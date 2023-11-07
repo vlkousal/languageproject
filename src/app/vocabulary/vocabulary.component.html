@@ -22,7 +22,7 @@
   <h3>{{correctAnswers}}/{{ words.length }} ({{ Math.floor(correctAnswers / (words.length / 100)) }}%)</h3>
   <button (click)="restart()">Restart</button>
   <div *ngFor="let word of wrong">
-    <p><button (click)="speak(word.question)">{{ word.question }}</button> - {{ word.correct }}</p>
+    <p><button (click)="speak(word.question)">{{ word.question }}</button> ({{ word.phonetic }}) - {{ word.correct }}</p>
   </div>
 </div>
 
