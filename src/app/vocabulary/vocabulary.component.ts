@@ -18,12 +18,13 @@ export class VocabularyComponent {
   lives: number = 3;
   hidden: boolean = false;
   correctAnswers: number = 0;
-  
+  feedback: string = "";
+
   speak(text: string){
     let utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
+    // MAC - (zh-CN)
     utt.lang = "cmn";
     utt.text = text;
-    utt.volume = 0;
     window.speechSynthesis.speak(utt);
   }
 
@@ -49,8 +50,10 @@ export class VocabularyComponent {
     window.speechSynthesis.cancel();
     if(this.current.correct == answer){
       this.evalCorrect();
+      this.feedback = "Correct!";
     } else{
       this.evalWrong();
+      this.feedback = "The correct answer was " + this.current.correct;
     }
     this.index++;
     if(this.index == this.words.length) {

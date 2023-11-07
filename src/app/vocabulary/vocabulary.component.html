@@ -1,11 +1,12 @@
 <app-base></app-base>
 <div class="xd" [hidden]="hidden">
-  <p>{{ index + 1 }}/{{ words.length }}</p>
-  <p class="score">{{ score }}</p>
+  <p>{{ index + 1 }}/{{ words.length }}     Score: {{ score }}</p>
   <p>Streak: {{ streak }}</p>
   <div class="hearts" *ngFor="let item of [].constructor(lives); let i = index">
     <img src="../../assets/srdce.png" alt="Lives">
   </div>
+  <br><br>
+  <p style="font-size: 20px">{{ feedback }}</p>
 </div>
 
 <div class="buttons" [hidden]="hidden">
