@@ -6,9 +6,10 @@ import {hsk3, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
   templateUrl: './vocabulary.component.html',
   styleUrls: ['./vocabulary.component.css']
 })
+
 export class VocabularyComponent {
   title = 'homes';
-  words = getRandom10();
+  words: Word[] = getWords();
   index: number = 0;
   current: Word = this.words[this.index];
   wrong: Word[] = [];
@@ -17,7 +18,7 @@ export class VocabularyComponent {
   lives: number = 3;
   hidden: boolean = false;
   correctAnswers: number = 0;
-  debug = [];
+  
   speak(text: string){
     let utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
     utt.lang = "cmn";
@@ -25,23 +26,31 @@ export class VocabularyComponent {
     utt.volume = 0;
     window.speechSynthesis.speak(utt);
   }
+
+  evalCorrect(): void{
+    this.streak++;
+    if(this.streak % STREAK_FOR_HEALTH == 0 && this.lives < MAX_HEALTH){
+      this.lives++;
+    }
+    this.score += this.streak;
+    this.correctAnswers++;
+  }
+
+  evalWrong(): void{
+    this.streak = 0;
+    this.lives--;
+    this.wrong.push(this.current);
+    if(this.lives == 0){
+      this.hidden = true;
+      return;
+    }
+  }
   checkAnswer(answer: string): void{
     window.speechSynthesis.cancel();
     if(this.current.correct == answer){
-      this.streak++;
-      if(this.streak % STREAK_FOR_HEALTH == 0 && this.lives < MAX_HEALTH){
-        this.lives++;
-      }
-      this.score += this.streak;
-      this.correctAnswers++;
+      this.evalCorrect();
     } else{
-      this.streak = 0;
-      this.lives--;
-      this.wrong.push(this.current);
-      if(this.lives == 0){
-        this.hidden = true;
-        return;
-      }
+      this.evalWrong();
     }
     this.index++;
     if(this.index == this.words.length) {
@@ -51,6 +60,7 @@ export class VocabularyComponent {
     this.current = this.words[this.index];
     this.speak(this.current.question);
   }
+
   restart(): void{
     this.index = 0;
     this.score = 0;
@@ -58,7 +68,7 @@ export class VocabularyComponent {
     this.lives = 3;
     this.correctAnswers = 0;
     this.hidden = false;
-    this.words = getRandom10();
+    this.words = getWords();
     this.wrong = [];
     this.current = this.words[this.index];
     this.speak(this.current.question);
@@ -67,35 +77,43 @@ export class VocabularyComponent {
   protected readonly Math = Math;
 }
 
-function getRandom10(){
-  let used = new Set<number>;
-  let vocabulary = getVocabulary();
-  let words = [];
-  while(words.length != vocabulary.length){
-    let index = Math.floor(Math.random() * vocabulary.length);
-    if(!used.has(index)){
-      let answerIndexes: number[] = [];
-      while(answerIndexes.length != 3){
-        let answerIndex = Math.floor(Math.random() * vocabulary.length);
-        if(answerIndex != index && !answerIndexes.includes(answerIndex)){
-          answerIndexes.push(answerIndex);
-        }
-      }
-      let randomAnswer: number = Math.floor(Math.random() * 3);
-      answerIndexes[randomAnswer] = index;
-      let question = vocabulary[index].split(";")[0];
-      let phonetic: string = vocabulary[index].split(";")[1];
-      let correct: string = vocabulary[index].split(";")[2];
-      let answer1 = vocabulary[answerIndexes[0]].split(";")[2];
-      let answer2 = vocabulary[answerIndexes[1]].split(";")[2];
-      let answer3 = vocabulary[answerIndexes[2]].split(";")[2];
-      let word = new Word(question, phonetic, correct, answer1, answer2, answer3);
-      words.push(word);
-      used.add(index);
-    }
+function getIndex(blocked: number, ceil: number): number{
+  let index = Math.floor(Math.random() * ceil);
+  while(index == blocked){
+    index = Math.floor(Math.random() * ceil);
   }
+  return index;
+}
+
+function shuffleList(list: any[]) {
+  for (let i = list.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [list[i], list[j]] = [list[j], list[i]];
+  }
+  return list;
+}
+
+function getWords() : Word[]{
+  let vocabString = getVocabulary();
+  let words: Word[] = [];
+  for(let i = 0; i < vocabString.length; i++){
+    let correct: string = vocabString[i].split(";")[2];
+    let answers: string[] = [correct];
+    for(let j = 0; j < 2; j++){
+      let index = getIndex(i, vocabString.length);
+      let otherAnswer: string = vocabString[index].split(";")[2];
+      answers.push(otherAnswer);
+    }
+    answers = shuffleList(answers);
+    let question = vocabString[i].split(";")[0];
+    let phonetic: string = vocabString[i].split(";")[1];
+    let word = new Word(question, phonetic, correct, answers);
+    words.push(word);
+  }
+  words = shuffleList(words);
   return words;
 }
+
 function getVocabulary(){
   return hsk3.split("\n");
 }

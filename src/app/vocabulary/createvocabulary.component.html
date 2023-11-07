@@ -1,0 +1,58 @@
+<app-base></app-base>
+<body>
+<input type="file" (change)="onFileSelected($event)" />
+<br>
+<label for="delimiter">Delimiter:</label>
+<input (input)="onInputChange()" id=delimiter type="text" [formControl]="delimiter" required maxlength="1" size="1">
+<p>{{ feedback }} Valid words: {{ counter }}</p>
+<button (click)="onSend()">Send</button>
+<p>{{ debug }}</p>
+<div class="container">
+  <textarea (input)="onInputChange()" oninput="updateLineNumbers()" [(ngModel)]="content" type="text" class="input" [formControl]="vocab" id="textarea" required></textarea>
+
+  <div class="table-container">
+    <table border="1" id="table">
+      <tr>
+        <th>First language</th>
+        <th>Phonetic</th>
+        <th>Second language</th>
+      </tr>
+
+      <tr *ngFor="let word of words">
+        <td>{{ word.question }}</td>
+        <td>{{ word.phonetic }}</td>
+        <td>{{ word.correct }}</td>
+      </tr>
+      <!-- Další řádky podle potřeby -->
+    </table>
+  </div>
+</div>
+
+
+
+
+</body>
+
+<style>
+  .input{
+    width: 600px;
+    height: 400px;
+    padding: 10px; /* Pro vytvoření mezery od okrajů */
+  }
+
+  .container {
+    display: flex;
+  }
+
+  .container textarea {
+    flex: 1;
+    margin-right: 20px; /* Přizpůsobte podle potřeby */
+  }
+
+  .table-container {
+    height: 300px; /* Přizpůsobte výšku podle potřeby */
+    overflow: auto;
+  }
+
+
+</style>

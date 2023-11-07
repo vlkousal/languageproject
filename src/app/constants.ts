@@ -4,16 +4,12 @@ export class Word{
   question: string;
   phonetic: string;
   correct: string;
-  answer1: string;
-  answer2: string;
-  answer3: string;
-  constructor(question: string, phonetic: string, correct: string, answer1: string, answer2: string, answer3: string) {
+  answers: string[];
+  constructor(question: string, phonetic: string, correct: string, answers: string[]) {
     this.question = question;
     this.phonetic = phonetic
     this.correct = correct;
-    this.answer1 = answer1;
-    this.answer2 = answer2;
-    this.answer3 = answer3;
+    this.answers = answers;
   }
 }
 
@@ -21,17 +17,17 @@ export class Word{
 export const hsk3 = "零;líng;zero\n" +
   "一;yī;one\n" +
   "二;èr;two\n" +
-  "三;sān three\n" +
+  "三;sān;three\n" +
   "四;sì;four\n" +
   "五;wǔ;five\n" +
-  "六;liù six\n" +
+  "六;liù;six\n" +
   "七;qī;seven\n" +
   "八;bā;eight\n" +
   "九;jiǔ;nine\n" +
   "十;shí;ten\n" +
   "两;liǎng;two\n" +
   "百;bǎi;hundred\n" +
-  "千;qiān; thousand\n" +
+  "千;qiān;thousand\n" +
   "万;wàn;ten thousand\n" +
   "第一;dì-yī;first\n" +
   "半;bàn;half\n" +
@@ -48,7 +44,6 @@ export const hsk3 = "零;líng;zero\n" +
   "别人;biéren;other people\n" +
   "这/这儿;zhè/zhèr;this/here\n" +
   "那/那儿;nà/nàr;that/there\n" +
-  "\n" +
   "哪/哪儿;nǎ/nǎr;which/where\n" +
   "谁;shéi;who\n" +
   "什么;shénme;what\n" +
@@ -57,7 +52,6 @@ export const hsk3 = "零;líng;zero\n" +
   "怎么;zěnme;how\n" +
   "怎么样;zěnmeyàng;how about\n" +
   "为什么;wèi shénme;why\n" +
-  "\n" +
   "现在;xiànzài;now\n" +
   "刚才;gāngcái;just now\n" +
   "今天;jīntiān;today\n" +
@@ -92,14 +86,13 @@ export const hsk3 = "零;líng;zero\n" +
   "冬;dōng;winter\n" +
   "节日;jiérì;festival\n" +
   "生日;shēngrì;birthday\n" +
-  "\n" +
   "人;rén;person\n" +
   "男人;nánrén;man\n" +
   "女人;nǚrén;woman\n" +
   "名字;míngzì;name\n" +
   "妈妈;māma;mom\n" +
   "爸爸;bàba;dad\n" +
-  "丈夫;zhàngfuhusband\n" +
+  "丈夫;zhàngfu;husband\n" +
   "妻子;qīzi;wife\n" +
   "孩子;háizi;child\n" +
   "儿子;érzi;son\n" +
@@ -213,7 +206,7 @@ export const hsk3 = "零;líng;zero\n" +
   "马;mǎ;horse\n" +
   "熊猫;xióngmāo;panda\n" +
   "鸟;niǎo;bird\n" +
-  "树;shùtree\n" +
+  "树;shù;tree\n" +
   "天气;tiānqì;weather\n" +
   "太阳;tàiyáng;sun\n" +
   "月亮;yuèliang;moon\n" +
@@ -269,7 +262,7 @@ export const hsk3 = "零;líng;zero\n" +
   "教室;jiàoshì;classroom\n" +
   "图书馆;túshūguǎn;library\n" +
   "公司;gōngsī;company\n" +
-  "办公室 bàngōngshì;office\n" +
+  "办公室;bàngōngshì;office\n" +
   "饭馆;fànguǎn;restaurant\n" +
   "宾馆;bīngguǎn;hotel\n" +
   "商店;shāngdiàn;shop\n" +
@@ -293,7 +286,7 @@ export const hsk3 = "零;líng;zero\n" +
   "前面;qiánmiàn;front\n" +
   "后面;hòumiàn;back\n" +
   "里;lǐ;inside\n" +
-  "外;wàioutside\n" +
+  "外;wài;outside\n" +
   "东;dōng;east\n" +
   "南;nán;south\n" +
   "西;xī;west\n" +
@@ -319,7 +312,6 @@ export const hsk3 = "零;líng;zero\n" +
   "双;shuāng;pair\n" +
   "段;duàn;span of time or distance\n" +
   "刻;kè;quarter (time)\n" +
-  "\n" +
   "做;zuò;to do\n" +
   "是;shì;to be\n" +
   "姓;xìng;to be surnamed\n" +
@@ -429,7 +421,7 @@ export const hsk3 = "零;líng;zero\n" +
   "同意;tóngyì;to agree\n" +
   "解决;jiějué;to solve\n" +
   "担心;dānxīn;to worry\n" +
-  "生气;shēngqìto get angry\n" +
+  "生气;shēngqì;to get angry\n" +
   "欢迎;huānyíng;to welcome\n" +
   "搬;bān;to move\n" +
   "还;huán;to return (sth)\n" +

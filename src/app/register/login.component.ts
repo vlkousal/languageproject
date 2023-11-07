@@ -3,11 +3,11 @@ import {FormControl} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import { Router } from '@angular/router';
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
-export class RegisterComponent {
+export class LoginComponent {
   constructor(private http: HttpClient, private router: Router) { }
   username = new FormControl("") as FormControl<string>;
   password = new FormControl("") as FormControl<string>;
@@ -21,7 +21,7 @@ export class RegisterComponent {
     }
   }
 
-  onRegister(){
+  onLogin(){
     if(!this.isValid){
       return;
     }
@@ -30,7 +30,7 @@ export class RegisterComponent {
         {"username": this.username.getRawValue(),
           "password": this.password.getRawValue()};
 
-    fetch('http://localhost:8000/api/register/', {
+    fetch('http://localhost:8000/api/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,14 +38,16 @@ export class RegisterComponent {
       body: JSON.stringify(data),
     }).then(async response => {
       if (!response.ok) {
-        this.feedback = "A user with this username already exists.";
+        this.feedback = "Wrong credentials.";
       }
       if(response.ok){
         sessionStorage.setItem("sessionId", await response.text());
         window.location.href = '/';
       }
     })
+
   }
+
   onInputChange(){
     let username = this.username.getRawValue();
     let password = this.password.getRawValue();
@@ -57,40 +59,11 @@ export class RegisterComponent {
       return;
     }
 
-    if(!/^[a-zA-Z0-9&-.+_]+$/.test(username)){
-      this.feedback = "Your username is illegal.";
-      return;
-    }
-
-    if(username.length < 2){
-      this.feedback = "Your username is too short.";
-      return;
-    }
-    if(username.length > 16){
-      this.feedback = "Your username is too long.";
-      return;
-    }
-
     if(password.length == 0){
       this.feedback = "Enter a password.";
       return;
     }
-
-    if(password.length < 5){
-      this.feedback = "Your password is too short.";
-      return;
-    }
-
-    if(password.length == 0){
-      this.feedback = "Enter your password again.";
-      return;
-    }
-
-    if(password != password_again){
-      this.feedback = "Your passwords don't match.";
-      return;
-    }
-    this.feedback = "Perfect!";
+    this.feedback = "Go for it!";
     this.isValid = true;
   }
 
