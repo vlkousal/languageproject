@@ -4,8 +4,21 @@
 <form>
   <label for="name">Name:</label>
   <input (input)="onInputChange()" id="name" type="text" [formControl]="name" required />
+  <br> <br>
   <label for="description">Description:</label>
   <textarea id="description" [formControl]="description"></textarea>
+
+  <br> <br>
+  <label for="firstLanguage">First language:</label>
+  <select id="firstLanguage">
+    <option *ngFor="let language of languages">{{language}}</option>
+  </select>
+  <br> <br>
+  <label for="secondLanguage">First language:</label>
+  <select id="secondLanguage">
+    <option *ngFor="let language of languages">{{language}}</option>
+  </select>
+    <br> <br>
 </form>
 <br>
 <label for="delimiter">Delimiter:</label>
@@ -13,6 +26,7 @@
 <p>{{ feedback }} Valid words: {{ counter }}</p>
 <button (click)="onSend()">Send</button>
 <p>{{ debug }}</p>
+<p>:) {{ languageString }}</p>
 <div class="container">
   <textarea (input)="onInputChange()" oninput="updateLineNumbers()" [(ngModel)]="content" type="text" class="input" [formControl]="vocab" id="textarea" required></textarea>
 

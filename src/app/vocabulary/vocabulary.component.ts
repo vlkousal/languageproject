@@ -22,8 +22,8 @@ export class VocabularyComponent {
 
   speak(text: string){
     let utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
-    // MAC - (zh-CN)
-    utt.lang = "zh-CN";
+    // MAC - (zh-CN), LINUX - (cmn)
+    utt.lang = "cmn";
     utt.text = text;
     window.speechSynthesis.speak(utt);
   }
