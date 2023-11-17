@@ -18,6 +18,8 @@ export class CreateVocabularyComponent {
   words: Set<Word> = new Set<Word>();
   counter: number = 0;
   debug: string = "";
+  name: FormControl<string> = new FormControl("") as FormControl<string>;
+  description : FormControl<string> = new FormControl("") as FormControl<string>;
 
   ngOnInit(){
     if(sessionStorage.getItem("sessionId") == null){
@@ -49,10 +51,7 @@ export class CreateVocabularyComponent {
 
   isValidLine(line: string) :boolean{
     let splitLine: string[] = line.split(this.delimiter.getRawValue());
-    if(splitLine.length != 3){
-      return false;
-    }
-    return true;
+    return splitLine.length == 3;
   }
 
   onInputChange():void{

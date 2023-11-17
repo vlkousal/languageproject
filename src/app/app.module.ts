@@ -2,14 +2,14 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { RegisterComponent } from './register/register.component';
+import { RegisterComponent } from './user/register.component';
 import { RouterModule } from "@angular/router";
 import { VocabularyComponent } from './vocabulary/vocabulary.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import { BaseComponent } from './base/base.component';
-import {LogoutComponent} from "./register/logout.component";
-import {LoginComponent} from "./register/login.component";
+import {LogoutComponent} from "./user/logout.component";
+import {LoginComponent} from "./user/login.component";
 import {CreateVocabularyComponent} from "./vocabulary/createvocabulary.component";
 @NgModule({
   declarations: [

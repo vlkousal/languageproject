@@ -23,7 +23,7 @@ export class VocabularyComponent {
   speak(text: string){
     let utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
     // MAC - (zh-CN)
-    utt.lang = "cmn";
+    utt.lang = "zh-CN";
     utt.text = text;
     window.speechSynthesis.speak(utt);
   }

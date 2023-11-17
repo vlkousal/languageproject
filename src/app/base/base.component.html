@@ -1,7 +1,8 @@
-<div *ngIf="username == null">
+<div *ngIf="sessionID == null">
   <p><a routerLink="/register">Register</a><a routerLink="/login">Login</a></p>
 </div>
 
-<div *ngIf="username != null">
+<div *ngIf="sessionID != null">
+  {{ username }}
   <a routerLink="/logout">Logout</a>
 </div>

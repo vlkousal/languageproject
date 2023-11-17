@@ -42,6 +42,7 @@ export class LoginComponent {
       }
       if(response.ok){
         sessionStorage.setItem("sessionId", await response.text());
+        sessionStorage.setItem("username", this.username.getRawValue());
         window.location.href = '/';
       }
     })

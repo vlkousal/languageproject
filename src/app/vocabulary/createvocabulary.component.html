@@ -1,6 +1,12 @@
 <app-base></app-base>
 <body>
 <input type="file" (change)="onFileSelected($event)" />
+<form>
+  <label for="name">Name:</label>
+  <input (input)="onInputChange()" id="name" type="text" [formControl]="name" required />
+  <label for="description">Description:</label>
+  <textarea id="description" [formControl]="description"></textarea>
+</form>
 <br>
 <label for="delimiter">Delimiter:</label>
 <input (input)="onInputChange()" id=delimiter type="text" [formControl]="delimiter" required maxlength="1" size="1">

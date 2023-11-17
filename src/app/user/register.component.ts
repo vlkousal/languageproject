@@ -3,7 +3,7 @@ import {FormControl} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import { Router } from '@angular/router';
 @Component({
-  selector: 'app-register',
+  selector: 'app-user',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
@@ -42,6 +42,7 @@ export class RegisterComponent {
       }
       if(response.ok){
         sessionStorage.setItem("sessionId", await response.text());
+        sessionStorage.setItem("username", this.username.getRawValue());
         window.location.href = '/';
       }
     })
