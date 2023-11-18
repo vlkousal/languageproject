@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormControl} from "@angular/forms";
+import {Form, FormControl} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {Router} from '@angular/router';
 import {Word} from "../constants";
@@ -24,6 +24,8 @@ export class CreateVocabularyComponent {
     languages: string[] = [];
     name: FormControl<string> = new FormControl("") as FormControl<string>;
     description : FormControl<string> = new FormControl("") as FormControl<string>;
+    firstLanguage: FormControl<string> = new FormControl("") as FormControl<string>;
+    secondLanguage: FormControl<string> = new FormControl("") as FormControl<string>;
 
     constructor(private http: HttpClient, private router: Router) { }
 
@@ -61,6 +63,24 @@ export class CreateVocabularyComponent {
             this.words.forEach(function(w) {
                 sentString += w.question + "," + w.phonetic + "," + w.correct + "\n";
             });
+            this.debug = sentString;
+            let username = localStorage.getItem("username");
+            const json = {
+                "session_id": sessionStorage.getItem("sessionId"),
+                "name": this.name.getRawValue(),
+                "description": this.description.getRawValue(),
+                "first_language": this.firstLanguage.getRawValue(),
+                "second_language": this.secondLanguage.getRawValue(),
+                "vocabulary": this.vocab.getRawValue()
+            }
+
+            fetch("http://localhost:8000/api/createvocab", {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify(json),
+            })
         }
     }
 

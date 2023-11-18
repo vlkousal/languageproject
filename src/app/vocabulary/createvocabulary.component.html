@@ -10,12 +10,12 @@
 
   <br> <br>
   <label for="firstLanguage">First language:</label>
-  <select id="firstLanguage">
+  <select id="firstLanguage" [formControl]="firstLanguage">
     <option *ngFor="let language of languages">{{language}}</option>
   </select>
   <br> <br>
   <label for="secondLanguage">First language:</label>
-  <select id="secondLanguage">
+  <select id="secondLanguage" [formControl]="secondLanguage">
     <option *ngFor="let language of languages">{{language}}</option>
   </select>
     <br> <br>
@@ -25,10 +25,9 @@
 <input (input)="onInputChange()" id=delimiter type="text" [formControl]="delimiter" required maxlength="1" size="1">
 <p>{{ feedback }} Valid words: {{ counter }}</p>
 <button (click)="onSend()">Send</button>
-<p>{{ debug }}</p>
-<p>:) {{ languageString }}</p>
+<p>DEBUG {{ debug }}</p>
 <div class="container">
-  <textarea (input)="onInputChange()" oninput="updateLineNumbers()" [(ngModel)]="content" type="text" class="input" [formControl]="vocab" id="textarea" required></textarea>
+  <textarea (input)="onInputChange()"  [(ngModel)]="content" type="text" class="input" [formControl]="vocab" id="textarea" required></textarea>
 
   <div class="table-container">
     <table border="1" id="table">
