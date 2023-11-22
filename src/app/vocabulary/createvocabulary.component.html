@@ -9,6 +9,10 @@
   <textarea id="description" [formControl]="description"></textarea>
 
   <br> <br>
+  <label for="url">URL:</label>
+  <input id="url" type="text" [formControl]="url" maxlength="32" required/>
+
+  <br> <br>
   <label for="firstLanguage">First language:</label>
   <select id="firstLanguage" [formControl]="firstLanguage">
     <option *ngFor="let language of languages">{{language}}</option>

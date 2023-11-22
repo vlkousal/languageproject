@@ -25,7 +25,6 @@ export class RegisterComponent {
     if(!this.isValid){
       return;
     }
-    sessionStorage
       const data =
         {"username": this.username.getRawValue(),
           "password": this.password.getRawValue()};

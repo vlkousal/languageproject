@@ -24,7 +24,7 @@ import {CreateVocabularyComponent} from "./vocabulary/createvocabulary.component
   imports: [
     BrowserModule,
     RouterModule.forRoot([
-      {path: "", component: VocabularyComponent},
+      {path: "vocab/:vocabUrl", component: VocabularyComponent},
       {path: "register", component: RegisterComponent},
       {path: "logout", component: LogoutComponent},
       {path: "login", component: LoginComponent},

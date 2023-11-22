@@ -24,6 +24,7 @@ export class CreateVocabularyComponent {
     languages: string[] = [];
     name: FormControl<string> = new FormControl("") as FormControl<string>;
     description : FormControl<string> = new FormControl("") as FormControl<string>;
+    url: FormControl<string> = new FormControl("") as FormControl<string>;
     firstLanguage: FormControl<string> = new FormControl("") as FormControl<string>;
     secondLanguage: FormControl<string> = new FormControl("") as FormControl<string>;
 
@@ -69,6 +70,7 @@ export class CreateVocabularyComponent {
                 "session_id": sessionStorage.getItem("sessionId"),
                 "name": this.name.getRawValue(),
                 "description": this.description.getRawValue(),
+                "url": this.url.getRawValue(),
                 "first_language": this.firstLanguage.getRawValue(),
                 "second_language": this.secondLanguage.getRawValue(),
                 "vocabulary": this.vocab.getRawValue()
@@ -89,9 +91,26 @@ export class CreateVocabularyComponent {
         return splitLine.length == 3;
     }
 
+    adaptURLText(){
+      let name = this.name.getRawValue();
+      let urlString = "";
+      for(let i = 0; i < name.length; i++){
+        let symbol = name.charAt(i);
+        var alphanumericRegex = /^[-_a-zA-Z0-9]$/;
+        if(alphanumericRegex.test(symbol)){
+          urlString += symbol;
+        } else if(symbol == " "){
+          urlString += "-";
+        }
+      }
+      this.url.setValue(urlString);
+    }
+
     onInputChange(){
+        this.adaptURLText();
+
         this.words = new Set<Word>();
-        this.lines = this.content.split("\n");
+        this.lines = (this.content + "\n").split("\n");
         if(this.delimiter.getRawValue().length == 0){
             this.feedback = "Please choose a delimeter.";
             return;
