@@ -62,6 +62,7 @@ export class CreateVocabularyComponent {
         if(this.counter != 0){
             let sentString: string = "";
             this.words.forEach(function(w) {
+              console.log("xddd");
                 sentString += w.question + "," + w.phonetic + "," + w.correct + "\n";
             });
             this.debug = sentString;
@@ -76,7 +77,7 @@ export class CreateVocabularyComponent {
                 "vocabulary": this.vocab.getRawValue()
             }
 
-            fetch("http://localhost:8000/api/createvocab", {
+            fetch("http://localhost:8000/api/createvocab/", {
                 method: "POST",
                 headers: {
                     "Content-Type" : "application/json"

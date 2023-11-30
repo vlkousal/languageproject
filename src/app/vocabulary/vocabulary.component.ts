@@ -9,10 +9,9 @@ import {ActivatedRoute} from "@angular/router";
 })
 
 export class VocabularyComponent {
-  title = 'homes';
-  words: Word[] = getWords();
+  words: Word[] = [];
   index: number = 0;
-  current: Word = this.words[this.index];
+  current: Word = new Word("nothing", "test", "test", ["test"]);
   wrong: Word[] = [];
   score: number = 0;
   streak: number = 0;
@@ -22,6 +21,11 @@ export class VocabularyComponent {
   feedback: string = "";
   url: string = "";
   vocabularySet: string = "";
+  name: string = "";
+  description: string = "";
+  contributor: string = "";
+  firstLanguage: string = "";
+  secondLanguage: string = "";
 
   constructor(private route: ActivatedRoute) {}
 
@@ -34,7 +38,12 @@ export class VocabularyComponent {
 
   async setup(){
     this.vocabularySet = await this.getVocabJson();
-    this.words = getWords();
+    let json = JSON.parse(this.vocabularySet);
+    this.name = json.name;
+    this.contributor = json.author;
+    this.description = json.description;
+    this.firstLanguage = json.first_language;
+    this.secondLanguage = json.second_language;
   }
 
 
@@ -61,7 +70,7 @@ export class VocabularyComponent {
   speak(text: string){
     let utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
     // MAC - (zh-CN), LINUX - (cmn)
-    utt.lang = "cmn";
+    utt.lang = "zh-CN";
     utt.text = text;
     window.speechSynthesis.speak(utt);
   }
@@ -84,6 +93,31 @@ export class VocabularyComponent {
       return;
     }
   }
+
+  startVocab(){
+    let vocabString = shuffleList(JSON.parse(this.vocabularySet).vocabulary.split("\n"));
+    let words: Word[] = [];
+    for(let i = 0; i < vocabString.length; i++){
+      console.log(words.length);
+      let correct: string = vocabString[i].split(";")[2];
+      let answers: string[] = [correct];
+      for(let j = 0; j < 2; j++){
+        let index = getIndex(i, vocabString.length);
+        let otherAnswer: string = vocabString[index].split(";")[2];
+        answers.push(otherAnswer);
+      }
+      answers = shuffleList(answers);
+      let question = vocabString[i].split(";")[0];
+      let phonetic: string = vocabString[i].split(";")[1];
+      let word = new Word(question, phonetic, correct, answers);
+      words.push(word);
+      this.words = words;
+    }
+    console.log(words.length);
+    words = shuffleList(words);
+    this.restart();
+  }
+
   checkAnswer(answer: string): void{
     window.speechSynthesis.cancel();
     if(this.current.correct == answer){
@@ -109,7 +143,8 @@ export class VocabularyComponent {
     this.lives = 3;
     this.correctAnswers = 0;
     this.hidden = false;
-    this.words = getWords();
+    console.log(this.words);
+    this.words = shuffleList(this.words);
     this.wrong = [];
     this.current = this.words[this.index];
     this.speak(this.current.question);
@@ -134,29 +169,7 @@ function shuffleList(list: any[]) {
   return list;
 }
 
-function getWords() : Word[]{
-  let vocabString = getVocabulary();
-  let words: Word[] = [];
-  for(let i = 0; i < vocabString.length; i++){
-    let correct: string = vocabString[i].split(";")[2];
-    let answers: string[] = [correct];
-    for(let j = 0; j < 2; j++){
-      let index = getIndex(i, vocabString.length);
-      let otherAnswer: string = vocabString[index].split(";")[2];
-      answers.push(otherAnswer);
-    }
-    answers = shuffleList(answers);
-    let question = vocabString[i].split(";")[0];
-    let phonetic: string = vocabString[i].split(";")[1];
-    let word = new Word(question, phonetic, correct, answers);
-    words.push(word);
-  }
-  words = shuffleList(words);
-  return words;
-}
-
 function getVocabulary(this: any){
-  return this.vocabularySet["vocabulary"];
   return hsk3.split("\n");
 }
 

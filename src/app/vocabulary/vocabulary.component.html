@@ -1,4 +1,13 @@
 <app-base></app-base>
+
+<div id="preview">
+  <h2>{{ name }}</h2>
+  <p>Contributor: {{ contributor}}</p>
+  <p>{{ firstLanguage }} -> {{ secondLanguage }}</p>
+  <p>{{ description }}</p>
+  <button (click)="startVocab()">Start</button>
+</div>
+
 <div class="xd" [hidden]="hidden">
   <p>{{ index + 1 }}/{{ words.length }}     Score: {{ score }}</p>
   <p>Streak: {{ streak }}</p>
@@ -9,7 +18,6 @@
   <strong style="font-size: 20px">{{ feedback }}</strong>
 </div>
 
-{{ url }}
 <div class="buttons" [hidden]="hidden">
   <p>{{ current.question }}</p>
   <p>{{ current.phonetic }}</p>
