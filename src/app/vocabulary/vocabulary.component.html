@@ -1,12 +1,13 @@
 <app-base></app-base>
 
-<div id="preview">
+<div id="preview" [hidden]="hiddenPreview" style="text-align: center;">
   <h2>{{ name }}</h2>
   <p>Contributor: {{ contributor}}</p>
   <p>{{ firstLanguage }} -> {{ secondLanguage }}</p>
   <p>{{ description }}</p>
   <button (click)="startVocab()">Start</button>
 </div>
+
 
 <div class="xd" [hidden]="hidden">
   <p>{{ index + 1 }}/{{ words.length }}     Score: {{ score }}</p>
@@ -16,20 +17,22 @@
   </div>
   <br><br>
   <strong style="font-size: 20px">{{ feedback }}</strong>
+    <button (click)="speak(current.question)">Play</button>
 </div>
-
 <div class="buttons" [hidden]="hidden">
-  <p>{{ current.question }}</p>
-  <p>{{ current.phonetic }}</p>
+    <div title="{{ current.phonetic}}"><p>{{ current.question }}</p></div>
+  <p><!--{{ current.phonetic }} --></p>
   <button (click)="checkAnswer(current.answers[0])">{{ current.answers[0] }}</button>
   <button (click)="checkAnswer(current.answers[1])">{{ current.answers[1] }}</button>
   <button (click)="checkAnswer(current.answers[2])">{{ current.answers[2] }}</button>
 </div>
 
-<div class="end" [hidden]="!hidden">
+
+<div class="end" [hidden]="(!hidden || !hiddenPreview)">
   <h1>Final score: {{ score }}</h1>
   <h3>{{correctAnswers}}/{{ words.length }} ({{ Math.floor(correctAnswers / (words.length / 100)) }}%)</h3>
   <button (click)="restart()">Restart</button>
+  <button (click)="replayMistakes()">Replay mistakes</button>
   <div *ngFor="let word of wrong">
     <p><button (click)="speak(word.question)">{{ word.question }}</button> ({{ word.phonetic }}) - {{ word.correct }}</p>
   </div>

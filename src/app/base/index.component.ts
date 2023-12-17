@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./index.component.css']
 })
 export class IndexComponent {
-  sessionID = sessionStorage.getItem("sessionId");
+  sessionID = localStorage.getItem("sessionId");
 }

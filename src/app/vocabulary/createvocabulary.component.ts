@@ -31,7 +31,7 @@ export class CreateVocabularyComponent {
     constructor(private http: HttpClient, private router: Router) { }
 
     ngOnInit(){
-        if(sessionStorage.getItem("sessionId") == null){
+        if(localStorage.getItem("sessionId") == null){
             this.router.navigate(["/"]);
         }
         this.getLanguageJson().then((result: string) => {
@@ -68,7 +68,7 @@ export class CreateVocabularyComponent {
             this.debug = sentString;
             let username = localStorage.getItem("username");
             const json = {
-                "session_id": sessionStorage.getItem("sessionId"),
+                "session_id": localStorage.getItem("sessionId"),
                 "name": this.name.getRawValue(),
                 "description": this.description.getRawValue(),
                 "url": this.url.getRawValue(),

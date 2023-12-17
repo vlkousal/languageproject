@@ -16,7 +16,7 @@ export class LoginComponent {
   feedback = "Enter a username.";
 
   ngOnInit(){
-    if(sessionStorage.getItem("sessionId") != null){
+    if(localStorage.getItem("sessionId") != null){
       this.router.navigate(["/"]);
     }
   }
@@ -25,7 +25,7 @@ export class LoginComponent {
     if(!this.isValid){
       return;
     }
-    sessionStorage
+    localStorage
       const data =
         {"username": this.username.getRawValue(),
           "password": this.password.getRawValue()};
@@ -41,8 +41,8 @@ export class LoginComponent {
         this.feedback = "Wrong credentials.";
       }
       if(response.ok){
-        sessionStorage.setItem("sessionId", await response.text());
-        sessionStorage.setItem("username", this.username.getRawValue());
+        localStorage.setItem("sessionId", await response.text());
+        localStorage.setItem("username", this.username.getRawValue());
         window.location.href = '/';
       }
     })

@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./base.component.css']
 })
 export class BaseComponent {
-  sessionID = sessionStorage.getItem("sessionId");
-  username: string | null = sessionStorage.getItem("username");
+  sessionID = localStorage.getItem("sessionId");
+  username: string | null = localStorage.getItem("username");
 }

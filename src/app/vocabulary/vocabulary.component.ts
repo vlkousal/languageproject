@@ -16,7 +16,9 @@ export class VocabularyComponent {
   score: number = 0;
   streak: number = 0;
   lives: number = 3;
-  hidden: boolean = false;
+  hidden: boolean = true;
+  hiddenPreview: boolean = false;
+  hiddenEnd: boolean = true;
   correctAnswers: number = 0;
   feedback: string = "";
   url: string = "";
@@ -70,7 +72,7 @@ export class VocabularyComponent {
   speak(text: string){
     let utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
     // MAC - (zh-CN), LINUX - (cmn)
-    utt.lang = "zh-CN";
+    utt.lang = "cmn";
     utt.text = text;
     window.speechSynthesis.speak(utt);
   }
@@ -116,6 +118,7 @@ export class VocabularyComponent {
     console.log(words.length);
     words = shuffleList(words);
     this.restart();
+    this.hiddenPreview = true;
   }
 
   checkAnswer(answer: string): void{
@@ -134,6 +137,11 @@ export class VocabularyComponent {
     }
     this.current = this.words[this.index];
     this.speak(this.current.question);
+  }
+
+  replayMistakes(): void{
+    this.words = this.wrong;
+    this.restart();
   }
 
   restart(): void{

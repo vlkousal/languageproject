@@ -16,7 +16,7 @@ export class RegisterComponent {
   feedback = "Enter a username.";
 
   ngOnInit(){
-    if(sessionStorage.getItem("sessionId") != null){
+    if(localStorage.getItem("sessionId") != null){
       this.router.navigate(["/"]);
     }
   }
@@ -40,8 +40,8 @@ export class RegisterComponent {
         this.feedback = "A user with this username already exists.";
       }
       if(response.ok){
-        sessionStorage.setItem("sessionId", await response.text());
-        sessionStorage.setItem("username", this.username.getRawValue());
+        localStorage.setItem("sessionId", await response.text());
+        localStorage.setItem("username", this.username.getRawValue());
         window.location.href = '/';
       }
     })
