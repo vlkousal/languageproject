@@ -7,5 +7,10 @@
 <body>
 <app-base></app-base>
 shit is fucked
+
+<h3>Vocabulary sets:</h3>
+<div *ngFor = "let set of sets">
+    <a routerLink="/vocab/{{ set.url }}">{{ set.name }}</a>
+</div>
 </body>
 </html>

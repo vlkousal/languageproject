@@ -12,7 +12,7 @@
 <div class="xd" [hidden]="hidden">
   <p>{{ index + 1 }}/{{ words.length }}     Score: {{ score }}</p>
   <p>Streak: {{ streak }}</p>
-  <div class="hearts" *ngFor="let item of [].constructor(lives); let i = index">
+  <div title="Lives: {{ lives }}" class="hearts" *ngFor="let item of [].constructor(lives); let i = index">
     <img src="../../assets/srdce.png" alt="Lives">
   </div>
   <br><br>
@@ -21,7 +21,6 @@
 </div>
 <div class="buttons" [hidden]="hidden">
     <div title="{{ current.phonetic}}"><p>{{ current.question }}</p></div>
-  <p><!--{{ current.phonetic }} --></p>
   <button (click)="checkAnswer(current.answers[0])">{{ current.answers[0] }}</button>
   <button (click)="checkAnswer(current.answers[1])">{{ current.answers[1] }}</button>
   <button (click)="checkAnswer(current.answers[2])">{{ current.answers[2] }}</button>
@@ -31,12 +30,13 @@
 <div class="end" [hidden]="(!hidden || !hiddenPreview)">
   <h1>Final score: {{ score }}</h1>
   <h3>{{correctAnswers}}/{{ words.length }} ({{ Math.floor(correctAnswers / (words.length / 100)) }}%)</h3>
-  <button (click)="restart()">Restart</button>
+  <button (click)="replay()">Restart</button>
   <button (click)="replayMistakes()">Replay mistakes</button>
   <div *ngFor="let word of wrong">
     <p><button (click)="speak(word.question)">{{ word.question }}</button> ({{ word.phonetic }}) - {{ word.correct }}</p>
   </div>
 </div>
+
 
 <style>
   /* Obecné styly pro aplikaci */

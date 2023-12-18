@@ -1,8 +1,14 @@
-<div *ngIf="sessionID == null">
-  <p><a routerLink="/register">Register</a><a routerLink="/login">Login</a></p>
+<!-- if logged in -->
+<div *ngIf="sessionID != null; else anonymousBlock">
+    {{ username }}
+    <a routerLink="/">Home</a>
+    <a routerLink="/logout">Logout</a>
 </div>
 
-<div *ngIf="sessionID != null">
-  {{ username }}
-  <a routerLink="/logout">Logout</a>
-</div>
+<!-- if logged out -->
+<ng-template #anonymousBlock>
+
+    <a routerLink="/">Home</a>
+    <a routerLink="/login">Login</a>
+    <a routerLink="/register">Register</a>
+</ng-template>

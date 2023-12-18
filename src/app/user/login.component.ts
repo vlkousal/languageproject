@@ -25,7 +25,6 @@ export class LoginComponent {
     if(!this.isValid){
       return;
     }
-    localStorage
       const data =
         {"username": this.username.getRawValue(),
           "password": this.password.getRawValue()};
@@ -66,6 +65,10 @@ export class LoginComponent {
     }
     this.feedback = "Go for it!";
     this.isValid = true;
+  }
+
+  onEnterPressed(event: KeyboardEvent){
+    this.onLogin();
   }
 
   protected readonly oninput = oninput;

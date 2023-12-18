@@ -10,6 +10,7 @@ import {ActivatedRoute} from "@angular/router";
 
 export class VocabularyComponent {
   words: Word[] = [];
+  all: Word[] = [];
   index: number = 0;
   current: Word = new Word("nothing", "test", "test", ["test"]);
   wrong: Word[] = [];
@@ -100,7 +101,6 @@ export class VocabularyComponent {
     let vocabString = shuffleList(JSON.parse(this.vocabularySet).vocabulary.split("\n"));
     let words: Word[] = [];
     for(let i = 0; i < vocabString.length; i++){
-      console.log(words.length);
       let correct: string = vocabString[i].split(";")[2];
       let answers: string[] = [correct];
       for(let j = 0; j < 2; j++){
@@ -114,8 +114,8 @@ export class VocabularyComponent {
       let word = new Word(question, phonetic, correct, answers);
       words.push(word);
       this.words = words;
+      this.all = words;
     }
-    console.log(words.length);
     words = shuffleList(words);
     this.restart();
     this.hiddenPreview = true;
@@ -140,7 +140,14 @@ export class VocabularyComponent {
   }
 
   replayMistakes(): void{
-    this.words = this.wrong;
+    if(this.wrong.length > 0){
+      this.words = this.wrong;
+      this.restart();
+    }
+  }
+
+  replay(): void{
+    this.words = this.all;
     this.restart();
   }
 
@@ -151,7 +158,6 @@ export class VocabularyComponent {
     this.lives = 3;
     this.correctAnswers = 0;
     this.hidden = false;
-    console.log(this.words);
     this.words = shuffleList(this.words);
     this.wrong = [];
     this.current = this.words[this.index];

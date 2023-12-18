@@ -1,10 +1,10 @@
 <div>
   <label for="username">Username:</label>
-  <input (input)="onInputChange()" id="username" type="text" [formControl]="username" required>
+  <input (keydown.enter)="onRegister()" (input)="onInputChange()" id="username" type="text" [formControl]="username" required>
   <label for="password">Password:</label>
-  <input (input)="onInputChange()" id=password type="password" [formControl]="password" required>
+  <input (keydown.enter)="onRegister()" (input)="onInputChange()" id=password type="password" [formControl]="password" required>
   <label for="password_again">Password again:</label>
-  <input (input)="onInputChange()" id=password_again type="password" [formControl]="password_again" required>
+  <input (keydown.enter)="onRegister()" (input)="onInputChange()" id=password_again type="password" [formControl]="password_again" required>
   <button (click)="onRegister()">Register</button>
   <p>{{ feedback }}</p>
 </div>
