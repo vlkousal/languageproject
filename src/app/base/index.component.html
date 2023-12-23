@@ -12,5 +12,74 @@ shit is fucked
 <div *ngFor = "let set of sets">
     <a routerLink="/vocab/{{ set.url }}">{{ set.name }}</a>
 </div>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chinese Character Rewriting</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    canvas {
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+<h2>Try to Rewrite the Chinese Character Stroke by Stroke</h2>
+<canvas id="canvas" width="201" height="201"></canvas>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Replace this with your desired Chinese character
+    var originalCharacter = "明";
+
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+
+    // Draw the original character on the canvas in a large size
+    context.font = '200px Arial';
+    context.fillStyle = 'grey'; // Change the color as needed
+    context.fillText(originalCharacter, 0, 170);
+
+    var isDrawing = false;
+
+    function startDrawing(e) {
+      isDrawing = true;
+      draw(e);
+    }
+
+    function stopDrawing() {
+      isDrawing = false;
+      context.beginPath();
+    }
+
+    function draw(e) {
+      if (!isDrawing) return;
+
+      // Get mouse coordinates
+      var x = e.clientX - canvas.getBoundingClientRect().left;
+      var y = e.clientY - canvas.getBoundingClientRect().top;
+
+      // Draw a small stroke at the user's input position
+      context.fillStyle = 'black'; // Change the color as needed
+      context.fillRect(x, y, 5, 5);
+    }
+
+    // Event listeners for mouse actions
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mousemove', draw);
+  });
+</script>
+</body>
+
 </body>
 </html>
