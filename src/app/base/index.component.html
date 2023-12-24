@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>XD</title>
 </head>
-<body>
-<app-base></app-base>
-shit is fucked
 
-<h3>Vocabulary sets:</h3>
-<div *ngFor = "let set of sets">
-    <a routerLink="/vocab/{{ set.url }}">{{ set.name }}</a>
-</div>
+<body>
+    <app-base></app-base>
+
+    <h3>Vocabulary sets:</h3>
+    <div *ngFor = "let set of sets">
+        <a routerLink="/vocab/{{ set.url }}">{{ set.name }}</a>
+    </div>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -82,4 +80,3 @@ shit is fucked
 </body>
 
 </body>
-</html>
