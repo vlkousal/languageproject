@@ -1,5 +1,17 @@
 export const STREAK_FOR_HEALTH: number = 3;
 export const MAX_HEALTH: number = 10;
+
+export class VocabSet{
+
+  name: string;
+  url: string;
+
+  constructor(name: string, url: string) {
+    this.name = name;
+    this.url = url;
+  }
+}
+
 export class Word{
   question: string;
   phonetic: string;
