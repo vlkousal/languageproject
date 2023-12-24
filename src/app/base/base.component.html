@@ -1,18 +1,22 @@
 
-<!-- if logged in -->
-<div class="navbar" *ngIf="sessionID != null; else anonymousBlock">
-  <span class="username">{{ username }}</span>
-  <a routerLink="/" class="nav-link">Home</a>
-  <a routerLink="/create" class="nav-link">Create</a>
-  <a routerLink="/logout" class="nav-link">Logout</a>
-</div>
+<div class="base-content">
+    <!-- if logged in -->
+    <div class="navbar" *ngIf="sessionID != null; else anonymousBlock">
+        <span class="username">{{ username }}</span>
+        <a routerLink="/" class="nav-link">Home</a>
+        <a routerLink="/create" class="nav-link">Create</a>
+        <a routerLink="/logout" class="nav-link">Logout</a>
+    </div>
 
-<!-- if logged out -->
-<ng-template #anonymousBlock>
-  <a routerLink="/" class="nav-link">Home</a>
-  <a routerLink="/login" class="nav-link">Login</a>
-  <a routerLink="/register" class="nav-link">Register</a>
-</ng-template>
+    <!-- if logged out -->
+    <ng-template #anonymousBlock>
+        <div class="navbar">
+            <a routerLink="/" class="nav-link">Home</a>
+            <a routerLink="/login" class="nav-link">Login</a>
+            <a routerLink="/register" class="nav-link">Register</a>
+        </div>
+    </ng-template>
+</div>
 
 <style>
   body {
@@ -44,5 +48,4 @@
   .nav-link:hover {
     color: #5ebf52; /* Change to your desired hover color */
   }
-
 </style>
