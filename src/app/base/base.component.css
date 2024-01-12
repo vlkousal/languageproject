@@ -5,7 +5,7 @@ body {
 }
 
 .navbar {
-    background-color: #656262;
+    background-color: #4f8033;
     color: #fff;
     padding: 10px;
     display: flex;
@@ -25,5 +25,5 @@ body {
 }
 
 .nav-link:hover {
-    color: #5ebf52; /* Change to your desired hover color */
+    color: #d0d9cf; /* Change to your desired hover color */
 }

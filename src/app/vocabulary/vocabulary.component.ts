@@ -28,7 +28,9 @@ export class VocabularyComponent {
   description: string = "";
   contributor: string = "";
   firstLanguage: string = "";
+  firstFlag: string = "";
   secondLanguage: string = "";
+  secondFlag: string = "";
 
   constructor(private route: ActivatedRoute) {}
 
@@ -47,6 +49,8 @@ export class VocabularyComponent {
     this.description = json.description;
     this.firstLanguage = json.first_language;
     this.secondLanguage = json.second_language;
+    this.firstFlag = json.first_language_flag;
+    this.secondFlag = json.second_language_flag;
   }
 
 

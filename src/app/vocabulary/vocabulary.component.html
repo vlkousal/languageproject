@@ -3,7 +3,8 @@
 <div id="preview" [hidden]="hiddenPreview" style="text-align: center;">
   <h2>{{ name }}</h2>
   <p>Contributor: {{ contributor}}</p>
-  <p>{{ firstLanguage }} -> {{ secondLanguage }}</p>
+	<p>{{ firstFlag }} {{ firstLanguage }}</p>
+	<p>{{ secondFlag }} {{ secondLanguage }}</p>
   <p>{{ description }}</p>
   <button (click)="startVocab()">Start</button>
 </div>
@@ -39,7 +40,30 @@
 
 
 <style>
-  /* Obecné styly pro aplikaci */
+
+    #preview {
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        max-width: 400px;
+    }
+
+    #preview button {
+        margin: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: green; /* Zelená barva pro tlačítka */
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    #preview button:hover {
+        background-color: #006400; /* Tmavší odstín zelené při najetí myší */
+    }
+
+    /* Obecné styly pro aplikaci */
   .app-base {
     font-family: Arial, sans-serif;
     text-align: center;
