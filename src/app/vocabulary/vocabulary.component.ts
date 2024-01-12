@@ -77,7 +77,7 @@ export class VocabularyComponent {
   speak(text: string){
     let utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
     // MAC - (zh-CN), LINUX - (cmn)
-    utt.lang = "zh-CN";
+    utt.lang = "cmn";
     utt.text = text;
     window.speechSynthesis.speak(utt);
   }
@@ -101,8 +101,10 @@ export class VocabularyComponent {
     }
   }
 
-  startVocab(){
-    let vocabString = shuffleList(JSON.parse(this.vocabularySet).vocabulary.split("\n"));
+  startVocab() {
+    let parsed = JSON.parse(this.vocabularySet).vocabulary;
+    let vocabString = shuffleList(parsed.split("\n")).filter(str => str.trim() !== '');
+    console.log(vocabString);
     let words: Word[] = [];
     for(let i = 0; i < vocabString.length; i++){
       let correct: string = vocabString[i].split(";")[2];
