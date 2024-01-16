@@ -42,7 +42,7 @@ export class RegisterComponent {
       if(response.ok){
         localStorage.setItem("sessionId", await response.text());
         localStorage.setItem("username", this.username.getRawValue());
-        window.location.href = '/';
+        this.router.navigate(["/"]);
       }
     })
   }

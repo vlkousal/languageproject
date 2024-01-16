@@ -1,81 +1,55 @@
 <app-base></app-base>
 <body>
-<input type="file" (change)="onFileSelected($event)" />
-<form>
+<form class="firstForm" [hidden]="(!firstPart)">
   <label for="name">Name:</label>
-  <input (input)="onInputChange()" id="name" type="text" [formControl]="name" required />
-  <br> <br>
+  <input (input)="onFirstInputChange()" id="name" type="text" [formControl]="name" required maxlength="32"/>
+
   <label for="description">Description:</label>
-  <textarea id="description" [formControl]="description"></textarea>
+  <textarea id="description" [formControl]="description" maxlength="256"></textarea>
 
-  <br> <br>
   <label for="url">URL:</label>
-  <input id="url" type="text" [formControl]="url" maxlength="32" required/>
+  <input (input)="onFirstInputChange()" id="url" type="text" [formControl]="url" maxlength="16" required/>
 
-  <br> <br>
   <label for="firstLanguage">First language:</label>
-  <select id="firstLanguage" [formControl]="firstLanguage">
+  <select id="firstLanguage" [formControl]="firstLanguage" (change)="onFirstInputChange()">
     <option *ngFor="let language of languages">{{language}}</option>
   </select>
-  <br> <br>
+
   <label for="secondLanguage">First language:</label>
-  <select id="secondLanguage" [formControl]="secondLanguage">
+  <select id="secondLanguage" [formControl]="secondLanguage" (change)="onFirstInputChange()">
     <option *ngFor="let language of languages">{{language}}</option>
   </select>
-    <br> <br>
+	<button (click)="onContinue()">Continue</button>
+	<p id="feedback">{{ firstFeedback }}</p>
 </form>
-<br>
-<label for="delimiter">Delimiter:</label>
-<input (input)="onInputChange()" id=delimiter type="text" [formControl]="delimiter" required maxlength="1" size="1">
-<p>{{ feedback }} Valid words: {{ counter }}</p>
-<button (click)="onSend()">Send</button>
-<p>DEBUG {{ debug }}</p>
-<div class="container">
-  <textarea (input)="onInputChange()"  [(ngModel)]="content" type="text" class="input" [formControl]="vocab" id="textarea" required></textarea>
 
-  <div class="table-container">
-    <table border="1" id="table">
-      <tr>
-        <th>First language</th>
-        <th>Phonetic</th>
-        <th>Second language</th>
-      </tr>
+<div class="vocabularyForm" [hidden]="(firstPart)">
+	<p>{{ feedback }} Valid words: {{ counter }}</p>
+	<p>DEBUG {{ debug }}</p>
+	<input type="file" (change)="onFileSelected($event)" />
+	<label for="delimiter">Delimiter:</label>
+	<input (input)="onInputChange()" id=delimiter type="text" [formControl]="delimiter" required maxlength="1" size="1">
+	<div class="container">
+		<textarea (input)="onInputChange()"  [(ngModel)]="content" type="text" class="input" [formControl]="vocab" id="textarea" required></textarea>
 
-      <tr *ngFor="let word of words">
-        <td>{{ word.question }}</td>
-        <td>{{ word.phonetic }}</td>
-        <td>{{ word.correct }}</td>
-      </tr>
-      <!-- Další řádky podle potřeby -->
-    </table>
-  </div>
+		<div class="table-container">
+			<table border="1" id="table">
+				<tr>
+					<th>First language</th>
+					<th>Phonetic</th>
+					<th>Second language</th>
+				</tr>
+
+				<tr *ngFor="let word of words">
+					<td>{{ word.question }}</td>
+					<td>{{ word.phonetic }}</td>
+					<td>{{ word.correct }}</td>
+				</tr>
+				<!-- Další řádky podle potřeby -->
+			</table>
+		</div>
+	</div>
+	<button (click)="goBack()">Go back</button>
+	<button (click)="onSend()">Create</button>
 </div>
-
-
-
-
 </body>
-
-<style>
-  .input{
-    width: 600px;
-    height: 400px;
-    padding: 10px; /* Pro vytvoření mezery od okrajů */
-  }
-
-  .container {
-    display: flex;
-  }
-
-  .container textarea {
-    flex: 1;
-    margin-right: 20px; /* Přizpůsobte podle potřeby */
-  }
-
-  .table-container {
-    height: 300px; /* Přizpůsobte výšku podle potřeby */
-    overflow: auto;
-  }
-
-
-</style>

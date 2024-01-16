@@ -19,7 +19,6 @@ export class VocabularyComponent {
   lives: number = 3;
   hidden: boolean = true;
   hiddenPreview: boolean = false;
-  hiddenEnd: boolean = true;
   correctAnswers: number = 0;
   feedback: string = "";
   url: string = "";
