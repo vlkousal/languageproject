@@ -98,7 +98,7 @@ export class CreateVocabularyComponent {
             fetch("http://localhost:8000/api/createvocab/", {
                 method: "POST",
                 headers: {
-                    "Content-Type" : "application/json"
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify(json),
             })
@@ -111,12 +111,14 @@ export class CreateVocabularyComponent {
     }
 
     addWord(word: Word) {
-        let delimeter = this.delimiter.getRawValue();
-        if(this.content.charAt(this.content.length - 1) != "\n" && this.content.charAt(this.content.length - 1) != ""){
-            this.content += "\n";
+        if(!this.containsWord(this.words, word)){
+            let delimeter = this.delimiter.getRawValue();
+            if(this.content.charAt(this.content.length - 1) != "\n" && this.content.charAt(this.content.length - 1) != ""){
+                this.content += "\n";
+            }
+            this.content += word.question + delimeter + word.phonetic + delimeter + word.correct + "\n";
+            this.onInputChange();
         }
-        this.content += word.question + delimeter + word.phonetic + delimeter + word.correct + "\n";
-        this.onInputChange();
     }
 
     removeWord(word: Word){
@@ -125,7 +127,7 @@ export class CreateVocabularyComponent {
         let line = word.question + delimiter + word.phonetic + delimiter + word.correct;
         this.content = "";
         lines.forEach( (l) => {
-            if(l != line){
+            if(l != line && l != ""){
                 this.content += l + "\n";
             }
         })
@@ -206,24 +208,22 @@ export class CreateVocabularyComponent {
 
     onInputChange(){
         this.adaptURLText();
-
         this.words = new Set<Word>();
         this.counter = 0;
-        this.lines = (this.content + "\n").split("\n");
+        let lines = (this.content + "\n").split("\n");
+        let delimiter = this.delimiter.getRawValue();
 
         if(this.content.length != 0){
-            for(let i = 0; i < this.lines.length - 1; i++){
-                let first = this.lines[i].split(this.delimiter.getRawValue())[0];
-                let phonetic: string = this.lines[i].split(this.delimiter.getRawValue())[1];
-                let second: string = this.lines[i].split(this.delimiter.getRawValue())[2];
+            for(let i = 0; i < lines.length - 1; i++){
+                let line = lines[i];
+                let word = new Word(line.split(delimiter)[0],
+                    line.split(delimiter)[1], line.split(delimiter)[2], []);
 
-                if(!this.isValidLine(this.lines[i]) || first.length == 0 || second.length == 0){
-                    continue;
-                }
-                let word = new Word(first, phonetic, second, []);
-                if(!this.containsWord(this.words, word)) {
-                    this.words.add(word);
-                    this.counter++;
+                if(this.isValidLine(lines[i]) && word.question.length != 0 && word.correct.length != 0){
+                    if(!this.containsWord(this.words, word)) {
+                        this.words.add(word);
+                        this.counter++;
+                    }
                 }
             }
         }
