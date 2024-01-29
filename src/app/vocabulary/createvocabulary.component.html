@@ -2,13 +2,13 @@
 <body>
 <form class="firstForm" [hidden]="(!firstPart)">
   <label for="name">Name:</label>
-  <input (input)="onFirstInputChange()" id="name" type="text" [formControl]="name" required maxlength="32"/>
+  <input (input)="onFirstInputChange()" id="name" type="text" [formControl]="name" placeholder="The name of the set" required maxlength="32"/>
 
   <label for="description">Description:</label>
-  <textarea id="description" [formControl]="description" maxlength="256"></textarea>
+  <textarea id="description" [formControl]="description" maxlength="256" placeholder="The description of the set"></textarea>
 
   <label for="url">URL:</label>
-  <input (input)="onFirstInputChange()" id="url" type="text" [formControl]="url" maxlength="16" required/>
+  <input (input)="onFirstInputChange()" id="url" type="text" [formControl]="url" maxlength="16" placeholder="The URL of the set" required/>
 
   <label for="firstLanguage">First language:</label>
   <select id="firstLanguage" [formControl]="firstLanguage" (change)="onFirstInputChange()">
@@ -24,13 +24,31 @@
 </form>
 
 <div class="vocabularyForm" [hidden]="(firstPart)">
-	<p>{{ feedback }} Valid words: {{ counter }}</p>
-	<p>DEBUG {{ debug }}</p>
 	<input type="file" (change)="onFileSelected($event)" />
 	<label for="delimiter">Delimiter:</label>
-	<input (input)="onInputChange()" id=delimiter type="text" [formControl]="delimiter" required maxlength="1" size="1">
+	<input (input)="onInputChange()" id=delimiter type="text" [formControl]="delimiter" required size="1" [defaultValue]="';'" style="width: 40px">
+	<label for="filter">Filter: </label>
+	<input (input)="onFilterChange()" id="filter" type="text" [formControl]="filter" style="width: 128px">
+	<p>Valid words: {{ counter }}</p>
 	<div class="container">
 		<textarea (input)="onInputChange()"  [(ngModel)]="content" type="text" class="input" [formControl]="vocab" id="textarea" required></textarea>
+		<div class="table-container">
+			<table border="1" id="table-relevant">
+				<tr>
+					<th>First language</th>
+					<th>Phonetic</th>
+					<th>Second language</th>
+					<th>Action</th>
+				</tr>
+
+				<tr *ngFor="let word of filteredRelevantWords">
+					<td>{{ word.question }}</td>
+					<td>{{ word.phonetic }}</td>
+					<td>{{ word.correct }}</td>
+					<td><button (click)="addWord(word)">Add</button></td>
+				</tr>
+			</table>
+		</div>
 
 		<div class="table-container">
 			<table border="1" id="table">
@@ -38,17 +56,20 @@
 					<th>First language</th>
 					<th>Phonetic</th>
 					<th>Second language</th>
+					<th>Action</th>
 				</tr>
 
 				<tr *ngFor="let word of words">
 					<td>{{ word.question }}</td>
 					<td>{{ word.phonetic }}</td>
 					<td>{{ word.correct }}</td>
+					<td><button (click)="removeWord(word)" style="background-color: #ea6161">Remove</button></td>
 				</tr>
-				<!-- Další řádky podle potřeby -->
 			</table>
 		</div>
 	</div>
+</div>
+<div [hidden]="firstPart" class="button">
 	<button (click)="goBack()">Go back</button>
 	<button (click)="onSend()">Create</button>
 </div>
