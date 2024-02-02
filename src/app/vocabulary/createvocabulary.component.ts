@@ -23,7 +23,7 @@ export class CreateVocabularyComponent {
     description : FormControl<string> = new FormControl("") as FormControl<string>;
     url: FormControl<string> = new FormControl("") as FormControl<string>;
     firstLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
-    secondLanguage: FormControl<string> = new FormControl("Chinese") as FormControl<string>;
+    secondLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
     firstPart: boolean = true;
     lastNameLength: number = 0;
     relevantWords: Set<Word> = new Set<Word>();
@@ -66,8 +66,9 @@ export class CreateVocabularyComponent {
 
     async onContinue(){
         if(this.isFirstInputValid()){
+            this.relevantWords = new Set<Word>();
             this.firstPart = false;
-            let parsed = await JSON.parse(await this.getRelevantVocabulary());
+            let parsed = JSON.parse(await this.getRelevantVocabulary());
             for(let i = 0; i < parsed.words.length; i++){
                 let word = new Word(parsed.words[i].first, parsed.words[i].phonetic, parsed.words[i].second, []);
                 if(!this.containsWord(this.relevantWords, word)){

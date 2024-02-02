@@ -7,7 +7,7 @@ import {Component} from '@angular/core';
 })
 
 export class BaseComponent {
-    
+
     username: string | null = null;
 
     async ngOnInit() {

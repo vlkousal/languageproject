@@ -5,7 +5,7 @@
   <input (input)="onFirstInputChange()" id="name" type="text" [formControl]="name" placeholder="The name of the set" required maxlength="32"/>
 
   <label for="description">Description:</label>
-  <textarea id="description" [formControl]="description" maxlength="256" placeholder="The description of the set"></textarea>
+  <textarea id="description" [formControl]="description" maxlength="256" placeholder="The description of the set            (not required)"></textarea>
 
   <label for="url">URL:</label>
   <input (input)="onFirstInputChange()" id="url" type="text" [formControl]="url" maxlength="16" placeholder="The URL of the set" required/>
