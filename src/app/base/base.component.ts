@@ -7,16 +7,14 @@ import {Component} from '@angular/core';
 })
 
 export class BaseComponent {
-
-    sessionID = localStorage.getItem("sessionId");
+    
     username: string | null = null;
 
     async ngOnInit() {
-        this.username = await this.sendTokenToCheck();
-        console.log(await this.sendTokenToCheck());
+        await this.sendTokenToCheck();
     }
 
-    async sendTokenToCheck(): Promise<string | null> {
+    async sendTokenToCheck() {
         const data = {"token": localStorage.getItem("sessionId")};
         fetch("http://localhost:8000/api/checktoken/", {
             method: "POST",
@@ -27,10 +25,9 @@ export class BaseComponent {
         }).then(async response => {
             if(response.ok) {
                 this.username = (await response.text()).replace(/^"(.*)"$/, '$1');
-                return response.text();
+            } else{
+                localStorage.clear();
             }
-            return null;
         })
-        return null;
     }
 }
