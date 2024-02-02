@@ -15,7 +15,7 @@
     <option *ngFor="let language of languages">{{language}}</option>
   </select>
 
-  <label for="secondLanguage">First language:</label>
+  <label for="secondLanguage">Second language:</label>
   <select id="secondLanguage" [formControl]="secondLanguage" (change)="onFirstInputChange()">
     <option *ngFor="let language of languages">{{language}}</option>
   </select>
@@ -25,6 +25,7 @@
 
 <div class="vocabularyForm" [hidden]="(firstPart)">
 	<input type="file" (change)="onFileSelected($event)" />
+
 	<label for="delimiter">Delimiter:</label>
 	<input (input)="onInputChange()" id=delimiter type="text" [formControl]="delimiter" required size="1" [defaultValue]="';'" style="width: 40px">
 	<label for="filter">Filter: </label>

@@ -187,8 +187,3 @@ function shuffleList(list: any[]) {
   }
   return list;
 }
-
-function getVocabulary(this: any){
-  return hsk3.split("\n");
-}
-

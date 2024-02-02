@@ -113,6 +113,7 @@ textarea{
 
 .table-container {
     height: 300px; /* Přizpůsobte výšku podle potřeby */
+    width: 600px;
     overflow: auto;
 }
 

@@ -14,7 +14,6 @@ export class CreateVocabularyComponent {
     vocab = new FormControl("") as FormControl<string>;
     delimiter = new FormControl(";") as FormControl<string>;
     content: string = "";
-    lines: string[] = [];
     firstFeedback: string = "Please enter a name.";
     words: Set<Word> = new Set<Word>();
     counter: number = 0;
@@ -24,7 +23,7 @@ export class CreateVocabularyComponent {
     description : FormControl<string> = new FormControl("") as FormControl<string>;
     url: FormControl<string> = new FormControl("") as FormControl<string>;
     firstLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
-    secondLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
+    secondLanguage: FormControl<string> = new FormControl("Chinese") as FormControl<string>;
     firstPart: boolean = true;
     lastNameLength: number = 0;
     relevantWords: Set<Word> = new Set<Word>();
@@ -187,7 +186,10 @@ export class CreateVocabularyComponent {
         if(filter.length != 0){
             this.filteredRelevantWords = new Set<Word>();
             this.relevantWords.forEach((word) => {
-                if(word.correct.includes(filter) || word.phonetic.includes(filter) || word.question.includes(filter)) {
+                let correct = this.removeDiacritics(word.correct);
+                let phonetic = this.removeDiacritics(word.phonetic);
+                let question = this.removeDiacritics(word.question);
+                if(correct.includes(filter) || phonetic.includes(filter) || question.includes(filter)) {
                     this.filteredRelevantWords.add(word);
                 }
             });
