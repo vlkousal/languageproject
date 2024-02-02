@@ -41,8 +41,8 @@ export class LoginComponent {
                 this.feedback = "Wrong credentials.";
             }
             if(response.ok){
-                localStorage.setItem("sessionId", await response.text());
-                localStorage.setItem("username", this.username.getRawValue());
+                let sessionId = (await response.text()).replace(/^"(.*)"$/, '$1');
+                localStorage.setItem("sessionId", sessionId);
                 window.location.href = '/';
             }
         })

@@ -9,7 +9,6 @@ import {VocabSet} from "../constants";
 })
 
 export class IndexComponent {
-    sessionID = localStorage.getItem("sessionId");
     debug: string = "";
     sets: VocabSet[] = [];
 
