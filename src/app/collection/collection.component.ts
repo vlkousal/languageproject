@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from "@angular/router";
-import {VocabSet, VocabularySet} from "../constants";
+import {VocabularySet} from "../constants";
 @Component({
   selector: 'app-collection',
   templateUrl: './collection.component.html',

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {VocabSet} from "../constants";
+import { VocabularySet } from "../constants";
 
 
 @Component({
@@ -10,11 +10,11 @@ import {VocabSet} from "../constants";
 
 export class IndexComponent {
     debug: string = "";
-    sets: VocabSet[] = [];
+    sets: VocabularySet[] = [];
 
     async ngOnInit(){
-        JSON.parse(await this.getSets()).forEach((item: { name: string; url: string; }) => {
-            this.sets.push(new VocabSet(item.name, item.url));
+        JSON.parse(await this.getSets()).forEach((item: { name: string; url: string; first_flag: string; second_flag: string}) => {
+            this.sets.push(new VocabularySet(item.name, item.url, item.first_flag, item.second_flag));
         });
         this.debug = await this.getSets();
 
