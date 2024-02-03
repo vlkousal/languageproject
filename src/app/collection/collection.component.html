@@ -1,0 +1,7 @@
+<app-base></app-base>
+<p>collection works!</p>
+
+<h3>Your sets: </h3>
+<div *ngFor = "let set of sets">
+	<a routerLink="/vocab/{{ set.url }}"> {{ set.first_flag }} {{ set.second_flag }} {{ set.name }}</a>
+</div>

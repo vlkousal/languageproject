@@ -4,6 +4,7 @@
     <div class="navbar" *ngIf="username != null; else anonymousBlock">
         <span class="username">{{ username }}</span>
         <a routerLink="/" class="nav-link">Home</a>
+	    <a routerLink="/collection" class="nav-link">Collection</a>
         <a routerLink="/create" class="nav-link">Create</a>
         <a routerLink="/logout" class="nav-link">Logout</a>
     </div>

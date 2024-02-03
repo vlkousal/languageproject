@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import {FormControl} from "@angular/forms";
-import {HttpClient} from "@angular/common/http";
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-user',
@@ -8,7 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private router: Router) { }
   username = new FormControl("") as FormControl<string>;
   password = new FormControl("") as FormControl<string>;
   password_again = new FormControl("") as FormControl<string>;

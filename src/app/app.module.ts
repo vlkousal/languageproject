@@ -12,6 +12,7 @@ import {LogoutComponent} from "./user/logout.component";
 import {LoginComponent} from "./user/login.component";
 import {CreateVocabularyComponent} from "./vocabulary/createvocabulary.component";
 import {IndexComponent} from "./base/index.component";
+import { CollectionComponent } from './collection/collection.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,7 +22,8 @@ import {IndexComponent} from "./base/index.component";
     LogoutComponent,
     LoginComponent,
     CreateVocabularyComponent,
-    IndexComponent
+    IndexComponent,
+    CollectionComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +33,8 @@ import {IndexComponent} from "./base/index.component";
       {path: "logout", component: LogoutComponent},
       {path: "login", component: LoginComponent},
       {path: "create", component: CreateVocabularyComponent},
-      {path: "", component: IndexComponent}
+      {path: "", component: IndexComponent},
+      {path: "collection", component: CollectionComponent}
     ]),
     FormsModule,
     ReactiveFormsModule,

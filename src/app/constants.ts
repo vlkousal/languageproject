@@ -12,7 +12,7 @@ export class VocabSet{
   }
 }
 
-export class Word{
+export class Word {
   question: string;
   phonetic: string;
   correct: string;
@@ -23,6 +23,21 @@ export class Word{
     this.correct = correct;
     this.answers = answers;
   }
+}
+
+export class VocabularySet {
+
+    name: string;
+    url: string;
+    first_flag: string;
+    second_flag: string;
+
+    constructor(name: string, url: string, first_flag: string, second_flag: string) {
+        this.name = name;
+        this.url = url;
+        this.first_flag = first_flag;
+        this.second_flag = second_flag;
+    }
 }
 
 

@@ -13,7 +13,7 @@ export class IndexComponent {
     sets: VocabSet[] = [];
 
     async ngOnInit(){
-        let dataString: string = JSON.parse(await this.getSets()).forEach((item: { name: string; url: string; }) => {
+        JSON.parse(await this.getSets()).forEach((item: { name: string; url: string; }) => {
             this.sets.push(new VocabSet(item.name, item.url));
         });
         this.debug = await this.getSets();
