@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from "@angular/router";
 import {VocabularySet} from "../constants";
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-collection',
   templateUrl: './collection.component.html',
@@ -11,8 +13,10 @@ export class CollectionComponent {
 
     token: string|null = localStorage.getItem("sessionId");
     sets: VocabularySet[] = [];
+    urlToDelete: string = "";
+    deleteClickCount: number = 0;
 
-    constructor(private router: Router) {}
+    constructor(private router: Router, private http: HttpClient) {}
 
     async ngOnInit() {
         if (localStorage.getItem("sessionId") == null) {
@@ -46,6 +50,38 @@ export class CollectionComponent {
                 })
             }
             return [];
+        })
+    }
+
+    onYesButtonClick() {
+        this.deleteClickCount++;
+        console.log(this.deleteClickCount);
+        if(this.deleteClickCount == 3){
+            console.log(this.deleteClickCount);
+            this.deleteSet(this.urlToDelete);
+            this.deleteClickCount = 0;
+            this.urlToDelete = "";
+        }
+    }
+
+    onDeleteButtonClick(url: string) {
+        this.urlToDelete = url;
+    }
+
+    deleteSet(urlToDelete: string) {
+        const data = { "token": this.token, "url_to_delete": urlToDelete };
+
+        fetch("http://localhost:8000/api/deleteset/", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        }).then(async response => {
+            if(response.ok){
+                window.location.reload();
+            }
+            console.error("Couldn't delete the set!");
         })
     }
 }
