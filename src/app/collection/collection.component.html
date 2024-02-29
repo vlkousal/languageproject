@@ -1,19 +1,19 @@
 <app-base></app-base>
 
 <h2>Your sets:</h2>
-<div class="set-container" *ngFor="let set of sets">
+<div class="set-container" *ngFor="let set of sets" id="xd">
 	<a class="set-link" routerLink="/vocab/{{ set.url }}">
 		{{ set.first_flag }} {{ set.second_flag }} {{ set.name }}
 	</a>
 	<div *ngIf="urlToDelete == set.url">
 		<div class="button-group">
 			<button class="delete-yes" (click)="onYesButtonClick()">Yes</button>
-			<button class="delete-no">No</button>
+			<button class="delete-no" (click)="onNoButtonClick()">No</button>
 		</div>
 	</div>
 	<div *ngIf="urlToDelete != set.url">
 		<div class="button-group">
-			<button class="edit-button">Edit</button>
+			<button class="edit-button" (click)="onEditButtonClick(set.url)">Edit</button>
 			<button class="delete-button" (click)="onDeleteButtonClick(set.url)">Delete</button>
 		</div>
 	</div>

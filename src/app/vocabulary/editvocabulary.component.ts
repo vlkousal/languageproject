@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Word} from "../constants";
 
 @Component({
@@ -9,8 +9,9 @@ import {Word} from "../constants";
   templateUrl: './createvocabulary.component.html',
   styleUrls: ['./createvocabulary.component.css']
 })
-export class CreateVocabularyComponent {
+export class EditVocabularyComponent {
 
+    vocabUrl = "";
     vocab = new FormControl("") as FormControl<string>;
     delimiter = new FormControl(";") as FormControl<string>;
     content: string = "";
@@ -30,9 +31,12 @@ export class CreateVocabularyComponent {
     filter: FormControl<string> = new FormControl("") as FormControl<string>;
     filteredRelevantWords: Set<Word> = new Set<Word>();
 
-    constructor(private http: HttpClient, private router: Router) { }
+    constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit(){
+        this.route.params.subscribe( params => {
+            this.vocabUrl = params["vocabUrl"];
+        })
         this.getLanguageJson().then((result: string) => {
             this.languageString = result;
             this.setupDropdownMenus(result);

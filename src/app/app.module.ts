@@ -13,6 +13,7 @@ import {LoginComponent} from "./user/login.component";
 import {CreateVocabularyComponent} from "./vocabulary/createvocabulary.component";
 import {IndexComponent} from "./base/index.component";
 import { CollectionComponent } from './collection/collection.component';
+import {EditVocabularyComponent} from "./vocabulary/editvocabulary.component";
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +24,8 @@ import { CollectionComponent } from './collection/collection.component';
     LoginComponent,
     CreateVocabularyComponent,
     IndexComponent,
-    CollectionComponent
+    CollectionComponent,
+    EditVocabularyComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +36,8 @@ import { CollectionComponent } from './collection/collection.component';
       {path: "login", component: LoginComponent},
       {path: "create", component: CreateVocabularyComponent},
       {path: "", component: IndexComponent},
-      {path: "collection", component: CollectionComponent}
+      {path: "collection", component: CollectionComponent},
+      {path: "edit/:vocabUrl", component: EditVocabularyComponent}
     ]),
     FormsModule,
     ReactiveFormsModule,

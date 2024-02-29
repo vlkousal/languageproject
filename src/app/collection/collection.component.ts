@@ -59,13 +59,22 @@ export class CollectionComponent {
         if(this.deleteClickCount == 3){
             console.log(this.deleteClickCount);
             this.deleteSet(this.urlToDelete);
-            this.deleteClickCount = 0;
-            this.urlToDelete = "";
+            this.onNoButtonClick();
         }
+    }
+
+    onNoButtonClick() {
+        this.deleteClickCount = 0;
+        this.urlToDelete = "";
     }
 
     onDeleteButtonClick(url: string) {
         this.urlToDelete = url;
+    }
+
+    onEditButtonClick(url: string){
+        this.router.navigate(["/edit/" + url]);
+        console.log("XDDDD");
     }
 
     deleteSet(urlToDelete: string) {
