@@ -3,6 +3,7 @@ import {FormControl} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from '@angular/router';
 import {Word} from "../constants";
+import {ApiTools} from "../apitools";
 
 @Component({
   selector: 'app-login',
@@ -31,16 +32,25 @@ export class EditVocabularyComponent {
 
     constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) { }
 
-    ngOnInit(){
-        this.route.params.subscribe( params => {
-            this.url.setValue(params["vocabUrl"]);
-        })
+    async ngOnInit(){
 
         this.getLanguageJson().then((result: string) => {
             this.setupDropdownMenus(result);
         }).catch((error) => {
             console.error('Error:', error);
         });
+
+        this.route.params.subscribe( params => {
+            this.url.setValue(params["vocabUrl"]);
+        })
+        let vocabData = await ApiTools.getVocabJson(this.url.getRawValue());
+        let parsed = JSON.parse(vocabData);
+        this.name.setValue(parsed.name);
+        this.description.setValue(parsed.description);
+        this.firstLanguage.setValue(parsed.first_language);
+        this.secondLanguage.setValue(parsed.second_language);
+        this.vocab.setValue(parsed.vocabulary);
+        this.onInputChange();
     }
 
     setupDropdownMenus(jsonString: string){
