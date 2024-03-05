@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Word} from "../constants";
+import {ApiTools} from "../apitools";
 
 @Component({
   selector: 'app-login',
@@ -28,8 +29,6 @@ export class CreateVocabularyComponent {
     relevantWords: Set<Word> = new Set<Word>();
     filter: FormControl<string> = new FormControl("") as FormControl<string>;
     filteredRelevantWords: Set<Word> = new Set<Word>();
-
-    constructor(private http: HttpClient, private router: Router) { }
 
     ngOnInit(){
         this.getLanguageJson().then((result: string) => {

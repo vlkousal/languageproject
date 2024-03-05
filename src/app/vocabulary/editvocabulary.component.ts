@@ -11,7 +11,6 @@ import {Word} from "../constants";
 })
 export class EditVocabularyComponent {
 
-    vocabUrl = "";
     vocab = new FormControl("") as FormControl<string>;
     delimiter = new FormControl(";") as FormControl<string>;
     content: string = "";
@@ -34,8 +33,9 @@ export class EditVocabularyComponent {
 
     ngOnInit(){
         this.route.params.subscribe( params => {
-            this.vocabUrl = params["vocabUrl"];
+            this.url.setValue(params["vocabUrl"]);
         })
+
         this.getLanguageJson().then((result: string) => {
             this.setupDropdownMenus(result);
         }).catch((error) => {
