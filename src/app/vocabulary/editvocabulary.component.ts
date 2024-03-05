@@ -6,8 +6,8 @@ import {Word} from "../constants";
 
 @Component({
   selector: 'app-login',
-  templateUrl: './createvocabulary.component.html',
-  styleUrls: ['./createvocabulary.component.css']
+  templateUrl: './editvocabulary.component.html',
+  styleUrls: ['./editvocabulary.component.css']
 })
 export class EditVocabularyComponent {
 
@@ -18,13 +18,12 @@ export class EditVocabularyComponent {
     firstFeedback: string = "Please enter a name.";
     words: Set<Word> = new Set<Word>();
     counter: number = 0;
-    languageString: string = "";
     languages: string[] = [];
     name: FormControl<string> = new FormControl("") as FormControl<string>;
     description : FormControl<string> = new FormControl("") as FormControl<string>;
     url: FormControl<string> = new FormControl("") as FormControl<string>;
     firstLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
-    secondLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
+    secondLanguage: FormControl<string> = new FormControl("English") as FormControl<string>;
     firstPart: boolean = true;
     lastNameLength: number = 0;
     relevantWords: Set<Word> = new Set<Word>();
@@ -38,7 +37,6 @@ export class EditVocabularyComponent {
             this.vocabUrl = params["vocabUrl"];
         })
         this.getLanguageJson().then((result: string) => {
-            this.languageString = result;
             this.setupDropdownMenus(result);
         }).catch((error) => {
             console.error('Error:', error);

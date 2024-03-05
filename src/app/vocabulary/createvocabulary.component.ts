@@ -17,7 +17,6 @@ export class CreateVocabularyComponent {
     firstFeedback: string = "Please enter a name.";
     words: Set<Word> = new Set<Word>();
     counter: number = 0;
-    languageString: string = "";
     languages: string[] = [];
     name: FormControl<string> = new FormControl("") as FormControl<string>;
     description : FormControl<string> = new FormControl("") as FormControl<string>;
@@ -34,7 +33,6 @@ export class CreateVocabularyComponent {
 
     ngOnInit(){
         this.getLanguageJson().then((result: string) => {
-            this.languageString = result;
             this.setupDropdownMenus(result);
         }).catch((error) => {
             console.error('Error:', error);
