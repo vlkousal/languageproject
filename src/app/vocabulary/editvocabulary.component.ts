@@ -6,7 +6,7 @@ import {Word} from "../constants";
 import {ApiTools} from "../apitools";
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-editvocabulary',
   templateUrl: './editvocabulary.component.html',
   styleUrls: ['./editvocabulary.component.css']
 })
@@ -22,6 +22,7 @@ export class EditVocabularyComponent {
     name: FormControl<string> = new FormControl("") as FormControl<string>;
     description : FormControl<string> = new FormControl("") as FormControl<string>;
     url: FormControl<string> = new FormControl("") as FormControl<string>;
+    previousurl: string = "";
     firstLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
     secondLanguage: FormControl<string> = new FormControl("English") as FormControl<string>;
     firstPart: boolean = true;
@@ -33,7 +34,6 @@ export class EditVocabularyComponent {
     constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) { }
 
     async ngOnInit(){
-
         this.getLanguageJson().then((result: string) => {
             this.setupDropdownMenus(result);
         }).catch((error) => {
@@ -42,6 +42,7 @@ export class EditVocabularyComponent {
 
         this.route.params.subscribe( params => {
             this.url.setValue(params["vocabUrl"]);
+            this.previousurl = params["vocabUrl"];
         })
         let vocabData = await ApiTools.getVocabJson(this.url.getRawValue());
         let parsed = JSON.parse(vocabData);
@@ -99,12 +100,14 @@ export class EditVocabularyComponent {
                 "name": this.name.getRawValue(),
                 "description": this.description.getRawValue(),
                 "url": this.url.getRawValue(),
+                "previous_url": this.previousurl,
                 "first_language": this.firstLanguage.getRawValue(),
                 "second_language": this.secondLanguage.getRawValue(),
                 "vocabulary": this.vocab.getRawValue()
             }
+            console.log(this.name.getRawValue());
 
-            fetch("http://localhost:8000/api/createvocab/", {
+            fetch("http://localhost:8000/api/editvocab/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -143,35 +146,8 @@ export class EditVocabularyComponent {
         this.onInputChange();
     }
 
-    adaptURLText(){
-        let name = this.name.getRawValue();
-        let urlString = "";
-
-        let limit = 16;
-        if(name.length <= 16){
-            limit = name.length;
-        }
-        for(let i = 0; i < limit; i++){
-            let symbol = this.removeDiacritics(name.charAt(i));
-            let alphanumericRegex = /^[-_a-zA-Z0-9]$/;
-            if(alphanumericRegex.test(symbol)){
-                urlString += symbol;
-            } else if(symbol == " " && urlString.charAt(urlString.length - 1) != "-"){
-                urlString += "-";
-            }
-        }
-        while(urlString.charAt(urlString.length - 1) == "-"){
-            urlString = urlString.slice(0, -1);
-        }
-        this.url.setValue(this.removeDiacritics(urlString).toLowerCase());
-    }
-
     onFirstInputChange() {
         let nameLength = this.name.getRawValue().length;
-        // we need to refresh the URL string if name was changed
-        if(this.lastNameLength != nameLength){
-            this.adaptURLText();
-        }
 
         this.lastNameLength = nameLength;
         if(this.name.getRawValue().length == 0){
@@ -219,7 +195,6 @@ export class EditVocabularyComponent {
     }
 
     onInputChange(){
-        this.adaptURLText();
         this.words = new Set<Word>();
         this.counter = 0;
         let lines = (this.content + "\n").split("\n");

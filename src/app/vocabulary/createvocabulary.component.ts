@@ -6,7 +6,7 @@ import {Word} from "../constants";
 import {ApiTools} from "../apitools";
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-createvocabulary',
   templateUrl: './createvocabulary.component.html',
   styleUrls: ['./createvocabulary.component.css']
 })
