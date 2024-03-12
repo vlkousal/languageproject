@@ -3,28 +3,28 @@ import {FormControl} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from '@angular/router';
 import {Word} from "../constants";
+import {ApiTools} from "../apitools";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './createvocabulary.component.html',
-  styleUrls: ['./createvocabulary.component.css']
+  selector: 'app-editvocabulary',
+  templateUrl: './editvocabulary.component.html',
+  styleUrls: ['./editvocabulary.component.css']
 })
 export class EditVocabularyComponent {
 
-    vocabUrl = "";
     vocab = new FormControl("") as FormControl<string>;
     delimiter = new FormControl(";") as FormControl<string>;
     content: string = "";
     firstFeedback: string = "Please enter a name.";
     words: Set<Word> = new Set<Word>();
     counter: number = 0;
-    languageString: string = "";
     languages: string[] = [];
     name: FormControl<string> = new FormControl("") as FormControl<string>;
     description : FormControl<string> = new FormControl("") as FormControl<string>;
     url: FormControl<string> = new FormControl("") as FormControl<string>;
+    previousurl: string = "";
     firstLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
-    secondLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
+    secondLanguage: FormControl<string> = new FormControl("English") as FormControl<string>;
     firstPart: boolean = true;
     lastNameLength: number = 0;
     relevantWords: Set<Word> = new Set<Word>();
@@ -33,16 +33,25 @@ export class EditVocabularyComponent {
 
     constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) { }
 
-    ngOnInit(){
-        this.route.params.subscribe( params => {
-            this.vocabUrl = params["vocabUrl"];
-        })
+    async ngOnInit(){
         this.getLanguageJson().then((result: string) => {
-            this.languageString = result;
             this.setupDropdownMenus(result);
         }).catch((error) => {
             console.error('Error:', error);
         });
+
+        this.route.params.subscribe( params => {
+            this.url.setValue(params["vocabUrl"]);
+            this.previousurl = params["vocabUrl"];
+        })
+        let vocabData = await ApiTools.getVocabJson(this.url.getRawValue());
+        let parsed = JSON.parse(vocabData);
+        this.name.setValue(parsed.name);
+        this.description.setValue(parsed.description);
+        this.firstLanguage.setValue(parsed.first_language);
+        this.secondLanguage.setValue(parsed.second_language);
+        this.vocab.setValue(parsed.vocabulary);
+        this.onInputChange();
     }
 
     setupDropdownMenus(jsonString: string){
@@ -91,12 +100,14 @@ export class EditVocabularyComponent {
                 "name": this.name.getRawValue(),
                 "description": this.description.getRawValue(),
                 "url": this.url.getRawValue(),
+                "previous_url": this.previousurl,
                 "first_language": this.firstLanguage.getRawValue(),
                 "second_language": this.secondLanguage.getRawValue(),
                 "vocabulary": this.vocab.getRawValue()
             }
+            console.log(this.name.getRawValue());
 
-            fetch("http://localhost:8000/api/createvocab/", {
+            fetch("http://localhost:8000/api/editvocab/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -135,35 +146,8 @@ export class EditVocabularyComponent {
         this.onInputChange();
     }
 
-    adaptURLText(){
-        let name = this.name.getRawValue();
-        let urlString = "";
-
-        let limit = 16;
-        if(name.length <= 16){
-            limit = name.length;
-        }
-        for(let i = 0; i < limit; i++){
-            let symbol = this.removeDiacritics(name.charAt(i));
-            let alphanumericRegex = /^[-_a-zA-Z0-9]$/;
-            if(alphanumericRegex.test(symbol)){
-                urlString += symbol;
-            } else if(symbol == " " && urlString.charAt(urlString.length - 1) != "-"){
-                urlString += "-";
-            }
-        }
-        while(urlString.charAt(urlString.length - 1) == "-"){
-            urlString = urlString.slice(0, -1);
-        }
-        this.url.setValue(this.removeDiacritics(urlString).toLowerCase());
-    }
-
     onFirstInputChange() {
         let nameLength = this.name.getRawValue().length;
-        // we need to refresh the URL string if name was changed
-        if(this.lastNameLength != nameLength){
-            this.adaptURLText();
-        }
 
         this.lastNameLength = nameLength;
         if(this.name.getRawValue().length == 0){
@@ -211,7 +195,6 @@ export class EditVocabularyComponent {
     }
 
     onInputChange(){
-        this.adaptURLText();
         this.words = new Set<Word>();
         this.counter = 0;
         let lines = (this.content + "\n").split("\n");

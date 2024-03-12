@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
 import {ActivatedRoute} from "@angular/router";
+import {ApiTools} from "../apitools";
 
 @Component({
     selector: 'app-vocabulary',
@@ -30,7 +31,7 @@ export class VocabularyComponent {
     firstLanguage: string = "";
     secondLanguage: string = "";
 
-  constructor(private route: ActivatedRoute) {}
+    constructor(private route: ActivatedRoute) {}
 
     ngOnInit() {
         this.route.params.subscribe(params => {
@@ -40,33 +41,13 @@ export class VocabularyComponent {
     }
 
     async setup() {
-        this.vocabularySet = await this.getVocabJson();
+        this.vocabularySet = await ApiTools.getVocabJson(this.url)
         let json = JSON.parse(this.vocabularySet);
         this.name = json.name;
         this.contributor = json.author;
         this.description = json.description;
         this.firstLanguage = json.first_language_flag + " " + json.first_language;
         this.secondLanguage = json.second_language_flag + " " + json.second_language;
-    }
-
-    async getVocabJson(): Promise<string> {
-        try {
-            const response = await fetch('http://localhost:8000/api/getvocab/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({"url": this.url})
-        });
-
-        if (response.ok) {
-            return await response.text();
-        }
-        throw new Error('Network response was not ok.');
-        } catch (error) {
-            console.error('Error:', error);
-            throw error; // Re-throw the error for further handling
-        }
     }
 
     speak(text: string) {
