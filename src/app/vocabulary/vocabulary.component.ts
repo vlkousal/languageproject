@@ -14,7 +14,7 @@ export class VocabularyComponent {
     words: Word[] = [];
     all: Word[] = [];
     index: number = 0;
-    current: Word = new Word("", "", "", [""]);
+    current: Word = new Word(0, "", "", "", [""]);
     wrong: Word[] = [];
     score: number = 0;
     streak: number = 0;
@@ -92,9 +92,10 @@ export class VocabularyComponent {
                 answers.push(otherAnswer);
             }
             answers = shuffleList(answers);
+            let id = vocabString[i].split(";")[3];
             let question = vocabString[i].split(";")[0];
             let phonetic: string = vocabString[i].split(";")[1];
-            let word = new Word(question, phonetic, correct, answers);
+            let word = new Word(id, question, phonetic, correct, answers);
             words.push(word);
             this.words = words;
             this.all = words;
@@ -107,9 +108,11 @@ export class VocabularyComponent {
     checkAnswer(answer: string): void {
         window.speechSynthesis.cancel();
         if(this.current.correct == answer) {
+            this.sendResult(true);
             this.evalCorrect();
             this.feedback = "Correct!";
         } else {
+            this.sendResult(false);
             this.evalWrong();
             this.feedback = "The correct answer was " + this.current.correct;
         }
@@ -120,6 +123,22 @@ export class VocabularyComponent {
         }
         this.current = this.words[this.index];
         this.speak(this.current.question);
+    }
+
+    sendResult(correct: boolean){
+        const data = {
+            "token": localStorage.getItem("sessionId"),
+            "wordId": this.current.id,
+            "correct": correct
+        }
+
+        fetch("http://localhost:8000/api/addresult/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
     }
 
     replayMistakes(): void {
@@ -146,7 +165,6 @@ export class VocabularyComponent {
         this.current = this.words[this.index];
         this.speak(this.current.question);
     }
-
     protected readonly Math = Math;
 }
 
