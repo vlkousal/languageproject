@@ -32,3 +32,132 @@ body{
 .score{
   font-size: 40px;
 }
+
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap');
+
+#preview {
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-width: 1000px;
+  font-size: 20px;
+}
+
+.body{
+  font-family: 'Open Sans', sans-serif;
+}
+
+#preview button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: green; /* Zelená barva pro tlačítka */
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#preview button:hover {
+  background-color: #006400; /* Tmavší odstín zelené při najetí myší */
+}
+
+/* Obecné styly pro aplikaci */
+.app-base {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+  color: black; /* Černá barva textu */
+}
+
+/* Styly pro skryté prvky */
+.xd[hidden],
+.buttons[hidden] {
+  display: none;
+}
+
+/* Styly pro skóre a stav */
+.xd p:nth-of-type(2),
+.end h1,
+.score {
+  font-size: 24px;
+  font-weight: bold;
+  color: green; /* Zelená barva pro skóre a stav */
+}
+
+
+/* Styly pro tlačítka */
+.buttons button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: green; /* Zelená barva pro tlačítka */
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.buttons button:hover {
+  background-color: #006400; /* Tmavší odstín zelené při najetí myší */
+}
+
+/* Styly pro konec */
+.end {
+  margin-top: 20px;
+}
+
+.end h1 {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.end h3 {
+  font-size: 18px;
+}
+
+.end button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #a9a9a9; /* Šedá barva pro tlačítko na konci */
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.end button:hover {
+  background-color: #808080; /* Tmavší odstín šedé při najetí myší */
+}
+
+.end div p {
+  margin: 10px 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: center;
+}
+
+/* Style table headers */
+th {
+  padding: 10px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  background-color: white; /* Adjust as needed */
+  z-index: 1;
+}
+
+
+/* Style table cells */
+td {
+  padding: 10px;
+}
+
+
+.table-container {
+  height: 300px; /* Přizpůsobte výšku podle potřeby */
+  overflow: auto;
+}
