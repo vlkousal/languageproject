@@ -4,13 +4,15 @@ export const MAX_HEALTH: number = 10;
 export class Word {
 
     id: number;
+    success_rate: number;
     question: string;
     phonetic: string;
     correct: string;
     answers: string[];
 
-    constructor(id: number,  question: string, phonetic: string, correct: string, answers: string[]) {
+    constructor(id: number,  success_rate: number, question: string, phonetic: string, correct: string, answers: string[]) {
         this.id = id;
+        this.success_rate = success_rate;
         this.question = question;
         this.phonetic = phonetic
         this.correct = correct;

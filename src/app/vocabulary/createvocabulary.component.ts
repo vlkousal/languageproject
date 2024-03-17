@@ -1,9 +1,6 @@
 import {Component} from '@angular/core';
 import {FormControl} from "@angular/forms";
-import {HttpClient} from "@angular/common/http";
-import {ActivatedRoute, Router} from '@angular/router';
 import {Word} from "../constants";
-import {ApiTools} from "../apitools";
 
 @Component({
   selector: 'app-createvocabulary',
@@ -64,7 +61,7 @@ export class CreateVocabularyComponent {
             this.firstPart = false;
             let parsed = JSON.parse(await this.getRelevantVocabulary());
             for(let i = 0; i < parsed.words.length; i++){
-                let word = new Word(0, parsed.words[i].first, parsed.words[i].phonetic, parsed.words[i].second, []);
+                let word = new Word(0,0,  parsed.words[i].first, parsed.words[i].phonetic, parsed.words[i].second, []);
                 if(!this.containsWord(this.relevantWords, word)){
                     this.relevantWords.add(word);
                 }
@@ -213,7 +210,7 @@ export class CreateVocabularyComponent {
         if(this.content.length != 0){
             for(let i = 0; i < lines.length - 1; i++){
                 let line = lines[i];
-                let word = new Word(0, line.split(delimiter)[0],
+                let word = new Word(0,0,  line.split(delimiter)[0],
                     line.split(delimiter)[1], line.split(delimiter)[2], []);
 
                 if(this.isValidLine(lines[i]) && word.question.length != 0 && word.correct.length != 0){

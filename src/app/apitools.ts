@@ -9,7 +9,7 @@ export class ApiTools {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({"url": url})
+                body: JSON.stringify({"token": localStorage.getItem("sessionId"), "url": url})
             });
 
             if (response.ok) {
