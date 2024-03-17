@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {Router} from '@angular/router';
+import {BACKEND} from "../constants";
 
 @Component({
   selector: 'app-login',
@@ -30,7 +31,7 @@ export class LoginComponent {
         {"username": this.username.getRawValue(),
           "password": this.password.getRawValue()};
 
-        fetch('http://localhost:8000/api/login/', {
+        fetch(BACKEND + 'api/login/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

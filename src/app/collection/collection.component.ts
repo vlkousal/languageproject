@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from "@angular/router";
-import {VocabularySet} from "../constants";
+import {BACKEND, VocabularySet} from "../constants";
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -31,7 +31,7 @@ export class CollectionComponent {
 
     async getOwnSets() {
         const data = { "token": this.token };
-        fetch("http://localhost:8000/api/getownsets/", {
+        fetch(BACKEND + "api/getownsets/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -80,7 +80,7 @@ export class CollectionComponent {
     deleteSet(urlToDelete: string) {
         const data = { "token": this.token, "url_to_delete": urlToDelete };
 
-        fetch("http://localhost:8000/api/deleteset/", {
+        fetch(BACKEND + "api/deleteset/", {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

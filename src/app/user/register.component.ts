@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {FormControl} from "@angular/forms";
 import { Router } from '@angular/router';
+import {BACKEND} from "../constants";
 @Component({
   selector: 'app-user',
   templateUrl: './register.component.html',
@@ -28,7 +29,7 @@ export class RegisterComponent {
         {"username": this.username.getRawValue(),
           "password": this.password.getRawValue()};
 
-    fetch('http://localhost:8000/api/register/', {
+    fetch(BACKEND + 'api/register/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

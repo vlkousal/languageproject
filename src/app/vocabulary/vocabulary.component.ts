@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
+import {BACKEND, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
 import {ActivatedRoute} from "@angular/router";
 import {ApiTools} from "../apitools";
 
@@ -192,7 +192,7 @@ export class VocabularyComponent {
             "correct": correct
         }
 
-        fetch("http://localhost:8000/api/addresult/", {
+        fetch(BACKEND + "api/addresult/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from '@angular/router';
-import {Word} from "../constants";
+import {BACKEND, Word} from "../constants";
 import {ApiTools} from "../apitools";
 
 @Component({
@@ -107,7 +107,7 @@ export class EditVocabularyComponent {
             }
             console.log(this.name.getRawValue());
 
-            fetch("http://localhost:8000/api/editvocab/", {
+            fetch(BACKEND + "api/editvocab/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -228,7 +228,7 @@ export class EditVocabularyComponent {
 
     async getLanguageJson(): Promise<string> {
         try {
-            const response = await fetch('http://localhost:8000/api/get_languages/', {
+            const response = await fetch(BACKEND + 'api/get_languages/', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -247,7 +247,7 @@ export class EditVocabularyComponent {
 
     async getRelevantVocabulary(): Promise<string> {
         try {
-            const response = await fetch("http://localhost:8000/api/getlanguagevocab/", {
+            const response = await fetch(BACKEND + "api/getlanguagevocab/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

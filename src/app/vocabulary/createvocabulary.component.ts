@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FormControl} from "@angular/forms";
-import {Word} from "../constants";
+import {BACKEND, Word} from "../constants";
 
 @Component({
   selector: 'app-createvocabulary',
@@ -86,7 +86,7 @@ export class CreateVocabularyComponent {
                 "vocabulary": this.vocab.getRawValue()
             }
 
-            fetch("http://localhost:8000/api/createvocab/", {
+            fetch(BACKEND + "api/createvocab/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -235,7 +235,7 @@ export class CreateVocabularyComponent {
 
     async getLanguageJson(): Promise<string> {
         try {
-            const response = await fetch('http://localhost:8000/api/get_languages/', {
+            const response = await fetch(BACKEND + 'api/get_languages/', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -254,7 +254,7 @@ export class CreateVocabularyComponent {
 
     async getRelevantVocabulary(): Promise<string> {
         try {
-            const response = await fetch("http://localhost:8000/api/getlanguagevocab/", {
+            const response = await fetch(BACKEND + "api/getlanguagevocab/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

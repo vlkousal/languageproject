@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {BACKEND} from "../constants";
 
 @Component({
     selector: 'app-base',
@@ -16,7 +17,7 @@ export class BaseComponent {
 
     async sendTokenToCheck() {
         const data = {"token": localStorage.getItem("sessionId")};
-        fetch("http://localhost:8000/api/checktoken/", {
+        fetch(BACKEND + "api/checktoken/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

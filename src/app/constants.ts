@@ -1,6 +1,6 @@
 export const STREAK_FOR_HEALTH: number = 3;
 export const MAX_HEALTH: number = 10;
-
+export const BACKEND: string = "http://localhost:8000/";
 export class Word {
 
     id: number;

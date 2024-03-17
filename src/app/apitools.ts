@@ -1,10 +1,11 @@
+import {BACKEND} from "./constants";
 
 
 export class ApiTools {
 
     static async getVocabJson(url: string): Promise<string> {
         try {
-            const response = await fetch('http://localhost:8000/api/getvocab/', {
+            const response = await fetch(BACKEND + 'api/getvocab/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
