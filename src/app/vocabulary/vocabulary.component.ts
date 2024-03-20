@@ -103,7 +103,6 @@ export class VocabularyComponent {
             let question = vocabString[i].split(";")[0];
             let phonetic: string = vocabString[i].split(";")[1];
             let word = new Word(id, success_rate, question, phonetic, correct, answers);
-            console.log(id, success_rate, question, phonetic, correct, answers);
             words.push(word);
             this.words = words;
             this.all = words;
@@ -113,7 +112,7 @@ export class VocabularyComponent {
     speak(text: string) {
         let utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
         // MAC - (zh-CN), LINUX - (cmn)
-        utt.lang = "cmn";
+        utt.lang = "zh-CN";
         utt.text = text;
         window.speechSynthesis.speak(utt);
     }
@@ -173,6 +172,11 @@ export class VocabularyComponent {
                 to_move_index++;
             }
         }
+        let to_print = "";
+        for(let i = 0; i < words.length; i++){
+          to_print += words[i].success_rate + " ";
+        }
+        console.log(to_print)
         this.restart();
         this.hiddenPreview = true;
     }
@@ -194,6 +198,7 @@ export class VocabularyComponent {
             return;
         }
         this.current = this.words[this.index];
+        console.log(this.current.question + ": " + this.current.success_rate);
         this.speak(this.current.question);
     }
 
@@ -253,5 +258,16 @@ function shuffleList(list: any[]) {
         const j = Math.floor(Math.random() * (i + 1));
         [list[i], list[j]] = [list[j], list[i]];
     }
+    // we sort, and then we move the "undiscovered" words to be first
+    let to_move_index = 0;
+    for(let i = 0; i < list.length; i++){
+      let word = list[i];
+    if(word.success_rate == -1){
+      let temp = list[to_move_index];
+      list[to_move_index] = word;
+      list[i] = temp
+      to_move_index++;
+    }
+  }
     return list;
 }
