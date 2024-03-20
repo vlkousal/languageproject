@@ -49,6 +49,7 @@ export class VocabularyComponent {
         this.firstLanguage = json.first_language_flag + " " + json.first_language;
         this.secondLanguage = json.second_language_flag + " " + json.second_language;
         this.fillVocabularyTable();
+        this.sortByFirst();
     }
 
     sortByFirst(): void {
@@ -161,6 +162,16 @@ export class VocabularyComponent {
             this.all = words;
         }
         shuffleList(words);
+        // we sort, and then we move the "undiscovered" words to be first
+        let to_move_index = 0;
+        for(let i = 0; i < words.length; i++){
+            let word = words[i];
+            if(word.success_rate == -1){
+                let temp = words[to_move_index];
+                words[to_move_index] = word;
+                words[i] = temp
+            }
+        }
         this.restart();
         this.hiddenPreview = true;
     }
