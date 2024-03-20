@@ -170,6 +170,7 @@ export class VocabularyComponent {
                 let temp = words[to_move_index];
                 words[to_move_index] = word;
                 words[i] = temp
+                to_move_index++;
             }
         }
         this.restart();
