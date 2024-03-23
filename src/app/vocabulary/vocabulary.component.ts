@@ -33,6 +33,8 @@ export class VocabularyComponent {
     secondLanguage: string = "";
     languageNames: string[] = [];
 
+    writtenAnswer: FormControl<string> = new FormControl("") as FormControl<string>;
+
     hideChooseOfThree: boolean = true;
     hidePreview: boolean = false;
     hideWriteTheAnswer: boolean = true;
@@ -100,7 +102,7 @@ export class VocabularyComponent {
         return speechSynthesis.getVoices().find(voice => voice.name === name);
     }
 
-    onFirstLanguageChange(){
+    onFirstLanguageChange() {
         let voice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
         if (voice) {
             this.utt.voice = voice;
@@ -175,6 +177,8 @@ export class VocabularyComponent {
         }
         this.score += this.streak;
         this.correctAnswers++;
+        this.sendResult(true);
+        this.feedback = "Correct!";
     }
 
     evalWrong(): void {
@@ -186,6 +190,8 @@ export class VocabularyComponent {
             this.hideEnd = false;
             return;
         }
+        this.sendResult(false);
+        this.feedback = "The correct answer was " + this.current.correct;
     }
 
     loadVocab() {
@@ -246,16 +252,15 @@ export class VocabularyComponent {
     }
 
     checkAnswer(answer: string): void {
-        window.speechSynthesis.cancel();
         if(this.current.correct == answer) {
-            this.sendResult(true);
             this.evalCorrect();
-            this.feedback = "Correct!";
         } else {
-            this.sendResult(false);
             this.evalWrong();
-            this.feedback = "The correct answer was " + this.current.correct;
         }
+        this.setNewWord();
+    }
+
+    setNewWord() {
         this.index++;
         if(this.index == this.words.length) {
             this.hideEverything();
@@ -288,6 +293,19 @@ export class VocabularyComponent {
             },
             body: JSON.stringify(data),
         })
+    }
+
+    checkWrittenAnswer(): void{
+        let answer: string = this.writtenAnswer.getRawValue();
+        if(answer.length != 0){
+            console.log(this.current.correct, answer);
+            if(this.current.correct == answer){
+                this.evalCorrect();
+            } else{
+                this.evalWrong();
+            }
+            this.setNewWord();
+        }
     }
 
     replayMistakes(): void {

@@ -50,8 +50,19 @@ export class EditVocabularyComponent {
         this.description.setValue(parsed.description);
         this.firstLanguage.setValue(parsed.first_language);
         this.secondLanguage.setValue(parsed.second_language);
-        this.vocab.setValue(parsed.vocabulary);
+        this.addWords(parsed.vocabulary);
         this.onInputChange();
+    }
+
+    addWords(vocab: string) {
+        let toAdd: string = "";
+        let lines: string[] = vocab.split("\n");
+        for(let i = 0; i < lines.length; i++){
+            let split = lines[i].split(";");
+            let lineString = split[0] + ";" + split[1] + ";" + split[2] + "\n"
+            toAdd += lineString;
+        }
+        this.vocab.setValue(toAdd);
     }
 
     setupDropdownMenus(jsonString: string){
@@ -90,7 +101,9 @@ export class EditVocabularyComponent {
     }
 
     onSend(){
+        console.log("wtf ??? ");
         if(this.counter >= 3){
+            console.log("vsak toto je extremne relane")
             let sentString: string = "";
             this.words.forEach(function(w) {
                 sentString += w.question + "," + w.phonetic + "," + w.correct + "\n";

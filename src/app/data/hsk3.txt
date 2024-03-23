@@ -594,7 +594,7 @@
 谢谢;xièxie;thanks
 不客气;bú kèqi;you’re welcome
 再见;zàijiàn;goodbye
-请;qǐng;please…
+请;qǐng;please
 对不起;duìbuqǐ;sorry
 没关系;méi guānxi;it’s all right
 当然;dāngrán;of course

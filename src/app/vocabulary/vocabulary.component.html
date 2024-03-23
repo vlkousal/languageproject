@@ -81,7 +81,7 @@
 	<strong style="font-size: 20px">{{ feedback }}</strong>
 	<button (click)="speak(current.question)">Play</button>
 	<div title="{{ current.phonetic}}"><p>{{ current.question }}</p></div>
-	<input>
+	<input [formControl]="writtenAnswer" (keydown.enter)="checkWrittenAnswer()">
 </div>
 
 
