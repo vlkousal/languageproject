@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {BACKEND, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
 import {ActivatedRoute} from "@angular/router";
 import {ApiTools} from "../apitools";
+import {VocabUtils} from "../vocabutils";
 
 @Component({
     selector: 'app-vocabulary',
@@ -48,66 +49,8 @@ export class VocabularyComponent {
         this.description = json.description;
         this.firstLanguage = json.first_language_flag + " " + json.first_language;
         this.secondLanguage = json.second_language_flag + " " + json.second_language;
-        this.fillVocabularyTable();
-        this.sortByFirst();
-    }
-
-    sortByFirst(): void {
-        this.words.sort((a, b) => {
-            if (a.question < b.question) return -1;
-            if (a.question > b.question) return 1;
-            return 0;
-        });
-    }
-
-    sortByPhonetic(): void{
-        this.words.sort((a, b) => {
-            if (a.phonetic < b.phonetic) return -1;
-            if (a.phonetic > b.phonetic) return 1;
-            return 0;
-        });
-    }
-
-    sortByAnswer(): void{
-        this.words.sort((a, b) => {
-            if (a.correct < b.correct) return -1;
-            if (a.correct > b.correct) return 1;
-            return 0;
-        });
-    }
-
-    sortBySuccessRate(): void{
-        this.words.sort((a, b) => {
-            if (a.success_rate < b.success_rate) return -1;
-            if (a.success_rate > b.success_rate) return 1;
-            return 0;
-        });
-    }
-
-    fillVocabularyTable(){
-        let parsed = JSON.parse(this.vocabularySet).vocabulary;
-        let vocabString = shuffleList(parsed.split("\n")).filter(str => str.trim() !== '');
-        let words: Word[] = [];
-
-        for(let i = 0; i < vocabString.length; i++) {
-            let correct: string = vocabString[i].split(";")[2];
-            let answers: string[] = [correct];
-            for(let answer = 0; answer < 2; answer++) {
-                let index = getIndex(i, vocabString.length);
-                let otherAnswer: string = vocabString[index].split(";")[2];
-                answers.push(otherAnswer);
-            }
-            answers = shuffleList(answers);
-            let id = vocabString[i].split(";")[3];
-            let success_rate = vocabString[i].split(";")[4];
-            let question = vocabString[i].split(";")[0];
-            let phonetic: string = vocabString[i].split(";")[1];
-            let word = new Word(id, success_rate, question, phonetic, correct, answers);
-            console.log(id, success_rate, question, phonetic, correct, answers);
-            words.push(word);
-            this.words = words;
-            this.all = words;
-        }
+        this.loadVocab();
+        VocabUtils.sortByFirst(this.words);
     }
 
     speak(text: string) {
@@ -137,7 +80,7 @@ export class VocabularyComponent {
         }
     }
 
-    startVocab() {
+    loadVocab() {
         let parsed = JSON.parse(this.vocabularySet).vocabulary;
         let vocabString = shuffleList(parsed.split("\n")).filter(str => str.trim() !== '');
         let words: Word[] = [];
@@ -161,15 +104,19 @@ export class VocabularyComponent {
             this.words = words;
             this.all = words;
         }
-        shuffleList(words);
+    }
+
+    startVocab() {
+        this.loadVocab();
+        shuffleList(this.words);
         // we sort, and then we move the "undiscovered" words to be first
         let to_move_index = 0;
-        for(let i = 0; i < words.length; i++){
-            let word = words[i];
+        for(let i = 0; i < this.words.length; i++){
+            let word = this.words[i];
             if(word.success_rate == -1){
-                let temp = words[to_move_index];
-                words[to_move_index] = word;
-                words[i] = temp
+                let temp = this.words[to_move_index];
+                this.words[to_move_index] = word;
+                this.words[i] = temp
                 to_move_index++;
             }
         }
@@ -238,6 +185,7 @@ export class VocabularyComponent {
         this.speak(this.current.question);
     }
     protected readonly Math = Math;
+    protected readonly VocabUtils = VocabUtils;
 }
 
 function getIndex(blocked: number, ceil: number): number {

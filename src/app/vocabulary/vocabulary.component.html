@@ -18,10 +18,10 @@
 	<div class="table-container">
 		<table border="1" id="table">
 			<tr>
-				<th (click)="sortByFirst()"> {{ this.firstLanguage }}</th>
-				<th (click)="sortByPhonetic()"> Phonetic</th>
-				<th (click)="sortByAnswer()"> {{ this.secondLanguage }}</th>
-				<th (click)="sortBySuccessRate()"> Correct rate</th>
+				<th (click)="VocabUtils.sortByFirst(this.words)"> {{ this.firstLanguage }}</th>
+				<th (click)="VocabUtils.sortByPhonetic(this.words)"> Phonetic</th>
+				<th (click)="VocabUtils.sortByAnswer(this.words)"> {{ this.secondLanguage }}</th>
+				<th (click)="VocabUtils.sortBySuccessRate(this.words)"> Correct rate</th>
 			</tr>
 
 			<tr *ngFor="let word of words">
