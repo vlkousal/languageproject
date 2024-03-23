@@ -301,7 +301,7 @@
 姓;xìng;to be surnamed
 在;zài;to be in
 有;yǒu;to have
-住;zhù;to live or to stay
+住;zhù;to live
 来;lái;to come
 去;qù;to go
 回;huí;to return
@@ -441,9 +441,9 @@
 影响;yǐngxiǎng;to affect
 结婚;jiéhūn;to marry
 举行;jǔxíng;to hold (event)
-会;huì;can (to know how to)
-能;néng;can (to be able to)
-可以;kěyǐ;can (to be permitted to)
+会;huì;can
+能;néng;can
+可以;kěyǐ;can
 必须;bìxū;must
 应该;yīnggāi;should
 愿意;yuànyì;to be willing to
