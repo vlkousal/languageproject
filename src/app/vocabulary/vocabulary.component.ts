@@ -49,11 +49,8 @@ export class VocabularyComponent {
         this.description = json.description;
         this.firstLanguage = json.first_language_flag + " " + json.first_language;
         this.secondLanguage = json.second_language_flag + " " + json.second_language;
-<<<<<<< HEAD
         this.loadVocab();
         VocabUtils.sortByFirst(this.words);
-=======
-        this.fillVocabularyTable();
         this.sortByFirst();
     }
 
@@ -112,7 +109,6 @@ export class VocabularyComponent {
             this.words = words;
             this.all = words;
         }
->>>>>>> 249de1d766b70203dd43b6eb928b165ab42e8344
     }
 
     speak(text: string) {
@@ -182,11 +178,6 @@ export class VocabularyComponent {
                 to_move_index++;
             }
         }
-        let to_print = "";
-        for(let i = 0; i < words.length; i++){
-          to_print += words[i].success_rate + " ";
-        }
-        console.log(to_print)
         this.restart();
         this.hiddenPreview = true;
     }

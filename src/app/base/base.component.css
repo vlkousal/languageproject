@@ -1,29 +1,55 @@
+/* Base styles */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
 }
 
+.base-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 .navbar {
     background-color: #4CAF50;
     color: #fff;
-    padding: 10px;
+    padding: 15px 20px; /* Increased padding for better spacing */
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Added subtle box shadow for depth */
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #fff;
+    margin-right: 20px; /* Increased margin for better separation */
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #d0d9cf; /* Change to your desired hover color */
 }
 
 .username {
     margin-right: 10px;
 }
 
-.nav-link {
-    text-decoration: none;
-    color: #fff;
-    margin-right: 15px;
-    transition: color 0.3s ease;
+/* Additional styles for responsiveness */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar a {
+        margin: 10px 0;
+    }
 }
 
-.nav-link:hover {
-    color: #d0d9cf; /* Change to your desired hover color */
+/* Additional hover effect */
+.navbar a:hover {
+    color: #d0d9cf;
+    transform: translateY(-2px); /* Add slight upward movement on hover */
 }
