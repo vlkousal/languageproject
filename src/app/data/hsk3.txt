@@ -440,7 +440,7 @@
 小心;xiǎoxīn;to be careful
 影响;yǐngxiǎng;to affect
 结婚;jiéhūn;to marry
-举行;jǔxíng;to hold (event)
+举行;jǔxíng;to hold an event
 会;huì;can
 能;néng;can
 可以;kěyǐ;can
@@ -448,10 +448,10 @@
 应该;yīnggāi;should
 愿意;yuànyì;to be willing to
 下雨;xià yǔ;to rain
-刮风;guā fēng; to blow (wind)
+刮风;guā fēng; to blow
 好;hǎo;good
 坏;huài;bad
-差;chà;bad (in quality)
+差;chà;bad
 大;dà;big
 小;xiǎo;small
 多;duō;many
@@ -465,17 +465,17 @@
 对;duì;right
 错;cuò;wrong
 长;cháng;long
-久;jiǔ;long (in time)
+久;jiǔ;long
 短;duǎn;short
 高;gāo;tall or high
-矮;ǎi;short (in height)
+矮;ǎi;short
 低;dī;low
 胖;pàng;fat
 瘦;shòu;thin
 新;xīn;new
 旧;jiù;old or used
 年轻;niánqīng;young
-老;lǎo;old (in age)
+老;lǎo;old
 贵;guì;expensive
 便宜;piányi;cheap
 黑;hēi;black
@@ -523,7 +523,7 @@
 很;hěn;very
 非常;fēicháng;extremely
 极;jí;extremely
-太;tài;too…
+太;tài;too
 多么;duōme;how
 都;dōu;both or all
 不;bù;not
@@ -564,7 +564,7 @@
 比;bǐ;than
 跟;gēn;with
 被;bèi;by
-为;wèi;for (sb/sth)
+为;wèi;for
 为了;wèile;for (purpose)
 关于;guānyú;about, regarding
 像;xiàng;as or like
