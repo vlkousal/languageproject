@@ -3,6 +3,8 @@ import {BACKEND, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
 import {ActivatedRoute} from "@angular/router";
 import {ApiTools} from "../apitools";
 import {VocabUtils} from "../vocabutils";
+import {first} from "rxjs";
+import {FormControl} from "@angular/forms";
 
 @Component({
     selector: 'app-vocabulary',
@@ -31,6 +33,9 @@ export class VocabularyComponent {
     contributor: string = "";
     firstLanguage: string = "";
     secondLanguage: string = "";
+    languageNames: string[] = [];
+    utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
+    selectedLanguageName: FormControl<string> = new FormControl("Czech") as FormControl<string>;
 
     constructor(private route: ActivatedRoute) {}
 
@@ -39,6 +44,25 @@ export class VocabularyComponent {
             this.url = params['vocabUrl'];
         });
         this.setup();
+
+        let voices = speechSynthesis.getVoices();
+        voices.forEach((voice, i) => {
+            this.languageNames.push(voice.name);
+        });
+        this.languageNames.sort();
+    }
+
+    getVoiceByName(name: string) {
+        return speechSynthesis.getVoices().find(voice => voice.name === name);
+    }
+
+    onLanguageChange() {
+        let voice = this.getVoiceByName(this.selectedLanguageName.getRawValue());
+        if (voice) {
+            this.utt.voice = voice;
+            this.utt.lang = voice.lang;
+        }
+        localStorage.setItem(this.firstLanguage, this.selectedLanguageName.getRawValue());
     }
 
     async setup() {
@@ -52,39 +76,18 @@ export class VocabularyComponent {
         this.loadVocab();
         VocabUtils.sortByFirst(this.words);
         this.VocabUtils.sortByFirst(this.words);
-    }
 
-    fillVocabularyTable(){
-        let parsed = JSON.parse(this.vocabularySet).vocabulary;
-        let vocabString = shuffleList(parsed.split("\n")).filter(str => str.trim() !== '');
-        let words: Word[] = [];
-
-        for(let i = 0; i < vocabString.length; i++) {
-            let correct: string = vocabString[i].split(";")[2];
-            let answers: string[] = [correct];
-            for(let answer = 0; answer < 2; answer++) {
-                let index = getIndex(i, vocabString.length);
-                let otherAnswer: string = vocabString[index].split(";")[2];
-                answers.push(otherAnswer);
-            }
-            answers = shuffleList(answers);
-            let id = vocabString[i].split(";")[3];
-            let success_rate = vocabString[i].split(";")[4];
-            let question = vocabString[i].split(";")[0];
-            let phonetic: string = vocabString[i].split(";")[1];
-            let word = new Word(id, success_rate, question, phonetic, correct, answers);
-            words.push(word);
-            this.words = words;
-            this.all = words;
+        let firstName = localStorage.getItem(this.firstLanguage);
+        if(firstName != null){
+            this.selectedLanguageName.setValue(firstName);
+            this.onLanguageChange();
         }
     }
 
+
     speak(text: string) {
-        let utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
-        // MAC - (zh-CN), LINUX - (cmn)
-        utt.lang = "zh-CN";
-        utt.text = text;
-        window.speechSynthesis.speak(utt);
+        this.utt.text = text;
+        window.speechSynthesis.speak(this.utt);
     }
 
     evalCorrect(): void {
@@ -121,11 +124,10 @@ export class VocabularyComponent {
             }
             answers = shuffleList(answers);
             let id = vocabString[i].split(";")[3];
-            let success_rate = vocabString[i].split(";")[4];
+            let success_rate = parseInt(vocabString[i].split(";")[4]);
             let question = vocabString[i].split(";")[0];
             let phonetic: string = vocabString[i].split(";")[1];
             let word = new Word(id, success_rate, question, phonetic, correct, answers);
-            console.log(id, success_rate, question, phonetic, correct, answers);
             words.push(word);
             this.words = words;
             this.all = words;
@@ -167,7 +169,6 @@ export class VocabularyComponent {
             return;
         }
         this.current = this.words[this.index];
-        console.log(this.current.question + ": " + this.current.success_rate);
         this.speak(this.current.question);
     }
 
@@ -213,6 +214,7 @@ export class VocabularyComponent {
     }
     protected readonly Math = Math;
     protected readonly VocabUtils = VocabUtils;
+    protected readonly first = first;
 }
 
 function getIndex(blocked: number, ceil: number): number {

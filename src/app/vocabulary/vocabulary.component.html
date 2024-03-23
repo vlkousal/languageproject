@@ -7,6 +7,7 @@
 	<title>XD</title>
 </head>
 
+<!--  PREVIEW -->
 <div id="preview" [hidden]="hiddenPreview" style="text-align: center;">
   <h2>{{ name }}</h2>
   <p>Contributor: {{ contributor}}</p>
@@ -33,10 +34,14 @@
 			</tr>
 		</table>
 	</div>
+	<p>{{ firstLanguage }}</p>
+	<select id="firstLanguage" [formControl]="selectedLanguageName" (change)="onLanguageChange()">
+		<option *ngFor="let language of languageNames">{{ language }}</option>
+	</select>
 </div>
 
 
-
+<!--  PICK ONE OF THREE -->
 <div class="xd" [hidden]="hidden">
   <p>{{ index + 1 }}/{{ words.length }}     Score: {{ score }}</p>
   <p>Streak: {{ streak }}</p>
@@ -55,6 +60,7 @@
 </div>
 
 
+<!--  END SCREEN -->
 <div class="end" [hidden]="(!hidden || !hiddenPreview)">
   <h1>Final score: {{ score }}</h1>
   <h3>{{correctAnswers}}/{{ words.length }} ({{ Math.floor(correctAnswers / (words.length / 100)) }}%)</h3>
@@ -64,4 +70,3 @@
     <p><button (click)="speak(word.question)">{{ word.question }}</button> ({{ word.phonetic }}) - {{ word.correct }}</p>
   </div>
 </div>
-
