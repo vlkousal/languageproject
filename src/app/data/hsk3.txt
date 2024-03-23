@@ -570,16 +570,6 @@
 像;xiàng;as or like
 除了;chúle;besides or except
 根据;gēnjù;according to
-的;de;possession particle
-得;de;structure particle
-地;de;structure particle
-了;le;aspect particle
-着;zhe;aspect particle
-过;guò;aspect particle
-吗;ma;question particle
-呢;ne;question particle
-吧;ba;question particle
-啊;a;exclamatory particle
 和;hé;and
 但是;dànshì;but
 虽然;suīrán;although
