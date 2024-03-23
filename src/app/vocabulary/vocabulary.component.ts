@@ -34,8 +34,12 @@ export class VocabularyComponent {
     firstLanguage: string = "";
     secondLanguage: string = "";
     languageNames: string[] = [];
+
     utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
-    selectedLanguageName: FormControl<string> = new FormControl("Czech") as FormControl<string>;
+    selectedFirstLanguageName: FormControl<string> = new FormControl("") as FormControl<string>;
+    selectedSecondLanguageName: FormControl<string> = new FormControl("") as FormControl<string>;
+    firstLang: string = "";
+    secondLang: string = "";
 
     constructor(private route: ActivatedRoute) {}
 
@@ -52,17 +56,40 @@ export class VocabularyComponent {
         this.languageNames.sort();
     }
 
+    testSecondVoice() {
+        let randomWord = getRandomElement(this.words);
+        this.utt.lang = this.secondLang;
+        this.speak(randomWord.correct);
+    }
+
+    testFirstVoice() {
+        let randomWord = getRandomElement(this.words);
+        this.utt.lang = this.firstLang;
+        this.speak(randomWord.question);
+    }
+
     getVoiceByName(name: string) {
         return speechSynthesis.getVoices().find(voice => voice.name === name);
     }
 
-    onLanguageChange() {
-        let voice = this.getVoiceByName(this.selectedLanguageName.getRawValue());
+    onFirstLanguageChange(){
+        let voice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
         if (voice) {
             this.utt.voice = voice;
             this.utt.lang = voice.lang;
+            this.firstLang = voice.lang;
         }
-        localStorage.setItem(this.firstLanguage, this.selectedLanguageName.getRawValue());
+        localStorage.setItem(this.firstLanguage, this.selectedFirstLanguageName.getRawValue());
+    }
+
+    onSecondLanguageChange() {
+        let voice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
+        if (voice) {
+            this.utt.voice = voice;
+            this.utt.lang = voice.lang;
+            this.secondLang = voice.lang;
+        }
+        localStorage.setItem(this.secondLanguage, this.selectedSecondLanguageName.getRawValue());
     }
 
     async setup() {
@@ -79,8 +106,14 @@ export class VocabularyComponent {
 
         let firstName = localStorage.getItem(this.firstLanguage);
         if(firstName != null){
-            this.selectedLanguageName.setValue(firstName);
-            this.onLanguageChange();
+            this.selectedFirstLanguageName.setValue(firstName);
+            this.onFirstLanguageChange();
+        }
+
+        let secondName = localStorage.getItem(this.secondLanguage);
+        if(secondName != null){
+            this.selectedSecondLanguageName.setValue(secondName);
+            this.onSecondLanguageChange();
         }
     }
 
@@ -242,4 +275,11 @@ function shuffleList(list: any[]) {
     }
   }
     return list;
+}
+
+function getRandomElement(list: any[]) {
+    // Generate a random index within the range of the list's length
+    const randomIndex = Math.floor(Math.random() * list.length);
+    // Return the element at the random index
+    return list[randomIndex];
 }
