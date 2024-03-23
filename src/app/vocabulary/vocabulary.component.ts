@@ -51,39 +51,7 @@ export class VocabularyComponent {
         this.secondLanguage = json.second_language_flag + " " + json.second_language;
         this.loadVocab();
         VocabUtils.sortByFirst(this.words);
-        this.sortByFirst();
-    }
-
-    sortByFirst(): void {
-        this.words.sort((a, b) => {
-            if (a.question < b.question) return -1;
-            if (a.question > b.question) return 1;
-            return 0;
-        });
-    }
-
-    sortByPhonetic(): void{
-        this.words.sort((a, b) => {
-            if (a.phonetic < b.phonetic) return -1;
-            if (a.phonetic > b.phonetic) return 1;
-            return 0;
-        });
-    }
-
-    sortByAnswer(): void{
-        this.words.sort((a, b) => {
-            if (a.correct < b.correct) return -1;
-            if (a.correct > b.correct) return 1;
-            return 0;
-        });
-    }
-
-    sortBySuccessRate(): void{
-        this.words.sort((a, b) => {
-            if (a.success_rate < b.success_rate) return -1;
-            if (a.success_rate > b.success_rate) return 1;
-            return 0;
-        });
+        this.VocabUtils.sortByFirst(this.words);
     }
 
     fillVocabularyTable(){
