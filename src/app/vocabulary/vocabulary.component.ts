@@ -58,13 +58,21 @@ export class VocabularyComponent {
 
     testSecondVoice() {
         let randomWord = getRandomElement(this.words);
+        let secondVoice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
         this.utt.lang = this.secondLang;
+        if(secondVoice != null){
+            this.utt.voice = secondVoice;
+        }
         this.speak(randomWord.correct);
     }
 
     testFirstVoice() {
         let randomWord = getRandomElement(this.words);
+        let firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
         this.utt.lang = this.firstLang;
+        if (firstVoice != null){
+            this.utt.voice = firstVoice;
+        }
         this.speak(randomWord.question);
     }
 
@@ -108,17 +116,33 @@ export class VocabularyComponent {
         if(firstName != null){
             this.selectedFirstLanguageName.setValue(firstName);
             this.onFirstLanguageChange();
+            let voice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
+            if (voice) {
+                this.utt.voice = voice;
+                this.utt.lang = voice.lang;
+                this.firstLang = voice.lang;
+            }
         }
 
         let secondName = localStorage.getItem(this.secondLanguage);
         if(secondName != null){
             this.selectedSecondLanguageName.setValue(secondName);
             this.onSecondLanguageChange();
+
+            let voice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
+            if (voice) {
+                this.utt.voice = voice;
+                this.utt.lang = voice.lang;
+                this.secondLang = voice.lang;
+            }
         }
     }
 
 
     speak(text: string) {
+        if(this.utt.voice != null){
+            console.log(this.utt.lang, this.utt.voice.name);
+        }
         this.utt.text = text;
         window.speechSynthesis.speak(this.utt);
     }
