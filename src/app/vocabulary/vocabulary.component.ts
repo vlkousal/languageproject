@@ -49,14 +49,76 @@ export class VocabularyComponent {
         this.description = json.description;
         this.firstLanguage = json.first_language_flag + " " + json.first_language;
         this.secondLanguage = json.second_language_flag + " " + json.second_language;
+<<<<<<< HEAD
         this.loadVocab();
         VocabUtils.sortByFirst(this.words);
+=======
+        this.fillVocabularyTable();
+        this.sortByFirst();
+    }
+
+    sortByFirst(): void {
+        this.words.sort((a, b) => {
+            if (a.question < b.question) return -1;
+            if (a.question > b.question) return 1;
+            return 0;
+        });
+    }
+
+    sortByPhonetic(): void{
+        this.words.sort((a, b) => {
+            if (a.phonetic < b.phonetic) return -1;
+            if (a.phonetic > b.phonetic) return 1;
+            return 0;
+        });
+    }
+
+    sortByAnswer(): void{
+        this.words.sort((a, b) => {
+            if (a.correct < b.correct) return -1;
+            if (a.correct > b.correct) return 1;
+            return 0;
+        });
+    }
+
+    sortBySuccessRate(): void{
+        this.words.sort((a, b) => {
+            if (a.success_rate < b.success_rate) return -1;
+            if (a.success_rate > b.success_rate) return 1;
+            return 0;
+        });
+    }
+
+    fillVocabularyTable(){
+        let parsed = JSON.parse(this.vocabularySet).vocabulary;
+        let vocabString = shuffleList(parsed.split("\n")).filter(str => str.trim() !== '');
+        let words: Word[] = [];
+
+        for(let i = 0; i < vocabString.length; i++) {
+            let correct: string = vocabString[i].split(";")[2];
+            let answers: string[] = [correct];
+            for(let answer = 0; answer < 2; answer++) {
+                let index = getIndex(i, vocabString.length);
+                let otherAnswer: string = vocabString[index].split(";")[2];
+                answers.push(otherAnswer);
+            }
+            answers = shuffleList(answers);
+            let id = vocabString[i].split(";")[3];
+            let success_rate = vocabString[i].split(";")[4];
+            let question = vocabString[i].split(";")[0];
+            let phonetic: string = vocabString[i].split(";")[1];
+            let word = new Word(id, success_rate, question, phonetic, correct, answers);
+            words.push(word);
+            this.words = words;
+            this.all = words;
+        }
+>>>>>>> 249de1d766b70203dd43b6eb928b165ab42e8344
     }
 
     speak(text: string) {
         let utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
         // MAC - (zh-CN), LINUX - (cmn)
-        utt.lang = "cmn";
+        utt.lang = "zh-CN";
         utt.text = text;
         window.speechSynthesis.speak(utt);
     }
@@ -120,6 +182,11 @@ export class VocabularyComponent {
                 to_move_index++;
             }
         }
+        let to_print = "";
+        for(let i = 0; i < words.length; i++){
+          to_print += words[i].success_rate + " ";
+        }
+        console.log(to_print)
         this.restart();
         this.hiddenPreview = true;
     }
@@ -141,6 +208,7 @@ export class VocabularyComponent {
             return;
         }
         this.current = this.words[this.index];
+        console.log(this.current.question + ": " + this.current.success_rate);
         this.speak(this.current.question);
     }
 
@@ -201,5 +269,16 @@ function shuffleList(list: any[]) {
         const j = Math.floor(Math.random() * (i + 1));
         [list[i], list[j]] = [list[j], list[i]];
     }
+    // we sort, and then we move the "undiscovered" words to be first
+    let to_move_index = 0;
+    for(let i = 0; i < list.length; i++){
+      let word = list[i];
+    if(word.success_rate == -1){
+      let temp = list[to_move_index];
+      list[to_move_index] = word;
+      list[i] = temp
+      to_move_index++;
+    }
+  }
     return list;
 }
