@@ -22,8 +22,6 @@ export class VocabularyComponent {
     score: number = 0;
     streak: number = 0;
     lives: number = 3;
-    hidden: boolean = true;
-    hiddenPreview: boolean = false;
     correctAnswers: number = 0;
     feedback: string = "";
     url: string = "";
@@ -34,6 +32,11 @@ export class VocabularyComponent {
     firstLanguage: string = "";
     secondLanguage: string = "";
     languageNames: string[] = [];
+
+    hideChooseOfThree: boolean = true;
+    hidePreview: boolean = false;
+    hideWriteTheAnswer: boolean = true;
+    hideEnd: boolean = true;
 
     utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
     selectedFirstLanguageName: FormControl<string> = new FormControl("") as FormControl<string>;
@@ -54,6 +57,23 @@ export class VocabularyComponent {
             this.languageNames.push(voice.name);
         });
         this.languageNames.sort();
+    }
+
+    repeatWord(){
+        // TODO "flipped words"...
+        this.utt.lang = this.firstLang;
+        let firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
+        if(firstVoice){
+            this.utt.voice = firstVoice;
+        }
+        this.speak(this.current.question);
+    }
+
+    hideEverything(){
+        this.hidePreview = true;
+        this.hideWriteTheAnswer = true;
+        this.hideChooseOfThree = true;
+        this.hideEnd = true;
     }
 
     testSecondVoice() {
@@ -144,6 +164,7 @@ export class VocabularyComponent {
             console.log(this.utt.lang, this.utt.voice.name);
         }
         this.utt.text = text;
+        window.speechSynthesis.cancel();
         window.speechSynthesis.speak(this.utt);
     }
 
@@ -161,7 +182,8 @@ export class VocabularyComponent {
         this.lives--;
         this.wrong.push(this.current);
         if(this.lives == 0) {
-            this.hidden = true;
+            this.hideEverything();
+            this.hideEnd = false;
             return;
         }
     }
@@ -191,9 +213,7 @@ export class VocabularyComponent {
         }
     }
 
-    startVocab() {
-        this.loadVocab();
-        shuffleList(this.words);
+    pushUnseenForward() {
         // we sort, and then we move the "undiscovered" words to be first
         let to_move_index = 0;
         for(let i = 0; i < this.words.length; i++){
@@ -205,8 +225,24 @@ export class VocabularyComponent {
                 to_move_index++;
             }
         }
+    }
+
+    startWriteTheAnswer() {
+        this.hideEverything();
+        this.hideWriteTheAnswer = false;
+        this.loadVocab();
+        shuffleList(this.words);
+        this.pushUnseenForward();
         this.restart();
-        this.hiddenPreview = true;
+    }
+
+    startVocab() {
+        this.hideEverything();
+        this.hideChooseOfThree = false;
+        this.loadVocab();
+        shuffleList(this.words);
+        this.pushUnseenForward();
+        this.restart();
     }
 
     checkAnswer(answer: string): void {
@@ -222,10 +258,19 @@ export class VocabularyComponent {
         }
         this.index++;
         if(this.index == this.words.length) {
-            this.hidden = true;
+            this.hideEverything();
+            this.hideEnd = false;
             return;
         }
         this.current = this.words[this.index];
+
+        // TODO - make "flipped" words and make speaking in both languages functional
+        this.utt.lang = this.firstLang;
+        let firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
+        if(firstVoice){
+            this.utt.voice = firstVoice;
+            console.log("WTF ????", this.utt.lang, this.utt.voice)
+        }
         this.speak(this.current.question);
     }
 
@@ -248,12 +293,17 @@ export class VocabularyComponent {
     replayMistakes(): void {
         if(this.wrong.length > 0){
             this.words = this.wrong;
+            this.hideEverything();
+            this.hideChooseOfThree = false;
             this.restart();
         }
     }
 
     replay(): void {
         this.words = this.all;
+        // TODO reset aby fungovla na kazdem modu...
+        this.hideEverything();
+        this.hideChooseOfThree = false;
         this.restart();
     }
 
@@ -263,12 +313,11 @@ export class VocabularyComponent {
         this.streak = 0;
         this.lives = 3;
         this.correctAnswers = 0;
-        this.hidden = false;
         this.words = shuffleList(this.words);
         this.wrong = [];
-        this.current = this.words[this.index];
-        this.speak(this.current.question);
+        this.current = this.words[0];
     }
+
     protected readonly Math = Math;
     protected readonly VocabUtils = VocabUtils;
     protected readonly first = first;

@@ -8,13 +8,14 @@
 </head>
 
 <!--  PREVIEW -->
-<div id="preview" [hidden]="hiddenPreview" style="text-align: center;">
+<div id="preview" [hidden]="hidePreview" style="text-align: center;">
   <h2>{{ name }}</h2>
   <p>Contributor: {{ contributor}}</p>
 	<p>{{ firstLanguage }}</p>
 	<p>{{ secondLanguage }}</p>
   <p>{{ description }}</p>
   <button (click)="startVocab()">Start</button>
+  <button (click)="startWriteTheAnswer()">Write The Answer</button>
 
 	<div class="table-container">
 		<table border="1" id="table">
@@ -50,7 +51,7 @@
 
 
 <!--  PICK ONE OF THREE -->
-<div class="xd" [hidden]="hidden">
+<div class="xd" [hidden]="hideChooseOfThree">
   <p>{{ index + 1 }}/{{ words.length }}     Score: {{ score }}</p>
   <p>Streak: {{ streak }}</p>
   <div title="Lives: {{ lives }}" class="hearts" *ngFor="let item of [].constructor(lives); let i = index">
@@ -58,18 +59,34 @@
   </div>
   <br><br>
   <strong style="font-size: 20px">{{ feedback }}</strong>
-    <button (click)="speak(current.question)">Play</button>
+    <button (click)="repeatWord()">Play</button>
+
+	<div class="buttons" [hidden]="hideChooseOfThree">
+		<div title="{{ current.phonetic}}"><p>{{ current.question }}</p></div>
+		<button (click)="checkAnswer(current.answers[0])">{{ current.answers[0] }}</button>
+		<button (click)="checkAnswer(current.answers[1])">{{ current.answers[1] }}</button>
+		<button (click)="checkAnswer(current.answers[2])">{{ current.answers[2] }}</button>
+	</div>
 </div>
-<div class="buttons" [hidden]="hidden">
-    <div title="{{ current.phonetic}}"><p>{{ current.question }}</p></div>
-  <button (click)="checkAnswer(current.answers[0])">{{ current.answers[0] }}</button>
-  <button (click)="checkAnswer(current.answers[1])">{{ current.answers[1] }}</button>
-  <button (click)="checkAnswer(current.answers[2])">{{ current.answers[2] }}</button>
+
+
+<!--  WRITE THE ANSWER -->
+<div class="xd" [hidden]="hideWriteTheAnswer">
+	<p>{{ index + 1 }}/{{ words.length }}     Score: {{ score }}</p>
+	<p>Streak: {{ streak }}</p>
+	<div title="Lives: {{ lives }}" class="hearts" *ngFor="let item of [].constructor(lives); let i = index">
+		<img src="../../assets/srdce.png" alt="Lives">
+	</div>
+	<br><br>
+	<strong style="font-size: 20px">{{ feedback }}</strong>
+	<button (click)="speak(current.question)">Play</button>
+	<div title="{{ current.phonetic}}"><p>{{ current.question }}</p></div>
+	<input>
 </div>
 
 
 <!--  END SCREEN -->
-<div class="end" [hidden]="(!hidden || !hiddenPreview)">
+<div class="end" [hidden]="hideEnd">
   <h1>Final score: {{ score }}</h1>
   <h3>{{correctAnswers}}/{{ words.length }} ({{ Math.floor(correctAnswers / (words.length / 100)) }}%)</h3>
   <button (click)="replay()">Restart</button>
