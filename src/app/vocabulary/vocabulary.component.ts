@@ -162,9 +162,6 @@ export class VocabularyComponent {
 
 
     speak(text: string) {
-        if(this.utt.voice != null){
-            console.log(this.utt.lang, this.utt.voice.name);
-        }
         this.utt.text = text;
         window.speechSynthesis.cancel();
         window.speechSynthesis.speak(this.utt);
@@ -274,7 +271,6 @@ export class VocabularyComponent {
         let firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
         if(firstVoice){
             this.utt.voice = firstVoice;
-            console.log("WTF ????", this.utt.lang, this.utt.voice)
         }
         this.speak(this.current.question);
     }
@@ -298,7 +294,6 @@ export class VocabularyComponent {
     checkWrittenAnswer(): void{
         let answer: string = this.writtenAnswer.getRawValue();
         if(answer.length != 0){
-            console.log(this.current.correct, answer);
             if(this.current.correct == answer){
                 this.evalCorrect();
             } else{
@@ -306,6 +301,7 @@ export class VocabularyComponent {
             }
             this.setNewWord();
         }
+        this.writtenAnswer.setValue("");
     }
 
     replayMistakes(): void {
