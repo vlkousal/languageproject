@@ -16,6 +16,7 @@
   <p>{{ description }}</p>
   <button (click)="startOneOfThree()">One Of Three</button>
   <button (click)="startWriteTheAnswer()">Write The Answer</button>
+  <button (click)="startFlashcards()">Flashcards</button>
 
 	<div class="table-container">
 		<table border="1" id="table">
@@ -95,3 +96,23 @@
     <p><button (click)="speak(word.question)">{{ word.question }}</button> ({{ word.phonetic }}) - {{ word.correct }}</p>
   </div>
 </div>
+
+<div class="flashcard-container" [hidden]="hideFlashcards">
+	<div class="flashcard" [hidden]="hideFlashcards">
+		<p>{{this.currentIndex + 1}}/{{ this.words.length}}</p>
+		<div class="front">
+			<h2>{{ current.question }}</h2>
+			<p>{{ current.phonetic }}</p>
+		</div>
+		<div class="back">
+			<h2>{{ current.correct }}</h2>
+		</div>
+	</div>
+	<div class="button-container" [hidden]="hideFlashcards">
+		<button (click)="prevFlashcard()"><</button>
+		<button (click)="nextFlashcard()">></button>
+	</div>
+</div>
+
+
+

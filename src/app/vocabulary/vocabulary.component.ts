@@ -18,6 +18,7 @@ export class VocabularyComponent {
     all: Word[] = [];
     index: number = 0;
     current: Word = new Word(0, 0, "", "", "", [""]);
+    currentIndex: number = -1;
     wrong: Word[] = [];
     score: number = 0;
     streak: number = 0;
@@ -39,6 +40,7 @@ export class VocabularyComponent {
     hidePreview: boolean = false;
     hideWriteTheAnswer: boolean = true;
     hideEnd: boolean = true;
+    hideFlashcards: boolean = true;
 
     utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
     selectedFirstLanguageName: FormControl<string> = new FormControl("") as FormControl<string>;
@@ -96,6 +98,26 @@ export class VocabularyComponent {
             this.utt.voice = firstVoice;
         }
         this.speak(randomWord.question);
+    }
+
+    nextFlashcard() {
+        this.current = this.words[(++this.currentIndex) % this.words.length];
+        this.utt.lang = this.firstLang;
+        let firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
+        if (firstVoice != null){
+            this.utt.voice = firstVoice;
+        }
+        this.speak(this.current.question);
+    }
+
+    prevFlashcard() {
+        this.current = this.words[(--this.currentIndex) % this.words.length];
+        this.utt.lang = this.firstLang;
+        let firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
+        if (firstVoice != null){
+            this.utt.voice = firstVoice;
+        }
+        this.speak(this.current.question);
     }
 
     getVoiceByName(name: string) {
@@ -246,6 +268,14 @@ export class VocabularyComponent {
         shuffleList(this.words);
         this.pushUnseenForward();
         this.restart();
+    }
+
+    startFlashcards(){
+        this.hideEverything();
+        this.hideFlashcards = false;
+        this.loadVocab();
+        shuffleList(this.words);
+        this.nextFlashcard();
     }
 
     checkAnswer(answer: string): void {
