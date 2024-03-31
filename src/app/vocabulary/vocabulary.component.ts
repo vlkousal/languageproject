@@ -239,7 +239,7 @@ export class VocabularyComponent {
         this.restart();
     }
 
-    startVocab() {
+    startOneOfThree() {
         this.hideEverything();
         this.hideChooseOfThree = false;
         this.loadVocab();
