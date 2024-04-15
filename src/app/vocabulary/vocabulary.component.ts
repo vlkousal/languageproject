@@ -58,7 +58,7 @@ export class VocabularyComponent {
         this.setup();
 
         const voices = speechSynthesis.getVoices();
-        voices.forEach((voice, i) => {
+        voices.forEach((voice) => {
             this.languageNames.push(voice.name);
         });
         this.languageNames.sort();

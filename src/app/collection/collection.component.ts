@@ -22,11 +22,7 @@ export class CollectionComponent {
         if (localStorage.getItem("sessionId") == null) {
             this.router.navigate(["/"]);
         }
-        (await this.getOwnSets());
-        for(let i = 0; i < this.sets.length; i++){
-            console.log(this.sets[i].name);
-        }
-        console.log("Length: " + this.sets.length);
+        await this.getOwnSets();
     }
 
     async getOwnSets() {
@@ -55,9 +51,7 @@ export class CollectionComponent {
 
     onYesButtonClick() {
         this.deleteClickCount++;
-        console.log(this.deleteClickCount);
         if(this.deleteClickCount == 3){
-            console.log(this.deleteClickCount);
             this.deleteSet(this.urlToDelete);
             this.onNoButtonClick();
         }
@@ -74,7 +68,6 @@ export class CollectionComponent {
 
     onEditButtonClick(url: string){
         this.router.navigate(["/edit/" + url]);
-        console.log("XDDDD");
     }
 
     deleteSet(urlToDelete: string) {

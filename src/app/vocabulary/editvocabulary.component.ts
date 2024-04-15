@@ -101,13 +101,8 @@ export class EditVocabularyComponent {
     }
 
     onSend(){
-        console.log("wtf ??? ");
         if(this.counter >= 3){
-            console.log("vsak toto je extremne relane")
-            let sentString: string = "";
-            this.words.forEach(function(w) {
-                sentString += w.question + "," + w.phonetic + "," + w.correct + "\n";
-            });
+            const vocabString = this.vocab.getRawValue().replaceAll(this.delimiter.getRawValue(), ";");
             const json = {
                 "session_id": localStorage.getItem("sessionId"),
                 "name": this.name.getRawValue(),
@@ -116,9 +111,8 @@ export class EditVocabularyComponent {
                 "previous_url": this.previousurl,
                 "first_language": this.firstLanguage.getRawValue(),
                 "second_language": this.secondLanguage.getRawValue(),
-                "vocabulary": this.vocab.getRawValue()
+                "vocabulary": vocabString
             }
-            console.log(this.name.getRawValue());
 
             fetch(BACKEND + "api/editvocab/", {
                 method: "POST",

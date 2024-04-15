@@ -72,10 +72,7 @@ export class CreateVocabularyComponent {
 
     onSend(){
         if(this.counter >= 3){
-            let sentString: string = "";
-            this.words.forEach(function(w) {
-                sentString += w.question + "," + w.phonetic + "," + w.correct + "\n";
-            });
+            const vocabString = this.vocab.getRawValue().replaceAll(this.delimiter.getRawValue(), ";");
             const json = {
                 "session_id": localStorage.getItem("sessionId"),
                 "name": this.name.getRawValue(),
@@ -83,7 +80,7 @@ export class CreateVocabularyComponent {
                 "url": this.url.getRawValue(),
                 "first_language": this.firstLanguage.getRawValue(),
                 "second_language": this.secondLanguage.getRawValue(),
-                "vocabulary": this.vocab.getRawValue()
+                "vocabulary": vocabString
             }
 
             fetch(BACKEND + "api/createvocab/", {
