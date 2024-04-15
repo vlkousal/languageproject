@@ -44,8 +44,8 @@ export class EditVocabularyComponent {
             this.url.setValue(params["vocabUrl"]);
             this.previousurl = params["vocabUrl"];
         })
-        let vocabData = await ApiTools.getVocabJson(this.url.getRawValue());
-        let parsed = JSON.parse(vocabData);
+        const vocabData = await ApiTools.getVocabJson(this.url.getRawValue());
+        const parsed = JSON.parse(vocabData);
         this.name.setValue(parsed.name);
         this.description.setValue(parsed.description);
         this.firstLanguage.setValue(parsed.first_language);
@@ -56,10 +56,10 @@ export class EditVocabularyComponent {
 
     addWords(vocab: string) {
         let toAdd: string = "";
-        let lines: string[] = vocab.split("\n");
+        const lines: string[] = vocab.split("\n");
         for(let i = 0; i < lines.length; i++){
-            let split = lines[i].split(";");
-            let lineString = split[0] + ";" + split[1] + ";" + split[2] + "\n"
+            const split = lines[i].split(";");
+            const lineString = split[0] + ";" + split[1] + ";" + split[2] + "\n"
             toAdd += lineString;
         }
         this.vocab.setValue(toAdd);
@@ -89,9 +89,9 @@ export class EditVocabularyComponent {
         if(this.isFirstInputValid()){
             this.relevantWords = new Set<Word>();
             this.firstPart = false;
-            let parsed = JSON.parse(await this.getRelevantVocabulary());
+            const parsed = JSON.parse(await this.getRelevantVocabulary());
             for(let i = 0; i < parsed.words.length; i++){
-                let word = new Word(0,0,  parsed.words[i].first, parsed.words[i].phonetic, parsed.words[i].second, []);
+                const word = new Word(0,0,  parsed.words[i].first, parsed.words[i].phonetic, parsed.words[i].second, []);
                 if(!this.containsWord(this.relevantWords, word)){
                     this.relevantWords.add(word);
                 }
@@ -131,13 +131,13 @@ export class EditVocabularyComponent {
     }
 
     isValidLine(line: string){
-        let splitLine: string[] = line.split(this.delimiter.getRawValue());
+        const splitLine: string[] = line.split(this.delimiter.getRawValue());
         return splitLine.length == 3;
     }
 
     addWord(word: Word) {
         if(!this.containsWord(this.words, word)){
-            let delimeter = this.delimiter.getRawValue();
+            const delimeter = this.delimiter.getRawValue();
             if(this.content.charAt(this.content.length - 1) != "\n" && this.content.charAt(this.content.length - 1) != ""){
                 this.content += "\n";
             }
@@ -147,9 +147,9 @@ export class EditVocabularyComponent {
     }
 
     removeWord(word: Word){
-        let delimiter = this.delimiter.getRawValue();
-        let lines = this.content.split("\n");
-        let line = word.question + delimiter + word.phonetic + delimiter + word.correct;
+        const delimiter = this.delimiter.getRawValue();
+        const lines = this.content.split("\n");
+        const line = word.question + delimiter + word.phonetic + delimiter + word.correct;
         this.content = "";
         lines.forEach( (l) => {
             if(l != line && l != ""){
@@ -160,7 +160,7 @@ export class EditVocabularyComponent {
     }
 
     onFirstInputChange() {
-        let nameLength = this.name.getRawValue().length;
+        const nameLength = this.name.getRawValue().length;
 
         this.lastNameLength = nameLength;
         if(this.name.getRawValue().length == 0){
@@ -181,13 +181,13 @@ export class EditVocabularyComponent {
     }
 
     onFilterChange(){
-        let filter = this.removeDiacritics(this.filter.getRawValue());
+        const filter = this.removeDiacritics(this.filter.getRawValue());
         if(filter.length != 0){
             this.filteredRelevantWords = new Set<Word>();
             this.relevantWords.forEach((word) => {
-                let correct = this.removeDiacritics(word.correct);
-                let phonetic = this.removeDiacritics(word.phonetic);
-                let question = this.removeDiacritics(word.question);
+                const correct = this.removeDiacritics(word.correct);
+                const phonetic = this.removeDiacritics(word.phonetic);
+                const question = this.removeDiacritics(word.question);
                 if(correct.includes(filter) || phonetic.includes(filter) || question.includes(filter)) {
                     this.filteredRelevantWords.add(word);
                 }
@@ -210,13 +210,13 @@ export class EditVocabularyComponent {
     onInputChange(){
         this.words = new Set<Word>();
         this.counter = 0;
-        let lines = (this.content + "\n").split("\n");
-        let delimiter = this.delimiter.getRawValue();
+        const lines = (this.content + "\n").split("\n");
+        const delimiter = this.delimiter.getRawValue();
 
         if(this.content.length != 0){
             for(let i = 0; i < lines.length - 1; i++){
-                let line = lines[i];
-                let word = new Word(0, 0, line.split(delimiter)[0],
+                const line = lines[i];
+                const word = new Word(0, 0, line.split(delimiter)[0],
                     line.split(delimiter)[1], line.split(delimiter)[2], []);
 
                 if(this.isValidLine(lines[i]) && word.question.length != 0 && word.correct.length != 0){

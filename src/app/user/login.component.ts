@@ -42,7 +42,7 @@ export class LoginComponent {
                 this.feedback = "Wrong credentials.";
             }
             if(response.ok){
-                let sessionId = (await response.text()).replace(/^"(.*)"$/, '$1');
+                const sessionId = (await response.text()).replace(/^"(.*)"$/, '$1');
                 localStorage.setItem("sessionId", sessionId);
                 window.location.href = '/';
             }
@@ -50,8 +50,8 @@ export class LoginComponent {
     }
 
     onInputChange(){
-        let username = this.username.getRawValue();
-        let password = this.password.getRawValue();
+        const username = this.username.getRawValue();
+        const password = this.password.getRawValue();
         this.isValid = false;
 
         if(username.length == 0){

@@ -239,3 +239,24 @@ td {
 .button:hover {
   background-color: #45a049;
 }
+
+.canvas-container{
+  text-align: center;
+}
+
+.canvas-container button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+canvas {
+  border: 2px solid #000000;
+}

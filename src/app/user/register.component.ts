@@ -40,16 +40,16 @@ export class RegisterComponent {
         this.feedback = "A user with this username already exists.";
       }
       if(response.ok){
-        let sessionId = (await response.text()).replace(/^"(.*)"$/, '$1');
+        const sessionId = (await response.text()).replace(/^"(.*)"$/, '$1');
         localStorage.setItem("sessionId", sessionId);
         this.router.navigate(["/"]);
       }
     })
   }
   onInputChange(){
-    let username = this.username.getRawValue();
-    let password = this.password.getRawValue();
-    let password_again = this.password_again.getRawValue();
+    const username = this.username.getRawValue();
+    const password = this.password.getRawValue();
+    const password_again = this.password_again.getRawValue();
 
     this.isValid = false;
     if(username.length == 0){

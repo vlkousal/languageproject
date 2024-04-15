@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {BACKEND, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
+import {BACKEND, MAX_HEALTH, STREAK_FOR_HEALTH, VocabularySet, Word} from "../constants";
 import {ActivatedRoute} from "@angular/router";
 import {ApiTools} from "../apitools";
 import {VocabUtils} from "../vocabutils";
@@ -41,6 +41,7 @@ export class VocabularyComponent {
     hideWriteTheAnswer: boolean = true;
     hideEnd: boolean = true;
     hideFlashcards: boolean = true;
+    hideDrawing: boolean = true;
 
     utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
     selectedFirstLanguageName: FormControl<string> = new FormControl("") as FormControl<string>;
@@ -56,17 +57,95 @@ export class VocabularyComponent {
         });
         this.setup();
 
-        let voices = speechSynthesis.getVoices();
+        const voices = speechSynthesis.getVoices();
         voices.forEach((voice, i) => {
             this.languageNames.push(voice.name);
         });
         this.languageNames.sort();
+        this.prepCanvas();
+    }
+
+     prepCanvas(){
+
+        // Replace this with your desired Chinese character
+        const originalCharacter = "明";
+
+        const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+        const context = canvas.getContext('2d');
+
+        // Draw the original character on the canvas in a large size
+        // @ts-ignore
+        context.font = '200px Arial';
+        // @ts-ignore
+        context.fillStyle = 'grey'; // Change the color as needed
+        // @ts-ignore
+        context.fillText(originalCharacter, 0, 170);
+
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        function startDrawing(e: { clientX: number; clientY: number; }) {
+            isDrawing = true;
+            lastX = e.clientX - canvas.getBoundingClientRect().left;
+            lastY = e.clientY - canvas.getBoundingClientRect().top;
+            draw(e);
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            // @ts-ignore
+            context.beginPath();
+        }
+
+        function draw(e: { clientX: any; clientY: any; }) {
+            if (!isDrawing) return;
+
+            // Get current mouse coordinates
+            const x = e.clientX - canvas.getBoundingClientRect().left;
+            const y = e.clientY - canvas.getBoundingClientRect().top;
+
+            // Draw a line from the last position to the current position
+            // @ts-ignore
+            context.beginPath();
+            // @ts-ignore
+            context.moveTo(lastX, lastY);
+            // @ts-ignore
+            context.lineTo(x, y);
+            // @ts-ignore
+            context.strokeStyle = 'black'; // Change the color as needed
+            // @ts-ignore
+            context.lineWidth = 10;
+            // @ts-ignore
+            context.lineCap = 'round';
+            // @ts-ignore
+            context.stroke();
+
+            // Update last position
+            lastX = x;
+            lastY = y;
+        }
+
+        // Event listeners for mouse actions
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mousemove', draw);
+    }
+
+    resetCanvas(){
+        const canvas = document.getElementById("canvas");
+        // @ts-ignore
+        const context = canvas.getContext("2d");
+
+        // Clear the entire canvas
+        // @ts-ignore
+        context.clearRect(0, 0, canvas.width, canvas.height);
     }
 
     repeatWord(){
         // TODO "flipped words"...
         this.utt.lang = this.firstLang;
-        let firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
+        const firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
         if(firstVoice){
             this.utt.voice = firstVoice;
         }
@@ -81,8 +160,8 @@ export class VocabularyComponent {
     }
 
     testSecondVoice() {
-        let randomWord = getRandomElement(this.words);
-        let secondVoice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
+        const randomWord = getRandomElement(this.words);
+        const secondVoice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
         this.utt.lang = this.secondLang;
         if(secondVoice != null){
             this.utt.voice = secondVoice;
@@ -91,8 +170,8 @@ export class VocabularyComponent {
     }
 
     testFirstVoice() {
-        let randomWord = getRandomElement(this.words);
-        let firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
+        const randomWord = getRandomElement(this.words);
+        const firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
         this.utt.lang = this.firstLang;
         if (firstVoice != null){
             this.utt.voice = firstVoice;
@@ -103,7 +182,7 @@ export class VocabularyComponent {
     nextFlashcard() {
         this.current = this.words[(++this.currentIndex) % this.words.length];
         this.utt.lang = this.firstLang;
-        let firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
+        const firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
         if (firstVoice != null){
             this.utt.voice = firstVoice;
         }
@@ -113,7 +192,7 @@ export class VocabularyComponent {
     prevFlashcard() {
         this.current = this.words[(--this.currentIndex) % this.words.length];
         this.utt.lang = this.firstLang;
-        let firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
+        const firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
         if (firstVoice != null){
             this.utt.voice = firstVoice;
         }
@@ -125,7 +204,7 @@ export class VocabularyComponent {
     }
 
     onFirstLanguageChange() {
-        let voice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
+        const voice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
         if (voice) {
             this.utt.voice = voice;
             this.utt.lang = voice.lang;
@@ -135,7 +214,7 @@ export class VocabularyComponent {
     }
 
     onSecondLanguageChange() {
-        let voice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
+        const voice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
         if (voice) {
             this.utt.voice = voice;
             this.utt.lang = voice.lang;
@@ -146,7 +225,7 @@ export class VocabularyComponent {
 
     async setup() {
         this.vocabularySet = await ApiTools.getVocabJson(this.url)
-        let json = JSON.parse(this.vocabularySet);
+        const json = JSON.parse(this.vocabularySet);
         this.name = json.name;
         this.contributor = json.author;
         this.description = json.description;
@@ -156,11 +235,11 @@ export class VocabularyComponent {
         VocabUtils.sortByFirst(this.words);
         this.VocabUtils.sortByFirst(this.words);
 
-        let firstName = localStorage.getItem(this.firstLanguage);
+        const firstName = localStorage.getItem(this.firstLanguage);
         if(firstName != null){
             this.selectedFirstLanguageName.setValue(firstName);
             this.onFirstLanguageChange();
-            let voice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
+            const voice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
             if (voice) {
                 this.utt.voice = voice;
                 this.utt.lang = voice.lang;
@@ -168,12 +247,12 @@ export class VocabularyComponent {
             }
         }
 
-        let secondName = localStorage.getItem(this.secondLanguage);
+        const secondName = localStorage.getItem(this.secondLanguage);
         if(secondName != null){
             this.selectedSecondLanguageName.setValue(secondName);
             this.onSecondLanguageChange();
 
-            let voice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
+            const voice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
             if (voice) {
                 this.utt.voice = voice;
                 this.utt.lang = voice.lang;
@@ -214,24 +293,24 @@ export class VocabularyComponent {
     }
 
     loadVocab() {
-        let parsed = JSON.parse(this.vocabularySet).vocabulary;
-        let vocabString = shuffleList(parsed.split("\n")).filter(str => str.trim() !== '');
-        let words: Word[] = [];
+        const parsed = JSON.parse(this.vocabularySet).vocabulary;
+        const vocabString = shuffleList(parsed.split("\n")).filter(str => str.trim() !== '');
+        const words: Word[] = [];
 
         for(let i = 0; i < vocabString.length; i++) {
-            let correct: string = vocabString[i].split(";")[2];
+            const correct: string = vocabString[i].split(";")[2];
             let answers: string[] = [correct];
             for(let answer = 0; answer < 2; answer++) {
-                let index = getIndex(i, vocabString.length);
-                let otherAnswer: string = vocabString[index].split(";")[2];
+                const index = getIndex(i, vocabString.length);
+                const otherAnswer: string = vocabString[index].split(";")[2];
                 answers.push(otherAnswer);
             }
             answers = shuffleList(answers);
-            let id = vocabString[i].split(";")[3];
-            let success_rate = parseInt(vocabString[i].split(";")[4]);
-            let question = vocabString[i].split(";")[0];
-            let phonetic: string = vocabString[i].split(";")[1];
-            let word = new Word(id, success_rate, question, phonetic, correct, answers);
+            const id = vocabString[i].split(";")[3];
+            const success_rate = parseInt(vocabString[i].split(";")[4]);
+            const question = vocabString[i].split(";")[0];
+            const phonetic: string = vocabString[i].split(";")[1];
+            const word = new Word(id, success_rate, question, phonetic, correct, answers);
             words.push(word);
             this.words = words;
             this.all = words;
@@ -242,9 +321,9 @@ export class VocabularyComponent {
         // we sort, and then we move the "undiscovered" words to be first
         let to_move_index = 0;
         for(let i = 0; i < this.words.length; i++){
-            let word = this.words[i];
+            const word = this.words[i];
             if(word.success_rate == -1){
-                let temp = this.words[to_move_index];
+                const temp = this.words[to_move_index];
                 this.words[to_move_index] = word;
                 this.words[i] = temp
                 to_move_index++;
@@ -278,6 +357,19 @@ export class VocabularyComponent {
         this.nextFlashcard();
     }
 
+    startDrawing() {
+        this.hideEverything();
+        this.hideDrawing = false;
+    }
+
+    checkDrawing() {
+        const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+        const context = canvas.getContext('2d');
+        if(context != null) {
+            context.fillText("我", 0, 170);
+        }
+    }
+
     checkAnswer(answer: string): void {
         if(this.current.correct == answer) {
             this.evalCorrect();
@@ -298,7 +390,7 @@ export class VocabularyComponent {
 
         // TODO - make "flipped" words and make speaking in both languages functional
         this.utt.lang = this.firstLang;
-        let firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
+        const firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
         if(firstVoice){
             this.utt.voice = firstVoice;
         }
@@ -322,7 +414,7 @@ export class VocabularyComponent {
     }
 
     checkWrittenAnswer(): void{
-        let answer: string = this.writtenAnswer.getRawValue();
+        const answer: string = this.writtenAnswer.getRawValue();
         if(answer.length != 0){
             if(this.current.correct == answer){
                 this.evalCorrect();
@@ -383,9 +475,9 @@ function shuffleList(list: any[]) {
     // we sort, and then we move the "undiscovered" words to be first
     let to_move_index = 0;
     for(let i = 0; i < list.length; i++){
-      let word = list[i];
+      const word = list[i];
     if(word.success_rate == -1){
-      let temp = list[to_move_index];
+      const temp = list[to_move_index];
       list[to_move_index] = word;
       list[i] = temp
       to_move_index++;

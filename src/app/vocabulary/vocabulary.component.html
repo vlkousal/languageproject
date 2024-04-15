@@ -17,6 +17,7 @@
   <button (click)="startOneOfThree()">One Of Three</button>
   <button (click)="startWriteTheAnswer()">Write The Answer</button>
   <button (click)="startFlashcards()">Flashcards</button>
+	<button (click)="startDrawing()">Draw Characters</button>
 
 	<div class="table-container">
 		<table border="1" id="table">
@@ -112,6 +113,13 @@
 		<button (click)="prevFlashcard()"><</button>
 		<button (click)="nextFlashcard()">></button>
 	</div>
+</div>
+
+<div class="canvas-container" [hidden]="hideDrawing">
+	<canvas id="canvas" width="201" height="201"></canvas>
+
+	<button (click)="resetCanvas()">Clear</button>
+	<button (click)="checkDrawing()">Check</button>
 </div>
 
 
