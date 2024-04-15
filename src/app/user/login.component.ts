@@ -66,8 +66,4 @@ export class LoginComponent {
         this.feedback = "Go for it!";
         this.isValid = true;
     }
-
-    onEnterPressed(event: KeyboardEvent){
-        this.onLogin();
-    }
 }
