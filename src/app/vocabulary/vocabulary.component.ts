@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {BACKEND, MAX_HEALTH, STREAK_FOR_HEALTH, VocabularySet, Word} from "../constants";
+import {BACKEND, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
 import {ActivatedRoute} from "@angular/router";
 import {ApiTools} from "../apitools";
 import {VocabUtils} from "../vocabutils";
@@ -65,20 +65,19 @@ export class VocabularyComponent {
         this.prepCanvas();
     }
 
-     prepCanvas(){
-
-        // Replace this with your desired Chinese character
-        const originalCharacter = "明";
-
+    prepCanvas() {
         const canvas = document.getElementById('canvas') as HTMLCanvasElement;
         const context = canvas.getContext('2d');
 
+        if(context == null) {
+            return;
+        }
+        // Replace this with your desired Chinese character
+        const originalCharacter = "明";
+
         // Draw the original character on the canvas in a large size
-        // @ts-ignore
         context.font = '200px Arial';
-        // @ts-ignore
         context.fillStyle = 'grey'; // Change the color as needed
-        // @ts-ignore
         context.fillText(originalCharacter, 0, 170);
 
         let isDrawing = false;
@@ -94,31 +93,25 @@ export class VocabularyComponent {
 
         function stopDrawing() {
             isDrawing = false;
-            // @ts-ignore
-            context.beginPath();
+            if(context != null){
+                context.beginPath();
+            }
         }
 
         function draw(e: { clientX: any; clientY: any; }) {
-            if (!isDrawing) return;
+            if (!isDrawing || context == null) return;
 
             // Get current mouse coordinates
             const x = e.clientX - canvas.getBoundingClientRect().left;
             const y = e.clientY - canvas.getBoundingClientRect().top;
 
             // Draw a line from the last position to the current position
-            // @ts-ignore
             context.beginPath();
-            // @ts-ignore
             context.moveTo(lastX, lastY);
-            // @ts-ignore
             context.lineTo(x, y);
-            // @ts-ignore
             context.strokeStyle = 'black'; // Change the color as needed
-            // @ts-ignore
             context.lineWidth = 10;
-            // @ts-ignore
             context.lineCap = 'round';
-            // @ts-ignore
             context.stroke();
 
             // Update last position
@@ -133,12 +126,10 @@ export class VocabularyComponent {
     }
 
     resetCanvas(){
-        const canvas = document.getElementById("canvas");
-        // @ts-ignore
+        const canvas = document.getElementById("canvas") as HTMLCanvasElement;
         const context = canvas.getContext("2d");
-
+        if(context == null) return;
         // Clear the entire canvas
-        // @ts-ignore
         context.clearRect(0, 0, canvas.width, canvas.height);
     }
 

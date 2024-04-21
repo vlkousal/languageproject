@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {FormControl} from "@angular/forms";
-import {HttpClient} from "@angular/common/http";
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {BACKEND, Word} from "../constants";
 import {ApiTools} from "../apitools";
+
 
 @Component({
   selector: 'app-editvocabulary',
@@ -31,7 +31,7 @@ export class EditVocabularyComponent {
     filter: FormControl<string> = new FormControl("") as FormControl<string>;
     filteredRelevantWords: Set<Word> = new Set<Word>();
 
-    constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) { }
+    constructor(private route: ActivatedRoute) { }
 
     async ngOnInit(){
         this.getLanguageJson().then((result: string) => {
@@ -65,12 +65,15 @@ export class EditVocabularyComponent {
         this.vocab.setValue(toAdd);
     }
 
-    setupDropdownMenus(jsonString: string){
+    setupDropdownMenus(jsonString: string) {
         const json = JSON.parse(jsonString);
         this.languages = Object.keys(json);
     }
 
-    onFileSelected(event: any){
+    onFileSelected(event: any) {
+        if(event.target == null) {
+            return;
+        }
         const selectedFile = event.target.files[0];
         const reader = new FileReader();
 
@@ -81,12 +84,12 @@ export class EditVocabularyComponent {
         reader.readAsText(selectedFile);
     }
 
-    goBack(){
+    goBack() {
         this.firstPart = true;
     }
 
-    async onContinue(){
-        if(this.isFirstInputValid()){
+    async onContinue() {
+        if(this.isFirstInputValid()) {
             this.relevantWords = new Set<Word>();
             this.firstPart = false;
             const parsed = JSON.parse(await this.getRelevantVocabulary());
@@ -100,8 +103,8 @@ export class EditVocabularyComponent {
         }
     }
 
-    onSend(){
-        if(this.counter >= 3){
+    onSend() {
+        if(this.counter >= 3) {
             const vocabString = this.vocab.getRawValue().replaceAll(this.delimiter.getRawValue(), ";");
             const json = {
                 "session_id": localStorage.getItem("sessionId"),
@@ -124,7 +127,7 @@ export class EditVocabularyComponent {
         }
     }
 
-    isValidLine(line: string){
+    isValidLine(line: string) {
         const splitLine: string[] = line.split(this.delimiter.getRawValue());
         return splitLine.length == 3;
     }
@@ -140,7 +143,7 @@ export class EditVocabularyComponent {
         }
     }
 
-    removeWord(word: Word){
+    removeWord(word: Word) {
         const delimiter = this.delimiter.getRawValue();
         const lines = this.content.split("\n");
         const line = word.question + delimiter + word.phonetic + delimiter + word.correct;
@@ -154,9 +157,7 @@ export class EditVocabularyComponent {
     }
 
     onFirstInputChange() {
-        const nameLength = this.name.getRawValue().length;
-
-        this.lastNameLength = nameLength;
+        this.lastNameLength = this.name.getRawValue().length;
         if(this.name.getRawValue().length == 0){
             this.firstFeedback = "Please enter a name.";
             return;
