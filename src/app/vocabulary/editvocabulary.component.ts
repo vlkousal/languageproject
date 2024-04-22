@@ -33,7 +33,7 @@ export class EditVocabularyComponent {
 
     constructor(private route: ActivatedRoute) { }
 
-    async ngOnInit(){
+    async ngOnInit() {
         this.getLanguageJson().then((result: string) => {
             this.setupDropdownMenus(result);
         }).catch((error) => {
@@ -57,7 +57,7 @@ export class EditVocabularyComponent {
     addWords(vocab: string) {
         let toAdd: string = "";
         const lines: string[] = vocab.split("\n");
-        for(let i = 0; i < lines.length; i++){
+        for(let i = 0; i < lines.length; i++) {
             const split = lines[i].split(";");
             const lineString = split[0] + ";" + split[1] + ";" + split[2] + "\n"
             toAdd += lineString;
@@ -93,9 +93,9 @@ export class EditVocabularyComponent {
             this.relevantWords = new Set<Word>();
             this.firstPart = false;
             const parsed = JSON.parse(await this.getRelevantVocabulary());
-            for(let i = 0; i < parsed.words.length; i++){
+            for(let i = 0; i < parsed.words.length; i++) {
                 const word = new Word(0,0,  parsed.words[i].first, parsed.words[i].phonetic, parsed.words[i].second, []);
-                if(!this.containsWord(this.relevantWords, word)){
+                if(!this.containsWord(this.relevantWords, word)) {
                     this.relevantWords.add(word);
                 }
             }
@@ -133,9 +133,9 @@ export class EditVocabularyComponent {
     }
 
     addWord(word: Word) {
-        if(!this.containsWord(this.words, word)){
+        if(!this.containsWord(this.words, word)) {
             const delimeter = this.delimiter.getRawValue();
-            if(this.content.charAt(this.content.length - 1) != "\n" && this.content.charAt(this.content.length - 1) != ""){
+            if(this.content.charAt(this.content.length - 1) != "\n" && this.content.charAt(this.content.length - 1) != "") {
                 this.content += "\n";
             }
             this.content += word.question + delimeter + word.phonetic + delimeter + word.correct + "\n";
@@ -149,7 +149,7 @@ export class EditVocabularyComponent {
         const line = word.question + delimiter + word.phonetic + delimiter + word.correct;
         this.content = "";
         lines.forEach( (l) => {
-            if(l != line && l != ""){
+            if(l != line && l != "") {
                 this.content += l + "\n";
             }
         })
@@ -158,26 +158,26 @@ export class EditVocabularyComponent {
 
     onFirstInputChange() {
         this.lastNameLength = this.name.getRawValue().length;
-        if(this.name.getRawValue().length == 0){
+        if(this.name.getRawValue().length == 0) {
             this.firstFeedback = "Please enter a name.";
             return;
         }
 
-        if(this.url.getRawValue().length == 0){
+        if(this.url.getRawValue().length == 0) {
             this.firstFeedback = "The URL is empty.";
             return;
         }
 
-        if(this.firstLanguage.getRawValue() == this.secondLanguage.getRawValue()){
+        if(this.firstLanguage.getRawValue() == this.secondLanguage.getRawValue()) {
             this.firstFeedback = "The languages must be different.";
             return;
         }
         this.firstFeedback = "Click continue when ready.";
     }
 
-    onFilterChange(){
+    onFilterChange() {
         const filter = this.removeDiacritics(this.filter.getRawValue());
-        if(filter.length != 0){
+        if(filter.length != 0) {
             this.filteredRelevantWords = new Set<Word>();
             this.relevantWords.forEach((word) => {
                 const correct = this.removeDiacritics(word.correct);
@@ -192,7 +192,7 @@ export class EditVocabularyComponent {
         this.filteredRelevantWords = this.relevantWords;
     }
 
-    isFirstInputValid(){
+    isFirstInputValid() {
         return this.name.getRawValue().length != 0 &&
             this.url.getRawValue().length != 0 &&
             this.firstLanguage.getRawValue() != this.secondLanguage.getRawValue();
@@ -202,19 +202,19 @@ export class EditVocabularyComponent {
         return inputString.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
-    onInputChange(){
+    onInputChange() {
         this.words = new Set<Word>();
         this.counter = 0;
         const lines = (this.content + "\n").split("\n");
         const delimiter = this.delimiter.getRawValue();
 
-        if(this.content.length != 0){
-            for(let i = 0; i < lines.length - 1; i++){
+        if(this.content.length != 0) {
+            for(let i = 0; i < lines.length - 1; i++) {
                 const line = lines[i];
                 const word = new Word(0, 0, line.split(delimiter)[0],
                     line.split(delimiter)[1], line.split(delimiter)[2], []);
 
-                if(this.isValidLine(lines[i]) && word.question.length != 0 && word.correct.length != 0){
+                if(this.isValidLine(lines[i]) && word.question.length != 0 && word.correct.length != 0) {
                     if(!this.containsWord(this.words, word)) {
                         this.words.add(word);
                         this.counter++;
@@ -224,10 +224,10 @@ export class EditVocabularyComponent {
         }
     }
 
-    containsWord(words: Set<Word>, word: Word){
+    containsWord(words: Set<Word>, word: Word) {
         let contains = false;
         words.forEach( (current) => {
-            if(current.question == word.question && current.correct == word.correct && current.phonetic == word.phonetic){
+            if(current.question == word.question && current.correct == word.correct && current.phonetic == word.phonetic) {
                 contains = true;
             }
         })
@@ -265,11 +265,11 @@ export class EditVocabularyComponent {
                 })
             });
 
-            if(response.ok){
+            if(response.ok) {
                 return await response.text();
             }
             throw new Error("XD ROFL LMAO");
-        } catch(error){
+        } catch(error) {
             console.error("Error:", error);
             throw error;
         }

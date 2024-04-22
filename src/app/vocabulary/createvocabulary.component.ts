@@ -27,7 +27,7 @@ export class CreateVocabularyComponent {
     filter: FormControl<string> = new FormControl("") as FormControl<string>;
     filteredRelevantWords: Set<Word> = new Set<Word>();
 
-    ngOnInit(){
+    ngOnInit() {
         this.getLanguageJson().then((result: string) => {
             this.setupDropdownMenus(result);
         }).catch((error) => {
@@ -35,12 +35,12 @@ export class CreateVocabularyComponent {
         });
     }
 
-    setupDropdownMenus(jsonString: string){
+    setupDropdownMenus(jsonString: string) {
         const json = JSON.parse(jsonString);
         this.languages = Object.keys(json);
     }
 
-    onFileSelected(event: any){
+    onFileSelected(event: any) {
         const selectedFile = event.target.files[0];
         const reader = new FileReader();
 
@@ -51,18 +51,18 @@ export class CreateVocabularyComponent {
         reader.readAsText(selectedFile);
     }
 
-    goBack(){
+    goBack() {
         this.firstPart = true;
     }
 
-    async onContinue(){
-        if(this.isFirstInputValid()){
+    async onContinue() {
+        if(this.isFirstInputValid()) {
             this.relevantWords = new Set<Word>();
             this.firstPart = false;
             const parsed = JSON.parse(await this.getRelevantVocabulary());
-            for(let i = 0; i < parsed.words.length; i++){
+            for(let i = 0; i < parsed.words.length; i++) {
                 const word = new Word(0,0,  parsed.words[i].first, parsed.words[i].phonetic, parsed.words[i].second, []);
-                if(!this.containsWord(this.relevantWords, word)){
+                if(!this.containsWord(this.relevantWords, word)) {
                     this.relevantWords.add(word);
                 }
             }
@@ -70,8 +70,8 @@ export class CreateVocabularyComponent {
         }
     }
 
-    onSend(){
-        if(this.counter >= 3){
+    onSend() {
+        if(this.counter >= 3) {
             const vocabString = this.vocab.getRawValue().replaceAll(this.delimiter.getRawValue(), ";");
             const json = {
                 "session_id": localStorage.getItem("sessionId"),
@@ -93,15 +93,15 @@ export class CreateVocabularyComponent {
         }
     }
 
-    isValidLine(line: string){
+    isValidLine(line: string) {
         const splitLine: string[] = line.split(this.delimiter.getRawValue());
         return splitLine.length == 3;
     }
 
     addWord(word: Word) {
-        if(!this.containsWord(this.words, word)){
+        if(!this.containsWord(this.words, word)) {
             const delimeter = this.delimiter.getRawValue();
-            if(this.content.charAt(this.content.length - 1) != "\n" && this.content.charAt(this.content.length - 1) != ""){
+            if(this.content.charAt(this.content.length - 1) != "\n" && this.content.charAt(this.content.length - 1) != "") {
                 this.content += "\n";
             }
             this.content += word.question + delimeter + word.phonetic + delimeter + word.correct + "\n";
@@ -109,37 +109,37 @@ export class CreateVocabularyComponent {
         }
     }
 
-    removeWord(word: Word){
+    removeWord(word: Word) {
         const delimiter = this.delimiter.getRawValue();
         const lines = this.content.split("\n");
         const line = word.question + delimiter + word.phonetic + delimiter + word.correct;
         this.content = "";
         lines.forEach( (l) => {
-            if(l != line && l != ""){
+            if(l != line && l != "") {
                 this.content += l + "\n";
             }
         })
         this.onInputChange();
     }
 
-    adaptURLText(){
+    adaptURLText() {
         const name = this.name.getRawValue();
         let urlString = "";
 
         let limit = 16;
-        if(name.length <= 16){
+        if(name.length <= 16) {
             limit = name.length;
         }
-        for(let i = 0; i < limit; i++){
+        for(let i = 0; i < limit; i++) {
             const symbol = this.removeDiacritics(name.charAt(i));
             const alphanumericRegex = /^[-_a-zA-Z0-9]$/;
-            if(alphanumericRegex.test(symbol)){
+            if(alphanumericRegex.test(symbol)) {
                 urlString += symbol;
-            } else if(symbol == " " && urlString.charAt(urlString.length - 1) != "-"){
+            } else if(symbol == " " && urlString.charAt(urlString.length - 1) != "-") {
                 urlString += "-";
             }
         }
-        while(urlString.charAt(urlString.length - 1) == "-"){
+        while(urlString.charAt(urlString.length - 1) == "-") {
             urlString = urlString.slice(0, -1);
         }
         this.url.setValue(this.removeDiacritics(urlString).toLowerCase());
@@ -148,31 +148,31 @@ export class CreateVocabularyComponent {
     onFirstInputChange() {
         const nameLength = this.name.getRawValue().length;
         // we need to refresh the URL string if name was changed
-        if(this.lastNameLength != nameLength){
+        if(this.lastNameLength != nameLength) {
             this.adaptURLText();
         }
 
         this.lastNameLength = nameLength;
-        if(this.name.getRawValue().length == 0){
+        if(this.name.getRawValue().length == 0) {
             this.firstFeedback = "Please enter a name.";
             return;
         }
 
-        if(this.url.getRawValue().length == 0){
+        if(this.url.getRawValue().length == 0) {
             this.firstFeedback = "The URL is empty.";
             return;
         }
 
-        if(this.firstLanguage.getRawValue() == this.secondLanguage.getRawValue()){
+        if(this.firstLanguage.getRawValue() == this.secondLanguage.getRawValue()) {
             this.firstFeedback = "The languages must be different.";
             return;
         }
         this.firstFeedback = "Click continue when ready.";
     }
 
-    onFilterChange(){
+    onFilterChange() {
         const filter = this.removeDiacritics(this.filter.getRawValue());
-        if(filter.length != 0){
+        if(filter.length != 0) {
             this.filteredRelevantWords = new Set<Word>();
             this.relevantWords.forEach((word) => {
                 const correct = this.removeDiacritics(word.correct);
@@ -187,7 +187,7 @@ export class CreateVocabularyComponent {
         this.filteredRelevantWords = this.relevantWords;
     }
 
-    isFirstInputValid(){
+    isFirstInputValid() {
         return this.name.getRawValue().length != 0 &&
             this.url.getRawValue().length != 0 &&
             this.firstLanguage.getRawValue() != this.secondLanguage.getRawValue();
@@ -197,20 +197,20 @@ export class CreateVocabularyComponent {
         return inputString.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
-    onInputChange(){
+    onInputChange() {
         this.adaptURLText();
         this.words = new Set<Word>();
         this.counter = 0;
         const lines = (this.content + "\n").split("\n");
         const delimiter = this.delimiter.getRawValue();
 
-        if(this.content.length != 0){
-            for(let i = 0; i < lines.length - 1; i++){
+        if(this.content.length != 0) {
+            for(let i = 0; i < lines.length - 1; i++) {
                 const line = lines[i];
                 const word = new Word(0,0,  line.split(delimiter)[0],
                     line.split(delimiter)[1], line.split(delimiter)[2], []);
 
-                if(this.isValidLine(lines[i]) && word.question.length != 0 && word.correct.length != 0){
+                if(this.isValidLine(lines[i]) && word.question.length != 0 && word.correct.length != 0) {
                     if(!this.containsWord(this.words, word)) {
                         this.words.add(word);
                         this.counter++;
@@ -220,10 +220,10 @@ export class CreateVocabularyComponent {
         }
     }
 
-    containsWord(words: Set<Word>, word: Word){
+    containsWord(words: Set<Word>, word: Word) {
         let contains = false;
         words.forEach( (current) => {
-            if(current.question == word.question && current.correct == word.correct && current.phonetic == word.phonetic){
+            if(current.question == word.question && current.correct == word.correct && current.phonetic == word.phonetic) {
                 contains = true;
             }
         })
@@ -261,11 +261,11 @@ export class CreateVocabularyComponent {
                 })
             });
 
-            if(response.ok){
+            if(response.ok) {
                 return await response.text();
             }
             throw new Error("XD ROFL LMAO");
-        } catch(error){
+        } catch(error) {
             console.error("Error:", error);
             throw error;
         }
