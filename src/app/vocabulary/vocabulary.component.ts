@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {BACKEND, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
+import {BACKEND, FLAGS, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
 import {ActivatedRoute} from "@angular/router";
 import {ApiTools} from "../apitools";
 import {VocabUtils} from "../vocabutils";
@@ -153,8 +153,8 @@ export class VocabularyComponent {
         this.name = json.name;
         this.contributor = json.author;
         this.description = json.description;
-        this.firstLanguage = json.first_language_flag + " " + json.first_language;
-        this.secondLanguage = json.second_language_flag + " " + json.second_language;
+        this.firstLanguage = FLAGS[json.first_language] + " " + json.first_language;
+        this.secondLanguage = FLAGS[json.second_language] + " " + json.second_language;
         this.loadVocab();
         VocabUtils.sortByFirst(this.words);
         this.VocabUtils.sortByFirst(this.words);
@@ -284,6 +284,14 @@ export class VocabularyComponent {
     startDrawing() {
         this.hideEverything();
         this.hideDrawing = false;
+    }
+
+    resetCanvas(){
+        const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+        const context = canvas.getContext("2d");
+        if(context == null) return;
+        // Clear the entire canvas
+        context.clearRect(0, 0, canvas.width, canvas.height);
     }
 
     checkDrawing() {

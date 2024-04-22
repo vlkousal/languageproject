@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from "@angular/router";
-import {BACKEND, VocabularySet} from "../constants";
+import {BACKEND, FLAGS, VocabularySet} from "../constants";
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -39,10 +39,12 @@ export class CollectionComponent {
                 (json.sets).forEach((item: {
                     name: string,
                     url: string,
-                    first_flag: string,
-                    second_flag: string
+                    first_language: string,
+                    second_language: string
                 }) => {
-                    this.sets.push(new VocabularySet(item.name, item.url, item.first_flag, item.second_flag));
+                    this.sets.push(new VocabularySet(item.name, item.url,
+                        FLAGS[item.first_language],
+                        FLAGS[item.second_language]));
                 })
             }
             return [];

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {BACKEND, VocabularySet} from "../constants";
+import {BACKEND, FLAGS, VocabularySet} from "../constants";
 
 
 @Component({
@@ -16,10 +16,10 @@ export class IndexComponent {
         JSON.parse(await this.getSets()).forEach((item: {
             name: string;
             url: string;
-            first_flag: string;
-            second_flag: string
+            first_language: string;
+            second_language: string;
         }) => {
-            this.sets.push(new VocabularySet(item.name, item.url, item.first_flag, item.second_flag));
+            this.sets.push(new VocabularySet(item.name, item.url, FLAGS[item.first_language], FLAGS[item.second_language]));
         });
         this.debug = await this.getSets();
     }

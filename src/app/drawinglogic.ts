@@ -59,13 +59,6 @@ export class Drawing{
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mousemove', draw);
     }
-
-    resetCanvas(){
-        const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-        const context = canvas.getContext("2d");
-        if(context == null) return;
-        // Clear the entire canvas
-        context.clearRect(0, 0, canvas.width, canvas.height);
-    }
 }
+
 
