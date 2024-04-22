@@ -1,4 +1,7 @@
-# Untitled
+# Language Project
+
+A project idea that came out of my passion for foreign languages. It also is my first web dev adventure. It allows you to create vocabulary sets, play words from those sets and try some cool minigames.
+More functionality coming soon. 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.0.
 
