@@ -19,12 +19,20 @@ export class FlashcardsComponent {
     }
 
     nextFlashcard() {
-        this.current = this.words[(++this.currentIndex) % this.words.length];
+        this.currentIndex = (++this.currentIndex) % this.words.length;
+        if(this.currentIndex >= this.words.length) {
+            this.currentIndex = 0;
+        }
+        this.current = this.words[this.currentIndex];
         SpeechUtils.speak(this.current.question);
     }
 
     prevFlashcard() {
-        this.current = this.words[(--this.currentIndex) % this.words.length];
+        this.currentIndex = (--this.currentIndex) % this.words.length
+        if(this.currentIndex < 0) {
+            this.currentIndex = this.words.length - 1;
+        }
+        this.current = this.words[this.currentIndex];
         SpeechUtils.speak(this.current.question);
     }
 }
