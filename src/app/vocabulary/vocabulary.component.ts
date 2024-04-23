@@ -6,6 +6,7 @@ import {VocabUtils} from "../vocabutils";
 import {first} from "rxjs";
 import {FormControl} from "@angular/forms";
 import {Drawing} from "../drawinglogic";
+import {Utils} from "../utils";
 
 @Component({
     selector: 'app-vocabulary',
@@ -84,7 +85,7 @@ export class VocabularyComponent {
     }
 
     testSecondVoice() {
-        const randomWord = getRandomElement(this.words);
+        const randomWord = Utils.getRandomElement(this.words);
         const secondVoice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
         this.utt.lang = this.secondLang;
         if(secondVoice != null) {
@@ -94,7 +95,7 @@ export class VocabularyComponent {
     }
 
     testFirstVoice() {
-        const randomWord = getRandomElement(this.words);
+        const randomWord = Utils.getRandomElement(this.words);
         const firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
         this.utt.lang = this.firstLang;
         if (firstVoice != null) {
@@ -218,18 +219,18 @@ export class VocabularyComponent {
 
     loadVocab() {
         const parsed = JSON.parse(this.vocabularySet).vocabulary;
-        const vocabString = shuffleList(parsed.split("\n")).filter(str => str.trim() !== '');
+        const vocabString = Utils.shuffleList(parsed.split("\n")).filter(str => str.trim() !== '');
         const words: Word[] = [];
 
         for(let i = 0; i < vocabString.length; i++) {
             const correct: string = vocabString[i].split(";")[2];
             let answers: string[] = [correct];
             for(let answer = 0; answer < 2; answer++) {
-                const index = getIndex(i, vocabString.length);
+                const index = Utils.getIndex(i, vocabString.length);
                 const otherAnswer: string = vocabString[index].split(";")[2];
                 answers.push(otherAnswer);
             }
-            answers = shuffleList(answers);
+            answers = Utils.shuffleList(answers);
             const id = vocabString[i].split(";")[3];
             const success_rate = parseInt(vocabString[i].split(";")[4]);
             const question = vocabString[i].split(";")[0];
@@ -259,7 +260,7 @@ export class VocabularyComponent {
         this.hideEverything();
         this.hideWriteTheAnswer = false;
         this.loadVocab();
-        shuffleList(this.words);
+        Utils.shuffleList(this.words);
         this.pushUnseenForward();
         this.restart();
     }
@@ -268,7 +269,7 @@ export class VocabularyComponent {
         this.hideEverything();
         this.hideChooseOfThree = false;
         this.loadVocab();
-        shuffleList(this.words);
+        Utils.shuffleList(this.words);
         this.pushUnseenForward();
         this.restart();
     }
@@ -277,7 +278,7 @@ export class VocabularyComponent {
         this.hideEverything();
         this.hideFlashcards = false;
         this.loadVocab();
-        shuffleList(this.words);
+        Utils.shuffleList(this.words);
         this.nextFlashcard();
     }
 
@@ -381,7 +382,7 @@ export class VocabularyComponent {
         this.streak = 0;
         this.lives = 3;
         this.correctAnswers = 0;
-        this.words = shuffleList(this.words);
+        this.words = Utils.shuffleList(this.words);
         this.wrong = [];
         this.current = this.words[0];
     }
@@ -389,38 +390,4 @@ export class VocabularyComponent {
     protected readonly Math = Math;
     protected readonly VocabUtils = VocabUtils;
     protected readonly first = first;
-}
-
-function getIndex(blocked: number, ceil: number): number {
-    let index = Math.floor(Math.random() * ceil);
-    while(index == blocked) {
-        index = Math.floor(Math.random() * ceil);
-    }
-    return index;
-}
-
-function shuffleList(list: any[]) {
-    for (let i = list.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [list[i], list[j]] = [list[j], list[i]];
-    }
-    // we sort, and then we move the "undiscovered" words to be first
-    let to_move_index = 0;
-    for(let i = 0; i < list.length; i++) {
-      const word = list[i];
-    if(word.success_rate == -1) {
-      const temp = list[to_move_index];
-      list[to_move_index] = word;
-      list[i] = temp
-      to_move_index++;
-    }
-  }
-    return list;
-}
-
-function getRandomElement(list: any[]) {
-    // Generate a random index within the range of the list's length
-    const randomIndex = Math.floor(Math.random() * list.length);
-    // Return the element at the random index
-    return list[randomIndex];
 }
