@@ -81,7 +81,7 @@
 	</div>
 	<br><br>
 	<strong style="font-size: 20px">{{ feedback }}</strong>
-	<button (click)="speak(current.question)">Play</button>
+	<button (click)="SpeechUtils.speak(current.question)">Play</button>
 	<div title="{{ current.phonetic}}"><p>{{ current.question }}</p></div>
 	<input [formControl]="writtenAnswer" (keydown.enter)="checkWrittenAnswer()">
 </div>
@@ -94,26 +94,14 @@
   <button (click)="replay()">Restart</button>
   <button (click)="replayMistakes()">Replay mistakes</button>
   <div *ngFor="let word of wrong">
-    <p><button (click)="speak(word.question)">{{ word.question }}</button> ({{ word.phonetic }}) - {{ word.correct }}</p>
+    <p><button (click)="SpeechUtils.speak(word.question)">{{ word.question }}</button> ({{ word.phonetic }}) - {{ word.correct }}</p>
   </div>
 </div>
 
-<div class="flashcard-container" [hidden]="hideFlashcards">
-	<div class="flashcard" [hidden]="hideFlashcards">
-		<p>{{this.currentIndex + 1}}/{{ this.words.length}}</p>
-		<div class="front">
-			<h2>{{ current.question }}</h2>
-			<p>{{ current.phonetic }}</p>
-		</div>
-		<div class="back">
-			<h2>{{ current.correct }}</h2>
-		</div>
-	</div>
-	<div class="button-container" [hidden]="hideFlashcards">
-		<button (click)="prevFlashcard()"><</button>
-		<button (click)="nextFlashcard()">></button>
-	</div>
+<div *ngIf="!hideFlashcards">
+	<app-flashcards [words]=words></app-flashcards>
 </div>
+
 
 <div class="canvas-container" [hidden]="hideDrawing">
 	<canvas id="canvas" width="201" height="201"></canvas>
