@@ -47,9 +47,3 @@ body {
         margin: 10px 0;
     }
 }
-
-/* Additional hover effect */
-.navbar a:hover {
-    color: #d0d9cf;
-    transform: translateY(-2px); /* Add slight upward movement on hover */
-}
