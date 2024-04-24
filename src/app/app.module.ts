@@ -15,6 +15,7 @@ import {IndexComponent} from "./base/index.component";
 import { CollectionComponent } from './collection/collection.component';
 import {EditVocabularyComponent} from "./vocabulary/editvocabulary.component";
 import { FlashcardsComponent } from './flashcards/flashcards.component';
+import { OneOfThreeComponent } from './oneofthree/one-of-three.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +28,8 @@ import { FlashcardsComponent } from './flashcards/flashcards.component';
     IndexComponent,
     CollectionComponent,
     EditVocabularyComponent,
-    FlashcardsComponent
+    FlashcardsComponent,
+    OneOfThreeComponent
   ],
   imports: [
     BrowserModule,

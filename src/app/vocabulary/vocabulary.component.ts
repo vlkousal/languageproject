@@ -75,16 +75,6 @@ export class VocabularyComponent {
 
     }
 
-    repeatWord() {
-        // TODO "flipped words"...
-        SpeechUtils.utt.lang = this.firstLang;
-        const firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
-        if(firstVoice) {
-            this.SpeechUtils.utt.voice = firstVoice;
-        }
-        SpeechUtils.speak(this.current.question);
-    }
-
     hideEverything() {
         this.hidePreview = true;
         this.hideWriteTheAnswer = true;
@@ -283,15 +273,6 @@ export class VocabularyComponent {
         if(context != null) {
             context.fillText("我", 0, 170);
         }
-    }
-
-    checkAnswer(answer: string): void {
-        if(this.current.correct == answer) {
-            this.evalCorrect();
-        } else {
-            this.evalWrong();
-        }
-        this.setNewWord();
     }
 
     setNewWord() {

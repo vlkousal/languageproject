@@ -1,35 +1,5 @@
-body{
-  text-align: center;
-}
-.xd{
-  text-align: center;
-  font-size: 40px;
-}
-
 .end{
   text-align: center;
-  font-size: 40px;
-}
-.buttons{
-  text-align: center;
-  font-size: 60px;
-  padding: 40px;
-}
-
-.buttons button{
-  width: 256px;
-  height: 128px;
-  margin-right: 20px;
-  font-size: 18px;
-}
-
-.hearts{
-  scale: 4;
-  padding-right: 5px;
-  display: inline-block;
-}
-
-.score{
   font-size: 40px;
 }
 
@@ -71,68 +41,6 @@ body{
   color: black; /* Černá barva textu */
 }
 
-/* Styly pro skryté prvky */
-.xd[hidden],
-.buttons[hidden] {
-  display: none;
-}
-
-/* Styly pro skóre a stav */
-.xd p:nth-of-type(2),
-.end h1,
-.score {
-  font-size: 24px;
-  font-weight: bold;
-  color: green; /* Zelená barva pro skóre a stav */
-}
-
-
-/* Styly pro tlačítka */
-.buttons button {
-  margin: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: green; /* Zelená barva pro tlačítka */
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.buttons button:hover {
-  background-color: #006400; /* Tmavší odstín zelené při najetí myší */
-}
-
-/* Styly pro konec */
-.end {
-  margin-top: 20px;
-}
-
-.end h1 {
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.end h3 {
-  font-size: 18px;
-}
-
-.end button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #a9a9a9; /* Šedá barva pro tlačítko na konci */
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.end button:hover {
-  background-color: #808080; /* Tmavší odstín šedé při najetí myší */
-}
-
-.end div p {
-  margin: 10px 0;
-}
 
 table {
   border-collapse: collapse;

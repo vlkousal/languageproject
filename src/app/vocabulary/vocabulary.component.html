@@ -52,24 +52,10 @@
 </div>
 
 
-<!--  PICK ONE OF THREE -->
-<div class="xd" [hidden]="hideChooseOfThree">
-  <p>{{ index + 1 }}/{{ words.length }}     Score: {{ score }}</p>
-  <p>Streak: {{ streak }}</p>
-  <div title="Lives: {{ lives }}" class="hearts" *ngFor="let item of [].constructor(lives); let i = index">
-    <img src="../../assets/srdce.png" alt="Lives">
-  </div>
-  <br><br>
-  <strong style="font-size: 20px">{{ feedback }}</strong>
-    <button (click)="repeatWord()">Play</button>
-
-	<div class="buttons" [hidden]="hideChooseOfThree">
-		<div title="{{ current.phonetic}}"><p>{{ current.question }}</p></div>
-		<button (click)="checkAnswer(current.answers[0])">{{ current.answers[0] }}</button>
-		<button (click)="checkAnswer(current.answers[1])">{{ current.answers[1] }}</button>
-		<button (click)="checkAnswer(current.answers[2])">{{ current.answers[2] }}</button>
-	</div>
+<div *ngIf="!hideChooseOfThree">
+	<app-oneofthree [words]=words></app-oneofthree>
 </div>
+
 
 
 <!--  WRITE THE ANSWER -->
