@@ -14,7 +14,7 @@ export class WriteTheAnswerComponent {
 
     @Input() words: Word[] = [];
     index: number = 0;
-    current: Word = new Word(1, 1, "", "", "", []);
+    current: Word = this.words[0];
     wrong: Word[] = [];
     writtenAnswer: FormControl<string> = new FormControl("") as FormControl<string>;
     score: number = 0;
@@ -25,8 +25,8 @@ export class WriteTheAnswerComponent {
     hideEnd: boolean = true;
 
     ngOnInit() {
-      console.log(this.words);
-      this.current = this.words[0];
+        Utils.shuffleList(this.words);
+        this.current = this.words[0];
     }
 
     checkWrittenAnswer(): void{

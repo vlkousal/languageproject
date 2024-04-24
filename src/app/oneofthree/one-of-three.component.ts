@@ -14,7 +14,7 @@ export class OneOfThreeComponent {
     @Input() words: Word[] = [];
     wrong: Word[] = [];
     index: number = 0;
-    current: Word = new Word(1, 1, "", "", "", []);
+    current: Word = this.words[0];
     streak: number = 0;
     lives: number = 3;
     score: number = 0;
@@ -23,6 +23,7 @@ export class OneOfThreeComponent {
     hideEnd: boolean = true;
 
     ngOnInit() {
+        Utils.shuffleList(this.words);
         this.current = this.words[0];
     }
 

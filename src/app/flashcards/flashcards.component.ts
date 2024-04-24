@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {Word} from "../constants";
 import {SpeechUtils} from "../speechutils";
+import {Utils} from "../utils";
 
 @Component({
   selector: 'app-flashcards',
@@ -12,9 +13,10 @@ export class FlashcardsComponent {
 
     currentIndex: number = 0;
     @Input() words: Word[] = [];
-    current: Word = new Word(1, 1, "", "", "", []);
+    current: Word = this.words[0];
 
     ngOnInit() {
+        Utils.shuffleList(this.words);
         this.current = this.words[0];
     }
 

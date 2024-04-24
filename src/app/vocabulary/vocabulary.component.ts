@@ -8,6 +8,7 @@ import {FormControl} from "@angular/forms";
 import {Drawing} from "../drawinglogic";
 import {Utils} from "../utils";
 import {SpeechUtils} from "../speechutils";
+import {WriteTheAnswerComponent} from "../writetheanswer/write-the-answer.component";
 
 @Component({
     selector: 'app-vocabulary',
@@ -62,6 +63,7 @@ export class VocabularyComponent {
         });
         this.languageNames.sort();
         Drawing.prepCanvas();
+
     }
 
     hideEverything() {
@@ -185,36 +187,6 @@ export class VocabularyComponent {
                 to_move_index++;
             }
         }
-    }
-
-    startWriteTheAnswer() {
-        this.hideEverything();
-        this.hideWriteTheAnswer = false;
-        this.loadVocab();
-        Utils.shuffleList(this.words);
-        this.pushUnseenForward();
-        this.restart();
-    }
-
-    startOneOfThree() {
-        this.hideEverything();
-        this.hideChooseOfThree = false;
-        this.loadVocab();
-        Utils.shuffleList(this.words);
-        this.pushUnseenForward();
-        this.restart();
-    }
-
-    startFlashcards() {
-        this.hideEverything();
-        this.hideFlashcards = false;
-        this.loadVocab();
-        Utils.shuffleList(this.words);
-    }
-
-    startDrawing() {
-        this.hideEverything();
-        this.hideDrawing = false;
     }
 
     resetCanvas(){

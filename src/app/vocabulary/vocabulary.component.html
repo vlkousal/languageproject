@@ -14,10 +14,10 @@
 	<p>{{ firstLanguage }}</p>
 	<p>{{ secondLanguage }}</p>
   <p>{{ description }}</p>
-  <button (click)="startOneOfThree()">One Of Three</button>
-  <button (click)="startWriteTheAnswer()">Write The Answer</button>
-  <button (click)="startFlashcards()">Flashcards</button>
-	<button (click)="startDrawing()">Draw Characters</button>
+  <button (click)= "hidePreview = true; hideChooseOfThree = false">One Of Three</button>
+  <button (click)="hidePreview = true; hideWriteTheAnswer = false">Write The Answer</button>
+  <button (click)="hidePreview = true; hideFlashcards = false">Flashcards</button>
+	<button (click)="hidePreview = true; hideDrawing = false">Draw Characters</button>
 
 	<div class="table-container">
 		<table border="1" id="table">
