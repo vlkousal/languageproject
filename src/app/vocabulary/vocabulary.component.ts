@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {BACKEND, FLAGS, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
+import {FLAGS, Word} from "../constants";
 import {ActivatedRoute} from "@angular/router";
 import {ApiTools} from "../apitools";
 import {VocabUtils} from "../vocabutils";
@@ -8,7 +8,6 @@ import {FormControl} from "@angular/forms";
 import {Drawing} from "../drawinglogic";
 import {Utils} from "../utils";
 import {SpeechUtils} from "../speechutils";
-import {WriteTheAnswerComponent} from "../writetheanswer/write-the-answer.component";
 
 @Component({
     selector: 'app-vocabulary',
@@ -21,12 +20,7 @@ export class VocabularyComponent {
     words: Word[] = [];
     all: Word[] = [];
     index: number = 0;
-    current: Word = new Word(0, 0, "", "", "", [""]);
-    wrong: Word[] = [];
-    score: number = 0;
-    streak: number = 0;
-    lives: number = 3;
-    correctAnswers: number = 0;
+
     feedback: string = "";
     url: string = "";
     vocabularySet: string = "";
@@ -40,7 +34,6 @@ export class VocabularyComponent {
     hideChooseOfThree: boolean = true;
     hidePreview: boolean = false;
     hideWriteTheAnswer: boolean = true;
-    hideEnd: boolean = true;
     hideFlashcards: boolean = true;
     hideDrawing: boolean = true;
 
@@ -64,13 +57,6 @@ export class VocabularyComponent {
         this.languageNames.sort();
         Drawing.prepCanvas();
 
-    }
-
-    hideEverything() {
-        this.hidePreview = true;
-        this.hideWriteTheAnswer = true;
-        this.hideChooseOfThree = true;
-        this.hideEnd = true;
     }
 
     testSecondVoice() {
@@ -121,6 +107,7 @@ export class VocabularyComponent {
         this.VocabUtils.sortByFirst(this.words);
 
         this.setupVoices();
+        this.pushUnseenForward();
     }
 
     setupVoices() {
@@ -203,17 +190,6 @@ export class VocabularyComponent {
         if(context != null) {
             context.fillText("我", 0, 170);
         }
-    }
-
-    restart(): void {
-        this.index = 0;
-        this.score = 0;
-        this.streak = 0;
-        this.lives = 3;
-        this.correctAnswers = 0;
-        this.words = Utils.shuffleList(this.words);
-        this.wrong = [];
-        this.current = this.words[0];
     }
 
     protected readonly VocabUtils = VocabUtils;
