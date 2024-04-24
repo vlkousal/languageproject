@@ -57,31 +57,8 @@
 </div>
 
 
-
-<!--  WRITE THE ANSWER -->
-<div class="xd" [hidden]="hideWriteTheAnswer">
-	<p>{{ index + 1 }}/{{ words.length }}     Score: {{ score }}</p>
-	<p>Streak: {{ streak }}</p>
-	<div title="Lives: {{ lives }}" class="hearts" *ngFor="let item of [].constructor(lives); let i = index">
-		<img src="../../assets/srdce.png" alt="Lives">
-	</div>
-	<br><br>
-	<strong style="font-size: 20px">{{ feedback }}</strong>
-	<button (click)="SpeechUtils.speak(current.question)">Play</button>
-	<div title="{{ current.phonetic}}"><p>{{ current.question }}</p></div>
-	<input [formControl]="writtenAnswer" (keydown.enter)="checkWrittenAnswer()">
-</div>
-
-
-<!--  END SCREEN -->
-<div class="end" [hidden]="hideEnd">
-  <h1>Final score: {{ score }}</h1>
-  <h3>{{correctAnswers}}/{{ words.length }} ({{ Math.floor(correctAnswers / (words.length / 100)) }}%)</h3>
-  <button (click)="replay()">Restart</button>
-  <button (click)="replayMistakes()">Replay mistakes</button>
-  <div *ngFor="let word of wrong">
-    <p><button (click)="SpeechUtils.speak(word.question)">{{ word.question }}</button> ({{ word.phonetic }}) - {{ word.correct }}</p>
-  </div>
+<div *ngIf="!hideWriteTheAnswer">
+	<app-writetheanswer [words]=words></app-writetheanswer>
 </div>
 
 <div *ngIf="!hideFlashcards">

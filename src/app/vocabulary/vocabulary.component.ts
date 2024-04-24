@@ -36,8 +36,6 @@ export class VocabularyComponent {
     secondLanguage: string = "";
     languageNames: string[] = [];
 
-    writtenAnswer: FormControl<string> = new FormControl("") as FormControl<string>;
-
     hideChooseOfThree: boolean = true;
     hidePreview: boolean = false;
     hideWriteTheAnswer: boolean = true;
@@ -165,31 +163,6 @@ export class VocabularyComponent {
         }
     }
 
-
-    evalCorrect(): void {
-        this.streak++;
-        if(this.streak % STREAK_FOR_HEALTH == 0 && this.lives < MAX_HEALTH) {
-            this.lives++;
-        }
-        this.score += this.streak;
-        this.correctAnswers++;
-        this.sendResult(true);
-        this.feedback = "Correct!";
-    }
-
-    evalWrong(): void {
-        this.streak = 0;
-        this.lives--;
-        this.wrong.push(this.current);
-        if(this.lives == 0) {
-            this.hideEverything();
-            this.hideEnd = false;
-            return;
-        }
-        this.sendResult(false);
-        this.feedback = "The correct answer was " + this.current.correct;
-    }
-
     loadVocab() {
         const parsed = JSON.parse(this.vocabularySet).vocabulary;
         const vocabString = Utils.shuffleList(parsed.split("\n")).filter(str => str.trim() !== '');
@@ -275,70 +248,6 @@ export class VocabularyComponent {
         }
     }
 
-    setNewWord() {
-        this.index++;
-        if(this.index == this.words.length) {
-            this.hideEverything();
-            this.hideEnd = false;
-            return;
-        }
-        this.current = this.words[this.index];
-
-        // TODO - make "flipped" words and make speaking in both languages functional
-        this.SpeechUtils.utt.lang = this.firstLang;
-        const firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
-        if(firstVoice) {
-            this.SpeechUtils.utt.voice = firstVoice;
-        }
-        SpeechUtils.speak(this.current.question);
-    }
-
-    sendResult(correct: boolean) {
-        const data = {
-            "token": localStorage.getItem("sessionId"),
-            "wordId": this.current.id,
-            "correct": correct
-        }
-
-        fetch(BACKEND + "api/addresult/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-    }
-
-    checkWrittenAnswer(): void{
-        const answer: string = this.writtenAnswer.getRawValue();
-        if(answer.length != 0) {
-            if(this.current.correct == answer) {
-                this.evalCorrect();
-            } else{
-                this.evalWrong();
-            }
-            this.setNewWord();
-        }
-        this.writtenAnswer.setValue("");
-    }
-
-    replayMistakes(): void {
-        if(this.wrong.length > 0) {
-            this.words = this.wrong;
-            this.hideEverything();
-            this.hideChooseOfThree = false;
-            this.restart();
-        }
-    }
-
-    replay(): void {
-        this.words = this.all;
-        // TODO reset aby fungovla na kazdem modu...
-        this.hideEverything();
-        this.hideChooseOfThree = false;
-        this.restart();
-    }
-
     restart(): void {
         this.index = 0;
         this.score = 0;
@@ -350,7 +259,6 @@ export class VocabularyComponent {
         this.current = this.words[0];
     }
 
-    protected readonly Math = Math;
     protected readonly VocabUtils = VocabUtils;
     protected readonly first = first;
     protected readonly SpeechUtils = SpeechUtils;
