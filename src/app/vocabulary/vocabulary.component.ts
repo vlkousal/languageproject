@@ -62,15 +62,6 @@ export class VocabularyComponent {
         });
         this.languageNames.sort();
         Drawing.prepCanvas();
-
-        const firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
-        SpeechUtils.utt.lang = this.firstLang;
-        console.log(this.selectedFirstLanguageName.getRawValue());
-        if (firstVoice != null) {
-            console.log("fakt neni!");
-            this.SpeechUtils.utt.voice = firstVoice;
-        }
-
     }
 
     hideEverything() {
@@ -82,21 +73,11 @@ export class VocabularyComponent {
 
     testSecondVoice() {
         const randomWord = Utils.getRandomElement(this.words);
-        const secondVoice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
-        this.SpeechUtils.utt.lang = this.secondLang;
-        if(secondVoice != null) {
-            this.SpeechUtils.utt.voice = secondVoice;
-        }
-        SpeechUtils.speak(randomWord.correct);
+        SpeechUtils.speak(randomWord.correct, false);
     }
 
     testFirstVoice() {
         const randomWord = Utils.getRandomElement(this.words);
-        const firstVoice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
-        this.SpeechUtils.utt.lang = this.firstLang;
-        if (firstVoice != null) {
-            this.SpeechUtils.utt.voice = firstVoice;
-        }
         SpeechUtils.speak(randomWord.question);
     }
 
@@ -108,8 +89,8 @@ export class VocabularyComponent {
     onFirstLanguageChange() {
         const voice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
         if (voice) {
-            this.SpeechUtils.utt.voice = voice;
-            this.SpeechUtils.utt.lang = voice.lang;
+            this.SpeechUtils.first_language_utt.voice = voice;
+            this.SpeechUtils.first_language_utt.lang = voice.lang;
             this.firstLang = voice.lang;
         }
         localStorage.setItem(this.firstLanguage, this.selectedFirstLanguageName.getRawValue());
@@ -118,8 +99,8 @@ export class VocabularyComponent {
     onSecondLanguageChange() {
         const voice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
         if (voice) {
-            this.SpeechUtils.utt.voice = voice;
-            this.SpeechUtils.utt.lang = voice.lang;
+            this.SpeechUtils.second_language_utt.voice = voice;
+            this.SpeechUtils.second_language_utt.lang = voice.lang;
             this.secondLang = voice.lang;
         }
         localStorage.setItem(this.secondLanguage, this.selectedSecondLanguageName.getRawValue());
@@ -137,14 +118,18 @@ export class VocabularyComponent {
         VocabUtils.sortByFirst(this.words);
         this.VocabUtils.sortByFirst(this.words);
 
+        this.setupVoices();
+    }
+
+    setupVoices() {
         const firstName = localStorage.getItem(this.firstLanguage);
         if(firstName != null) {
             this.selectedFirstLanguageName.setValue(firstName);
             this.onFirstLanguageChange();
             const voice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
             if (voice) {
-                this.SpeechUtils.utt.voice = voice;
-                this.SpeechUtils.utt.lang = voice.lang;
+                this.SpeechUtils.first_language_utt.voice = voice;
+                this.SpeechUtils.first_language_utt.lang = voice.lang;
                 this.firstLang = voice.lang;
             }
         }
@@ -156,8 +141,8 @@ export class VocabularyComponent {
 
             const voice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
             if (voice) {
-                this.SpeechUtils.utt.voice = voice;
-                this.SpeechUtils.utt.lang = voice.lang;
+                this.SpeechUtils.second_language_utt.voice = voice;
+                this.SpeechUtils.second_language_utt.lang = voice.lang;
                 this.secondLang = voice.lang;
             }
         }
