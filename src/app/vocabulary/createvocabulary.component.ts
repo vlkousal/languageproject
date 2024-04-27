@@ -19,7 +19,7 @@ export class CreateVocabularyComponent {
     name: FormControl<string> = new FormControl("") as FormControl<string>;
     description : FormControl<string> = new FormControl("") as FormControl<string>;
     url: FormControl<string> = new FormControl("") as FormControl<string>;
-    firstLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
+    firstLanguage: FormControl<string> = new FormControl("Albanian") as FormControl<string>;
     secondLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
     firstPart: boolean = true;
     lastNameLength: number = 0;
@@ -38,6 +38,8 @@ export class CreateVocabularyComponent {
     setupDropdownMenus(jsonString: string) {
         const json = JSON.parse(jsonString);
         this.languages = Object.keys(json);
+        this.firstLanguage.setValue(this.languages[0]);
+        this.secondLanguage.setValue(this.languages[1]);
     }
 
     onFileSelected(event: any) {

@@ -11,14 +11,15 @@
   <input (input)="onFirstInputChange()" id="url" type="text" [formControl]="url" maxlength="16" placeholder="The URL of the set" required/>
 
   <label for="firstLanguage">First language:</label>
-  <select id="firstLanguage" [formControl]="firstLanguage" (change)="onFirstInputChange()">
-    <option *ngFor="let language of languages">{{language}}</option>
-  </select>
+	<select id="firstLanguage" [formControl]="firstLanguage" (change)="onFirstInputChange()">
+		<option *ngFor="let language of languages" [value]="language">{{language}}</option>
+	</select>
 
   <label for="secondLanguage">Second language:</label>
-  <select id="secondLanguage" [formControl]="secondLanguage" (change)="onFirstInputChange()">
-    <option *ngFor="let language of languages">{{language}}</option>
-  </select>
+	<select id="secondLanguage" [formControl]="secondLanguage" (change)="onFirstInputChange()">
+		<option *ngFor="let language of languages" [value]="language">{{language}}</option>
+	</select>
+
 	<button (click)="onContinue()">Continue</button>
 	<p id="feedback">{{ firstFeedback }}</p>
 </form>
