@@ -58,9 +58,11 @@ export class EditVocabularyComponent {
         let toAdd: string = "";
         const lines: string[] = vocab.split("\n");
         for(let i = 0; i < lines.length; i++) {
-            const split = lines[i].split(";");
-            const lineString = split[0] + ";" + split[1] + ";" + split[2] + "\n"
-            toAdd += lineString;
+            if(lines[i].length != 0) {
+                const split = lines[i].split(";");
+                const lineString = split[0] + ";" + split[1] + ";" + split[2] + "\n"
+                toAdd += lineString;
+            }
         }
         this.vocab.setValue(toAdd);
     }
