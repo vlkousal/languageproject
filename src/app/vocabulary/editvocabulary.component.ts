@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FormControl} from "@angular/forms";
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {BACKEND, Word} from "../constants";
 import {ApiTools} from "../apitools";
 
@@ -31,7 +31,7 @@ export class EditVocabularyComponent {
     filter: FormControl<string> = new FormControl("") as FormControl<string>;
     filteredRelevantWords: Set<Word> = new Set<Word>();
 
-    constructor(private route: ActivatedRoute) { }
+    constructor(private route: ActivatedRoute, private router: Router) { }
 
     async ngOnInit() {
         ApiTools.getLanguageJson().then((result: string) => {
@@ -127,6 +127,10 @@ export class EditVocabularyComponent {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(json),
+            }).then(async response => {
+                if(response.ok) {
+                    this.router.navigate(["/vocab/" + this.url.getRawValue()]);
+                }
             })
         }
     }
