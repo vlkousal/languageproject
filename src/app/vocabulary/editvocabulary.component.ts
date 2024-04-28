@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {ActivatedRoute, Router} from '@angular/router';
-import {BACKEND, Word} from "../constants";
+import {BACKEND, FLAGS, Word} from "../constants";
 import {ApiTools} from "../apitools";
 
 
@@ -241,4 +241,6 @@ export class EditVocabularyComponent {
         })
         return contains;
     }
+
+    protected readonly FLAGS = FLAGS;
 }

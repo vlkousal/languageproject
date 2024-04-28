@@ -13,10 +13,56 @@ form {
     transform: translate(-50%, -50%);
 }
 
-/* Style labels */
-label {
-    display: block;
-    margin-bottom: 5px;
+.vocabulary-form {
+    margin-top: 150px;
+    margin-left: 20px;
+}
+
+.relevant-vocabulary {
+    width: 600px;
+    margin-left: 20px;
+    margin-right: 20px;
+    height: 475px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    top: 50%;
+    left: 50%;
+    overflow: auto;
+}
+
+.text-area {
+    text-align: center;
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 400px;
+    height: 475px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    top: 50%;
+    left: 50%;
+}
+
+.text-area textarea {
+    width: 300px;
+    height: 300px;
+}
+
+.table-container {
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 600px;
+    height: 475px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    top: 50%;
+    left: 50%;
+    overflow: auto;
 }
 
 /* Style labels */
@@ -68,26 +114,36 @@ br {
 }
 
 table {
-    border-collapse: collapse;
+    border-collapse: separate; /* Use separate border model */
+    border-spacing: 0; /* Set border spacing to zero */
     width: 100%;
-    text-align: center;
+    border-radius: 10px; /* Add border-radius for rounded corners */
+    overflow: hidden; /* Hide overflowing content */
 }
 
 /* Style table headers */
 th {
     padding: 10px;
     text-align: left;
+    background-color: #4CAF50; /* Set background color for headers */
+    color: white; /* Set text color for headers */
 }
-
 
 /* Style table cells */
 td {
     padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd; /* Add bottom border to cells */
 }
 
 /* Alternate row background color for better readability */
 tr:nth-child(even) {
-    background-color: #f2f2f2; /* Use your preferred background color */
+    background-color: #f9f9f9; /* Use your preferred background color */
+}
+
+/* Add hover effect to table rows */
+tr:hover {
+    background-color: #f2f2f2; /* Lighter background color on hover */
 }
 
 .input{
@@ -100,25 +156,35 @@ tr:nth-child(even) {
     display: flex;
 }
 
-.container textarea {
-    flex: 1;
-    margin-right: 20px; /* Přizpůsobte podle potřeby */
-    width: 50px;
-}
 
 textarea{
     height: 100px;
     resize: none; /* Disable resizing */
 }
 
-.table-container {
-    height: 300px; /* Přizpůsobte výšku podle potřeby */
-    width: 600px;
-    overflow: auto;
-}
-
 #feedback {
     margin-top: 10px;
     font-style: italic;
     color: #444;
+}
+
+.buttons {
+    margin-top: 50px;
+    margin-right: 10px;
+    margin-left: 700px;
+    display: flow;
+}
+
+.buttons button {
+    width: 100px;
+    margin-left: 20px;
+}
+
+.title {
+    text-align: left;
+    font-size: 20px;
+}
+
+.filter {
+    text-align: center;
 }

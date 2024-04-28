@@ -1,39 +1,49 @@
 <app-base></app-base>
 <body>
 <form class="firstForm" [hidden]="(!firstPart)">
-  <label for="name">Name:</label>
-  <input (input)="onFirstInputChange()" id="name" type="text" [formControl]="name" placeholder="The name of the set" required maxlength="32"/>
+	<label for="name">Name:</label>
+	<input (input)="onFirstInputChange()" id="name" type="text" [formControl]="name" placeholder="The name of the set" required maxlength="32"/>
 
-  <label for="description">Description:</label>
-  <textarea id="description" [formControl]="description" maxlength="256" placeholder="The description of the set            (not required)"></textarea>
+	<label for="description">Description:</label>
+	<textarea id="description" [formControl]="description" maxlength="256" placeholder="The description of the set            (not required)"></textarea>
 
-  <label for="url">URL:</label>
-  <input (input)="onFirstInputChange()" id="url" type="text" [formControl]="url" maxlength="16" placeholder="The URL of the set" required/>
+	<label for="url">URL:</label>
+	<input (input)="onFirstInputChange()" id="url" type="text" [formControl]="url" maxlength="16" placeholder="The URL of the set" required/>
 
-  <label for="firstLanguage">First language:</label>
-  <select id="firstLanguage" [formControl]="firstLanguage" (change)="onFirstInputChange()">
-    <option *ngFor="let language of languages">{{language}}</option>
-  </select>
+	<label for="firstLanguage">First language:</label>
+	<select id="firstLanguage" [formControl]="firstLanguage" (change)="onFirstInputChange()">
+		<option *ngFor="let language of languages" [value]="language">{{language}}</option>
+	</select>
 
-  <label for="secondLanguage">Second language:</label>
-  <select id="secondLanguage" [formControl]="secondLanguage" (change)="onFirstInputChange()">
-    <option *ngFor="let language of languages">{{language}}</option>
-  </select>
+	<label for="secondLanguage">Second language:</label>
+	<select id="secondLanguage" [formControl]="secondLanguage" (change)="onFirstInputChange()">
+		<option *ngFor="let language of languages" [value]="language">{{language}}</option>
+	</select>
+
 	<button (click)="onContinue()">Continue</button>
 	<p id="feedback">{{ firstFeedback }}</p>
 </form>
 
-<div class="vocabularyForm" [hidden]="(firstPart)">
-	<input type="file" (change)="onFileSelected($event)" />
-
-	<label for="delimiter">Delimiter:</label>
-	<input (input)="onInputChange()" id=delimiter type="text" [formControl]="delimiter" required size="1" [defaultValue]="';'" style="width: 40px">
-	<label for="filter">Filter: </label>
-	<input (input)="onFilterChange()" id="filter" type="text" [formControl]="filter" style="width: 128px">
-	<p>Valid words: {{ counter }}</p>
+<div class="vocabulary-form" [hidden]="(firstPart)">
+	<div class="title">
+		<h3>{{ name.getRawValue() }} {{FLAGS[firstLanguage.getRawValue()]}} {{ FLAGS[secondLanguage.getRawValue()]}}</h3>
+	</div>
 	<div class="container">
-		<textarea (input)="onInputChange()"  [(ngModel)]="content" type="text" class="input" [formControl]="vocab" id="textarea" required></textarea>
-		<div class="table-container">
+		<div class="text-area">
+			<div>
+				<label for="delimiter">Delimiter</label>
+				<input (input)="onInputChange()" id=delimiter type="text" [formControl]="delimiter" required size="1" [defaultValue]="';'" style="width: 40px">
+			</div>
+
+			<textarea (input)="onInputChange()"  [(ngModel)]="content" type="text" class="input" [formControl]="vocab" id="textarea" required></textarea>
+			<input type="file" (change)="onFileSelected($event)" />
+		</div>
+
+		<div class="relevant-vocabulary">
+			<div class="filter">
+				<label for="filter">Filter: </label>
+				<input (input)="onFilterChange()" id="filter" type="text" [formControl]="filter" style="width: 128px">
+			</div>
 			<table border="1" id="table-relevant">
 				<tr>
 					<th>First language</th>
@@ -51,7 +61,9 @@
 			</table>
 		</div>
 
+
 		<div class="table-container">
+			<p>Valid words: {{ counter }}</p>
 			<table border="1" id="table">
 				<tr>
 					<th>First language</th>
@@ -69,9 +81,10 @@
 			</table>
 		</div>
 	</div>
+	<div class="buttons">
+		<button (click)="goBack()">Go back</button>
+		<button (click)="onSend()">Create</button>
+	</div>
 </div>
-<div [hidden]="firstPart" class="button">
-	<button (click)="goBack()">Go back</button>
-	<button (click)="onSend()">Edit</button>
-</div>
+
 </body>
