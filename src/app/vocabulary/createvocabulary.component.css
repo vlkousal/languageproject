@@ -122,3 +122,37 @@ textarea{
     font-style: italic;
     color: #444;
 }
+
+/* Style for the file input */
+input[type="file"] {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+/* Hover effect */
+input[type="file"]:hover {
+    border-color: #999;
+}
+
+/* Focus effect */
+input[type="file"]:focus {
+    outline: none;
+    border-color: #666;
+}
+
+/* Styling the text inside the input */
+input[type="file"]::file-selector-button {
+    color: #333;
+}
+
+/* Optional: Hide default button text */
+input[type="file"]::-webkit-file-upload-button {
+    display: none;
+}

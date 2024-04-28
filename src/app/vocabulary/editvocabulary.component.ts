@@ -94,7 +94,9 @@ export class EditVocabularyComponent {
         if(this.isFirstInputValid()) {
             this.relevantWords = new Set<Word>();
             this.firstPart = false;
-            const parsed = JSON.parse(await this.getRelevantVocabulary());
+            let firstLanguage: string = this.firstLanguage.getRawValue();
+            let secondLanguage: string = this.secondLanguage.getRawValue();
+            const parsed = JSON.parse(await ApiTools.getRelevantVocabulary(firstLanguage, secondLanguage));
             for(let i = 0; i < parsed.words.length; i++) {
                 const word = new Word(0,0,  parsed.words[i].first, parsed.words[i].phonetic, parsed.words[i].second, []);
                 if(!this.containsWord(this.relevantWords, word)) {
@@ -252,28 +254,6 @@ export class EditVocabularyComponent {
         } catch (error) {
             console.error('Error:', error);
             throw error; // Re-throw the error for further handling
-        }
-    }
-
-    async getRelevantVocabulary(): Promise<string> {
-        try {
-            const response = await fetch(BACKEND + "api/getlanguagevocab/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                }, body: JSON.stringify({
-                    "first_language": this.firstLanguage.getRawValue(),
-                    "second_language": this.secondLanguage.getRawValue()
-                })
-            });
-
-            if(response.ok) {
-                return await response.text();
-            }
-            throw new Error("XD ROFL LMAO");
-        } catch(error) {
-            console.error("Error:", error);
-            throw error;
         }
     }
 }

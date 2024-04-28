@@ -38,5 +38,27 @@ export class ApiTools {
             body: JSON.stringify(data),
         })
     }
+
+    static async getRelevantVocabulary(firstLanguage: string, secondLanguage: string): Promise<string> {
+        try {
+            const response = await fetch(BACKEND + "api/getlanguagevocab/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }, body: JSON.stringify({
+                    "first_language": firstLanguage,
+                    "second_language": secondLanguage
+                })
+            });
+
+            if(response.ok) {
+                return await response.text();
+            }
+            throw new Error("XD ROFL LMAO");
+        } catch(error) {
+            console.error("Error:", error);
+            throw error;
+        }
+    }
 }
 
