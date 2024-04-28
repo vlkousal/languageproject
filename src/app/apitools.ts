@@ -60,5 +60,24 @@ export class ApiTools {
             throw error;
         }
     }
+
+    static async getLanguageJson(): Promise<string> {
+        try {
+            const response = await fetch(BACKEND + 'api/get_languages/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                return await response.text();
+            }
+            throw new Error('Network response was not ok.');
+        } catch (error) {
+            console.error('Error:', error);
+            throw error; // Re-throw the error for further handling
+        }
+    }
 }
 

@@ -32,7 +32,7 @@ export class CreateVocabularyComponent {
     constructor(private router: Router) { }
 
     ngOnInit() {
-        this.getLanguageJson().then((result: string) => {
+        ApiTools.getLanguageJson().then((result: string) => {
             this.setupDropdownMenus(result);
         }).catch((error) => {
             console.error('Error:', error);
@@ -240,24 +240,5 @@ export class CreateVocabularyComponent {
             }
         })
         return contains;
-    }
-
-    async getLanguageJson(): Promise<string> {
-        try {
-            const response = await fetch(BACKEND + 'api/get_languages/', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (response.ok) {
-                return await response.text();
-            }
-            throw new Error('Network response was not ok.');
-        } catch (error) {
-            console.error('Error:', error);
-            throw error; // Re-throw the error for further handling
-        }
     }
 }
