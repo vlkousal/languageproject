@@ -7,92 +7,94 @@ import {BACKEND} from "../constants";
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
+
 export class RegisterComponent {
-  constructor(private router: Router) { }
-  username = new FormControl("") as FormControl<string>;
-  password = new FormControl("") as FormControl<string>;
-  password_again = new FormControl("") as FormControl<string>;
-  isValid = false;
-  feedback = "Enter a username.";
 
-  ngOnInit(){
-    if(localStorage.getItem("sessionId") != null){
-      this.router.navigate(["/"]);
-    }
-  }
+    constructor(private router: Router) { }
+    username = new FormControl("") as FormControl<string>;
+    password = new FormControl("") as FormControl<string>;
+    password_again = new FormControl("") as FormControl<string>;
+    isValid = false;
+    feedback = "Enter a username.";
 
-  onRegister(){
-    if(!this.isValid){
-      return;
+    ngOnInit() {
+        if(localStorage.getItem("sessionId") != null) {
+            this.router.navigate(["/"]);
+        }
     }
-      const data =
-        {"username": this.username.getRawValue(),
+
+    onRegister() {
+        if(!this.isValid) {
+            return;
+        }
+        const data =
+          {"username": this.username.getRawValue(),
           "password": this.password.getRawValue()};
 
-    fetch(BACKEND + 'api/register/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    }).then(async response => {
-      if (!response.ok) {
-        this.feedback = "A user with this username already exists.";
-      }
-      if(response.ok){
-        const sessionId = (await response.text()).replace(/^"(.*)"$/, '$1');
-        localStorage.setItem("sessionId", sessionId);
-        this.router.navigate(["/"]);
-      }
-    })
-  }
-  onInputChange(){
-    const username = this.username.getRawValue();
-    const password = this.password.getRawValue();
-    const password_again = this.password_again.getRawValue();
-
-    this.isValid = false;
-    if(username.length == 0){
-      this.feedback = "Enter a username.";
-      return;
+        fetch(BACKEND + 'api/register/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        }).then(async response => {
+            if (!response.ok) {
+                this.feedback = "A user with this username already exists.";
+            }
+            if(response.ok) {
+                const sessionId = (await response.text()).replace(/^"(.*)"$/, '$1');
+                localStorage.setItem("sessionId", sessionId);
+                this.router.navigate(["/"]);
+            }
+        })
     }
 
-    if(!/^[a-zA-Z0-9&-.+_]+$/.test(username)){
-      this.feedback = "Your username is illegal.";
-      return;
-    }
+    onInputChange() {
+        const username = this.username.getRawValue();
+        const password = this.password.getRawValue();
+        const password_again = this.password_again.getRawValue();
 
-    if(username.length < 2){
-      this.feedback = "Your username is too short.";
-      return;
-    }
-    if(username.length > 16){
-      this.feedback = "Your username is too long.";
-      return;
-    }
+        this.isValid = false;
+        if(username.length == 0) {
+            this.feedback = "Enter a username.";
+            return;
+        }
 
-    if(password.length == 0){
-      this.feedback = "Enter a password.";
-      return;
-    }
+        if(!/^[a-zA-Z0-9&-.+_]+$/.test(username)) {
+            this.feedback = "Your username is illegal.";
+            return;
+        }
 
-    if(password.length < 5){
-      this.feedback = "Your password is too short.";
-      return;
-    }
+        if(username.length < 2) {
+            this.feedback = "Your username is too short.";
+            return;
+        }
 
-    if(password.length == 0){
-      this.feedback = "Enter your password again.";
-      return;
-    }
+        if(username.length > 16) {
+            this.feedback = "Your username is too long.";
+            return;
+        }
 
-    if(password != password_again){
-      this.feedback = "Your passwords don't match.";
-      return;
-    }
-    this.feedback = "Perfect!";
-    this.isValid = true;
-  }
+        if(password.length == 0) {
+            this.feedback = "Enter a password.";
+            return;
+        }
 
-  protected readonly oninput = oninput;
+        if(password.length < 5) {
+            this.feedback = "Your password is too short.";
+            return;
+        }
+
+        if(password.length == 0) {
+            this.feedback = "Enter your password again.";
+            return;
+        }
+
+        if(password != password_again) {
+            this.feedback = "Your passwords don't match.";
+            return;
+        }
+        this.feedback = "Perfect!";
+        this.isValid = true;
+    }
 }

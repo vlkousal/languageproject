@@ -31,7 +31,7 @@ export class IndexComponent {
                 "Content-Type": "application/json",
             },
         });
-        if(response.ok){
+        if(response.ok) {
             return await response.text();
         }
         return "failed";

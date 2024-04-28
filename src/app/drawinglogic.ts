@@ -1,5 +1,6 @@
 
-export class Drawing{
+export class Drawing {
+
     static prepCanvas() {
         const canvas = document.getElementById('canvas') as HTMLCanvasElement;
         const context = canvas.getContext('2d');
@@ -28,7 +29,7 @@ export class Drawing{
 
         function stopDrawing() {
             isDrawing = false;
-            if(context != null){
+            if(context != null) {
                 context.beginPath();
             }
         }

@@ -94,6 +94,10 @@ export class CreateVocabularyComponent {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(json),
+            }).then(async response => {
+                if(response.ok) {
+
+                }
             })
         }
     }

@@ -53,7 +53,7 @@ export class CollectionComponent {
 
     onYesButtonClick() {
         this.deleteClickCount++;
-        if(this.deleteClickCount == 3){
+        if(this.deleteClickCount == 3) {
             this.deleteSet(this.urlToDelete);
             this.onNoButtonClick();
         }
@@ -68,7 +68,7 @@ export class CollectionComponent {
         this.urlToDelete = url;
     }
 
-    onEditButtonClick(url: string){
+    onEditButtonClick(url: string) {
         this.router.navigate(["/edit/" + url]);
     }
 
@@ -82,7 +82,7 @@ export class CollectionComponent {
             },
             body: JSON.stringify(data),
         }).then(async response => {
-            if(response.ok){
+            if(response.ok) {
                 window.location.reload();
             }
             console.error("Couldn't delete the set!");
