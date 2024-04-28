@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {BACKEND, Word} from "../constants";
 import {ApiTools} from "../apitools";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-createvocabulary',
@@ -27,6 +28,8 @@ export class CreateVocabularyComponent {
     relevantWords: Set<Word> = new Set<Word>();
     filter: FormControl<string> = new FormControl("") as FormControl<string>;
     filteredRelevantWords: Set<Word> = new Set<Word>();
+
+    constructor(private router: Router) { }
 
     ngOnInit() {
         this.getLanguageJson().then((result: string) => {
@@ -96,7 +99,7 @@ export class CreateVocabularyComponent {
                 body: JSON.stringify(json),
             }).then(async response => {
                 if(response.ok) {
-
+                    this.router.navigate(["/vocab/" + this.url.getRawValue()]);
                 }
             })
         }
