@@ -7,10 +7,11 @@
 	</div>
 	<br><br>
 	<strong style="font-size: 20px">{{ feedback }}</strong>
-	<button (click)="repeatWord()">Play</button>
 
 	<div class="buttons">
-		<div title="{{ current.phonetic}}"><p>{{ current.question }}</p></div>
+		<div title="{{ current.phonetic}}" class="question">
+			<button (click)="SpeechUtils.speak(current.question)">{{ current.question }}</button>
+		</div>
 		<button (click)="checkAnswer(current.answers[0])">{{ current.answers[0] }}</button>
 		<button (click)="checkAnswer(current.answers[1])">{{ current.answers[1] }}</button>
 		<button (click)="checkAnswer(current.answers[2])">{{ current.answers[2] }}</button>

@@ -1,5 +1,5 @@
 <!--  WRITE THE ANSWER -->
-<div class="xd" [hidden]="!hideEnd">
+<div class="container" [hidden]="!hideEnd">
 	<p>{{ index + 1 }}/{{ words.length }}     Score: {{ score }}</p>
 	<p>Streak: {{ streak }}</p>
 	<div title="Lives: {{ lives }}" class="hearts" *ngFor="let item of [].constructor(lives); let i = index">
@@ -7,8 +7,9 @@
 	</div>
 	<br><br>
 	<strong style="font-size: 20px">{{ feedback }}</strong>
-	<button (click)="SpeechUtils.speak(current.question)">Play</button>
-	<div title="{{ current.phonetic}}"><p>{{ current.question }}</p></div>
+	<div title="{{ current.phonetic}}" class="question">
+		<button (click)="SpeechUtils.speak(current.question)">{{ current.question }}</button>
+	</div>
 	<input [formControl]="writtenAnswer" (keydown.enter)="checkWrittenAnswer()">
 </div>
 

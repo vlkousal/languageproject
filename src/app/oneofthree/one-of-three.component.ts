@@ -72,10 +72,6 @@ export class OneOfThreeComponent {
         SpeechUtils.speak(this.current.question);
     }
 
-    repeatWord() {
-        SpeechUtils.speak(this.current.question);
-    }
-
     replay() {
         Utils.shuffleList(this.words);
         this.current = this.words[0];

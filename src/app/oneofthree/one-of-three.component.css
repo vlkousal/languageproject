@@ -92,3 +92,19 @@ body{
 .end div p {
     margin: 10px 0;
 }
+
+.question button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    cursor: pointer;
+    /* Additional styles if needed */
+}
+
+.question button:hover {
+    background-color: #fbfafa;
+}
