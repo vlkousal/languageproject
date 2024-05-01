@@ -60,12 +60,12 @@ export class RegisterComponent {
             return;
         }
 
-        if(!/^[a-zA-Z0-9&-.+_]+$/.test(username)) {
+        if(!/^[a-zA-Z0-9&-._]+$/.test(username)) {
             this.feedback = "Your username is illegal.";
             return;
         }
 
-        if(username.length < 2) {
+        if(username.length < 4) {
             this.feedback = "Your username is too short.";
             return;
         }
