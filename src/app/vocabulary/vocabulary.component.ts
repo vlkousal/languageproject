@@ -32,10 +32,11 @@ export class VocabularyComponent {
     languageNames: string[] = [];
 
     hideChooseOfThree: boolean = true;
-    hidePreview: boolean = false;
+    hidePreview: boolean = true;
     hideWriteTheAnswer: boolean = true;
     hideFlashcards: boolean = true;
     hideDrawing: boolean = true;
+    loading: boolean = true;
 
     selectedFirstLanguageName: FormControl<string> = new FormControl("") as FormControl<string>;
     selectedSecondLanguageName: FormControl<string> = new FormControl("") as FormControl<string>;
@@ -44,11 +45,11 @@ export class VocabularyComponent {
 
     constructor(private route: ActivatedRoute) {}
 
-    ngOnInit() {
+    async ngOnInit() {
         this.route.params.subscribe(params => {
             this.url = params['vocabUrl'];
         });
-        this.setup();
+        await this.setup();
 
         const voices = speechSynthesis.getVoices();
         voices.forEach((voice) => {
@@ -56,7 +57,8 @@ export class VocabularyComponent {
         });
         this.languageNames.sort();
         Drawing.prepCanvas();
-
+        this.loading = false;
+        this.hidePreview = false;
     }
 
     testSecondVoice() {
