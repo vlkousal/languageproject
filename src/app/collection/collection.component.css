@@ -9,7 +9,9 @@
     border-radius: 5px;
     width: 400px;
     font-size: 20px;
+    text-align: center;
 }
+
 
 .set-link {
     text-decoration: none;
@@ -90,3 +92,10 @@
     filter: brightness(1.2);
 }
 
+.container {
+    /* Adjust width as needed */
+    max-width: 800px; /* For example */
+    width: 100%; /* Ensure it takes full width of the container */
+    margin-left: 20%;
+    margin-top: 10%;
+}
