@@ -14,7 +14,7 @@ export class WriteTheAnswerComponent {
 
     @Input() words: Word[] = [];
     index: number = 0;
-    current: Word = this.words[0];
+    current: Word = new Word(-1, -1, "q", "p", "c", []);
     wrong: Word[] = [];
     writtenAnswer: FormControl<string> = new FormControl("") as FormControl<string>;
     score: number = 0;

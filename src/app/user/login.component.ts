@@ -64,6 +64,9 @@ export class LoginComponent {
             return;
         }
         this.feedback = "Go for it!";
-        this.isValid = true;
+        if(/^[a-zA-Z0-9&-._]+$/.test(username) && username.length >= 4
+            && username.length <= 16 && password.length >= 5) {
+            this.isValid = true;
+        }
     }
 }
