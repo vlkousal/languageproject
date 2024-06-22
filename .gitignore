@@ -41,3 +41,9 @@ front/typings
 # System files
 .DS_Store
 Thumbs.db
+
+# Django
+back/db.sqlite3
+back/languageproject_back/__pycache__
+
+
