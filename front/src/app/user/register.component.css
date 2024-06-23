@@ -1,8 +1,7 @@
-
-  /* Styling the container div */
 .form {
+  margin-top: 10%;
+  max-width: 80%;
   width: 300px;
-  margin: auto;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -13,13 +12,11 @@
   transform: translate(-50%, -50%);
 }
 
-/* Styling the labels */
 label {
   display: block;
   margin-bottom: 5px;
 }
 
-/* Styling the input fields */
 input[type="text"],
 input[type="password"] {
   width: calc(100% - 22px);
@@ -29,7 +26,6 @@ input[type="password"] {
   border-radius: 4px;
 }
 
-/* Styling the button */
 button {
   width: 100%;
   padding: 10px;
@@ -44,7 +40,6 @@ button:hover {
   background-color: #45a049;
 }
 
-/* Styling the feedback paragraph */
 p {
   margin-top: 10px;
   font-style: italic;
