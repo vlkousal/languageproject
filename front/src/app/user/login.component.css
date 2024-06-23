@@ -1,17 +1,7 @@
-body{
-  text-align: center;
-  background-color: green;
-}
-
-.form{
-  text-align: center;
-  float: left;
-  font-size: 50rem;
-}
-
 div {
-  width: 300px;
-  margin: auto;
+  max-width: 300px;
+  min-width: 200px;
+
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;

@@ -19,6 +19,7 @@ body {
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Added subtle box shadow for depth */
+    max-height: 15px;
 }
 
 .navbar a {
