@@ -1,3 +1,5 @@
+import {Word} from "./constants";
+
 export class Utils {
     static getIndex(blocked: number, ceil: number): number {
         let index = Math.floor(Math.random() * ceil);
@@ -26,7 +28,7 @@ export class Utils {
         return list;
     }
 
-    static getRandomElement(list: any[]) {
+    static getRandomElement(list: Word[]) {
         // Generate a random index within the range of the list's length
         const randomIndex = Math.floor(Math.random() * list.length);
         // Return the element at the random index

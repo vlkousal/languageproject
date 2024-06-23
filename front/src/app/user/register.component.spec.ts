@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { RegisterComponent } from './register.component';
-import {HttpTestingController} from "@angular/common/http/testing";
 import {BaseComponent} from "../base/base.component";
 import {ReactiveFormsModule} from "@angular/forms";
 

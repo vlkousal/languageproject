@@ -46,13 +46,19 @@ export class CreateVocabularyComponent {
         this.secondLanguage.setValue(this.languages[1]);
     }
 
-    onFileSelected(event: any) {
-        const selectedFile = event.target.files[0];
+    onFileSelected(event: Event) {
+        const input = event.target as HTMLInputElement;
+        if(input == null || input.files == null) {
+            return;
+        }
+        const selectedFile = input.files[0];
         const reader = new FileReader();
 
-        reader.onload = (e: any) => {
-            this.content = e.target.result;
-            this.onInputChange();
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+            if(e.target != null && e.target.result != null) {
+                this.content = e.target.result.toString();
+                this.onInputChange();
+            }
         };
         reader.readAsText(selectedFile);
     }
@@ -65,8 +71,8 @@ export class CreateVocabularyComponent {
         if(this.isFirstInputValid()) {
             this.relevantWords = new Set<Word>();
             this.firstPart = false;
-            let firstLanguage: string = this.firstLanguage.getRawValue();
-            let secondLanguage: string = this.secondLanguage.getRawValue();
+            const firstLanguage: string = this.firstLanguage.getRawValue();
+            const secondLanguage: string = this.secondLanguage.getRawValue();
             const parsed = JSON.parse(await ApiTools.getRelevantVocabulary(firstLanguage, secondLanguage));
             for(let i = 0; i < parsed.words.length; i++) {
                 const word = new Word(0,0,  parsed.words[i].first, parsed.words[i].phonetic, parsed.words[i].second, []);

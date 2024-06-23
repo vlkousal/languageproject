@@ -34,7 +34,7 @@ export class Drawing {
             }
         }
 
-        function draw(e: { clientX: any; clientY: any; }) {
+        function draw(e: { clientX: number; clientY: number; }) {
             if (!isDrawing || context == null) return;
 
             // Get current mouse coordinates
