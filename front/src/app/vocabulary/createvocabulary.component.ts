@@ -16,8 +16,8 @@ export class CreateVocabularyComponent {
     content: string = "";
     firstFeedback: string = "Please enter a name.";
     words: Set<Word> = new Set<Word>();
+    languages: string[] = Object.keys(FLAGS);
     counter: number = 0;
-    languages: string[] = [];
     name: FormControl<string> = new FormControl("") as FormControl<string>;
     description : FormControl<string> = new FormControl("") as FormControl<string>;
     url: FormControl<string> = new FormControl("") as FormControl<string>;
@@ -32,18 +32,7 @@ export class CreateVocabularyComponent {
     constructor(private router: Router) { }
 
     ngOnInit() {
-        ApiTools.getLanguageJson().then((result: string) => {
-            this.setupDropdownMenus(result);
-        }).catch((error) => {
-            console.error('Error:', error);
-        });
-    }
-
-    setupDropdownMenus(jsonString: string) {
-        const json = JSON.parse(jsonString);
-        this.languages = Object.keys(json);
-        this.firstLanguage.setValue(this.languages[0]);
-        this.secondLanguage.setValue(this.languages[1]);
+        this.randomizeLanguages();
     }
 
     onFileSelected(event: Event) {
@@ -213,6 +202,19 @@ export class CreateVocabularyComponent {
 
     removeDiacritics(inputString: string) {
         return inputString.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    randomizeLanguages() {
+        const keys = Object.keys(FLAGS);
+        const firstIndex = Math.floor(Math.random() * keys.length);
+        let secondIndex = Math.floor(Math.random() * keys.length);
+        if(firstIndex == secondIndex) {
+            secondIndex = (secondIndex + 1) % keys.length;
+        }
+        this.firstLanguage.setValue(keys[firstIndex]);
+        this.secondLanguage.setValue(keys[secondIndex]);
+        this.firstLanguage.setValue(this.firstLanguage.getRawValue());
+        console.log(keys[firstIndex]);
     }
 
     onInputChange() {

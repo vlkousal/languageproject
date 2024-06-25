@@ -1,15 +1,12 @@
-/* Apply a simple reset to remove default styling */
-
-
 
 form {
-    padding: 20px;
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #f9f9f9;
     position: absolute;
-    top: 50%;
     left: 50%;
+    top: 50%;
     transform: translate(-50%, -50%);
 }
 
@@ -65,13 +62,11 @@ form {
     overflow: auto;
 }
 
-/* Style labels */
 label {
     display: block;
     margin-bottom: 5px;
 }
 
-/* Style text inputs and textareas */
 input[type="text"],
 textarea {
     width: calc(100% - 22px);
@@ -81,18 +76,15 @@ textarea {
     border-radius: 4px;
 }
 
-/* Style the select dropdowns */
 select {
     padding: 8px;
     margin-bottom: 15px;
     box-sizing: border-box;
-    border: 1px solid grey; /* Use your grey color */
+    border: 1px solid grey;
     border-radius: 4px;
-    background-color: #fff; /* Use your preferred background color */
-    color: #333; /* Use your preferred text color */
+    background-color: #fff;
+    color: #333;
 }
-
-/* Style the submit button if you have one */
 
 button {
     width: 100%;
@@ -105,51 +97,47 @@ button {
 }
 
 button:hover {
-    background-color: #006400; /* Tmavší odstín zelené při najetí myší */
+    background-color: #006400;
 }
 
-/* Optional: Add some spacing between form elements */
 br {
     margin-bottom: 15px;
 }
 
 table {
-    border-collapse: separate; /* Use separate border model */
-    border-spacing: 0; /* Set border spacing to zero */
+    border-collapse: separate;
+    border-spacing: 0;
     width: 100%;
-    border-radius: 10px; /* Add border-radius for rounded corners */
-    overflow: hidden; /* Hide overflowing content */
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 /* Style table headers */
 th {
     padding: 10px;
     text-align: left;
-    background-color: #4CAF50; /* Set background color for headers */
-    color: white; /* Set text color for headers */
+    background-color: #4CAF50;
+    color: white;
 }
 
-/* Style table cells */
 td {
     padding: 10px;
     text-align: center;
-    border-bottom: 1px solid #ddd; /* Add bottom border to cells */
+    border-bottom: 1px solid #ddd;
 }
 
-/* Alternate row background color for better readability */
 tr:nth-child(even) {
-    background-color: #f9f9f9; /* Use your preferred background color */
+    background-color: #f9f9f9;
 }
 
-/* Add hover effect to table rows */
 tr:hover {
-    background-color: #f2f2f2; /* Lighter background color on hover */
+    background-color: #f2f2f2;
 }
 
 .input{
     width: 600px;
     height: 400px;
-    padding: 10px; /* Pro vytvoření mezery od okrajů */
+    padding: 10px;
 }
 
 .container {
@@ -159,7 +147,7 @@ tr:hover {
 
 textarea{
     height: 100px;
-    resize: none; /* Disable resizing */
+    resize: none;
 }
 
 #feedback {
@@ -188,3 +176,6 @@ textarea{
 .filter {
     text-align: center;
 }
+
+
+
