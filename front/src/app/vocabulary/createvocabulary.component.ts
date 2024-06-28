@@ -14,7 +14,6 @@ export class CreateVocabularyComponent {
     delimiter = new FormControl(";") as FormControl<string>;
     content: string = "";
     firstFeedback: string = "Please enter a name.";
-    words: Set<Word> = new Set<Word>();
     languages: string[] = Object.keys(FLAGS);
     counter: number = 0;
     name: FormControl<string> = new FormControl("") as FormControl<string>;
@@ -23,9 +22,14 @@ export class CreateVocabularyComponent {
     firstLanguage: FormControl<string> = new FormControl("Albanian") as FormControl<string>;
     secondLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
     lastNameLength: number = 0;
+
     relevantWords: Set<Word> = new Set<Word>();
     filter: FormControl<string> = new FormControl("") as FormControl<string>;
     filteredRelevantWords: Set<Word> = new Set<Word>();
+
+    words: Set<Word> = new Set<Word>();
+    wordsFilter: FormControl<string> = new FormControl("") as FormControl<string>;
+    filteredWords: Set<Word> = new Set<Word>();
 
     hideText: boolean = false;
     hideRelevant: boolean = true;
@@ -36,6 +40,41 @@ export class CreateVocabularyComponent {
     async ngOnInit() {
         this.randomizeLanguages();
         await this.findRelevantWords();
+    }
+
+    onWordsFilterChange() {
+        const filter: string = this.removeDiacritics(this.wordsFilter.getRawValue());
+        console.log(filter.length);
+        if(filter.length != 0) {
+            this.filteredWords = new Set<Word>();
+            this.words.forEach((word) => {
+                const correct = this.removeDiacritics(word.correct);
+                const phonetic = this.removeDiacritics(word.phonetic);
+                const question = this.removeDiacritics(word.question);
+                if(correct.includes(filter) || phonetic.includes(filter) || question.includes(filter)) {
+                    this.filteredWords.add(word);
+                }
+            })
+            return;
+        }
+        this.filteredWords = this.words;
+    }
+
+    onFilterChange() {
+        const filter = this.removeDiacritics(this.filter.getRawValue());
+        if(filter.length != 0) {
+            this.filteredRelevantWords = new Set<Word>();
+            this.relevantWords.forEach((word) => {
+                const correct = this.removeDiacritics(word.correct);
+                const phonetic = this.removeDiacritics(word.phonetic);
+                const question = this.removeDiacritics(word.question);
+                if(correct.includes(filter) || phonetic.includes(filter) || question.includes(filter)) {
+                    this.filteredRelevantWords.add(word);
+                }
+            });
+            return;
+        }
+        this.filteredRelevantWords = this.relevantWords;
     }
 
     async findRelevantWords() {
@@ -59,18 +98,27 @@ export class CreateVocabularyComponent {
         this.hideText = false;
         this.hideRelevant = true;
         this.hideTable = true;
+
+        this.filter.setValue("");
+        this.wordsFilter.setValue("");
     }
 
     showRelevant() {
         this.hideText = true;
         this.hideRelevant = false;
         this.hideTable = true;
+
+        this.filter.setValue("");
+        this.wordsFilter.setValue("");
     }
 
     showTable() {
         this.hideText = true;
         this.hideRelevant = true;
         this.hideTable = false;
+
+        this.filter.setValue("");
+        this.wordsFilter.setValue("");
     }
 
     onFileSelected(event: Event) {
@@ -130,6 +178,7 @@ export class CreateVocabularyComponent {
             }
             this.content += word.question + delimeter + word.phonetic + delimeter + word.correct + "\n";
             this.onInputChange();
+            this.onWordsFilterChange();
         }
     }
 
@@ -144,6 +193,7 @@ export class CreateVocabularyComponent {
             }
         })
         this.onInputChange();
+        this.onWordsFilterChange();
     }
 
     adaptURLText() {
@@ -192,23 +242,6 @@ export class CreateVocabularyComponent {
             return;
         }
         this.firstFeedback = "Click continue when ready.";
-    }
-
-    onFilterChange() {
-        const filter = this.removeDiacritics(this.filter.getRawValue());
-        if(filter.length != 0) {
-            this.filteredRelevantWords = new Set<Word>();
-            this.relevantWords.forEach((word) => {
-                const correct = this.removeDiacritics(word.correct);
-                const phonetic = this.removeDiacritics(word.phonetic);
-                const question = this.removeDiacritics(word.question);
-                if(correct.includes(filter) || phonetic.includes(filter) || question.includes(filter)) {
-                    this.filteredRelevantWords.add(word);
-                }
-            });
-            return;
-        }
-        this.filteredRelevantWords = this.relevantWords;
     }
 
     removeDiacritics(inputString: string) {

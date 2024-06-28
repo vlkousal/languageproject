@@ -45,7 +45,7 @@
 
 				<div class="filter" [hidden]="hideTable">
 					<label for="filter">Filter: </label>
-					<input id="QWDQWQD" type="text" [formControl]="filter" style="width: 128px">
+					<input (input)="onWordsFilterChange()" id="wordsFilter" type="text" [formControl]="wordsFilter" style="width: 128px">
 				</div>
 
 				<div class="text-area" [hidden]="hideText">
@@ -82,7 +82,7 @@
 							<th>Action</th>
 						</tr>
 
-						<tr *ngFor="let word of words">
+						<tr *ngFor="let word of filteredWords">
 							<td>{{ word.question }}</td>
 							<td>{{ word.phonetic }}</td>
 							<td>{{ word.correct }}</td>
