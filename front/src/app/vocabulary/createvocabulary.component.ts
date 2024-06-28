@@ -31,6 +31,8 @@ export class CreateVocabularyComponent {
     wordsFilter: FormControl<string> = new FormControl("") as FormControl<string>;
     filteredWords: Set<Word> = new Set<Word>();
 
+    removedFromRelevant: Set<Word> = new Set<Word>();
+
     hideText: boolean = false;
     hideRelevant: boolean = true;
     hideTable: boolean = true;
@@ -179,6 +181,9 @@ export class CreateVocabularyComponent {
             this.content += word.question + delimeter + word.phonetic + delimeter + word.correct + "\n";
             this.onInputChange();
             this.onWordsFilterChange();
+
+            this.removedFromRelevant.add(word);
+            this.relevantWords.delete(word);
         }
     }
 
@@ -194,6 +199,11 @@ export class CreateVocabularyComponent {
         })
         this.onInputChange();
         this.onWordsFilterChange();
+
+        if(this.containsWord(this.removedFromRelevant, word)) {
+            this.removedFromRelevant.delete(word);
+            this.relevantWords.add(word);
+        }
     }
 
     adaptURLText() {
