@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {BACKEND, FLAGS, Word} from "../constants";
-import {ApiTools} from "../apitools";
 import {Router} from "@angular/router";
+import {ApiTools} from "../apitools";
 
 @Component({
   selector: 'app-createvocabulary',
@@ -11,7 +11,6 @@ import {Router} from "@angular/router";
 })
 export class CreateVocabularyComponent {
 
-    vocab = new FormControl("") as FormControl<string>;
     delimiter = new FormControl(";") as FormControl<string>;
     content: string = "";
     firstFeedback: string = "Please enter a name.";
@@ -23,16 +22,55 @@ export class CreateVocabularyComponent {
     url: FormControl<string> = new FormControl("") as FormControl<string>;
     firstLanguage: FormControl<string> = new FormControl("Albanian") as FormControl<string>;
     secondLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
-    firstPart: boolean = true;
     lastNameLength: number = 0;
     relevantWords: Set<Word> = new Set<Word>();
     filter: FormControl<string> = new FormControl("") as FormControl<string>;
     filteredRelevantWords: Set<Word> = new Set<Word>();
 
+    hideText: boolean = false;
+    hideRelevant: boolean = true;
+    hideTable: boolean = true;
+
     constructor(private router: Router) { }
 
-    ngOnInit() {
+    async ngOnInit() {
         this.randomizeLanguages();
+        await this.findRelevantWords();
+    }
+
+    async findRelevantWords() {
+        this.relevantWords = new Set<Word>();
+        const firstLanguage: string = this.firstLanguage.getRawValue();
+        const secondLanguage: string = this.secondLanguage.getRawValue();
+        const parsed = JSON.parse(await ApiTools.getRelevantVocabulary(firstLanguage, secondLanguage));
+        for(let i = 0; i < parsed.words.length; i++) {
+            const word = new Word(0,0,  parsed.words[i].first, parsed.words[i].phonetic, parsed.words[i].second, []);
+            if(!this.containsWord(this.relevantWords, word)) {
+                this.relevantWords.add(word);
+            }
+        }
+        console.log(firstLanguage + " " + secondLanguage);
+        console.log(this.relevantWords.size);
+        this.filteredRelevantWords = this.relevantWords;
+        this.onFirstInputChange();
+    }
+
+    showText() {
+        this.hideText = false;
+        this.hideRelevant = true;
+        this.hideTable = true;
+    }
+
+    showRelevant() {
+        this.hideText = true;
+        this.hideRelevant = false;
+        this.hideTable = true;
+    }
+
+    showTable() {
+        this.hideText = true;
+        this.hideRelevant = true;
+        this.hideTable = false;
     }
 
     onFileSelected(event: Event) {
@@ -52,30 +90,9 @@ export class CreateVocabularyComponent {
         reader.readAsText(selectedFile);
     }
 
-    goBack() {
-        this.firstPart = true;
-    }
-
-    async onContinue() {
-        if(this.isFirstInputValid()) {
-            this.relevantWords = new Set<Word>();
-            this.firstPart = false;
-            const firstLanguage: string = this.firstLanguage.getRawValue();
-            const secondLanguage: string = this.secondLanguage.getRawValue();
-            const parsed = JSON.parse(await ApiTools.getRelevantVocabulary(firstLanguage, secondLanguage));
-            for(let i = 0; i < parsed.words.length; i++) {
-                const word = new Word(0,0,  parsed.words[i].first, parsed.words[i].phonetic, parsed.words[i].second, []);
-                if(!this.containsWord(this.relevantWords, word)) {
-                    this.relevantWords.add(word);
-                }
-            }
-            this.filteredRelevantWords = this.relevantWords;
-        }
-    }
-
     onSend() {
         if(this.counter >= 3) {
-            const vocabString = this.vocab.getRawValue().replaceAll(this.delimiter.getRawValue(), ";");
+            const vocabString = this.content.replaceAll(this.delimiter.getRawValue(), ";");
             const json = {
                 "session_id": localStorage.getItem("sessionId"),
                 "name": this.name.getRawValue(),
@@ -194,12 +211,6 @@ export class CreateVocabularyComponent {
         this.filteredRelevantWords = this.relevantWords;
     }
 
-    isFirstInputValid() {
-        return this.name.getRawValue().length != 0 &&
-            this.url.getRawValue().length != 0 &&
-            this.firstLanguage.getRawValue() != this.secondLanguage.getRawValue();
-    }
-
     removeDiacritics(inputString: string) {
         return inputString.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
@@ -214,7 +225,6 @@ export class CreateVocabularyComponent {
         this.firstLanguage.setValue(keys[firstIndex]);
         this.secondLanguage.setValue(keys[secondIndex]);
         this.firstLanguage.setValue(this.firstLanguage.getRawValue());
-        console.log(keys[firstIndex]);
     }
 
     onInputChange() {
