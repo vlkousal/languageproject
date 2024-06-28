@@ -1,13 +1,15 @@
 <body>
     <app-base></app-base>
 	<div class="container">
+
 		<div class="bottom-panel" id="top-panel">
 			<div class="top-buttons">
-				<button (click)="showText()">Text</button>
-				<button (click)="showRelevant()">Suggestions</button>
-				<button (click)="showTable()">Summary</button>
+				<button #textButton (click)="showText()">Text</button>
+				<button #relevantButton (click)="showRelevant()">Suggestions</button>
+				<button #summaryButton (click)="showTable()">Summary</button>
 			</div>
 		</div>
+
 		<div class="form">
 			<div class="first-form">
 				<h3>{{FLAGS[firstLanguage.getRawValue()]}} {{ FLAGS[secondLanguage.getRawValue()]}} {{ name.getRawValue() }}</h3>
@@ -92,9 +94,11 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="bottom-panel">
 			<p id="feedback">{{ firstFeedback }}</p>
 			<button (click)="onSend()">Create</button>
 		</div>
+
 	</div>
 </body>

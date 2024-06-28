@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ElementRef, Renderer2, ViewChild} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {BACKEND, FLAGS, Word} from "../constants";
 import {Router} from "@angular/router";
@@ -37,7 +37,11 @@ export class CreateVocabularyComponent {
     hideRelevant: boolean = true;
     hideTable: boolean = true;
 
-    constructor(private router: Router) { }
+    @ViewChild('textButton', { static: true }) textButton!: ElementRef;
+    @ViewChild('relevantButton', { static: true }) relevantButton!: ElementRef;
+    @ViewChild('summaryButton', { static: true }) summaryButton!: ElementRef;
+
+    constructor(private router: Router, private renderer: Renderer2) { }
 
     async ngOnInit() {
         this.randomizeLanguages();
@@ -103,6 +107,10 @@ export class CreateVocabularyComponent {
 
         this.filter.setValue("");
         this.wordsFilter.setValue("");
+
+        this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#25c525");
+        this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#4CAF50");
+        this.renderer.setStyle(this.summaryButton.nativeElement, 'background-color', "#4CAF50");
     }
 
     showRelevant() {
@@ -112,6 +120,10 @@ export class CreateVocabularyComponent {
 
         this.filter.setValue("");
         this.wordsFilter.setValue("");
+
+        this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#4CAF50");
+        this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#25c525");
+        this.renderer.setStyle(this.summaryButton.nativeElement, 'background-color', "#4CAF50");
     }
 
     showTable() {
@@ -121,6 +133,10 @@ export class CreateVocabularyComponent {
 
         this.filter.setValue("");
         this.wordsFilter.setValue("");
+
+        this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#4CAF50");
+        this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#4CAF50");
+        this.renderer.setStyle(this.summaryButton.nativeElement, 'background-color', "#25c525");
     }
 
     onFileSelected(event: Event) {
