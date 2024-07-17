@@ -1,17 +1,34 @@
-<!--  PICK ONE OF THREE -->
-<div class="xd" [hidden]="!hideEnd">
-	<p>{{ index + 1 }}/{{ words.length }}     Score: {{ score }}</p>
-	<p>Streak: {{ streak }}</p>
-	<div title="Lives: {{ lives }}" class="hearts" *ngFor="let item of [].constructor(lives); let i = index">
-		<img src="../../assets/heart.png" alt="Lives">
+<div class="container" [hidden]="!hideEnd">
+	<div id="top-panel">
+		<button id="back-button">
+			<i class="fas fa-arrow-left"> </i>
+		</button>
+		<p id="counter">{{ index + 1 }}/{{ words.length }}</p>
+		<p id="score">{{ score }}</p>
+		<div id="top-buttons">
+			<button id="mute-button" >
+				<i class="fas fa-volume-up"></i>
+			</button>
+			<button id="settings-button" >
+				<i class="fas fa-cog"></i>
+			</button>
+		</div>
 	</div>
-	<br><br>
-	<strong style="font-size: 20px">{{ feedback }}</strong>
+
+	<div id="stats-container">
+		<div id="streak-container">
+			<i class="fas fa-fire" id="flame">{{ streak }}</i>
+		</div>
+		<div id="heart-container">
+			<i class="fas fa-heart" id="xd">{{ lives }}</i>
+		</div>
+	</div>
 
 	<div class="buttons">
-		<div title="{{ current.phonetic}}" class="question">
+		<div class="question">
 			<button (click)="SpeechUtils.speak(current.question)">{{ current.question }}</button>
 		</div>
+		<p id="phonetic">{{  current.phonetic }}</p>
 		<button (click)="checkAnswer(current.answers[0])">{{ current.answers[0] }}</button>
 		<button (click)="checkAnswer(current.answers[1])">{{ current.answers[1] }}</button>
 		<button (click)="checkAnswer(current.answers[2])">{{ current.answers[2] }}</button>

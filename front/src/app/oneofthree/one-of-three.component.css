@@ -1,66 +1,21 @@
-body{
-    text-align: center;
-}
-.xd{
-    text-align: center;
-    font-size: 40px;
-}
-
-.buttons{
+.buttons {
     text-align: center;
     font-size: 60px;
     padding: 40px;
 }
 
-.buttons button{
-    width: 256px;
-    height: 128px;
-    margin-right: 20px;
-    font-size: 18px;
-}
-
-.hearts{
-    scale: 4;
-    padding-right: 5px;
-    display: inline-block;
-}
-
-.score{
-    font-size: 40px;
-}
-
-/* Styly pro skryté prvky */
 .xd[hidden],
 .buttons[hidden] {
     display: none;
 }
 
-/* Styly pro skóre a stav */
 .xd p:nth-of-type(2),
-.end h1,
-.score {
+.end h1 {
     font-size: 24px;
     font-weight: bold;
-    color: green; /* Zelená barva pro skóre a stav */
+    color: green;
 }
 
-
-/* Styly pro tlačítka */
-.buttons button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: green; /* Zelená barva pro tlačítka */
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.buttons button:hover {
-    background-color: #006400; /* Tmavší odstín zelené při najetí myší */
-}
-
-/* Styly pro konec */
 .end {
     margin-top: 100px;
     text-align: center;
@@ -79,18 +34,56 @@ body{
     margin-top: 20px;
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #a9a9a9; /* Šedá barva pro tlačítko na konci */
+    background-color: #a9a9a9;
     color: white;
     border: none;
     cursor: pointer;
 }
 
 .end button:hover {
-    background-color: #808080; /* Tmavší odstín šedé při najetí myší */
+    background-color: #808080;
 }
 
 .end div p {
     margin: 10px 0;
+}
+
+.container {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 300px;
+    max-width: 1000px;
+
+
+    width: 60%;
+}
+
+.buttons button {
+    margin: 10px;
+
+    background-color: #169716;
+    color: white;
+    cursor: pointer;
+    border: none;
+
+
+    height: 20%;
+    min-width: 100px;
+    min-height: 50px;
+
+    font-size: clamp(14px, 2vw, 20px);
+
+    width: max-content !important;
+}
+
+.buttons button:hover {
+    background-color: #006400;
 }
 
 .question button {
@@ -98,13 +91,81 @@ body{
     border: none;
     padding: 0;
     margin: 0;
-    font-family: inherit;
-    font-size: inherit;
-    color: inherit;
-    cursor: pointer;
-    /* Additional styles if needed */
+    color: black;
+
+    font-size: clamp(28px, 4vw, 120px);
 }
 
 .question button:hover {
     background-color: #fbfafa;
+}
+
+#top-panel {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+#counter {
+    margin-left: 1%;
+    margin-top: 1%;
+    font-size: clamp(20px, 2vw, 28px);
+}
+
+i {
+    color: white;
+    font-size: clamp(20px, 2vw, 28px);
+}
+
+#top-buttons button {
+    border: none;
+    width: 50px;
+    height: 50px;
+}
+
+#score {
+    margin-left: 1%;
+    margin-top: 1%;
+    font-size: clamp(20px, 2vw, 28px);
+
+    color: #64757e;
+}
+
+#phonetic {
+    font-size: clamp(7px, 2vw, 20px);
+}
+
+#flame {
+    color: orange;
+}
+
+#hearts {
+    scale: 4;
+    padding-right: 5px;
+    display: inline-block;
+}
+
+
+#streak-container {
+    display: flex;
+}
+
+#xd {
+    color: red;
+}
+
+#back-button {
+    border: none;
+    width: 50px;
+    height: 50px;
+}
+
+#stats-container {
+    display: flex;
+    justify-content: center;
+}
+
+#heart-container {
+    margin-left: 10%;
 }
