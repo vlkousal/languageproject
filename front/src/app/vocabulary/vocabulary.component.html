@@ -1,23 +1,17 @@
 <app-base></app-base>
 
-<head>
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap" rel="stylesheet">
-	<title>XD</title>
-</head>
-
-
 <div class="spinner" [hidden]="!loading"></div>
 
-
 <!--  PREVIEW -->
-<div id="preview" [hidden]="hidePreview" style="text-align: center;">
-  <h2>{{ name }}</h2>
-  <p>{{ contributor}}</p>
-	<p>{{ firstLanguage }}</p>
-	<p>{{ secondLanguage }}</p>
-  <p>{{ description }}</p>
+<div id="container" [hidden]="hidePreview">
+	<div id="top-panel">
+		<h2>{{ name }} {{ FLAGS[firstLanguage] }} {{ FLAGS[secondLanguage] }}</h2>
+		<button class="settings-button" >
+			<i class="fas fa-cog"></i>
+		</button>
+	</div>
+  <p id="description">{{ description }}</p>
+	<p>{{ contributor}}</p>
   <button (click)= "hidePreview = true; hideChooseOfThree = false">One Of Three</button>
   <button (click)="hidePreview = true; hideWriteTheAnswer = false">Write The Answer</button>
   <button (click)="hidePreview = true; hideFlashcards = false">Flashcards</button>

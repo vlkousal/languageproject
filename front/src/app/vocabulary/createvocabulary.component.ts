@@ -13,7 +13,7 @@ export class CreateVocabularyComponent {
 
     delimiter = new FormControl(";") as FormControl<string>;
     content: string = "";
-    firstFeedback: string = "Please enter a name.";
+    feedback: string = "Please enter a name.";
     languages: string[] = Object.keys(FLAGS);
     counter: number = 0;
     name: FormControl<string> = new FormControl("") as FormControl<string>;
@@ -254,20 +254,20 @@ export class CreateVocabularyComponent {
 
         this.lastNameLength = nameLength;
         if(this.name.getRawValue().length == 0) {
-            this.firstFeedback = "Please enter a name.";
+            this.feedback = "Please enter a name.";
             return;
         }
 
         if(this.url.getRawValue().length == 0) {
-            this.firstFeedback = "The URL is empty.";
+            this.feedback = "The URL is empty.";
             return;
         }
 
         if(this.firstLanguage.getRawValue() == this.secondLanguage.getRawValue()) {
-            this.firstFeedback = "The languages must be different.";
+            this.feedback = "The languages must be different.";
             return;
         }
-        this.firstFeedback = "Click continue when ready.";
+        this.feedback = "Click continue when ready.";
     }
 
     removeDiacritics(inputString: string) {

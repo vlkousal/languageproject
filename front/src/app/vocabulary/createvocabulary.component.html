@@ -12,7 +12,6 @@
 
 		<div class="form">
 			<div class="first-form">
-				<h3>{{FLAGS[firstLanguage.getRawValue()]}} {{ FLAGS[secondLanguage.getRawValue()]}} {{ name.getRawValue() }}</h3>
 				<label for="name">Name:</label>
 				<input (input)="onFirstInputChange()" id="name" type="text" [formControl]="name" placeholder="The name of the set" required maxlength="48"/>
 
@@ -96,7 +95,7 @@
 		</div>
 
 		<div class="bottom-panel">
-			<p id="feedback">{{ firstFeedback }}</p>
+			<p id="feedback">{{ feedback }}</p>
 			<button (click)="onSend()">Create</button>
 		</div>
 

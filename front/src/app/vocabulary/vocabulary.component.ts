@@ -102,8 +102,8 @@ export class VocabularyComponent {
         this.name = json.name;
         this.contributor = json.author;
         this.description = json.description;
-        this.firstLanguage = FLAGS[json.first_language] + " " + json.first_language;
-        this.secondLanguage = FLAGS[json.second_language] + " " + json.second_language;
+        this.firstLanguage = json.first_language;
+        this.secondLanguage = json.second_language;
         this.loadVocab();
         VocabUtils.sortByFirst(this.words);
         this.VocabUtils.sortByFirst(this.words);
@@ -197,4 +197,5 @@ export class VocabularyComponent {
     protected readonly VocabUtils = VocabUtils;
     protected readonly first = first;
     protected readonly SpeechUtils = SpeechUtils;
+    protected readonly FLAGS = FLAGS;
 }
