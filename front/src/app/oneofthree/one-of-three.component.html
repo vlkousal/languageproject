@@ -1,6 +1,6 @@
 <div class="container" [hidden]="!hideEnd">
 	<div id="top-panel">
-		<button id="back-button">
+		<button id="back-button" (click)="goBack()">
 			<i class="fas fa-arrow-left"> </i>
 		</button>
 		<p id="counter">{{ index + 1 }}/{{ words.length }}</p>

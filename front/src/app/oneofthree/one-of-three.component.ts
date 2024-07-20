@@ -1,14 +1,15 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, NgModule} from '@angular/core';
 import {BACKEND, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
 import {SpeechUtils} from "../speechutils";
 import {Utils} from "../utils";
+import {Router, Routes} from '@angular/router';
+import {VocabularyComponent} from "../vocabulary/vocabulary.component";
 
 @Component({
-  selector: 'app-oneofthree',
-  templateUrl: './one-of-three.component.html',
-  styleUrls: ['./one-of-three.component.css']
+    selector: 'app-oneofthree',
+    templateUrl: './one-of-three.component.html',
+    styleUrls: ['./one-of-three.component.css'],
 })
-
 export class OneOfThreeComponent {
 
     @Input() words: Word[] = [];
@@ -21,6 +22,8 @@ export class OneOfThreeComponent {
     feedback: string = "";
     correctAnswers: number = 0;
     hideEnd: boolean = true;
+
+    constructor(private router: Router) {}
 
     ngOnInit() {
         Utils.shuffleList(this.words);
@@ -79,6 +82,10 @@ export class OneOfThreeComponent {
         this.score = 0;
         this.streak = 0;
         this.hideEnd = true;
+    }
+
+    goBack() {
+        this.router.navigate(["/vocab/xd"]);
     }
 
     sendResult(correct: boolean) {

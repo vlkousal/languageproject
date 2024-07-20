@@ -49,20 +49,9 @@
 	<button (click)="testSecondVoice()">Test</button>
 </div>
 
-
-<div *ngIf="!hideChooseOfThree">
-	<app-oneofthree [words]=words></app-oneofthree>
-</div>
-
-
-<div *ngIf="!hideWriteTheAnswer">
-	<app-writetheanswer [words]=words></app-writetheanswer>
-</div>
-
-<div *ngIf="!hideFlashcards">
-	<app-flashcards [words]=words></app-flashcards>
-</div>
-
+<app-oneofthree [words]=words *ngIf="!hideChooseOfThree"></app-oneofthree>
+<app-writetheanswer [words]=words *ngIf="!hideWriteTheAnswer"></app-writetheanswer>
+<app-flashcards [words]=words *ngIf="!hideFlashcards"></app-flashcards>
 
 <div class="canvas-container" [hidden]="hideDrawing">
 	<canvas id="canvas" width="201" height="201"></canvas>

@@ -14,7 +14,6 @@ import {SpeechUtils} from "../speechutils";
     templateUrl: './vocabulary.component.html',
     styleUrls: ['./vocabulary.component.css']
 })
-
 export class VocabularyComponent {
 
     words: Word[] = [];
