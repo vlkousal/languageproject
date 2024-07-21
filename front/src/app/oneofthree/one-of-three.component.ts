@@ -1,4 +1,4 @@
-import {Component, Input, NgModule} from '@angular/core';
+import {Component, EventEmitter, Input, NgModule, Output} from '@angular/core';
 import {BACKEND, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
 import {SpeechUtils} from "../speechutils";
 import {Utils} from "../utils";
@@ -13,6 +13,7 @@ import {VocabularyComponent} from "../vocabulary/vocabulary.component";
 export class OneOfThreeComponent {
 
     @Input() words: Word[] = [];
+    @Output() gameOver: EventEmitter<void> = new EventEmitter();
     wrong: Word[] = [];
     index: number = 0;
     current: Word = this.words[0];
@@ -85,7 +86,8 @@ export class OneOfThreeComponent {
     }
 
     goBack() {
-        this.router.navigate(["/vocab/xd"]);
+        this.gameOver.emit();
+        this.router.navigate(["/vocab/kscx03"]);
     }
 
     sendResult(correct: boolean) {

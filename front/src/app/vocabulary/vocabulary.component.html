@@ -3,7 +3,7 @@
 <div class="spinner" [hidden]="!loading"></div>
 
 <!--  PREVIEW -->
-<div id="container" [hidden]="hidePreview">
+<div id="container" *ngIf="mode == 'none' && !loading">
 	<div id="top-panel">
 		<h2>{{ name }} {{ FLAGS[firstLanguage] }} {{ FLAGS[secondLanguage] }}</h2>
 		<button class="settings-button" >
@@ -12,13 +12,13 @@
 	</div>
   <p id="description">{{ description }}</p>
 	<p>{{ contributor}}</p>
-  <button (click)= "hidePreview = true; hideChooseOfThree = false">One Of Three</button>
-  <button (click)="hidePreview = true; hideWriteTheAnswer = false">Write The Answer</button>
-  <button (click)="hidePreview = true; hideFlashcards = false">Flashcards</button>
-	<button (click)="hidePreview = true; hideDrawing = false">Draw Characters</button>
+  <button (click)= "mode = 'one of three'">One Of Three</button>
+  <button (click)="mode = 'write the answer'">Write The Answer</button>
+  <button (click)="mode = 'flashcards'">Flashcards</button>
+	<button (click)="mode = 'drawing'">Draw Characters</button>
 
 	<div class="table-container">
-		<table border="1" id="table">
+		<table id="table">
 			<tr>
 				<th (click)="VocabUtils.sortByFirst(this.words)"> {{ this.firstLanguage }}</th>
 				<th (click)="VocabUtils.sortByPhonetic(this.words)"> Phonetic</th>
@@ -49,16 +49,16 @@
 	<button (click)="testSecondVoice()">Test</button>
 </div>
 
-<app-oneofthree [words]=words *ngIf="!hideChooseOfThree"></app-oneofthree>
-<app-writetheanswer [words]=words *ngIf="!hideWriteTheAnswer"></app-writetheanswer>
-<app-flashcards [words]=words *ngIf="!hideFlashcards"></app-flashcards>
+<app-oneofthree [words]=words (gameOver)="gameOver()" *ngIf="mode == 'one of three'"></app-oneofthree>
+<app-writetheanswer [words]=words *ngIf="mode == 'write the answer'"></app-writetheanswer>
+<app-flashcards [words]=words *ngIf="mode == 'flashcards'"></app-flashcards>
 
-<div class="canvas-container" [hidden]="hideDrawing">
+
+<!--
+<div class="canvas-container" [hidden]="mode == 'drawing'">
 	<canvas id="canvas" width="201" height="201"></canvas>
 
 	<button (click)="resetCanvas()">Clear</button>
 	<button (click)="checkDrawing()">Check</button>
 </div>
-
-
-
+-->

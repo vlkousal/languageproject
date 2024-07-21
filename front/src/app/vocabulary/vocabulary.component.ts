@@ -30,11 +30,7 @@ export class VocabularyComponent {
     secondLanguage: string = "";
     languageNames: string[] = [];
 
-    hideChooseOfThree: boolean = true;
-    hidePreview: boolean = true;
-    hideWriteTheAnswer: boolean = true;
-    hideFlashcards: boolean = true;
-    hideDrawing: boolean = true;
+    mode: string = "none";
     loading: boolean = true;
 
     selectedFirstLanguageName: FormControl<string> = new FormControl("") as FormControl<string>;
@@ -55,9 +51,9 @@ export class VocabularyComponent {
             this.languageNames.push(voice.name);
         });
         this.languageNames.sort();
-        Drawing.prepCanvas();
+        //Drawing.prepCanvas();
         this.loading = false;
-        this.hidePreview = false;
+        console.log(":)");
     }
 
     testSecondVoice() {
@@ -175,6 +171,10 @@ export class VocabularyComponent {
                 to_move_index++;
             }
         }
+    }
+
+    gameOver(): void {
+        this.mode = "none";
     }
 
     resetCanvas() {
