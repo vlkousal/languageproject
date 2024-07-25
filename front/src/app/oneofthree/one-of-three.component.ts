@@ -1,9 +1,8 @@
-import {Component, EventEmitter, Input, NgModule, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {BACKEND, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
 import {SpeechUtils} from "../speechutils";
 import {Utils} from "../utils";
-import {Router, Routes} from '@angular/router';
-import {VocabularyComponent} from "../vocabulary/vocabulary.component";
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-oneofthree',
@@ -30,7 +29,7 @@ export class OneOfThreeComponent {
         Utils.shuffleList(this.words);
         this.current = this.words[0];
 
-        this.SpeechUtils.speak(this.current.question);
+        SpeechUtils.speak(this.current.question);
     }
 
     checkAnswer(answer: string): void {

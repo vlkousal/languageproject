@@ -19,8 +19,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     min-width: 300px;
-    max-width: 1000px;
-
+    max-width: 650px;
 
     width: 60%;
 }
@@ -54,7 +53,7 @@
     margin: 0;
     color: black;
 
-    font-size: clamp(28px, 4vw, 120px);
+    font-size: clamp(28px, 4vw, 60px);
 }
 
 .question button:hover {
