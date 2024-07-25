@@ -7,9 +7,9 @@
 /bazel-out
 
 # Node
-/front/node_modules
-/front/npm-debug.log
-/front/yarn-error.log
+front/node_modules
+front/npm-debug.log
+front/yarn-error.log
 
 # IDEs and editors
 .vscode/
