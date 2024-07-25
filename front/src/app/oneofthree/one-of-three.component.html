@@ -1,11 +1,9 @@
 <div class="container" [hidden]="!hideEnd">
-	<div id="top-panel">
-		<button id="back-button" (click)="goBack()">
+	<div class="top-panel">
+		<button class="back-button" (click)="goBack()">
 			<i class="fas fa-arrow-left"> </i>
 		</button>
-		<p id="counter">{{ index + 1 }}/{{ words.length }}</p>
-		<p id="score">{{ score }}</p>
-		<div id="top-buttons">
+		<div class="top-buttons">
 			<button id="mute-button" >
 				<i class="fas fa-volume-up"></i>
 			</button>
@@ -36,11 +34,29 @@
 </div>
 
 <!--  END SCREEN -->
-<div class="end" [hidden]="hideEnd">
-	<h1>Final score: {{ score }}</h1>
-	<h3>{{correctAnswers}}/{{ words.length }} ({{ Math.floor(correctAnswers / (words.length / 100)) }}%)</h3>
-	<button (click)="replay()">Restart</button>
-	<div *ngFor="let word of wrong">
-		<p><button (click)="SpeechUtils.speak(word.question)">{{ word.question }}</button> ({{ word.phonetic }}) - {{ word.correct }}</p>
+<div id="end" class="container end-container" [hidden]="hideEnd">
+	<div class="top-panel">
+		<button class="back-button" (click)="goBack()">
+			<i class="fas fa-arrow-left"> </i>
+		</button>
+		<div class="top-buttons">
+			<button id="mute-button2" >
+				<i class="fas fa-volume-up"></i>
+			</button>
+			<button id="settings-button2" >
+				<i class="fas fa-cog"></i>
+			</button>
+		</div>
 	</div>
+		<p>Final score: {{ score }}</p>
+		<p>{{correctAnswers}}/{{ words.length }} ({{ Math.floor(correctAnswers / (words.length / 100)) }}%)</p>
+		<button (click)="replay()">Restart</button>
+	    <div id="flex-container">
+		    <div id="wrong-word" *ngFor="let word of wrong" (click)="SpeechUtils.speak(word.question)">
+
+			    <p id="end-question">{{ word.question }}</p>
+			    <p id="end-phonetic">{{ word.phonetic }}</p>
+			    <strong>{{ word.correct }}</strong>
+		    </div>
+	    </div>
 </div>

@@ -9,45 +9,6 @@
     display: none;
 }
 
-.xd p:nth-of-type(2),
-.end h1 {
-    font-size: 24px;
-    font-weight: bold;
-    color: green;
-}
-
-.end {
-    margin-top: 100px;
-    text-align: center;
-}
-
-.end h1 {
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.end h3 {
-    font-size: 18px;
-}
-
-.end button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #a9a9a9;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.end button:hover {
-    background-color: #808080;
-}
-
-.end div p {
-    margin: 10px 0;
-}
-
 .container {
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -100,7 +61,7 @@
     background-color: #fbfafa;
 }
 
-#top-panel {
+.top-panel {
     width: 100%;
 
     display: flex;
@@ -117,8 +78,7 @@ i {
     color: white;
     font-size: clamp(20px, 2vw, 28px);
 }
-
-#top-buttons button {
+.top-buttons button {
     border: none;
     width: 50px;
     height: 50px;
@@ -155,7 +115,7 @@ i {
     color: red;
 }
 
-#back-button {
+.back-button {
     border: none;
     width: 50px;
     height: 50px;
@@ -168,4 +128,35 @@ i {
 
 #heart-container {
     margin-left: 10%;
+}
+
+.end-container {
+    width: 40%;
+}
+
+#end-phonetic {
+    font-style: italic;
+}
+
+#end-question {
+    font-size: clamp(14px, 1vw, 24px);
+}
+
+#wrong-word {
+    background-color: #eae7e7;
+    padding: 5px;
+    height: 140px;
+    width: 140px;
+    text-align: center;
+}
+
+#flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+
+    margin-left: 15%;
+    margin-bottom: 10%;
+
+    overflow: scroll;
 }

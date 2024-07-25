@@ -29,6 +29,8 @@ export class OneOfThreeComponent {
     ngOnInit() {
         Utils.shuffleList(this.words);
         this.current = this.words[0];
+
+        this.SpeechUtils.speak(this.current.question);
     }
 
     checkAnswer(answer: string): void {
