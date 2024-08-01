@@ -1,9 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 body {
     font-family: 'Open Sans', sans-serif;
-    background-color: var(--sky-blue);
 }
 
+/* https://colorhunt.co/palette/79e0ee98eeccd0f5befbffdc */
 :root {
     --sky-blue: #79E0EE;
     --mint-green: #98EECC;
