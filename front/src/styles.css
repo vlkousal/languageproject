@@ -1,12 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 body {
     font-family: 'Open Sans', sans-serif;
+    background-color: var(--sand-beige);
 }
 
-/* https://colorhunt.co/palette/79e0ee98eeccd0f5befbffdc */
+/* https://colorhunt.co/palette/1a4d2e4f6f52e8dfcaf5efe6 */
 :root {
-    --sky-blue: #79E0EE;
-    --mint-green: #98EECC;
-    --light-mint: #D0F5BE;
-    --light-lemon: #FBFFDC;
+    --forest-green: #1A4D2E;
+    --sage-green: #4F6F52;
+    --sand-beige: #E8DFCA;
+    --ivory: #F5EFE6;
 }

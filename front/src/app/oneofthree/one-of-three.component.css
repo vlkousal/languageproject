@@ -10,40 +10,32 @@
 }
 
 .container {
-    border: 1px solid #ddd;
     border-radius: 5px;
-    background-color: #f9f9f9;
-
+    background-color: var(--sage-green);
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     min-width: 300px;
     max-width: 650px;
-
     width: 60%;
 }
 
 .buttons button {
     margin: 10px;
-
-    background-color: #169716;
+    background-color: var(--forest-green);
     color: white;
     cursor: pointer;
     border: none;
-
-
     height: 20%;
     min-width: 100px;
     min-height: 50px;
-
     font-size: clamp(14px, 2vw, 20px);
-
     width: max-content !important;
 }
 
 .buttons button:hover {
-    background-color: #006400;
+    background-color: var(--sage-green);
 }
 
 .question button {
@@ -52,12 +44,11 @@
     padding: 0;
     margin: 0;
     color: black;
-
     font-size: clamp(28px, 4vw, 60px);
 }
 
 .question button:hover {
-    background-color: #fbfafa;
+    background-color: var(--ivory);
 }
 
 .top-panel {
@@ -73,22 +64,15 @@
 }
 
 i {
-    color: white;
+    color: var(--sand-beige);
     font-size: clamp(20px, 2vw, 28px);
 }
 
 .top-buttons button {
-    border: none;
     width: 50px;
     height: 50px;
-}
-
-#score {
-    margin-left: 1%;
-    margin-top: 1%;
-    font-size: clamp(20px, 2vw, 28px);
-
-    color: #64757e;
+    background-color: var(--sage-green);
+    border: none;
 }
 
 #phonetic {
@@ -105,7 +89,6 @@ i {
     display: inline-block;
 }
 
-
 #streak-container {
     display: flex;
 }
@@ -118,6 +101,7 @@ i {
     border: none;
     width: 50px;
     height: 50px;
+    background-color: var(--sage-green);
 }
 
 #stats-container {

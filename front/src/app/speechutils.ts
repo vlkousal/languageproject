@@ -4,7 +4,6 @@ export class SpeechUtils {
     static utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
     static isMuted: boolean = false;
 
-
     public static play(text: string, voice: SpeechSynthesisVoice): void {
         if(this.isMuted) return;
         const volume = this.getVolume();
@@ -13,6 +12,7 @@ export class SpeechUtils {
         this.utt.voice = voice;
         window.speechSynthesis.cancel();
         window.speechSynthesis.speak(this.utt);
+        console.log(volume);
     }
 
     public static getVoices(): string[] {
@@ -34,10 +34,8 @@ export class SpeechUtils {
             if(firstLanguage == null) return;
             voiceName = localStorage.getItem(firstLanguage);
         }
-        console.log(voiceName);
         for(let voice of speechSynthesis.getVoices()) {
             if(voice.name == voiceName){
-                console.log(":)");
                 this.play(text, voice);
             }
         }

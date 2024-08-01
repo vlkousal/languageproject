@@ -11,7 +11,7 @@ body {
 }
 
 .navbar {
-    background-color: var(--sky-blue);
+    background-color: var(--forest-green);
     color: #fff;
     padding: 15px 20px; /* Increased padding for better spacing */
     display: flex;
