@@ -62,7 +62,6 @@
 
 .top-panel {
     width: 100%;
-
     display: flex;
     justify-content: space-between;
 }
@@ -77,6 +76,7 @@ i {
     color: white;
     font-size: clamp(20px, 2vw, 28px);
 }
+
 .top-buttons button {
     border: none;
     width: 50px;
@@ -153,9 +153,7 @@ i {
     display: flex;
     flex-wrap: wrap;
     gap: 40px;
-
     margin-left: 15%;
     margin-bottom: 10%;
-
     overflow: scroll;
 }

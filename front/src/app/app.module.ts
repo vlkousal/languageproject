@@ -17,7 +17,7 @@ import {EditVocabularyComponent} from "./vocabulary/editvocabulary.component";
 import { FlashcardsComponent } from './flashcards/flashcards.component';
 import { OneOfThreeComponent } from './oneofthree/one-of-three.component';
 import { WriteTheAnswerComponent } from './writetheanswer/write-the-answer.component';
-import { GamesettingsComponent } from './gamesettings/gamesettings.component';
+import { GameSettingsComponent } from './game-settings/game-settings.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,7 +33,7 @@ import { GamesettingsComponent } from './gamesettings/gamesettings.component';
     FlashcardsComponent,
     OneOfThreeComponent,
     WriteTheAnswerComponent,
-    GamesettingsComponent
+    GameSettingsComponent
   ],
   imports: [
     BrowserModule,

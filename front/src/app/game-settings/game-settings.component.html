@@ -1,0 +1,36 @@
+<!-- SETTINGS -->
+<div id="settings" class="container">
+	<div class="top-panel">
+		<button class="back-button" (click)="closeSettings.emit()">
+			<i class="fas fa-arrow-left"> </i>
+		</button>
+	</div>
+
+	<p id="volume-text">Volume</p>
+	<div id="volume">
+		<div>
+			<input id="volume-slider" type="range" min="0" max="100" [(ngModel)]="volume" (change)="onVolumeChange()">
+			<p>{{ volume }}%</p>
+		</div>
+	</div>
+
+	<p class="language-name">{{ FLAGS[firstLanguage]}}  {{ firstLanguage }}</p>
+	<select id="firstLanguageName" [(ngModel)]="firstVoice" (change)="onFirstLanguageChange()">
+		<option *ngFor="let language of languageNames" [value]="language">{{ language }}</option>
+	</select>
+	<button (click)="testFirstVoice()">Test</button>
+
+	<p class="language-name">{{ FLAGS[secondLanguage]}} {{ secondLanguage }}</p>
+	<select id="secondLanguageName" [(ngModel)]="secondVoice" (change)="onSecondLanguageChange()">
+		<option *ngFor="let language of languageNames" [value]="language">{{ language }}</option>
+	</select>
+	<button (click)="testSecondVoice()">Test</button>
+
+	<div id="show-phonetic">
+		Show Phonetic
+		<label class="switch">
+			<input type="checkbox" [(ngModel)]="showPhonetic" (change)="onShowPhoneticChange()">
+			<span class="slider round"></span>
+		</label>
+	</div>
+</div>

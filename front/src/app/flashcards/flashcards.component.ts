@@ -26,7 +26,7 @@ export class FlashcardsComponent {
             this.currentIndex = 0;
         }
         this.current = this.words[this.currentIndex];
-        SpeechUtils.speak(this.current.question);
+        //SpeechUtils.speak(this.current.question);
     }
 
     prevFlashcard() {
@@ -35,6 +35,6 @@ export class FlashcardsComponent {
             this.currentIndex = this.words.length - 1;
         }
         this.current = this.words[this.currentIndex];
-        SpeechUtils.speak(this.current.question);
+        //SpeechUtils.speak(this.current.question);
     }
 }

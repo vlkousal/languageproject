@@ -35,18 +35,6 @@
 			</tr>
 		</table>
 	</div>
-
-	<p>{{ firstLanguage }}</p>
-	<select id="firstLanguageName" [formControl]="selectedFirstLanguageName" (change)="onFirstLanguageChange()">
-		<option *ngFor="let language of languageNames">{{ language }}</option>
-	</select>
-	<button (click)="testFirstVoice()">Test</button>
-
-	<p>{{ secondLanguage }}</p>
-	<select id="secondLanguageName" [formControl]="selectedSecondLanguageName" (change)="onSecondLanguageChange()">
-		<option *ngFor="let language of languageNames">{{ language }}</option>
-	</select>
-	<button (click)="testSecondVoice()">Test</button>
 </div>
 
 <app-oneofthree [words]=words (gameOver)="gameOver()" *ngIf="mode == 'one of three'"></app-oneofthree>

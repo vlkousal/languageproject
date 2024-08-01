@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {BACKEND, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
 import {SpeechUtils} from "../speechutils";
 import {Utils} from "../utils";
-import {Router} from '@angular/router';
+import {ApiTools} from "../apitools";
 
 @Component({
     selector: 'app-oneofthree',
@@ -22,14 +22,16 @@ export class OneOfThreeComponent {
     feedback: string = "";
     correctAnswers: number = 0;
     hideEnd: boolean = true;
-
-    constructor(private router: Router) {}
+    showSettings: boolean = false;
 
     ngOnInit() {
         Utils.shuffleList(this.words);
         this.current = this.words[0];
 
-        SpeechUtils.speak(this.current.question);
+        const firstLanguage: string | null = localStorage.getItem("firstLanguage");
+        if(firstLanguage != null) {
+            SpeechUtils.speak(this.current.question);
+        }
     }
 
     checkAnswer(answer: string): void {
@@ -74,7 +76,10 @@ export class OneOfThreeComponent {
         this.current = this.words[this.index];
 
         // TODO - make "flipped" words and make speaking in both languages functional
-        SpeechUtils.speak(this.current.question);
+        const firstLanguage: string | null = localStorage.getItem("firstLanguage");
+        if(firstLanguage != null) {
+            SpeechUtils.speak(this.current.question);
+        }
     }
 
     replay() {
@@ -88,7 +93,6 @@ export class OneOfThreeComponent {
 
     goBack() {
         this.gameOver.emit();
-        this.router.navigate(["/vocab/kscx03"]);
     }
 
     sendResult(correct: boolean) {
@@ -105,6 +109,13 @@ export class OneOfThreeComponent {
             },
             body: JSON.stringify(data),
         })
+    }
+
+    speakQuestion(): void {
+        const firstLanguage: string | null = localStorage.getItem("firstLanguage");
+        if(firstLanguage != null) {
+            SpeechUtils.speak(this.current.question);
+        }
     }
 
     protected readonly Math = Math;

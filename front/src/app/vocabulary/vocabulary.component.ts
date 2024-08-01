@@ -5,7 +5,6 @@ import {ApiTools} from "../apitools";
 import {VocabUtils} from "../vocabutils";
 import {first} from "rxjs";
 import {FormControl} from "@angular/forms";
-import {Drawing} from "../drawinglogic";
 import {Utils} from "../utils";
 import {SpeechUtils} from "../speechutils";
 
@@ -33,11 +32,6 @@ export class VocabularyComponent {
     mode: string = "none";
     loading: boolean = true;
 
-    selectedFirstLanguageName: FormControl<string> = new FormControl("") as FormControl<string>;
-    selectedSecondLanguageName: FormControl<string> = new FormControl("") as FormControl<string>;
-    firstLang: string = "";
-    secondLang: string = "";
-
     constructor(private route: ActivatedRoute) {}
 
     async ngOnInit() {
@@ -46,49 +40,16 @@ export class VocabularyComponent {
         });
         await this.setup();
 
-        const voices = speechSynthesis.getVoices();
-        voices.forEach((voice) => {
-            this.languageNames.push(voice.name);
-        });
         this.languageNames.sort();
         //Drawing.prepCanvas();
         this.loading = false;
-        console.log(":)");
-    }
 
-    testSecondVoice() {
-        const randomWord = Utils.getRandomElement(this.words);
-        SpeechUtils.speak(randomWord.correct, false);
+        localStorage.setItem("firstLanguage", this.firstLanguage);
+        localStorage.setItem("secondLanguage", this.secondLanguage);
     }
-
-    testFirstVoice() {
-        const randomWord = Utils.getRandomElement(this.words);
-        SpeechUtils.speak(randomWord.question);
-    }
-
 
     getVoiceByName(name: string) {
         return speechSynthesis.getVoices().find(voice => voice.name === name);
-    }
-
-    onFirstLanguageChange() {
-        const voice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
-        if (voice) {
-            this.SpeechUtils.first_language_utt.voice = voice;
-            this.SpeechUtils.first_language_utt.lang = voice.lang;
-            this.firstLang = voice.lang;
-        }
-        localStorage.setItem(this.firstLanguage, this.selectedFirstLanguageName.getRawValue());
-    }
-
-    onSecondLanguageChange() {
-        const voice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
-        if (voice) {
-            this.SpeechUtils.second_language_utt.voice = voice;
-            this.SpeechUtils.second_language_utt.lang = voice.lang;
-            this.secondLang = voice.lang;
-        }
-        localStorage.setItem(this.secondLanguage, this.selectedSecondLanguageName.getRawValue());
     }
 
     async setup() {
@@ -103,35 +64,7 @@ export class VocabularyComponent {
         VocabUtils.sortByFirst(this.words);
         this.VocabUtils.sortByFirst(this.words);
 
-        this.setupVoices();
         this.pushUnseenForward();
-    }
-
-    setupVoices() {
-        const firstName = localStorage.getItem(this.firstLanguage);
-        if(firstName != null) {
-            this.selectedFirstLanguageName.setValue(firstName);
-            this.onFirstLanguageChange();
-            const voice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
-            if (voice) {
-                this.SpeechUtils.first_language_utt.voice = voice;
-                this.SpeechUtils.first_language_utt.lang = voice.lang;
-                this.firstLang = voice.lang;
-            }
-        }
-
-        const secondName = localStorage.getItem(this.secondLanguage);
-        if(secondName != null) {
-            this.selectedSecondLanguageName.setValue(secondName);
-            this.onSecondLanguageChange();
-
-            const voice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
-            if (voice) {
-                this.SpeechUtils.second_language_utt.voice = voice;
-                this.SpeechUtils.second_language_utt.lang = voice.lang;
-                this.secondLang = voice.lang;
-            }
-        }
     }
 
     loadVocab() {
