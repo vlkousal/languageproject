@@ -65,7 +65,7 @@ export class OneOfThreeComponent {
         this.feedback = "The correct answer was " + this.current.correct;
     }
 
-    setNewWord() {
+    setNewWord(): void {
         this.index++;
         if(this.index == this.words.length) {
             this.hideEnd = false;
@@ -80,7 +80,7 @@ export class OneOfThreeComponent {
         }
     }
 
-    replay() {
+    replay(): void {
         Utils.shuffleList(this.words);
         this.current = this.words[0];
         this.lives = 3;
@@ -89,24 +89,35 @@ export class OneOfThreeComponent {
         this.hideEnd = true;
     }
 
-    goBack() {
+    goBack(): void {
         this.gameOver.emit();
     }
 
-    sendResult(correct: boolean) {
+    async sendResult(correct: boolean): Promise<void> {
         const data = {
-            "token": localStorage.getItem("sessionId"),
-            "wordId": this.current.id,
-            "correct": correct
-        }
+            token: localStorage.getItem("sessionId"),
+            wordId: this.current.id,
+            correct
+        };
 
-        fetch(BACKEND + "api/addresult/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
+        try {
+            const response = await fetch(`${BACKEND}api/addresult/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log("Result sent successfully:", result);
+        } catch (error) {
+            console.error("Failed to send result:", error);
+        }
     }
 
     speakQuestion(): void {

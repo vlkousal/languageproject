@@ -3,11 +3,6 @@
     padding: 40px;
 }
 
-.xd[hidden],
-.buttons[hidden] {
-    display: none;
-}
-
 .buttons button {
     margin: 10px;
     background-color: var(--soft-ivory);
@@ -44,12 +39,6 @@
     justify-content: space-between;
 }
 
-#counter {
-    margin-left: 1%;
-    margin-top: 1%;
-    font-size: clamp(20px, 2vw, 28px);
-}
-
 i {
     color: var(--soft-ivory);
     font-size: clamp(20px, 2vw, 28px);
@@ -67,7 +56,7 @@ i {
     color: var(--soft-ivory);
 }
 
-#xd, #flame {
+#lives, #flame {
     color: var(--soft-ivory);
 }
 
@@ -114,4 +103,13 @@ i {
     margin-left: 15%;
     margin-bottom: 10%;
     overflow: scroll;
+}
+
+#bottom-panel {
+    border: 2px solid pink;
+    height: 2%;
+}
+
+#counter {
+    margin-left: 12%;
 }
