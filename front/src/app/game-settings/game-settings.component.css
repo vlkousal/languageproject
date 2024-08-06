@@ -1,16 +1,3 @@
-.container {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    min-width: 300px;
-    max-width: 650px;
-    width: 60%;
-}
-
 .top-panel {
     width: 100%;
     display: flex;
@@ -21,11 +8,6 @@
     border: none;
     width: 50px;
     height: 50px;
-}
-
-i {
-    color: white;
-    font-size: clamp(20px, 2vw, 28px);
 }
 
 #show-phonetic {

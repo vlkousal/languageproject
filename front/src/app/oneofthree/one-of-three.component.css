@@ -1,6 +1,5 @@
 .buttons {
     text-align: center;
-    font-size: 60px;
     padding: 40px;
 }
 
@@ -9,33 +8,21 @@
     display: none;
 }
 
-.container {
-    border-radius: 5px;
-    background-color: var(--sage-green);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    min-width: 300px;
-    max-width: 650px;
-    width: 60%;
-}
-
 .buttons button {
     margin: 10px;
-    background-color: var(--forest-green);
-    color: white;
+    background-color: var(--soft-ivory);
+    color: var(--muted-teal);
     cursor: pointer;
-    border: none;
     height: 20%;
     min-width: 100px;
     min-height: 50px;
     font-size: clamp(14px, 2vw, 20px);
     width: max-content !important;
+    border: 2px solid var(--muted-teal);
 }
 
 .buttons button:hover {
-    background-color: var(--sage-green);
+    background-color: var(--pastel-mint);
 }
 
 .question button {
@@ -43,12 +30,12 @@
     border: none;
     padding: 0;
     margin: 0;
-    color: black;
+    color: var(--soft-ivory);
     font-size: clamp(28px, 4vw, 60px);
 }
 
 .question button:hover {
-    background-color: var(--ivory);
+    background-color: var(--medium-mint);
 }
 
 .top-panel {
@@ -64,44 +51,31 @@
 }
 
 i {
-    color: var(--sand-beige);
+    color: var(--soft-ivory);
     font-size: clamp(20px, 2vw, 28px);
 }
 
 .top-buttons button {
     width: 50px;
     height: 50px;
-    background-color: var(--sage-green);
+    background-color: var(--medium-mint);
     border: none;
 }
 
 #phonetic {
     font-size: clamp(7px, 2vw, 20px);
+    color: var(--soft-ivory);
 }
 
-#flame {
-    color: orange;
-}
-
-#hearts {
-    scale: 4;
-    padding-right: 5px;
-    display: inline-block;
-}
-
-#streak-container {
-    display: flex;
-}
-
-#xd {
-    color: red;
+#xd, #flame {
+    color: var(--soft-ivory);
 }
 
 .back-button {
     border: none;
     width: 50px;
     height: 50px;
-    background-color: var(--sage-green);
+    background-color: var(--medium-mint);
 }
 
 #stats-container {

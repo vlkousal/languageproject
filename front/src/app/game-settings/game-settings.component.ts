@@ -30,7 +30,6 @@ export class GameSettingsComponent {
         }
         this.languageNames = SpeechUtils.getVoices().sort();
         this.setFirstAndSecondLanguage();
-        window.addEventListener('storage', this.onLocalStorageChange.bind(this), false);
     }
 
     onVolumeChange(): void {
@@ -70,23 +69,15 @@ export class GameSettingsComponent {
     }
 
     onFirstLanguageChange(): void {
-        console.log(this.firstLanguage);
         localStorage.setItem(this.firstLanguage, this.firstVoice);
     }
 
     onSecondLanguageChange(): void {
-        console.log(this.secondVoice);
         localStorage.setItem(this.secondLanguage, this.secondVoice);
     }
 
     onShowPhoneticChange(): void {
-        console.log("DO NOT REDEEM SAAR");
-        console.log(this.showPhonetic);
         localStorage.setItem("showPhonetic", String(this.showPhonetic));
-    }
-
-    onLocalStorageChange(event: StorageEvent): void {
-        console.log("jop!!");
     }
 
     protected readonly FLAGS = FLAGS;

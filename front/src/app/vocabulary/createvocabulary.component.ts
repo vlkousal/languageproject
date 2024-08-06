@@ -50,7 +50,6 @@ export class CreateVocabularyComponent {
 
     onWordsFilterChange() {
         const filter: string = this.removeDiacritics(this.wordsFilter.getRawValue());
-        console.log(filter.length);
         if(filter.length != 0) {
             this.filteredWords = new Set<Word>();
             this.words.forEach((word) => {
@@ -94,8 +93,6 @@ export class CreateVocabularyComponent {
                 this.relevantWords.add(word);
             }
         }
-        console.log(firstLanguage + " " + secondLanguage);
-        console.log(this.relevantWords.size);
         this.filteredRelevantWords = this.relevantWords;
         this.onFirstInputChange();
     }
@@ -104,10 +101,8 @@ export class CreateVocabularyComponent {
         this.hideText = false;
         this.hideRelevant = true;
         this.hideTable = true;
-
         this.filter.setValue("");
         this.wordsFilter.setValue("");
-
         this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#25c525");
         this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#4CAF50");
         this.renderer.setStyle(this.summaryButton.nativeElement, 'background-color', "#4CAF50");

@@ -4,7 +4,6 @@ import {ActivatedRoute} from "@angular/router";
 import {ApiTools} from "../apitools";
 import {VocabUtils} from "../vocabutils";
 import {first} from "rxjs";
-import {FormControl} from "@angular/forms";
 import {Utils} from "../utils";
 import {SpeechUtils} from "../speechutils";
 

@@ -27,11 +27,9 @@ export class OneOfThreeComponent {
     ngOnInit() {
         Utils.shuffleList(this.words);
         this.current = this.words[0];
-
-        const firstLanguage: string | null = localStorage.getItem("firstLanguage");
-        if(firstLanguage != null) {
-            SpeechUtils.speak(this.current.question);
-        }
+        SpeechUtils.checkMute();
+        SpeechUtils.speak(this.current.question);
+        console.log(SpeechUtils.isMuted);
     }
 
     checkAnswer(answer: string): void {
@@ -58,7 +56,6 @@ export class OneOfThreeComponent {
         this.streak = 0;
         this.lives--;
         this.wrong.push(this.current);
-        console.log(this.lives);
         if(this.lives == 0) {
             this.hideEnd = false;
             return;

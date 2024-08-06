@@ -12,7 +12,6 @@ export class SpeechUtils {
         this.utt.voice = voice;
         window.speechSynthesis.cancel();
         window.speechSynthesis.speak(this.utt);
-        console.log(volume);
     }
 
     public static getVoices(): string[] {
@@ -48,5 +47,17 @@ export class SpeechUtils {
             return 0.5;
         }
         return Number(volume);
+    }
+
+    public static toggleMute(): void {
+        this.isMuted = !this.isMuted;
+        localStorage.setItem("isMuted", String(this.isMuted));
+    }
+
+    public static checkMute(): void {
+        const val = localStorage.getItem("isMuted");
+        if(val == "true"){
+            this.isMuted = true;
+        }
     }
 }
