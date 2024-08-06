@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {BACKEND, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
 import {SpeechUtils} from "../speechutils";
 import {Utils} from "../utils";
-import {ApiTools} from "../apitools";
+import {GameSettingsComponent} from "../game-settings/game-settings.component";
 
 @Component({
     selector: 'app-oneofthree',
@@ -21,6 +21,7 @@ export class OneOfThreeComponent {
     score: number = 0;
     feedback: string = "";
     correctAnswers: number = 0;
+
     hideEnd: boolean = true;
     showSettings: boolean = false;
 
@@ -117,4 +118,6 @@ export class OneOfThreeComponent {
 
     protected readonly Math = Math;
     protected readonly SpeechUtils = SpeechUtils;
+    protected readonly GameSettingsComponent = GameSettingsComponent;
+    protected readonly localStorage = localStorage;
 }

@@ -27,7 +27,7 @@
 		<div class="question">
 			<button (click)="speakQuestion()">{{ current.question }}</button>
 		</div>
-		<p id="phonetic">{{  current.phonetic }}</p>
+		<p id="phonetic" *ngIf="localStorage.getItem('showPhonetic') != 'false'">{{  current.phonetic }}</p>
 		<button (click)="checkAnswer(current.answers[0])">{{ current.answers[0] }}</button>
 		<button (click)="checkAnswer(current.answers[1])">{{ current.answers[1] }}</button>
 		<button (click)="checkAnswer(current.answers[2])">{{ current.answers[2] }}</button>

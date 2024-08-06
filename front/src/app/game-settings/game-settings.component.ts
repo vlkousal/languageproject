@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Utils} from "../utils";
 import {SpeechUtils} from "../speechutils";
 import {FLAGS, Word} from "../constants";
-import {ApiTools} from "../apitools";
 
 @Component({
   selector: 'app-game-settings',
@@ -19,7 +18,7 @@ export class GameSettingsComponent {
     secondLanguage: string = "second";
     firstVoice: string = "";
     secondVoice: string = "";
-    showPhonetic: boolean = true;
+    showPhonetic: boolean = false;
 
     ngOnInit(): void {
         const volume = localStorage.getItem("volume");
@@ -28,6 +27,10 @@ export class GameSettingsComponent {
         } else {
             this.volume = Math.round(Number(volume) * 100);
         }
+
+        const phonetic = localStorage.getItem("showPhonetic");
+        this.showPhonetic = phonetic == "true";
+
         this.languageNames = SpeechUtils.getVoices().sort();
         this.setFirstAndSecondLanguage();
     }

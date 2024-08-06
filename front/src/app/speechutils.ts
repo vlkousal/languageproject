@@ -56,6 +56,7 @@ export class SpeechUtils {
 
     public static checkMute(): void {
         const val = localStorage.getItem("isMuted");
+
         if(val == "true"){
             this.isMuted = true;
         }
