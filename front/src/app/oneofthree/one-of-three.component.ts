@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {BACKEND, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
+import {BACKEND, MAX_HEALTH, Mode, STREAK_FOR_HEALTH, Word} from "../constants";
 import {SpeechUtils} from "../speechutils";
 import {Utils} from "../utils";
 import {GameSettingsComponent} from "../game-settings/game-settings.component";
@@ -30,7 +30,6 @@ export class OneOfThreeComponent {
         this.current = this.words[0];
         SpeechUtils.checkMute();
         SpeechUtils.speak(this.current.question);
-        console.log(SpeechUtils.isMuted);
     }
 
     checkAnswer(answer: string): void {
@@ -97,7 +96,8 @@ export class OneOfThreeComponent {
         const data = {
             token: localStorage.getItem("sessionId"),
             wordId: this.current.id,
-            correct
+            mode: Mode.OneOfThree,
+            correct: correct
         };
 
         try {

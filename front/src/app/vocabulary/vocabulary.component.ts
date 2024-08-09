@@ -15,9 +15,7 @@ import {SpeechUtils} from "../speechutils";
 export class VocabularyComponent {
 
     words: Word[] = [];
-    all: Word[] = [];
     index: number = 0;
-
     feedback: string = "";
     url: string = "";
     vocabularySet: string = "";
@@ -34,6 +32,7 @@ export class VocabularyComponent {
     constructor(private route: ActivatedRoute) {}
 
     async ngOnInit() {
+        console.log(0);
         this.route.params.subscribe(params => {
             this.url = params['vocabUrl'];
         });
@@ -52,7 +51,9 @@ export class VocabularyComponent {
     }
 
     async setup() {
+        console.log("1");
         this.vocabularySet = await ApiTools.getVocabJson(this.url)
+        console.log(2);
         const json = JSON.parse(this.vocabularySet);
         this.name = json.name;
         this.contributor = json.author;
@@ -70,8 +71,10 @@ export class VocabularyComponent {
         const parsed = JSON.parse(this.vocabularySet).vocabulary;
         const vocabString = Utils.shuffleList(parsed.split("\n")).filter(str => str.trim() !== '');
         const words: Word[] = [];
+        console.log(vocabString.length);
 
         for(let i = 0; i < vocabString.length; i++) {
+            console.log(i);
             const correct: string = vocabString[i].split(";")[2];
             let answers: string[] = [correct];
             for(let answer = 0; answer < 2; answer++) {
@@ -81,14 +84,12 @@ export class VocabularyComponent {
             }
             answers = Utils.shuffleList(answers);
             const id = vocabString[i].split(";")[3];
-            const success_rate = parseInt(vocabString[i].split(";")[4]);
             const question = vocabString[i].split(";")[0];
             const phonetic: string = vocabString[i].split(";")[1];
-            const word = new Word(id, success_rate, question, phonetic, correct, answers);
+            const word = new Word(id, 0, question, phonetic, correct, answers);
             words.push(word);
-            this.words = words;
-            this.all = words;
         }
+        this.words = words;
     }
 
     pushUnseenForward() {

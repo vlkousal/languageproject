@@ -10,16 +10,16 @@ export class ApiTools {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({"token": localStorage.getItem("sessionId"), "url": url})
+                body: JSON.stringify({"url": url})
             });
-
+            console.log(1.5);
             if (response.ok) {
-                return await response.text();
+                return response.text();
             }
             throw new Error('Network response was not ok.');
         } catch (error) {
             console.error('Error:', error);
-            throw error; // Re-throw the error for further handling
+            throw error;
         }
     }
 

@@ -3,6 +3,10 @@ export const MAX_HEALTH: number = 10;
 export const BACKEND: string = "http://localhost:8000/";
 
 
+export enum Mode {
+  OneOfThree = 0
+}
+
 type FlagsDict = {
     [key: string]: string;
 };
