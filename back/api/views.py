@@ -10,7 +10,7 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from .models import Language, VocabularySet, WordEntry, WordRecord
-
+from utils import Mode
 
 @api_view(['POST'])
 def edit_vocab(request):
@@ -40,6 +40,8 @@ def edit_vocab(request):
 def add_result(request):
     token = request.data.get("token")
     correct = request.data.get("correct")
+    mode = request.data.get("mode")
+
     try:
         username = Session.objects.get(session_key=token).session_data
         user = User.objects.get(username=username)
@@ -54,14 +56,13 @@ def add_result(request):
     filter = WordRecord.objects.filter(user=user, word=word)
     if len(filter) == 0:
         record = WordRecord.objects.create(user=user, word=word)
-        record.count += 1
-        record.correct += correct
-        record.save()
     else:
         record = WordRecord.objects.get(user=user, word=word)
-        record.count += 1
-        record.correct += correct
-        record.save()
+
+    if mode == Mode.ONE_OF_THREE.value:
+        record.one_of_three_correct += correct
+        record.one_of_three_count += 1
+    record.save()
     return Response(status=status.HTTP_200_OK)
 
 
@@ -207,13 +208,11 @@ def create_vocab(request):
         name=request.data.get("first_language"))
     second_language = Language.objects.get(
         name=request.data.get("second_language"))
-    set = VocabularySet.objects.create(author=user, name=name,
-                                       description=description,
-                                       url=url,
-                                       first_language=first_language,
-                                       second_language=second_language)
+    vocab_set = VocabularySet.objects.create(author=user, name=name,
+    description=description, url=url, first_language=first_language,
+    second_language=second_language)
 
-    set_vocabulary(set, vocab, first_language, second_language, user)
+    set_vocabulary(vocab_set, vocab, first_language, second_language, user)
     return Response("OK", status=status.HTTP_200_OK)
 
 

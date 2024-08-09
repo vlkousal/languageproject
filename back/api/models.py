@@ -11,12 +11,6 @@ class Language(models.Model):
 
 class WordEntry(models.Model):
     contributor = models.ForeignKey(User, on_delete=models.CASCADE)
-    first_language = models.ForeignKey(Language,
-                                       on_delete=models.CASCADE,
-                                       related_name="word_language")
-    second_language = models.ForeignKey(Language,
-                                        on_delete=models.CASCADE,
-                                        related_name="translation_language")
     first = models.CharField(max_length=64)
     phonetic = models.CharField(max_length=64)
     second = models.CharField(max_length=64)
@@ -45,10 +39,9 @@ class VocabularySet(models.Model):
 class WordRecord(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     word = models.ForeignKey(WordEntry, on_delete=models.CASCADE)
-    correct = models.IntegerField(default=0)
-    count = models.IntegerField(default=0)
+    one_of_three_correct = models.IntegerField(default=0)
+    one_of_three_count = models.IntegerField(default=0)
 
     def __str__(self):
         return (self.user.username + " - " + self.word.first +
-                "(" + self.word.second + ")" + " " +
-                str(self.correct) + "/" + str(self.count))
+                "(" + self.word.second + ")")
