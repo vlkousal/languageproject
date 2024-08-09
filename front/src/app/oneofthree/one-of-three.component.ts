@@ -100,24 +100,13 @@ export class OneOfThreeComponent {
             correct: correct
         };
 
-        try {
-            const response = await fetch(`${BACKEND}api/addresult/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const result = await response.json();
-            console.log("Result sent successfully:", result);
-        } catch (error) {
-            console.error("Failed to send result:", error);
-        }
+        const response = await fetch(`${BACKEND}api/addresult/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
     }
 
     speakQuestion(): void {

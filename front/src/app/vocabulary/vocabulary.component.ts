@@ -18,7 +18,6 @@ export class VocabularyComponent {
     index: number = 0;
     feedback: string = "";
     url: string = "";
-    vocabularySet: string = "";
     name: string = "";
     description: string = "";
     contributor: string = "";
@@ -32,7 +31,6 @@ export class VocabularyComponent {
     constructor(private route: ActivatedRoute) {}
 
     async ngOnInit() {
-        console.log(0);
         this.route.params.subscribe(params => {
             this.url = params['vocabUrl'];
         });
@@ -51,45 +49,32 @@ export class VocabularyComponent {
     }
 
     async setup() {
-        console.log("1");
-        this.vocabularySet = await ApiTools.getVocabJson(this.url)
-        console.log(2);
-        const json = JSON.parse(this.vocabularySet);
+        const vocab: string =  await ApiTools.getVocabJson(this.url)
+        const json = JSON.parse(vocab);
         this.name = json.name;
         this.contributor = json.author;
         this.description = json.description;
         this.firstLanguage = json.first_language;
         this.secondLanguage = json.second_language;
-        this.loadVocab();
-        VocabUtils.sortByFirst(this.words);
-        this.VocabUtils.sortByFirst(this.words);
 
-        this.pushUnseenForward();
-    }
-
-    loadVocab() {
-        const parsed = JSON.parse(this.vocabularySet).vocabulary;
-        const vocabString = Utils.shuffleList(parsed.split("\n")).filter(str => str.trim() !== '');
         const words: Word[] = [];
-        console.log(vocabString.length);
-
-        for(let i = 0; i < vocabString.length; i++) {
-            console.log(i);
-            const correct: string = vocabString[i].split(";")[2];
-            let answers: string[] = [correct];
+        json.vocabulary.forEach((word: any, i: number) => {
+            let answers: string[] = [word.correct];
             for(let answer = 0; answer < 2; answer++) {
-                const index = Utils.getIndex(i, vocabString.length);
-                const otherAnswer: string = vocabString[index].split(";")[2];
-                answers.push(otherAnswer);
+                const index = Utils.getRandomDifferentIndex(i, json.vocabulary.length);
+                answers.push(json.vocabulary[index].correct);
             }
             answers = Utils.shuffleList(answers);
-            const id = vocabString[i].split(";")[3];
-            const question = vocabString[i].split(";")[0];
-            const phonetic: string = vocabString[i].split(";")[1];
-            const word = new Word(id, 0, question, phonetic, correct, answers);
+            word = new Word(word.id, 0, word.question, word.phonetic,
+              word.correct, answers);
+            console.log(word.correct, word.answers)
             words.push(word);
-        }
+        });
         this.words = words;
+
+        VocabUtils.sortByFirst(this.words);
+        this.VocabUtils.sortByFirst(this.words);
+        this.pushUnseenForward();
     }
 
     pushUnseenForward() {

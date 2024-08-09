@@ -3,27 +3,31 @@ import {BACKEND} from "./constants";
 
 export class ApiTools {
 
-    static async getVocabJson(url: string): Promise<string> {
-        try {
-            const response = await fetch(BACKEND + 'api/getvocab/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({"url": url})
-            });
-            console.log(1.5);
-            if (response.ok) {
-                return response.text();
-            }
-            throw new Error('Network response was not ok.');
-        } catch (error) {
-            console.error('Error:', error);
-            throw error;
-        }
-    }
+  static async getVocabJson(url: string): Promise<string> {
+    try {
+      const response = await fetch(BACKEND + 'api/getvocab/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({"url": url})
+      });
 
-    static sendResult(wordId: number, correct: boolean) {
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
+
+      const data = await response.text();
+      return data;
+
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  }
+
+
+  static sendResult(wordId: number, correct: boolean) {
         const data = {
             "token": localStorage.getItem("sessionId"),
             "wordId": wordId,
@@ -76,7 +80,7 @@ export class ApiTools {
             throw new Error('Network response was not ok.');
         } catch (error) {
             console.error('Error:', error);
-            throw error; // Re-throw the error for further handling
+            throw error;
         }
     }
 }
