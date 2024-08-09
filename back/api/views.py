@@ -1,6 +1,5 @@
 from datetime import timedelta
 from random import randint
-from math import ceil
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
@@ -146,41 +145,28 @@ def get_vocab_sets(request):
     return Response(data, status=status.HTTP_200_OK)
 
 
-@api_view(["POST", "PUT"])
+@api_view(["POST"])
 def get_vocab(request):
-    token = request.data.get("token")
     url = request.data.get("url")
-    vocab = VocabularySet.objects.get(url=url)
-    if vocab is None:
+    try:
+        vocab = VocabularySet.objects.get(url=url)
+    except VocabularySet.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    user_filter = Session.objects.filter(session_key=token)
-    user = None
-    if len(user_filter) == 1:
-        user = User.objects.get(username=user_filter[0].session_data)
-
-    vocab_string = ""
+    words = []
     for word in vocab.vocabulary.all():
-        # we need to get the success rate for each word
-        success_rate = -1
-        if user is not None:
-            word_record = WordRecord.objects.filter(word=word, user=user)
-            if len(word_record) != 0:
-                correct = word_record[0].correct
-                count = word_record[0].count
-                success_rate = ceil((correct / count) * 100)
-        vocab_string += word.first + ";"
-        vocab_string += word.phonetic + ";"
-        vocab_string += word.second + ";"
-        vocab_string += str(word.id) + ";"
-        vocab_string += str(success_rate) + "\n"
+        word = {"question": word.first, "phonetic": word.phonetic, "correct": word.second,
+                "id": word.id}
+        words.append(word)
 
-    data = {"name": vocab.name,
-            "author": vocab.author.username,
-            "description": vocab.description,
-            "first_language": vocab.first_language.name,
-            "second_language": vocab.second_language.name,
-            "vocabulary": vocab_string}
+    data = {
+        "name": vocab.name,
+        "author": vocab.author.username,
+        "description": vocab.description,
+        "first_language": vocab.first_language.name,
+        "second_language": vocab.second_language.name,
+        "vocabulary": words
+    }
     return Response(data, status=status.HTTP_200_OK)
 
 
