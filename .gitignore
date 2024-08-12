@@ -8,8 +8,8 @@
 
 # Node
 front/node_modules
-front/npm-debug.log
-front/yarn-error.log
+npm-debug.log
+yarn-error.log
 
 # IDEs and editors
 .vscode/
