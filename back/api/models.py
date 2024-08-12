@@ -45,3 +45,13 @@ class WordRecord(models.Model):
     def __str__(self):
         return (self.user.username + " - " + self.word.first +
                 "(" + self.word.second + ")")
+
+
+class VocabularySetRecord(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    set = models.ForeignKey(VocabularySet, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    score = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.user.username + " - " + self.set.name + "(" + str(self.score) + ")"

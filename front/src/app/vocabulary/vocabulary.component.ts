@@ -113,6 +113,5 @@ export class VocabularyComponent {
 
     protected readonly VocabUtils = VocabUtils;
     protected readonly first = first;
-    protected readonly SpeechUtils = SpeechUtils;
     protected readonly FLAGS = FLAGS;
 }

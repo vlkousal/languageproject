@@ -12,6 +12,7 @@ import {GameSettingsComponent} from "../game-settings/game-settings.component";
 export class OneOfThreeComponent {
 
     @Input() words: Word[] = [];
+    @Input() url: string = "";
     @Output() gameOver: EventEmitter<void> = new EventEmitter();
     wrong: Word[] = [];
     index: number = 0;
@@ -57,6 +58,7 @@ export class OneOfThreeComponent {
         this.lives--;
         this.wrong.push(this.current);
         if(this.lives == 0) {
+            this.sendVocabSetResult();
             this.hideEnd = false;
             return;
         }
@@ -92,7 +94,7 @@ export class OneOfThreeComponent {
         this.gameOver.emit();
     }
 
-    async sendResult(correct: boolean): Promise<void> {
+    sendResult(correct: boolean): void {
         const data = {
             token: localStorage.getItem("sessionId"),
             wordId: this.current.id,
@@ -100,13 +102,29 @@ export class OneOfThreeComponent {
             correct: correct
         };
 
-        const response = await fetch(`${BACKEND}api/addresult/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
+        fetch(`${BACKEND}api/addresult/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
         });
+    }
+
+    sendVocabSetResult(): void {
+        const data = {
+            token: localStorage.getItem("sessionId"),
+            setUrl: this.url,
+            score: this.score
+        }
+
+        fetch(`${BACKEND}api/sendvocabresult/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })
     }
 
     speakQuestion(): void {

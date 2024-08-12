@@ -37,7 +37,7 @@
 	</div>
 </div>
 
-<app-oneofthree [words]=words (gameOver)="gameOver()" *ngIf="mode == 'one of three'"></app-oneofthree>
+<app-oneofthree [words]=words [url]=url (gameOver)="gameOver()" *ngIf="mode == 'one of three'"></app-oneofthree>
 <app-writetheanswer [words]=words *ngIf="mode == 'write the answer'"></app-writetheanswer>
 <app-flashcards [words]=words *ngIf="mode == 'flashcards'"></app-flashcards>
 

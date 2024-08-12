@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
-from .models import Language, VocabularySet, WordEntry, WordRecord
+from .models import Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord
 from utils import Mode
 
 @api_view(['POST'])
@@ -33,6 +33,31 @@ def edit_vocab(request):
     set_vocabulary(vocab_set, request.data.get("vocabulary"),
                    vocab_set.first_language, vocab_set.second_language, user)
     return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def send_vocab_result(request):
+  token = request.data.get("token")
+
+  try:
+      username = Session.objects.get(session_key=token).session_data
+      user = User.objects.get(username=username)
+  except ObjectDoesNotExist:
+      return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+  set_url = request.data.get("setUrl")
+
+  try:
+      vocab_set = VocabularySet.objects.get(url=set_url)
+  except ObjectDoesNotExist:
+      return Response(status=status.HTTP_400_BAD_REQUEST)
+
+  score = request.data.get("score")
+  if score is None:
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+  VocabularySetRecord.objects.create(user=user, set=vocab_set, score=score).save()
+  return Response(status=status.HTTP_200_OK)
 
 
 @api_view(["POST"])
