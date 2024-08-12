@@ -52,7 +52,7 @@ i {
 }
 
 #phonetic {
-    font-size: clamp(7px, 2vw, 20px);
+    font-size: clamp(14px, 2vw, 20px);
     color: var(--soft-ivory);
 }
 
@@ -110,6 +110,6 @@ i {
     height: 2%;
 }
 
-#counter {
+#counter, #score {
     margin-left: 12%;
 }

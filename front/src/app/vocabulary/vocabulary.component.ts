@@ -24,7 +24,6 @@ export class VocabularyComponent {
     firstLanguage: string = "";
     secondLanguage: string = "";
     languageNames: string[] = [];
-
     mode: string = "none";
     loading: boolean = true;
 
@@ -42,10 +41,6 @@ export class VocabularyComponent {
 
         localStorage.setItem("firstLanguage", this.firstLanguage);
         localStorage.setItem("secondLanguage", this.secondLanguage);
-    }
-
-    getVoiceByName(name: string) {
-        return speechSynthesis.getVoices().find(voice => voice.name === name);
     }
 
     async setup() {
@@ -74,21 +69,6 @@ export class VocabularyComponent {
 
         VocabUtils.sortByFirst(this.words);
         this.VocabUtils.sortByFirst(this.words);
-        this.pushUnseenForward();
-    }
-
-    pushUnseenForward() {
-        // we sort, and then we move the "undiscovered" words to be first
-        let to_move_index = 0;
-        for(let i = 0; i < this.words.length; i++) {
-            const word = this.words[i];
-            if(word.success_rate == -1) {
-                const temp = this.words[to_move_index];
-                this.words[to_move_index] = word;
-                this.words[i] = temp
-                to_move_index++;
-            }
-        }
     }
 
     gameOver(): void {

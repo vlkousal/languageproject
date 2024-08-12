@@ -20,11 +20,10 @@ export class OneOfThreeComponent {
     streak: number = 0;
     lives: number = 3;
     score: number = 0;
-    feedback: string = "";
     correctAnswers: number = 0;
-
     hideEnd: boolean = true;
     showSettings: boolean = false;
+    buttonColors: string[] = ["#F9F8EB", "#F9F8EB", "#F9F8EB"];
 
     ngOnInit() {
         Utils.shuffleList(this.words);
@@ -33,14 +32,25 @@ export class OneOfThreeComponent {
         SpeechUtils.speak(this.current.question);
     }
 
-    checkAnswer(answer: string): void {
-        if(this.current.correct == answer) {
+    checkAnswer(answerIndex: number): void {
+        let isCorrect: boolean = this.current.answers[answerIndex] == this.current.correct;
+        this.sendResult(isCorrect);
+        if(isCorrect) {
             this.evalCorrect();
-        } else {
+            this.setNewWord();
+        } else{
             this.evalWrong();
+            this.buttonColors[answerIndex] = "#d68585";
+            let correctIndex = this.current.answers.indexOf(this.current.correct);
+            this.buttonColors[correctIndex] = "#55e855";
+            setTimeout(() => {
+                this.buttonColors[answerIndex] = "#F9F8EB";
+                this.buttonColors[correctIndex] = "#F9F8EB";
+                this.setNewWord();
+            }, 2000);
         }
-        this.setNewWord();
     }
+
 
     evalCorrect(): void {
         this.streak++;
@@ -49,8 +59,6 @@ export class OneOfThreeComponent {
         }
         this.score += this.streak;
         this.correctAnswers++;
-        this.sendResult(true);
-        this.feedback = "Correct!";
     }
 
     evalWrong(): void {
@@ -62,8 +70,6 @@ export class OneOfThreeComponent {
             this.hideEnd = false;
             return;
         }
-        this.sendResult(false);
-        this.feedback = "The correct answer was " + this.current.correct;
     }
 
     setNewWord(): void {
