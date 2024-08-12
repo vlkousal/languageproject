@@ -11,25 +11,25 @@ body {
 }
 
 .navbar {
-    background-color: #4CAF50;
+    background-color: var(--muted-teal);
     color: #fff;
-    padding: 15px 20px; /* Increased padding for better spacing */
+    padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Added subtle box shadow for depth */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: scroll;
 }
 
 .navbar a {
     text-decoration: none;
-    color: #fff;
-    margin-right: 20px; /* Increased margin for better separation */
+    color: white;
+    margin-right: 20px;
     transition: color 0.3s ease;
 }
 
 .navbar a:hover {
-    color: #d0d9cf; /* Change to your desired hover color */
+    color: #d0d9cf;
 }
 
 .username {

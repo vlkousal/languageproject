@@ -70,7 +70,7 @@ export class WriteTheAnswerComponent {
             return;
         }
         this.current = this.words[this.index];
-        SpeechUtils.speak(this.current.question);
+        //SpeechUtils.speak(this.current.question);
     }
 
     replay() {

@@ -1,4 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
 body {
     font-family: 'Open Sans', sans-serif;
+    background-color: var(--soft-ivory);
+}
+
+.container {
+    border-radius: 5px;
+    background-color: var(--medium-mint);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 300px;
+    max-width: 650px;
+    width: 60%;
+    border: 4px solid var(--muted-teal);
+}
+
+/* https://colorhunt.co/palette/f9f8eba7d7c574b49b5c8d89 */
+:root {
+    --soft-ivory: #F9F8EB;
+    --pastel-mint: #A7D7C5;
+    --medium-mint: #74B49B;
+    --muted-teal: #5C8D89;
 }

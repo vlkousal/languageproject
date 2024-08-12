@@ -146,6 +146,7 @@ textarea {
     transform: translate(-50%, -50%);
 
     overflow: scroll;
+    min-width: 400px;
 }
 
 .first-form {

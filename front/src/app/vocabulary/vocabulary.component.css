@@ -1,70 +1,80 @@
-.end{
+.spinner {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #333;
+  animation: spin 1s linear infinite;
+  margin-top: 15%;
+  margin-left: 43%;
+  align-content: center;
+  justify-content: space-between;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.end {
   text-align: center;
   font-size: 40px;
 }
 
-
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap');
-
-#preview {
+#container {
   margin: 5% auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  max-width: 750px;
   font-size: 20px;
   background-color: #f9f9f9;
+  text-align: center;
+
+  height: 10%;
+  width: 80%;
+  max-width: 750px;
 }
 
-.body{
-  font-family: 'Open Sans', sans-serif;
-}
-
-#preview button {
+#container button {
   margin: 10px;
   padding: 10px 20px;
   font-size: 16px;
-  background-color: green; /* Zelená barva pro tlačítka */
+  background-color: green;
   color: white;
   border: none;
   cursor: pointer;
 }
 
-#preview button:hover {
-  background-color: #006400; /* Tmavší odstín zelené při najetí myší */
+#container button:hover {
+  background-color: #006400;
 }
 
-/* Obecné styly pro aplikaci */
 .app-base {
   font-family: Arial, sans-serif;
   text-align: center;
   padding: 20px;
-  color: black; /* Černá barva textu */
+  color: black;
 }
 
-/* Style table headers */
 th {
   padding: 10px;
   text-align: center;
   position: sticky;
   top: 0;
-  background-color: white; /* Adjust as needed */
+  background-color: white;
   z-index: 1;
 }
 
-
-/* Style table cells */
 td {
   padding: 10px;
 }
 
-
 .table-container {
-  height: 300px; /* Přizpůsobte výšku podle potřeby */
+  height: 300px;
   overflow: auto;
   width: 90%;
 }
-
 
 .button-container {
   display: flex;
@@ -74,7 +84,7 @@ td {
 .button-container button {
   margin: 0 10px;
   padding: 10px 20px;
-  background-color: #4CAF50; /* Green */
+  background-color: #4CAF50;
   border: none;
   color: white;
   text-align: center;
@@ -90,19 +100,6 @@ td {
 
 .canvas-container{
   text-align: center;
-}
-
-.canvas-container button {
-  margin: 0 10px;
-  padding: 10px 20px;
-  background-color: #4CAF50; /* Green */
-  border: none;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 5px;
 }
 
 canvas {
@@ -124,37 +121,30 @@ th, td {
 }
 
 th {
-  background-color: #45a049; /* Green */
+  background-color: #45a049;
   color: white;
 }
 
 tr:nth-child(even) {
-  background-color: #f2f2f2; /* Grey */
+  background-color: #f2f2f2;
 }
 
 tr:hover {
-  background-color: #d9d9d9; /* Light Grey on hover */
+  background-color: #d9d9d9;
 }
 
 td {
   border-bottom: 1px solid #ddd;
 }
 
-.spinner {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-top-color: #333;
-  animation: spin 1s linear infinite;
-  margin-top: 15%;
-  margin-left: 43%;
-  align-content: center;
+#top-panel {
+  display: flex;
   justify-content: space-between;
+  text-align: center;
+  background-color: grey;
+  height: 20px;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+#description {
+  font-size: clamp(7px, 2vw, 14px);
 }

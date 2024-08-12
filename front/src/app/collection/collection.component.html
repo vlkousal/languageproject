@@ -2,7 +2,7 @@
 
 <div class="container">
 	<h2>Your sets:</h2>
-	<div class="set-container" *ngFor="let set of sets" id="xd">
+	<div class="set-container" *ngFor="let set of sets" id="lives">
 		<a class="set-link" routerLink="/vocab/{{ set.url }}">
 			{{ set.first_flag }} {{ set.second_flag }} {{ set.name }}
 		</a>

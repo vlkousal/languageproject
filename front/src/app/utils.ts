@@ -1,7 +1,7 @@
 import {Word} from "./constants";
 
 export class Utils {
-    static getIndex(blocked: number, ceil: number): number {
+    static getRandomDifferentIndex(blocked: number, ceil: number): number {
         let index = Math.floor(Math.random() * ceil);
         while(index == blocked) {
             index = Math.floor(Math.random() * ceil);

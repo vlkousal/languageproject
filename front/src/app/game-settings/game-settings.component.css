@@ -1,0 +1,43 @@
+.top-panel {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.back-button {
+    border: none;
+    width: 50px;
+    height: 50px;
+}
+
+#show-phonetic {
+    margin-top: 10%;
+}
+
+#settings {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.language-name {
+    font-size: clamp(14px, 2vw, 18px);
+}
+
+select {
+    border: solid 2px #d3d8d3;
+    width: auto;
+    height: auto;
+    max-width: 200px;
+}
+
+
+#volume-slider {
+    background: #4CAF50; /* Thumb color */
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+#volume-text {
+    font-size: clamp(14px, 2vw, 18px);
+}

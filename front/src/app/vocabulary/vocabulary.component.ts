@@ -4,8 +4,6 @@ import {ActivatedRoute} from "@angular/router";
 import {ApiTools} from "../apitools";
 import {VocabUtils} from "../vocabutils";
 import {first} from "rxjs";
-import {FormControl} from "@angular/forms";
-import {Drawing} from "../drawinglogic";
 import {Utils} from "../utils";
 import {SpeechUtils} from "../speechutils";
 
@@ -14,16 +12,12 @@ import {SpeechUtils} from "../speechutils";
     templateUrl: './vocabulary.component.html',
     styleUrls: ['./vocabulary.component.css']
 })
-
 export class VocabularyComponent {
 
     words: Word[] = [];
-    all: Word[] = [];
     index: number = 0;
-
     feedback: string = "";
     url: string = "";
-    vocabularySet: string = "";
     name: string = "";
     description: string = "";
     contributor: string = "";
@@ -31,17 +25,8 @@ export class VocabularyComponent {
     secondLanguage: string = "";
     languageNames: string[] = [];
 
-    hideChooseOfThree: boolean = true;
-    hidePreview: boolean = true;
-    hideWriteTheAnswer: boolean = true;
-    hideFlashcards: boolean = true;
-    hideDrawing: boolean = true;
+    mode: string = "none";
     loading: boolean = true;
-
-    selectedFirstLanguageName: FormControl<string> = new FormControl("") as FormControl<string>;
-    selectedSecondLanguageName: FormControl<string> = new FormControl("") as FormControl<string>;
-    firstLang: string = "";
-    secondLang: string = "";
 
     constructor(private route: ActivatedRoute) {}
 
@@ -51,117 +36,45 @@ export class VocabularyComponent {
         });
         await this.setup();
 
-        const voices = speechSynthesis.getVoices();
-        voices.forEach((voice) => {
-            this.languageNames.push(voice.name);
-        });
         this.languageNames.sort();
-        Drawing.prepCanvas();
+        //Drawing.prepCanvas();
         this.loading = false;
-        this.hidePreview = false;
-    }
 
-    testSecondVoice() {
-        const randomWord = Utils.getRandomElement(this.words);
-        SpeechUtils.speak(randomWord.correct, false);
+        localStorage.setItem("firstLanguage", this.firstLanguage);
+        localStorage.setItem("secondLanguage", this.secondLanguage);
     }
-
-    testFirstVoice() {
-        const randomWord = Utils.getRandomElement(this.words);
-        SpeechUtils.speak(randomWord.question);
-    }
-
 
     getVoiceByName(name: string) {
         return speechSynthesis.getVoices().find(voice => voice.name === name);
     }
 
-    onFirstLanguageChange() {
-        const voice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
-        if (voice) {
-            this.SpeechUtils.first_language_utt.voice = voice;
-            this.SpeechUtils.first_language_utt.lang = voice.lang;
-            this.firstLang = voice.lang;
-        }
-        localStorage.setItem(this.firstLanguage, this.selectedFirstLanguageName.getRawValue());
-    }
-
-    onSecondLanguageChange() {
-        const voice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
-        if (voice) {
-            this.SpeechUtils.second_language_utt.voice = voice;
-            this.SpeechUtils.second_language_utt.lang = voice.lang;
-            this.secondLang = voice.lang;
-        }
-        localStorage.setItem(this.secondLanguage, this.selectedSecondLanguageName.getRawValue());
-    }
-
     async setup() {
-        this.vocabularySet = await ApiTools.getVocabJson(this.url)
-        const json = JSON.parse(this.vocabularySet);
+        const vocab: string =  await ApiTools.getVocabJson(this.url)
+        const json = JSON.parse(vocab);
         this.name = json.name;
         this.contributor = json.author;
         this.description = json.description;
-        this.firstLanguage = FLAGS[json.first_language] + " " + json.first_language;
-        this.secondLanguage = FLAGS[json.second_language] + " " + json.second_language;
-        this.loadVocab();
-        VocabUtils.sortByFirst(this.words);
-        this.VocabUtils.sortByFirst(this.words);
+        this.firstLanguage = json.first_language;
+        this.secondLanguage = json.second_language;
 
-        this.setupVoices();
-        this.pushUnseenForward();
-    }
-
-    setupVoices() {
-        const firstName = localStorage.getItem(this.firstLanguage);
-        if(firstName != null) {
-            this.selectedFirstLanguageName.setValue(firstName);
-            this.onFirstLanguageChange();
-            const voice = this.getVoiceByName(this.selectedFirstLanguageName.getRawValue());
-            if (voice) {
-                this.SpeechUtils.first_language_utt.voice = voice;
-                this.SpeechUtils.first_language_utt.lang = voice.lang;
-                this.firstLang = voice.lang;
-            }
-        }
-
-        const secondName = localStorage.getItem(this.secondLanguage);
-        if(secondName != null) {
-            this.selectedSecondLanguageName.setValue(secondName);
-            this.onSecondLanguageChange();
-
-            const voice = this.getVoiceByName(this.selectedSecondLanguageName.getRawValue());
-            if (voice) {
-                this.SpeechUtils.second_language_utt.voice = voice;
-                this.SpeechUtils.second_language_utt.lang = voice.lang;
-                this.secondLang = voice.lang;
-            }
-        }
-    }
-
-    loadVocab() {
-        const parsed = JSON.parse(this.vocabularySet).vocabulary;
-        const vocabString = Utils.shuffleList(parsed.split("\n")).filter(str => str.trim() !== '');
         const words: Word[] = [];
-
-        for(let i = 0; i < vocabString.length; i++) {
-            const correct: string = vocabString[i].split(";")[2];
-            let answers: string[] = [correct];
+        json.vocabulary.forEach((word: any, i: number) => {
+            let answers: string[] = [word.correct];
             for(let answer = 0; answer < 2; answer++) {
-                const index = Utils.getIndex(i, vocabString.length);
-                const otherAnswer: string = vocabString[index].split(";")[2];
-                answers.push(otherAnswer);
+                const index = Utils.getRandomDifferentIndex(i, json.vocabulary.length);
+                answers.push(json.vocabulary[index].correct);
             }
             answers = Utils.shuffleList(answers);
-            const id = vocabString[i].split(";")[3];
-            const success_rate = parseInt(vocabString[i].split(";")[4]);
-            const question = vocabString[i].split(";")[0];
-            const phonetic: string = vocabString[i].split(";")[1];
-            const word = new Word(id, success_rate, question, phonetic, correct, answers);
+            word = new Word(word.id, 0, word.question, word.phonetic,
+              word.correct, answers);
+            console.log(word.correct, word.answers)
             words.push(word);
-            this.words = words;
-            this.all = words;
-        }
+        });
+        this.words = words;
+
+        VocabUtils.sortByFirst(this.words);
+        this.VocabUtils.sortByFirst(this.words);
+        this.pushUnseenForward();
     }
 
     pushUnseenForward() {
@@ -176,6 +89,10 @@ export class VocabularyComponent {
                 to_move_index++;
             }
         }
+    }
+
+    gameOver(): void {
+        this.mode = "none";
     }
 
     resetCanvas() {
@@ -197,4 +114,5 @@ export class VocabularyComponent {
     protected readonly VocabUtils = VocabUtils;
     protected readonly first = first;
     protected readonly SpeechUtils = SpeechUtils;
+    protected readonly FLAGS = FLAGS;
 }

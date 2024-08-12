@@ -1,17 +1,18 @@
-import {Component, Input} from '@angular/core';
-import {BACKEND, MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {BACKEND, MAX_HEALTH, Mode, STREAK_FOR_HEALTH, Word} from "../constants";
 import {SpeechUtils} from "../speechutils";
 import {Utils} from "../utils";
+import {GameSettingsComponent} from "../game-settings/game-settings.component";
 
 @Component({
-  selector: 'app-oneofthree',
-  templateUrl: './one-of-three.component.html',
-  styleUrls: ['./one-of-three.component.css']
+    selector: 'app-oneofthree',
+    templateUrl: './one-of-three.component.html',
+    styleUrls: ['./one-of-three.component.css'],
 })
-
 export class OneOfThreeComponent {
 
     @Input() words: Word[] = [];
+    @Output() gameOver: EventEmitter<void> = new EventEmitter();
     wrong: Word[] = [];
     index: number = 0;
     current: Word = this.words[0];
@@ -20,11 +21,15 @@ export class OneOfThreeComponent {
     score: number = 0;
     feedback: string = "";
     correctAnswers: number = 0;
+
     hideEnd: boolean = true;
+    showSettings: boolean = false;
 
     ngOnInit() {
         Utils.shuffleList(this.words);
         this.current = this.words[0];
+        SpeechUtils.checkMute();
+        SpeechUtils.speak(this.current.question);
     }
 
     checkAnswer(answer: string): void {
@@ -51,7 +56,6 @@ export class OneOfThreeComponent {
         this.streak = 0;
         this.lives--;
         this.wrong.push(this.current);
-        console.log(this.lives);
         if(this.lives == 0) {
             this.hideEnd = false;
             return;
@@ -60,7 +64,7 @@ export class OneOfThreeComponent {
         this.feedback = "The correct answer was " + this.current.correct;
     }
 
-    setNewWord() {
+    setNewWord(): void {
         this.index++;
         if(this.index == this.words.length) {
             this.hideEnd = false;
@@ -69,10 +73,13 @@ export class OneOfThreeComponent {
         this.current = this.words[this.index];
 
         // TODO - make "flipped" words and make speaking in both languages functional
-        SpeechUtils.speak(this.current.question);
+        const firstLanguage: string | null = localStorage.getItem("firstLanguage");
+        if(firstLanguage != null) {
+            SpeechUtils.speak(this.current.question);
+        }
     }
 
-    replay() {
+    replay(): void {
         Utils.shuffleList(this.words);
         this.current = this.words[0];
         this.lives = 3;
@@ -81,22 +88,36 @@ export class OneOfThreeComponent {
         this.hideEnd = true;
     }
 
-    sendResult(correct: boolean) {
-        const data = {
-            "token": localStorage.getItem("sessionId"),
-            "wordId": this.current.id,
-            "correct": correct
-        }
+    goBack(): void {
+        this.gameOver.emit();
+    }
 
-        fetch(BACKEND + "api/addresult/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
+    async sendResult(correct: boolean): Promise<void> {
+        const data = {
+            token: localStorage.getItem("sessionId"),
+            wordId: this.current.id,
+            mode: Mode.OneOfThree,
+            correct: correct
+        };
+
+        const response = await fetch(`${BACKEND}api/addresult/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+    }
+
+    speakQuestion(): void {
+        const firstLanguage: string | null = localStorage.getItem("firstLanguage");
+        if(firstLanguage != null) {
+            SpeechUtils.speak(this.current.question);
+        }
     }
 
     protected readonly Math = Math;
     protected readonly SpeechUtils = SpeechUtils;
+    protected readonly GameSettingsComponent = GameSettingsComponent;
+    protected readonly localStorage = localStorage;
 }

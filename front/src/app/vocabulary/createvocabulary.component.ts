@@ -13,7 +13,7 @@ export class CreateVocabularyComponent {
 
     delimiter = new FormControl(";") as FormControl<string>;
     content: string = "";
-    firstFeedback: string = "Please enter a name.";
+    feedback: string = "Please enter a name.";
     languages: string[] = Object.keys(FLAGS);
     counter: number = 0;
     name: FormControl<string> = new FormControl("") as FormControl<string>;
@@ -50,7 +50,6 @@ export class CreateVocabularyComponent {
 
     onWordsFilterChange() {
         const filter: string = this.removeDiacritics(this.wordsFilter.getRawValue());
-        console.log(filter.length);
         if(filter.length != 0) {
             this.filteredWords = new Set<Word>();
             this.words.forEach((word) => {
@@ -94,8 +93,6 @@ export class CreateVocabularyComponent {
                 this.relevantWords.add(word);
             }
         }
-        console.log(firstLanguage + " " + secondLanguage);
-        console.log(this.relevantWords.size);
         this.filteredRelevantWords = this.relevantWords;
         this.onFirstInputChange();
     }
@@ -104,10 +101,8 @@ export class CreateVocabularyComponent {
         this.hideText = false;
         this.hideRelevant = true;
         this.hideTable = true;
-
         this.filter.setValue("");
         this.wordsFilter.setValue("");
-
         this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#25c525");
         this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#4CAF50");
         this.renderer.setStyle(this.summaryButton.nativeElement, 'background-color', "#4CAF50");
@@ -254,20 +249,20 @@ export class CreateVocabularyComponent {
 
         this.lastNameLength = nameLength;
         if(this.name.getRawValue().length == 0) {
-            this.firstFeedback = "Please enter a name.";
+            this.feedback = "Please enter a name.";
             return;
         }
 
         if(this.url.getRawValue().length == 0) {
-            this.firstFeedback = "The URL is empty.";
+            this.feedback = "The URL is empty.";
             return;
         }
 
         if(this.firstLanguage.getRawValue() == this.secondLanguage.getRawValue()) {
-            this.firstFeedback = "The languages must be different.";
+            this.feedback = "The languages must be different.";
             return;
         }
-        this.firstFeedback = "Click continue when ready.";
+        this.feedback = "Click continue when ready.";
     }
 
     removeDiacritics(inputString: string) {

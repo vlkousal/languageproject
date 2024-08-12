@@ -1,29 +1,67 @@
-<!--  PICK ONE OF THREE -->
-<div class="xd" [hidden]="!hideEnd">
-	<p>{{ index + 1 }}/{{ words.length }}     Score: {{ score }}</p>
-	<p>Streak: {{ streak }}</p>
-	<div title="Lives: {{ lives }}" class="hearts" *ngFor="let item of [].constructor(lives); let i = index">
-		<img src="../../assets/srdce.png" alt="Lives">
+<div class="container" *ngIf="hideEnd && !showSettings">
+	<div class="top-panel">
+		<button class="back-button" (click)="goBack()">
+			<i class="fas fa-arrow-left"> </i>
+		</button>
+		<div class="top-buttons">
+			<button (click)="SpeechUtils.toggleMute()">
+				<i class="fas fa-volume-up" *ngIf="!SpeechUtils.isMuted"></i>
+				<i class="fas fa-volume-off" *ngIf="SpeechUtils.isMuted"></i>
+			</button>
+			<button (click)="showSettings = !showSettings">
+				<i class="fas fa-cog"></i>
+			</button>
+		</div>
 	</div>
-	<br><br>
-	<strong style="font-size: 20px">{{ feedback }}</strong>
+
+	<div id="stats-container">
+		<div id="streak-container">
+			<i class="fas fa-fire" id="flame">     {{ streak }}</i>
+		</div>
+		<i id="counter" >{{ index + 1 }}/{{ words.length }}</i>
+		<div id="heart-container">
+			<i class="fas fa-heart" id="lives">     {{ lives }}</i>
+		</div>
+	</div>
 
 	<div class="buttons">
-		<div title="{{ current.phonetic}}" class="question">
-			<button (click)="SpeechUtils.speak(current.question)">{{ current.question }}</button>
+		<div class="question">
+			<button (click)="speakQuestion()">{{ current.question }}</button>
 		</div>
+		<p id="phonetic" *ngIf="localStorage.getItem('showPhonetic') != 'false'">{{  current.phonetic }}</p>
 		<button (click)="checkAnswer(current.answers[0])">{{ current.answers[0] }}</button>
 		<button (click)="checkAnswer(current.answers[1])">{{ current.answers[1] }}</button>
 		<button (click)="checkAnswer(current.answers[2])">{{ current.answers[2] }}</button>
 	</div>
 </div>
 
+<app-game-settings *ngIf="showSettings" [words]="words" (closeSettings)="showSettings = false"></app-game-settings>
+
+
 <!--  END SCREEN -->
-<div class="end" [hidden]="hideEnd">
-	<h1>Final score: {{ score }}</h1>
-	<h3>{{correctAnswers}}/{{ words.length }} ({{ Math.floor(correctAnswers / (words.length / 100)) }}%)</h3>
-	<button (click)="replay()">Restart</button>
-	<div *ngFor="let word of wrong">
-		<p><button (click)="SpeechUtils.speak(word.question)">{{ word.question }}</button> ({{ word.phonetic }}) - {{ word.correct }}</p>
+<div id="end" class="container end-container" [hidden]="hideEnd">
+	<div class="top-panel">
+		<button class="back-button" (click)="goBack()">
+			<i class="fas fa-arrow-left"> </i>
+		</button>
+		<div class="top-buttons">
+			<button id="mute-button2" >
+				<i class="fas fa-volume-up"></i>
+			</button>
+			<button id="settings-button2" >
+				<i class="fas fa-cog"></i>
+			</button>
+		</div>
 	</div>
+		<p>Final score: {{ score }}</p>
+		<p>{{correctAnswers}}/{{ words.length }} ({{ Math.floor(correctAnswers / (words.length / 100)) }}%)</p>
+		<button (click)="replay()">Restart</button>
+	    <div id="flex-container">
+		    <div id="wrong-word" *ngFor="let word of wrong" (click)="speakQuestion()">
+
+			    <p id="end-question">{{ word.question }}</p>
+			    <p id="end-phonetic">{{ word.phonetic }}</p>
+			    <strong>{{ word.correct }}</strong>
+		    </div>
+	    </div>
 </div>

@@ -1,96 +1,23 @@
-body{
+.buttons {
     text-align: center;
-}
-.xd{
-    text-align: center;
-    font-size: 40px;
-}
-
-.buttons{
-    text-align: center;
-    font-size: 60px;
     padding: 40px;
 }
 
-.buttons button{
-    width: 256px;
-    height: 128px;
-    margin-right: 20px;
-    font-size: 18px;
-}
-
-.hearts{
-    scale: 4;
-    padding-right: 5px;
-    display: inline-block;
-}
-
-.score{
-    font-size: 40px;
-}
-
-/* Styly pro skryté prvky */
-.xd[hidden],
-.buttons[hidden] {
-    display: none;
-}
-
-/* Styly pro skóre a stav */
-.xd p:nth-of-type(2),
-.end h1,
-.score {
-    font-size: 24px;
-    font-weight: bold;
-    color: green; /* Zelená barva pro skóre a stav */
-}
-
-
-/* Styly pro tlačítka */
 .buttons button {
     margin: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: green; /* Zelená barva pro tlačítka */
-    color: white;
-    border: none;
+    background-color: var(--soft-ivory);
+    color: var(--muted-teal);
     cursor: pointer;
+    height: 20%;
+    min-width: 100px;
+    min-height: 50px;
+    font-size: clamp(14px, 2vw, 20px);
+    width: max-content !important;
+    border: 2px solid var(--muted-teal);
 }
 
 .buttons button:hover {
-    background-color: #006400; /* Tmavší odstín zelené při najetí myší */
-}
-
-/* Styly pro konec */
-.end {
-    margin-top: 100px;
-    text-align: center;
-}
-
-.end h1 {
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.end h3 {
-    font-size: 18px;
-}
-
-.end button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #a9a9a9; /* Šedá barva pro tlačítko na konci */
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.end button:hover {
-    background-color: #808080; /* Tmavší odstín šedé při najetí myší */
-}
-
-.end div p {
-    margin: 10px 0;
+    background-color: var(--pastel-mint);
 }
 
 .question button {
@@ -98,13 +25,91 @@ body{
     border: none;
     padding: 0;
     margin: 0;
-    font-family: inherit;
-    font-size: inherit;
-    color: inherit;
-    cursor: pointer;
-    /* Additional styles if needed */
+    color: var(--soft-ivory);
+    font-size: clamp(28px, 4vw, 60px);
 }
 
 .question button:hover {
-    background-color: #fbfafa;
+    background-color: var(--medium-mint);
+}
+
+.top-panel {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+i {
+    color: var(--soft-ivory);
+    font-size: clamp(20px, 2vw, 28px);
+}
+
+.top-buttons button {
+    width: 50px;
+    height: 50px;
+    background-color: var(--medium-mint);
+    border: none;
+}
+
+#phonetic {
+    font-size: clamp(7px, 2vw, 20px);
+    color: var(--soft-ivory);
+}
+
+#lives, #flame {
+    color: var(--soft-ivory);
+}
+
+.back-button {
+    border: none;
+    width: 50px;
+    height: 50px;
+    background-color: var(--medium-mint);
+}
+
+#stats-container {
+    display: flex;
+    justify-content: center;
+}
+
+#heart-container {
+    margin-left: 10%;
+}
+
+.end-container {
+    width: 40%;
+}
+
+#end-phonetic {
+    font-style: italic;
+}
+
+#end-question {
+    font-size: clamp(14px, 1vw, 24px);
+}
+
+#wrong-word {
+    background-color: #eae7e7;
+    padding: 5px;
+    height: 140px;
+    width: 140px;
+    text-align: center;
+}
+
+#flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-left: 15%;
+    margin-bottom: 10%;
+    overflow: scroll;
+}
+
+#bottom-panel {
+    border: 2px solid pink;
+    height: 2%;
+}
+
+#counter {
+    margin-left: 12%;
 }
