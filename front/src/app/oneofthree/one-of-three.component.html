@@ -15,14 +15,10 @@
 	</div>
 
 	<div id="stats-container">
-		<div id="streak-container">
-			<i class="fas fa-fire" id="flame">     {{ streak }}</i>
-		</div>
-		<i id="counter" >{{ index + 1 }}/{{ words.length }}</i>
-		<i id="score">{{ score }}</i>
-		<div id="heart-container">
-			<i class="fas fa-heart" id="lives">     {{ lives }}</i>
-		</div>
+		<i id="flame" class="fas fa-fire">     {{ streak }}</i>
+		<i id="counter" class="fas fa-atlas">     {{ index + 1 }}/{{ words.length }}</i>
+		<i id="score" class="fas fa-trophy">     {{ score }}</i>
+		<i id="lives" class="fas fa-heart">     {{ lives }}</i>
 	</div>
 
 	<div class="buttons">

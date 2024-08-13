@@ -23,7 +23,9 @@ export class OneOfThreeComponent {
     correctAnswers: number = 0;
     hideEnd: boolean = true;
     showSettings: boolean = false;
+
     buttonColors: string[] = ["#F9F8EB", "#F9F8EB", "#F9F8EB"];
+    allowAnswering: boolean = true;
 
     ngOnInit() {
         Utils.shuffleList(this.words);
@@ -33,25 +35,28 @@ export class OneOfThreeComponent {
     }
 
     checkAnswer(answerIndex: number): void {
+        if(!this.allowAnswering) return;
+
         let isCorrect: boolean = this.current.answers[answerIndex] == this.current.correct;
         this.sendResult(isCorrect);
         if(isCorrect) {
             this.evalCorrect();
             this.setNewWord();
         } else{
-            this.evalWrong();
-            this.buttonColors[answerIndex] = "#d68585";
+            this.buttonColors[answerIndex] = "#e8a9a9";
             let correctIndex = this.current.answers.indexOf(this.current.correct);
-            this.buttonColors[correctIndex] = "#55e855";
+            this.buttonColors[correctIndex] = "#9ff19f";
             SpeechUtils.speak(this.current.correct, true);
+            this.allowAnswering = false;
             setTimeout(() => {
                 this.buttonColors[answerIndex] = "#F9F8EB";
                 this.buttonColors[correctIndex] = "#F9F8EB";
                 this.setNewWord();
+                this.allowAnswering = true;
+                this.evalWrong();
             }, 2000);
         }
     }
-
 
     evalCorrect(): void {
         this.streak++;

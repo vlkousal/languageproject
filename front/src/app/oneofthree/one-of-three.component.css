@@ -110,6 +110,6 @@ i {
     height: 2%;
 }
 
-#counter, #score {
-    margin-left: 12%;
+#counter, #score, #lives {
+    margin-left: 10%;
 }

@@ -34,4 +34,8 @@ export class Utils {
         // Return the element at the random index
         return list[randomIndex];
     }
+
+    static coinFlip(): 0 | 1 {
+        return Math.random() < 0.5 ? 0 : 1;
+    }
 }
