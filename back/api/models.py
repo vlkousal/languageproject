@@ -39,8 +39,8 @@ class VocabularySet(models.Model):
 class WordRecord(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     word = models.ForeignKey(WordEntry, on_delete=models.CASCADE)
-    one_of_three_correct = models.IntegerField(default=0)
-    one_of_three_count = models.IntegerField(default=0)
+    one_of_three_score = models.IntegerField(default=0)
+    one_of_three_streak = models.IntegerField(default=0)
 
     def __str__(self):
         return (self.user.username + " - " + self.word.first +

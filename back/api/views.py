@@ -65,6 +65,10 @@ def add_result(request):
     token = request.data.get("token")
     correct = request.data.get("correct")
     mode = request.data.get("mode")
+    word_id = request.data.get("wordId")
+
+    if token is None or correct is None or mode is None or word_id is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     try:
         username = Session.objects.get(session_key=token).session_data
@@ -73,19 +77,30 @@ def add_result(request):
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     try:
-        word = WordEntry.objects.get(id=request.data.get("wordId"))
+        word = WordEntry.objects.get(id=word_id)
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    filter = WordRecord.objects.filter(user=user, word=word)
-    if len(filter) == 0:
+    filtered = WordRecord.objects.filter(user=user, word=word)
+    if not filtered.exists():
         record = WordRecord.objects.create(user=user, word=word)
     else:
-        record = WordRecord.objects.get(user=user, word=word)
+        record = filtered.first()
 
     if mode == Mode.ONE_OF_THREE.value:
-        record.one_of_three_correct += correct
-        record.one_of_three_count += 1
+        if correct:
+            new_score: int = record.one_of_three_score + 10 + record.one_of_three_streak
+            if new_score > 100:
+                record.one_of_three_score = 100
+            else:
+                record.one_of_three_score = new_score
+            record.one_of_three_streak += 1
+        else:
+            if record.one_of_three_score - 10 < 0:
+                record.one_of_three_score = 0
+            else:
+                record.one_of_three_score = record.one_of_three_score - 10
+            record.one_of_three_streak = 0
     record.save()
     return Response(status=status.HTTP_200_OK)
 
@@ -133,7 +148,6 @@ def check_token(request):
         session = Session.objects.get(session_key=token)
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
-    session = Session.objects.get(session_key=token)
     username = session.session_data
     return Response(username, status=status.HTTP_200_OK)
 

@@ -43,6 +43,7 @@ export class OneOfThreeComponent {
             this.buttonColors[answerIndex] = "#d68585";
             let correctIndex = this.current.answers.indexOf(this.current.correct);
             this.buttonColors[correctIndex] = "#55e855";
+            SpeechUtils.speak(this.current.correct, true);
             setTimeout(() => {
                 this.buttonColors[answerIndex] = "#F9F8EB";
                 this.buttonColors[correctIndex] = "#F9F8EB";
