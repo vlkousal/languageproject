@@ -24,7 +24,7 @@ describe('WritetheanswerComponent', () => {
 
     it('should be a wrong answer', () => {
         component.correctAnswers = 0;
-        component.current = new Word(-1, -1, "question", "phonetic", "correct", ["correct", "wrong", "wrong"]);
+        component.current = new Word(-1, [], "question", "phonetic", "correct", ["correct", "wrong", "wrong"], []);
         component.writtenAnswer.setValue("wrong");
         component.checkWrittenAnswer();
         expect(component.correctAnswers).toBe(0);
@@ -32,7 +32,7 @@ describe('WritetheanswerComponent', () => {
 
     it('should be a correct answer', () => {
         component.correctAnswers = 0;
-        component.current = new Word(-1, -1, "question", "phonetic", "correct", ["correct", "wrong", "wrong"]);
+        component.current = new Word(-1, [], "question", "phonetic", "correct", ["correct", "wrong", "wrong"], []);
         component.writtenAnswer.setValue("correct");
         component.checkWrittenAnswer();
         expect(component.correctAnswers).toBe(0);

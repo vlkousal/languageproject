@@ -88,7 +88,7 @@ export class CreateVocabularyComponent {
         const secondLanguage: string = this.secondLanguage.getRawValue();
         const parsed = JSON.parse(await ApiTools.getRelevantVocabulary(firstLanguage, secondLanguage));
         for(let i = 0; i < parsed.words.length; i++) {
-            const word = new Word(0,0,  parsed.words[i].first, parsed.words[i].phonetic, parsed.words[i].second, []);
+            const word = new Word(0, [],  parsed.words[i].first, parsed.words[i].phonetic, parsed.words[i].second, [], []);
             if(!this.containsWord(this.relevantWords, word)) {
                 this.relevantWords.add(word);
             }
@@ -291,8 +291,8 @@ export class CreateVocabularyComponent {
         if(this.content.length != 0) {
             for(let i = 0; i < lines.length - 1; i++) {
                 const line = lines[i];
-                const word = new Word(0,0,  line.split(delimiter)[0],
-                    line.split(delimiter)[1], line.split(delimiter)[2], []);
+                const word = new Word(0, [],  line.split(delimiter)[0],
+                    line.split(delimiter)[1], line.split(delimiter)[2], [], []);
 
                 if(this.isValidLine(lines[i]) && word.question.length != 0 && word.correct.length != 0) {
                     if(!this.containsWord(this.words, word)) {

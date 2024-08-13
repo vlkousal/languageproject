@@ -25,7 +25,7 @@
 		<div class="question">
 			<button (click)="speakQuestion()">{{ current.question }}</button>
 		</div>
-		<p id="phonetic" *ngIf="localStorage.getItem('showPhonetic') != 'false'">{{  current.phonetic }}</p>
+		<p id="phonetic" *ngIf="localStorage.getItem('showPhonetic') != 'false' && !isFlipped">{{  current.phonetic }}</p>
 		<button [ngStyle]="{'background-color': buttonColors[0]}" (click)="checkAnswer(0)">{{ current.answers[0] }}</button>
 		<button [ngStyle]="{'background-color': buttonColors[1]}" (click)="checkAnswer(1)">{{ current.answers[1] }}</button>
 		<button [ngStyle]="{'background-color': buttonColors[2]}" (click)="checkAnswer(2)">{{ current.answers[2] }}</button>

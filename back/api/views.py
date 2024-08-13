@@ -1,5 +1,7 @@
 from datetime import timedelta
 from random import randint
+from typing import List
+
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
@@ -186,6 +188,16 @@ def get_vocab_sets(request):
 
 @api_view(["POST"])
 def get_vocab(request):
+    token = request.data.get("token")
+
+    user = None
+    try:
+        username: str = Session.objects.get(session_key=token).session_data
+        user = User.objects.get(username=username)
+        no_user: bool = False
+    except ObjectDoesNotExist:
+        no_user: bool = True
+
     url = request.data.get("url")
     try:
         vocab = VocabularySet.objects.get(url=url)
@@ -194,8 +206,22 @@ def get_vocab(request):
 
     words = []
     for word in vocab.vocabulary.all():
-        word = {"question": word.first, "phonetic": word.phonetic, "correct": word.second,
-                "id": word.id}
+        # getting the scores
+        scores: List[int] = [0]
+        if not no_user:
+          try:
+              record = WordRecord.objects.get(user=user, word=word)
+              scores[0] = record.one_of_three_score
+          except ObjectDoesNotExist:
+              pass
+
+
+        word = {"question": word.first,
+                "phonetic": word.phonetic,
+                "correct": word.second,
+                "id": word.id,
+                "scores": scores
+                }
         words.append(word)
 
     data = {

@@ -125,19 +125,23 @@ export const FLAGS: FlagsDict = {
 export class Word {
 
     id: number;
-    success_rate: number;
+    score: number[];
     question: string;
     phonetic: string;
     correct: string;
     answers: string[];
+    flippedAnswers: string[];
 
-    constructor(id: number,  success_rate: number, question: string, phonetic: string, correct: string, answers: string[]) {
+    constructor(id: number,  score: number[], question: string,
+                phonetic: string, correct: string, answers: string[],
+                flippedAnswers: string[]) {
         this.id = id;
-        this.success_rate = success_rate;
+        this.score = score;
         this.question = question;
         this.phonetic = phonetic
         this.correct = correct;
         this.answers = answers;
+        this.flippedAnswers = flippedAnswers;
     }
 }
 

@@ -1,6 +1,7 @@
 import {Word} from "./constants";
 
 export class Utils {
+
     static getRandomDifferentIndex(blocked: number, ceil: number): number {
         let index = Math.floor(Math.random() * ceil);
         while(index == blocked) {
@@ -9,7 +10,7 @@ export class Utils {
         return index;
     }
 
-    static shuffleList(list: any[]) {
+    static shuffleList(list: any[]): any[] {
         for (let i = list.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [list[i], list[j]] = [list[j], list[i]];
@@ -35,7 +36,7 @@ export class Utils {
         return list[randomIndex];
     }
 
-    static coinFlip(): 0 | 1 {
+    static flipACoin(): 0 | 1 {
         return Math.random() < 0.5 ? 0 : 1;
     }
 }

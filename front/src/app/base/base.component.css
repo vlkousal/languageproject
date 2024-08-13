@@ -31,11 +31,3 @@ body {
 .navbar a:hover {
     color: #d0d9cf;
 }
-
-.username {
-    margin-right: 10px;
-}
-
-body, html {
-    font-family: 'Open Sans', sans-serif;
-}

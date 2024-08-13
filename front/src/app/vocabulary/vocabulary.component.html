@@ -10,31 +10,12 @@
 			<i class="fas fa-cog"></i>
 		</button>
 	</div>
-  <p id="description">{{ description }}</p>
+    <p id="description">{{ description }}</p>
 	<p>{{ contributor}}</p>
-  <button (click)= "mode = 'one of three'">One Of Three</button>
-  <button (click)="mode = 'write the answer'">Write The Answer</button>
-  <button (click)="mode = 'flashcards'">Flashcards</button>
-	<button (click)="mode = 'drawing'">Draw Characters</button>
-
-	<div class="table-container">
-		<table id="table">
-			<tr>
-				<th (click)="VocabUtils.sortByFirst(this.words)"> {{ this.firstLanguage }}</th>
-				<th (click)="VocabUtils.sortByPhonetic(this.words)"> Phonetic</th>
-				<th (click)="VocabUtils.sortByAnswer(this.words)"> {{ this.secondLanguage }}</th>
-				<th (click)="VocabUtils.sortBySuccessRate(this.words)"> Correct rate</th>
-			</tr>
-
-			<tr *ngFor="let word of words">
-				<td>{{ word.question }}</td>
-				<td>{{ word.phonetic }}</td>
-				<td>{{ word.correct }}</td>
-				<td *ngIf="word.success_rate != -1">{{ word.success_rate }}%</td>
-				<td *ngIf="word.success_rate == -1">-</td>
-			</tr>
-		</table>
-	</div>
+    <button (click)= "mode = 'one of three'">One Of Three</button>
+    <button (click)="mode = 'write the answer'">Write The Answer</button>
+    <button (click)="mode = 'flashcards'">Flashcards</button>
+    <button (click)="mode = 'drawing'">Draw Characters</button>
 </div>
 
 <app-oneofthree [words]=words [url]=url (gameOver)="gameOver()" *ngIf="mode == 'one of three'"></app-oneofthree>

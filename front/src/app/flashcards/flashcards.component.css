@@ -11,6 +11,7 @@
     position: relative;
     margin-top: 100px;
     margin-bottom: 60px;
+    border: 2px solid var(--muted-teal);
 }
 
 .flashcard p{

@@ -60,13 +60,19 @@ export class VocabularyComponent {
                 answers.push(json.vocabulary[index].correct);
             }
             answers = Utils.shuffleList(answers);
-            word = new Word(word.id, 0, word.question, word.phonetic,
-              word.correct, answers);
-            console.log(word.correct, word.answers)
+
+            let flippedAnswers: string[] = [word.question];
+            for(let answer = 0; answer < 2; answer++) {
+                const index = Utils.getRandomDifferentIndex(i, json.vocabulary.length);
+                flippedAnswers.push(json.vocabulary[index].question);
+            }
+            flippedAnswers = Utils.shuffleList(flippedAnswers);
+
+            word = new Word(word.id, word.scores, word.question, word.phonetic,
+              word.correct, answers, flippedAnswers);
             words.push(word);
         });
         this.words = words;
-
         VocabUtils.sortByFirst(this.words);
         this.VocabUtils.sortByFirst(this.words);
     }

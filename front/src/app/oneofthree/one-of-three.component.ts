@@ -3,6 +3,7 @@ import {BACKEND, MAX_HEALTH, Mode, STREAK_FOR_HEALTH, Word} from "../constants";
 import {SpeechUtils} from "../speechutils";
 import {Utils} from "../utils";
 import {GameSettingsComponent} from "../game-settings/game-settings.component";
+import {VocabUtils} from "../vocabutils";
 
 @Component({
     selector: 'app-oneofthree',
@@ -23,15 +24,17 @@ export class OneOfThreeComponent {
     correctAnswers: number = 0;
     hideEnd: boolean = true;
     showSettings: boolean = false;
+    isFlipped: boolean = false;
 
     buttonColors: string[] = ["#F9F8EB", "#F9F8EB", "#F9F8EB"];
     allowAnswering: boolean = true;
 
     ngOnInit() {
         Utils.shuffleList(this.words);
-        this.current = this.words[0];
+        VocabUtils.sortByScore(this.words, Mode.OneOfThree);
+        console.log(this.words);
+        this.setNewWord();
         SpeechUtils.checkMute();
-        SpeechUtils.speak(this.current.question);
     }
 
     checkAnswer(answerIndex: number): void {
@@ -46,8 +49,9 @@ export class OneOfThreeComponent {
             this.buttonColors[answerIndex] = "#e8a9a9";
             let correctIndex = this.current.answers.indexOf(this.current.correct);
             this.buttonColors[correctIndex] = "#9ff19f";
-            SpeechUtils.speak(this.current.correct, true);
+            SpeechUtils.speak(this.current.correct, !this.isFlipped);
             this.allowAnswering = false;
+            this.isFlipped = false;
             setTimeout(() => {
                 this.buttonColors[answerIndex] = "#F9F8EB";
                 this.buttonColors[correctIndex] = "#F9F8EB";
@@ -79,18 +83,26 @@ export class OneOfThreeComponent {
     }
 
     setNewWord(): void {
-        this.index++;
         if(this.index == this.words.length) {
             this.hideEnd = false;
             return;
         }
-        this.current = this.words[this.index];
 
-        // TODO - make "flipped" words and make speaking in both languages functional
-        const firstLanguage: string | null = localStorage.getItem("firstLanguage");
-        if(firstLanguage != null) {
-            SpeechUtils.speak(this.current.question);
+        this.current = this.words[this.index];
+        // throw a coin to decide whether the languages get flipped
+        const coinFlip: number = Utils.flipACoin();
+        if(coinFlip == 1) {
+            this.isFlipped = true;
+            const temp = this.current.question;
+            this.current.question = this.current.correct;
+            this.current.correct = temp;
+            this.current.answers = [...this.current.flippedAnswers];
+            SpeechUtils.speak(this.current.question, true);
+        } else{
+            this.isFlipped = false;
+            SpeechUtils.speak(this.current.question, false);
         }
+        this.index++;
     }
 
     replay(): void {
@@ -142,7 +154,7 @@ export class OneOfThreeComponent {
     speakQuestion(): void {
         const firstLanguage: string | null = localStorage.getItem("firstLanguage");
         if(firstLanguage != null) {
-            SpeechUtils.speak(this.current.question);
+            SpeechUtils.speak(this.current.question, this.isFlipped);
         }
     }
 

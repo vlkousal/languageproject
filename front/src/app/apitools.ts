@@ -3,31 +3,29 @@ import {BACKEND} from "./constants";
 
 export class ApiTools {
 
-  static async getVocabJson(url: string): Promise<string> {
-    try {
-      const response = await fetch(BACKEND + 'api/getvocab/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({"url": url})
-      });
+    static async getVocabJson(url: string): Promise<string> {
+        try {
+            const response = await fetch(BACKEND + 'api/getvocab/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({"url": url, "token": localStorage.getItem("sessionId")})
+        });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok.');
-      }
+        if (!response.ok) {
+            throw new Error('Network response was not ok.');
+        }
+        return await response.text();
 
-      const data = await response.text();
-      return data;
-
-    } catch (error) {
-      console.error('Error:', error);
-      throw error;
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
     }
-  }
 
 
-  static sendResult(wordId: number, correct: boolean) {
+    static sendResult(wordId: number, correct: boolean) {
         const data = {
             "token": localStorage.getItem("sessionId"),
             "wordId": wordId,

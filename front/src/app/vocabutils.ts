@@ -1,4 +1,4 @@
-import {Word} from "./constants";
+import {Mode, Word} from "./constants";
 
 export class VocabUtils {
 
@@ -10,7 +10,7 @@ export class VocabUtils {
         });
     }
 
-    static sortByPhonetic(words: Word[]): void{
+    static sortByPhonetic(words: Word[]): void {
         words.sort((a, b) => {
             if (a.phonetic < b.phonetic) return -1;
             if (a.phonetic > b.phonetic) return 1;
@@ -18,7 +18,7 @@ export class VocabUtils {
         });
     }
 
-    static sortByAnswer(words: Word[]): void{
+    static sortByAnswer(words: Word[]): void {
         words.sort((a, b) => {
             if (a.correct < b.correct) return -1;
             if (a.correct > b.correct) return 1;
@@ -26,11 +26,12 @@ export class VocabUtils {
         });
     }
 
-    static sortBySuccessRate(words: Word[]): void{
+    static sortByScore(words: Word[], mode: Mode): Word[] {
         words.sort((a, b) => {
-            if (a.success_rate < b.success_rate) return -1;
-            if (a.success_rate > b.success_rate) return 1;
+            if (a.score[mode] < b.score[mode]) return -1;
+            if (a.score[mode] > b.score[mode]) return 1;
             return 0;
         });
+        return words;
     }
 }
