@@ -26,7 +26,7 @@
     padding: 0;
     margin: 0;
     color: var(--soft-ivory);
-    font-size: clamp(28px, 4vw, 60px);
+    font-size: clamp(34px, 6vw, 60px);
 }
 
 .question button:hover {
@@ -111,5 +111,5 @@ i {
 }
 
 #counter, #score, #lives {
-    margin-left: 10%;
+    margin-left: 8%;
 }
