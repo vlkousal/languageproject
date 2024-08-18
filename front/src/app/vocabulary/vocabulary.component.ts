@@ -77,11 +77,6 @@ export class VocabularyComponent {
         this.VocabUtils.sortByFirst(this.words);
     }
 
-    gameOver(): void {
-        console.log(":((");
-        this.mode = "none";
-    }
-
     resetCanvas() {
         const canvas = document.getElementById("canvas") as HTMLCanvasElement;
         const context = canvas.getContext("2d");

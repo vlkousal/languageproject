@@ -1,29 +1,18 @@
-
+<div id="flashcard-container">
+	<app-top-panel (emitter)="backEmitter.emit()"></app-top-panel>
 	<div class="flashcard">
-		<div class="top-panel">
-			<button class="back-button" >
-				<i class="fas fa-arrow-left"> </i>
-			</button>
-			<div class="top-buttons">
-				<button (click)="SpeechUtils.toggleMute()">
-					<i class="fas fa-volume-up" *ngIf="!SpeechUtils.isMuted"></i>
-					<i class="fas fa-volume-off" *ngIf="SpeechUtils.isMuted"></i>
-				</button>
-				<button>
-					<i class="fas fa-cog"></i>
-				</button>
-			</div>
-		</div>
 		<div class="front">
-			<h2>{{ current.question }}</h2>
-			<p>{{ current.phonetic }}</p>
+			<p id="question">{{ current.question }}</p>
+			<p id="phonetic">{{ current.phonetic }}</p>
 		</div>
 		<div class="back">
-			<h2>{{ current.correct }}</h2>
+			<p id="answer">{{ current.correct }}</p>
 		</div>
 	</div>
-
-	<div class="button-container">
-		<button (click)="prevFlashcard()"><</button>
-		<button (click)="nextFlashcard()">></button>
+	<div id="bottom-panel">
+		<i id="left-arrow" class="fas fa-arrow-left" (click)="prevFlashcard()"></i>
+		<p id="counter">{{ currentIndex + 1 }}/{{ words.length }}</p>
+		<i id="right-arrow" class="fas fa-arrow-right" (click)="nextFlashcard()"></i>
 	</div>
+</div>
+

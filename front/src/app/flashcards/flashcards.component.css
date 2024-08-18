@@ -1,17 +1,15 @@
-.flashcard-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.flashcard {
-    width: 400px;
-    height: 500px;
-    perspective: 1000px;
-    position: relative;
-    margin-top: 100px;
-    margin-bottom: 60px;
-    border: 2px solid var(--muted-teal);
+#flashcard-container {
+    min-width: 200px;
+    max-width: 400px;
+    width: 60%;
+    min-height: 300px;
+    max-height: 500px;
+    height: 50%;
+    border: 4px solid var(--muted-teal);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .flashcard p{
@@ -22,13 +20,13 @@
 .front,
 .back {
     width: 100%;
-    height: 100%;
+    height: 80%;
     position: absolute;
     backface-visibility: hidden;
 }
 
 .front {
-    background-color: #4CAF50;
+    background-color: var(--medium-mint);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -38,7 +36,7 @@
 }
 
 .back {
-    background-color: #dbe4e7;
+    background-color: var(--soft-ivory);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -53,4 +51,50 @@
 
 .flashcard:hover .back {
     transform: rotateY(0deg);
+}
+
+#bottom-panel {
+    width: 100%;
+    background-color: var(--medium-mint);
+    display: flex;
+    justify-content: space-between;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    align-items: center;
+}
+
+#left-arrow {
+    margin-left: 10px;
+}
+
+#right-arrow {
+    margin-right: 10px;
+}
+
+p {
+    color: var(--soft-ivory);
+}
+
+#question, #answer {
+    font-size: clamp(22px, 2vw, 36px);
+}
+
+#answer {
+    color: var(--muted-teal);
+}
+
+#phonetic {
+    font-size: clamp(18px, 2vw, 24px);
+}
+
+i {
+    color: var(--soft-ivory);
+    font-size: clamp(20px, 2vw, 28px);
+}
+
+#counter {
+    color: var(--soft-ivory);
+    font-size: clamp(18px, 2vw, 24px);
 }
