@@ -18,6 +18,7 @@ import { FlashcardsComponent } from './flashcards/flashcards.component';
 import { OneOfThreeComponent } from './oneofthree/one-of-three.component';
 import { WriteTheAnswerComponent } from './writetheanswer/write-the-answer.component';
 import { GameSettingsComponent } from './game-settings/game-settings.component';
+import { TopPanelComponent } from './top-panel/top-panel.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,7 +34,8 @@ import { GameSettingsComponent } from './game-settings/game-settings.component';
     FlashcardsComponent,
     OneOfThreeComponent,
     WriteTheAnswerComponent,
-    GameSettingsComponent
+    GameSettingsComponent,
+    TopPanelComponent
   ],
   imports: [
     BrowserModule,

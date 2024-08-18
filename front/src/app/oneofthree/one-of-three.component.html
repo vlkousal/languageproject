@@ -1,18 +1,5 @@
 <div class="container" *ngIf="hideEnd && !showSettings">
-	<div class="top-panel">
-		<button class="back-button" (click)="goBack()">
-			<i class="fas fa-arrow-left"> </i>
-		</button>
-		<div class="top-buttons">
-			<button (click)="SpeechUtils.toggleMute()">
-				<i class="fas fa-volume-up" *ngIf="!SpeechUtils.isMuted"></i>
-				<i class="fas fa-volume-off" *ngIf="SpeechUtils.isMuted"></i>
-			</button>
-			<button (click)="showSettings = !showSettings">
-				<i class="fas fa-cog"></i>
-			</button>
-		</div>
-	</div>
+	<app-top-panel (emitter)="emitter.emit()" (settingsEmitter)="showSettings = !showSettings"></app-top-panel>
 
 	<div id="stats-container">
 		<i id="flame" class="fas fa-fire">     {{ streak }}</i>

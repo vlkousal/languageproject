@@ -1,0 +1,30 @@
+.top-panel {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.back-button {
+    border: none;
+    width: 50px;
+    height: 50px;
+    background-color: var(--medium-mint);
+}
+
+.top-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10%;
+}
+
+.top-buttons button {
+    width: 50px;
+    height: 50px;
+    background-color: var(--medium-mint);
+    border: none;
+}
+
+i {
+    color: var(--soft-ivory);
+    font-size: clamp(20px, 2vw, 28px);
+}

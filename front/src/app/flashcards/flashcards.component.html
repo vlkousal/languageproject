@@ -1,5 +1,19 @@
-<div class="flashcard-container">
+
 	<div class="flashcard">
+		<div class="top-panel">
+			<button class="back-button" >
+				<i class="fas fa-arrow-left"> </i>
+			</button>
+			<div class="top-buttons">
+				<button (click)="SpeechUtils.toggleMute()">
+					<i class="fas fa-volume-up" *ngIf="!SpeechUtils.isMuted"></i>
+					<i class="fas fa-volume-off" *ngIf="SpeechUtils.isMuted"></i>
+				</button>
+				<button>
+					<i class="fas fa-cog"></i>
+				</button>
+			</div>
+		</div>
 		<div class="front">
 			<h2>{{ current.question }}</h2>
 			<p>{{ current.phonetic }}</p>
@@ -13,4 +27,3 @@
 		<button (click)="prevFlashcard()"><</button>
 		<button (click)="nextFlashcard()">></button>
 	</div>
-</div>

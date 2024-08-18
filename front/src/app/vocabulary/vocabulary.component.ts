@@ -78,6 +78,7 @@ export class VocabularyComponent {
     }
 
     gameOver(): void {
+        console.log(":((");
         this.mode = "none";
     }
 

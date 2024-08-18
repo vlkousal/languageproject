@@ -14,7 +14,8 @@ export class OneOfThreeComponent {
 
     @Input() words: Word[] = [];
     @Input() url: string = "";
-    @Output() gameOver: EventEmitter<void> = new EventEmitter();
+    @Output() emitter: EventEmitter<void> = new EventEmitter();
+    @Output() settingsEmitter: EventEmitter<void> = new EventEmitter();
     wrong: Word[] = [];
     index: number = 0;
     current: Word = this.words[0];
@@ -115,7 +116,7 @@ export class OneOfThreeComponent {
     }
 
     goBack(): void {
-        this.gameOver.emit();
+        this.emitter.emit();
     }
 
     sendResult(correct: boolean): void {

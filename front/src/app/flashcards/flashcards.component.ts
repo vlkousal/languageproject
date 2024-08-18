@@ -37,4 +37,6 @@ export class FlashcardsComponent {
         this.current = this.words[this.currentIndex];
         //SpeechUtils.speak(this.current.question);
     }
+
+    protected readonly SpeechUtils = SpeechUtils;
 }
