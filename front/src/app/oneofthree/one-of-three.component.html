@@ -1,5 +1,7 @@
 <div class="container" *ngIf="hideEnd && !showSettings">
-	<app-top-panel (emitter)="emitter.emit()" (settingsEmitter)="showSettings = !showSettings"></app-top-panel>
+	<div id="top-panel-container">
+		<app-top-panel (emitter)="emitter.emit()" (settingsEmitter)="showSettings = !showSettings"></app-top-panel>
+	</div>
 
 	<div id="stats-container">
 		<i id="flame" class="fas fa-fire">     {{ streak }}</i>
@@ -13,9 +15,9 @@
 			<button (click)="speakQuestion()">{{ current.question }}</button>
 		</div>
 		<p id="phonetic" *ngIf="localStorage.getItem('showPhonetic') != 'false' && !isFlipped">{{  current.phonetic }}</p>
-		<button [ngStyle]="{'background-color': buttonColors[0]}" (click)="checkAnswer(0)">{{ current.answers[0] }}</button>
-		<button [ngStyle]="{'background-color': buttonColors[1]}" (click)="checkAnswer(1)">{{ current.answers[1] }}</button>
-		<button [ngStyle]="{'background-color': buttonColors[2]}" (click)="checkAnswer(2)">{{ current.answers[2] }}</button>
+		<button [ngStyle]="{'background-color': buttonColors[0]}" (dblclick)="checkAnswer(0)" (click)="SpeechUtils.speak(current.answers[0], !isFlipped)"> {{ current.answers[0] }}</button>
+		<button [ngStyle]="{'background-color': buttonColors[1]}" (dblclick)="checkAnswer(1)" (click)="SpeechUtils.speak(current.answers[1], !isFlipped)">{{ current.answers[1] }}</button>
+		<button [ngStyle]="{'background-color': buttonColors[2]}" (dblclick)="checkAnswer(2)" (click)="SpeechUtils.speak(current.answers[2], !isFlipped)">{{ current.answers[2] }}</button>
 	</div>
 </div>
 

@@ -113,3 +113,8 @@ i {
 #counter, #score, #lives {
     margin-left: 8%;
 }
+
+#top-panel-container {
+    border-bottom: 2px solid var(--muted-teal);
+    margin-bottom: 10%;
+}

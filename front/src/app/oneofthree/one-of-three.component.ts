@@ -163,4 +163,5 @@ export class OneOfThreeComponent {
     protected readonly SpeechUtils = SpeechUtils;
     protected readonly GameSettingsComponent = GameSettingsComponent;
     protected readonly localStorage = localStorage;
+    protected readonly console = console;
 }
