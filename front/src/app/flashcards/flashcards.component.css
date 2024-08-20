@@ -17,15 +17,15 @@
     margin-top: 10px;
 }
 
-.front,
-.back {
+#front,
+#back {
     width: 100%;
     height: 80%;
     position: absolute;
     backface-visibility: hidden;
 }
 
-.front {
+#front {
     background-color: var(--medium-mint);
     display: flex;
     flex-direction: column;
@@ -35,7 +35,7 @@
     transition: transform 0.5s;
 }
 
-.back {
+#back {
     background-color: var(--soft-ivory);
     display: flex;
     flex-direction: column;
@@ -45,24 +45,17 @@
     transition: transform 0.5s;
 }
 
-.flashcard:hover .front {
-    transform: rotateY(-180deg);
-}
-
-.flashcard:hover .back {
-    transform: rotateY(0deg);
-}
-
 #bottom-panel {
     width: 100%;
     background-color: var(--medium-mint);
     display: flex;
     justify-content: space-between;
-
     position: absolute;
     bottom: 0;
     left: 0;
     align-items: center;
+    border-top: 4px solid var(--muted-teal);
+    height: 50px;
 }
 
 #left-arrow {
@@ -98,3 +91,8 @@ i {
     color: var(--soft-ivory);
     font-size: clamp(18px, 2vw, 24px);
 }
+
+#top-panel-container {
+    border-bottom: 4px solid var(--muted-teal);
+}
+

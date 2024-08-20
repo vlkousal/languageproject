@@ -1,11 +1,13 @@
 <div id="flashcard-container">
-	<app-top-panel (emitter)="backEmitter.emit()"></app-top-panel>
-	<div class="flashcard">
-		<div class="front">
+	<div id="top-panel-container">
+		<app-top-panel id="top-panel" (emitter)="backEmitter.emit()"></app-top-panel>
+	</div>
+	<div class="flashcard" (click)="toggleFlip()">
+		<div id="front" [ngStyle]="{'transform': isFlipped ? 'rotateY(-180deg)' : 'rotateY(0deg)'}">
 			<p id="question">{{ current.question }}</p>
 			<p id="phonetic">{{ current.phonetic }}</p>
 		</div>
-		<div class="back">
+		 <div id="back" [ngStyle]="{'transform': isFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)'}">
 			<p id="answer">{{ current.correct }}</p>
 		</div>
 	</div>
