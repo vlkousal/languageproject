@@ -76,35 +76,6 @@ i {
     margin-left: 10%;
 }
 
-.end-container {
-    width: 40%;
-}
-
-#end-phonetic {
-    font-style: italic;
-}
-
-#end-question {
-    font-size: clamp(14px, 1vw, 24px);
-}
-
-#wrong-word {
-    background-color: #eae7e7;
-    padding: 5px;
-    height: 140px;
-    width: 140px;
-    text-align: center;
-}
-
-#flex-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    margin-left: 15%;
-    margin-bottom: 10%;
-    overflow: scroll;
-}
-
 #bottom-panel {
     border: 2px solid pink;
     height: 2%;

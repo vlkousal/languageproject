@@ -12,11 +12,12 @@ import {Utils} from "../utils";
 export class FlashcardsComponent {
 
     @Input() words: Word[] = [];
-    @Output() backEmitter: EventEmitter<void> = new EventEmitter();
+    @Output() onGoBack: EventEmitter<void> = new EventEmitter();
 
     currentIndex: number = 0;
     current: Word = this.words[0];
     isFlipped: boolean = false;
+    showSettings: boolean = false;
 
     ngOnInit(): void {
         Utils.shuffleList(this.words);

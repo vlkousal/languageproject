@@ -1,6 +1,6 @@
 <div class="container" *ngIf="hideEnd && !showSettings">
 	<div id="top-panel-container">
-		<app-top-panel (emitter)="emitter.emit()" (settingsEmitter)="showSettings = !showSettings"></app-top-panel>
+		<app-top-panel (onGoBack)="onGoBack.emit()" (settingsEmitter)="showSettings = !showSettings"></app-top-panel>
 	</div>
 
 	<div id="stats-container">
@@ -22,32 +22,7 @@
 </div>
 
 <app-game-settings *ngIf="showSettings" [words]="words" (closeSettings)="showSettings = false"></app-game-settings>
+<app-end-screen *ngIf="!hideEnd" (onGoBack)="onGoBack.emit()"
+                [score]="score" [correct]="correctAnswers"
+                [wordCount]="words.length" [words]="words" [wrong]="wrong"></app-end-screen>
 
-
-<!--  END SCREEN -->
-<div id="end" class="container end-container" [hidden]="hideEnd">
-	<div class="top-panel">
-		<button class="back-button" (click)="goBack()">
-			<i class="fas fa-arrow-left"> </i>
-		</button>
-		<div class="top-buttons">
-			<button id="mute-button2" >
-				<i class="fas fa-volume-up"></i>
-			</button>
-			<button id="settings-button2" >
-				<i class="fas fa-cog"></i>
-			</button>
-		</div>
-	</div>
-		<p>Final score: {{ score }}</p>
-		<p>{{correctAnswers}}/{{ words.length }} ({{ Math.floor(correctAnswers / (words.length / 100)) }}%)</p>
-		<button (click)="replay()">Restart</button>
-	    <div id="flex-container">
-		    <div id="wrong-word" *ngFor="let word of wrong" (click)="speakQuestion()">
-
-			    <p id="end-question">{{ word.question }}</p>
-			    <p id="end-phonetic">{{ word.phonetic }}</p>
-			    <strong>{{ word.correct }}</strong>
-		    </div>
-	    </div>
-</div>

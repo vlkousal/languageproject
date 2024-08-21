@@ -19,6 +19,7 @@ import { OneOfThreeComponent } from './oneofthree/one-of-three.component';
 import { WriteTheAnswerComponent } from './writetheanswer/write-the-answer.component';
 import { GameSettingsComponent } from './game-settings/game-settings.component';
 import { TopPanelComponent } from './top-panel/top-panel.component';
+import { EndScreenComponent } from './end-screen/end-screen.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +36,8 @@ import { TopPanelComponent } from './top-panel/top-panel.component';
     OneOfThreeComponent,
     WriteTheAnswerComponent,
     GameSettingsComponent,
-    TopPanelComponent
+    TopPanelComponent,
+    EndScreenComponent
   ],
   imports: [
     BrowserModule,

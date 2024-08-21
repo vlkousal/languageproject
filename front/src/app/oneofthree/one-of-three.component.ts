@@ -14,7 +14,7 @@ export class OneOfThreeComponent {
 
     @Input() words: Word[] = [];
     @Input() url: string = "";
-    @Output() emitter: EventEmitter<void> = new EventEmitter();
+    @Output() onGoBack: EventEmitter<void> = new EventEmitter();
     @Output() settingsEmitter: EventEmitter<void> = new EventEmitter();
     wrong: Word[] = [];
     index: number = 0;
@@ -59,7 +59,7 @@ export class OneOfThreeComponent {
                 this.setNewWord();
                 this.allowAnswering = true;
                 this.evalWrong();
-            }, 2000);
+            }, 200); // back to 2000 after debug
         }
     }
 
@@ -116,7 +116,7 @@ export class OneOfThreeComponent {
     }
 
     goBack(): void {
-        this.emitter.emit();
+        this.onGoBack.emit();
     }
 
     sendResult(correct: boolean): void {

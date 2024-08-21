@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {SpeechUtils} from "../speechutils";
 
 @Component({
@@ -8,9 +8,10 @@ import {SpeechUtils} from "../speechutils";
 })
 export class TopPanelComponent {
 
-    showSettings: boolean = false;
-    @Output() emitter: EventEmitter<void> = new EventEmitter();
+    @Input() showMuteButton: boolean = true;
+    @Output() onGoBack: EventEmitter<void> = new EventEmitter();
     @Output() settingsEmitter: EventEmitter<void> = new EventEmitter();
+    showSettings: boolean = false;
 
     toggleSettings(): void {
         this.settingsEmitter.emit();
