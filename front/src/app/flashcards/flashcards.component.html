@@ -4,17 +4,17 @@
 	</div>
 	<div class="flashcard" (click)="toggleFlip()">
 		<div id="front" [ngStyle]="{'transform': isFlipped ? 'rotateY(-180deg)' : 'rotateY(0deg)'}">
-			<p id="question">{{ current.question }}</p>
-			<p id="phonetic">{{ current.phonetic }}</p>
+			<p id="question">{{ words[currentIndex].question }}</p>
+			<p id="phonetic">{{ words[currentIndex].phonetic }}</p>
 		</div>
 		 <div id="back" [ngStyle]="{'transform': isFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)'}">
-			<p id="answer">{{ current.correct }}</p>
+			<p id="answer">{{ words[currentIndex].correct }}</p>
 		</div>
 	</div>
 	<div id="bottom-panel">
-		<i id="left-arrow" class="fas fa-arrow-left" (click)="prevFlashcard()"></i>
+		<i id="left-arrow" class="fas fa-arrow-left" (click)="currentIndex = currentIndex - 1; switchFlashcard();"></i>
 		<p id="counter">{{ currentIndex + 1 }}/{{ words.length }}</p>
-		<i id="right-arrow" class="fas fa-arrow-right" (click)="nextFlashcard()"></i>
+		<i id="right-arrow" class="fas fa-arrow-right" (click)="currentIndex = currentIndex + 1; switchFlashcard()"></i>
 	</div>
 </div>
 

@@ -15,48 +15,35 @@ export class FlashcardsComponent {
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
 
     currentIndex: number = 0;
-    current: Word = this.words[0];
     isFlipped: boolean = false;
     showSettings: boolean = false;
 
     ngOnInit(): void {
         Utils.shuffleList(this.words);
-        this.current = this.words[0];
-        SpeechUtils.speak(this.current.question);
+        SpeechUtils.speak(this.words[this.currentIndex].question);
     }
 
-    async nextFlashcard(): Promise<void> {
-        await this.flipBack();
-        this.currentIndex = (++this.currentIndex) % this.words.length;
-        if(this.currentIndex >= this.words.length) {
+    switchFlashcard(): void {
+        this.flipBack();
+        if(this.currentIndex < 0){
+            this.currentIndex = this.words.length - 1;
+        } else if(this.currentIndex >= this.words.length){
             this.currentIndex = 0;
         }
-        this.current = this.words[this.currentIndex];
-        SpeechUtils.speak(this.current.question);
+        SpeechUtils.speak(this.words[this.currentIndex].question);
         this.isFlipped = false;
     }
 
-    async flipBack(): Promise<void> {
+    flipBack(): void {
         this.isFlipped = false;
-
-    }
-
-    prevFlashcard(): void {
-        this.isFlipped = false;
-        this.currentIndex = (--this.currentIndex) % this.words.length
-        if(this.currentIndex < 0) {
-            this.currentIndex = this.words.length - 1;
-        }
-        this.current = this.words[this.currentIndex];
-        SpeechUtils.speak(this.current.question);
     }
 
     toggleFlip(): void {
         this.isFlipped = !this.isFlipped;
         if(this.isFlipped) {
-            SpeechUtils.speak(this.current.correct, true);
+            SpeechUtils.speak(this.words[this.currentIndex].correct, true);
         } else{
-            SpeechUtils.speak(this.current.question);
+            SpeechUtils.speak(this.words[this.currentIndex].question);
         }
     }
 }
