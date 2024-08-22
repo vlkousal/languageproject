@@ -24,7 +24,7 @@ export class OneOfThreeComponent {
     score: number = 0;
     correctAnswers: number = 0;
     hideEnd: boolean = true;
-    showSettings: boolean = false;
+    showContent: boolean = false;
     isFlipped: boolean = false;
 
     buttonColors: string[] = ["#F9F8EB", "#F9F8EB", "#F9F8EB"];
@@ -33,7 +33,6 @@ export class OneOfThreeComponent {
     ngOnInit() {
         Utils.shuffleList(this.words);
         VocabUtils.sortByScore(this.words, Mode.OneOfThree);
-        console.log(this.words);
         this.setNewWord();
         SpeechUtils.checkMute();
     }

@@ -30,7 +30,6 @@ export class GameSettingsComponent {
 
         const phonetic = localStorage.getItem("showPhonetic");
         this.showPhonetic = phonetic == "true";
-
         this.languageNames = SpeechUtils.getVoices().sort();
         this.setFirstAndSecondLanguage();
     }

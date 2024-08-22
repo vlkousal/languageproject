@@ -14,8 +14,8 @@ export class TopPanelComponent {
     showSettings: boolean = false;
 
     toggleSettings(): void {
-        this.settingsEmitter.emit();
         this.showSettings = !this.showSettings;
+        this.settingsEmitter.emit();
     }
 
     protected readonly SpeechUtils = SpeechUtils;

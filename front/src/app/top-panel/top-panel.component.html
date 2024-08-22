@@ -1,5 +1,5 @@
 <div class="top-panel" *ngIf="!showSettings">
-	<button class="back-button" (click)="console.log('XD'); this.onGoBack.emit()">
+	<button class="back-button" (click)="this.onGoBack.emit()">
 		<i class="fas fa-arrow-left"></i>
 	</button>
 	<div class="top-buttons">
@@ -7,10 +7,8 @@
 			<i class="fas fa-volume-up" *ngIf="!SpeechUtils.isMuted"></i>
 			<i class="fas fa-volume-off" *ngIf="SpeechUtils.isMuted"></i>
 		</button>
-		<button (click)="showSettings = !showSettings; settingsEmitter.emit(); console.log('panel settings: ' + showSettings)">
+		<button (click)="toggleSettings()">
 			<i class="fas fa-cog"></i>
 		</button>
 	</div>
 </div>
-
-<app-game-settings *ngIf="showSettings" (closeSettings)="toggleSettings()"></app-game-settings>
