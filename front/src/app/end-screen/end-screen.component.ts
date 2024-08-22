@@ -13,7 +13,10 @@ export class EndScreenComponent {
     @Input() wordCount: number = 0;
     @Input() words: Word[] = [];
     @Input() wrong: Word[] = [];
+
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
+    @Output() onReplayAll: EventEmitter<void> = new EventEmitter();
+    @Output() onReplayWrong: EventEmitter<void> = new EventEmitter();
 
     showSettings: boolean = false;
     showFlashcards: boolean = false;

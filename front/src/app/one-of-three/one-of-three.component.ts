@@ -6,7 +6,7 @@ import {GameSettingsComponent} from "../game-settings/game-settings.component";
 import {VocabUtils} from "../vocabutils";
 
 @Component({
-    selector: 'app-oneofthree',
+    selector: 'app-one-of-three',
     templateUrl: './one-of-three.component.html',
     styleUrls: ['./one-of-three.component.css'],
 })
@@ -16,9 +16,9 @@ export class OneOfThreeComponent {
     @Input() url: string = "";
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
     @Output() settingsEmitter: EventEmitter<void> = new EventEmitter();
+    wordsCopy: Word[] = [];
     wrong: Word[] = [];
     index: number = 0;
-    current: Word = this.words[0];
     streak: number = 0;
     lives: number = 3;
     score: number = 0;
@@ -35,21 +35,23 @@ export class OneOfThreeComponent {
         VocabUtils.sortByScore(this.words, Mode.OneOfThree);
         this.setNewWord();
         SpeechUtils.checkMute();
+        this.wordsCopy = [...this.words];
+        console.log(this.words, this.wordsCopy);
     }
 
     checkAnswer(answerIndex: number): void {
         if(!this.allowAnswering) return;
 
-        let isCorrect: boolean = this.current.answers[answerIndex] == this.current.correct;
+        const currentWord: Word = this.words[this.index];
+        let isCorrect: boolean = currentWord.answers[answerIndex] == currentWord.correct;
         this.sendResult(isCorrect);
         if(isCorrect) {
             this.evalCorrect();
-            this.setNewWord();
         } else{
             this.buttonColors[answerIndex] = "#e8a9a9";
-            let correctIndex = this.current.answers.indexOf(this.current.correct);
+            let correctIndex = currentWord.answers.indexOf(currentWord.correct);
             this.buttonColors[correctIndex] = "#9ff19f";
-            SpeechUtils.speak(this.current.correct, !this.isFlipped);
+            SpeechUtils.speak(currentWord.correct, !this.isFlipped);
             this.allowAnswering = false;
             this.isFlipped = false;
             setTimeout(() => {
@@ -69,59 +71,84 @@ export class OneOfThreeComponent {
         }
         this.score += this.streak;
         this.correctAnswers++;
+
+        if(this.index == this.words.length - 1){
+            this.sendVocabSetResult();
+            this.hideEnd = false;
+            return;
+        }
+        this.index++;
     }
 
     evalWrong(): void {
         this.streak = 0;
         this.lives--;
-        this.wrong.push(this.current);
-        if(this.lives == 0) {
+        this.wrong.push(this.words[this.index]);
+        if(this.lives == 0 || this.index == this.words.length - 1) {
             this.sendVocabSetResult();
             this.hideEnd = false;
             return;
         }
+        this.index++;
     }
 
     setNewWord(): void {
         if(this.index == this.words.length) {
+            console.log("XDDDD");
             this.hideEnd = false;
             return;
         }
 
-        this.current = this.words[this.index];
+        const currentWord: Word = this.words[this.index];
         // throw a coin to decide whether the languages get flipped
         const coinFlip: number = Utils.flipACoin();
         if(coinFlip == 1) {
             this.isFlipped = true;
-            const temp = this.current.question;
-            this.current.question = this.current.correct;
-            this.current.correct = temp;
-            this.current.answers = [...this.current.flippedAnswers];
-            SpeechUtils.speak(this.current.question, true);
+            const temp = currentWord.question;
+            currentWord.question = currentWord.correct;
+            currentWord.correct = temp;
+            currentWord.answers = [...currentWord.flippedAnswers];
+            SpeechUtils.speak(currentWord.question, true);
         } else{
             this.isFlipped = false;
-            SpeechUtils.speak(this.current.question, false);
+            SpeechUtils.speak(currentWord.question, false);
         }
-        this.index++;
+        console.log("current:" + this.words[this.index]);
     }
 
-    replay(): void {
+    replayAll(): void {
+        this.words = [...this.wordsCopy];
+        console.log(this.words);
+        this.resetStats();
+    }
+
+    replayWrong() : void {
+        this.words = [];
+        this.wrong.forEach((word) => {
+            const found: Word | undefined = this.wordsCopy.find((w) => w.id == word.id);
+            if(found !== undefined) {
+                console.log("found");
+                this.words.push(found);
+            }
+        })
+        this.resetStats();
+    }
+
+    resetStats(): void {
         Utils.shuffleList(this.words);
-        this.current = this.words[0];
+        this.hideEnd = true;
+        this.index = 0;
+        this.setNewWord();
         this.lives = 3;
         this.score = 0;
         this.streak = 0;
-        this.hideEnd = true;
-    }
-
-    goBack(): void {
-        this.onGoBack.emit();
+        this.wrong = [];
     }
 
     sendResult(correct: boolean): void {
         const data = {
             token: localStorage.getItem("sessionId"),
-            wordId: this.current.id,
+            wordId: this.words[this.index].id,
             mode: Mode.OneOfThree,
             correct: correct
         };
@@ -154,7 +181,7 @@ export class OneOfThreeComponent {
     speakQuestion(): void {
         const firstLanguage: string | null = localStorage.getItem("firstLanguage");
         if(firstLanguage != null) {
-            SpeechUtils.speak(this.current.question, this.isFlipped);
+            SpeechUtils.speak(this.words[this.index].question, this.isFlipped);
         }
     }
 

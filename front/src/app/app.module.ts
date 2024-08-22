@@ -15,7 +15,7 @@ import {IndexComponent} from "./base/index.component";
 import { CollectionComponent } from './collection/collection.component';
 import {EditVocabularyComponent} from "./vocabulary/editvocabulary.component";
 import { FlashcardsComponent } from './flashcards/flashcards.component';
-import { OneOfThreeComponent } from './oneofthree/one-of-three.component';
+import { OneOfThreeComponent } from './one-of-three/one-of-three.component';
 import { WriteTheAnswerComponent } from './writetheanswer/write-the-answer.component';
 import { GameSettingsComponent } from './game-settings/game-settings.component';
 import { TopPanelComponent } from './top-panel/top-panel.component';

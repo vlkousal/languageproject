@@ -4,8 +4,8 @@
 		<p>Your score was: {{ score }}</p>
 		<p>{{ correct }}/{{ wordCount }} ({{ Math.floor((correct / wordCount) * 100) }}%) </p>
 
-		<button>Repeat All</button>
-		<button>Repeat wrong</button>
+		<button (click)="onReplayAll.emit()">Repeat All</button>
+		<button *ngIf="wrong.length != 0" (click)="onReplayWrong.emit()">Repeat wrong</button>
 		<button (click)="showFlashcards = true">Show flashcards</button>
 		You're out of touch, I'm out of time
 	</div>
