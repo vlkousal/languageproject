@@ -4,6 +4,7 @@ import {SpeechUtils} from "../speechutils";
 import {Utils} from "../utils";
 import {GameSettingsComponent} from "../game-settings/game-settings.component";
 import {VocabUtils} from "../vocabutils";
+import {ApiTools} from "../api-tools";
 
 @Component({
     selector: 'app-one-of-three',
@@ -26,16 +27,19 @@ export class OneOfThreeComponent {
     hideEnd: boolean = true;
     showContent: boolean = false;
     isFlipped: boolean = false;
-
+    highScore: number = 0;
     buttonColors: string[] = ["#F9F8EB", "#F9F8EB", "#F9F8EB"];
     allowAnswering: boolean = true;
     repeatingWrong: boolean = false;
 
-    ngOnInit() {
+    async ngOnInit() {
         Utils.shuffleList(this.words);
         VocabUtils.sortByScore(this.words, Mode.OneOfThree);
         this.setNewWord();
         this.wordsCopy = [...this.words];
+
+        const highScore: number = await ApiTools.getHighScore(this.url, Mode.OneOfThree);
+        console.log(highScore);
     }
 
     checkAnswer(answerIndex: number): void {
@@ -94,7 +98,7 @@ export class OneOfThreeComponent {
             this.isFlipped = true;
             this.words[this.index] = new Word(currentWord.id, currentWord.score, currentWord.correct,
                 currentWord.phonetic, currentWord.question, currentWord.flippedAnswers, currentWord.answers);
-            SpeechUtils.speak(currentWord.question, true);
+            SpeechUtils.speak(this.words[this.index].question, true);
             return;
         }
         this.isFlipped = false;
@@ -177,4 +181,5 @@ export class OneOfThreeComponent {
     protected readonly GameSettingsComponent = GameSettingsComponent;
     protected readonly localStorage = localStorage;
     protected readonly console = console;
+    protected readonly Mode = Mode;
 }

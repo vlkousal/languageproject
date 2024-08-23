@@ -1,6 +1,6 @@
 from datetime import timedelta
 from random import randint
-from typing import List
+from typing import List, Optional
 
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
@@ -12,6 +12,37 @@ from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from .models import Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord
 from utils import Mode
+
+
+@api_view(['POST'])
+def get_high_score(request):
+    token: str = request.data.get("token")
+    vocab_url: str = request.data.get("url")
+    mode: int = request.data.get("mode")
+
+    user: User = get_user(token)
+    if user is None:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    try:
+        vocab_set: VocabularySet = VocabularySet.objects.get(url=vocab_url)
+    except ObjectDoesNotExist:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    highest_score_set = VocabularySetRecord.objects.filter(user=user, set=vocab_set).order_by('-score').first()
+    if highest_score_set is None:
+        return Response(data={"highScore": -1}, status=status.HTTP_200_OK)
+    return Response(data={"highScore": highest_score_set.score}, status=status.HTTP_200_OK)
+
+
+def get_user(token: str):
+    try:
+        username: str = Session.objects.get(session_key=token).session_data
+        user = User.objects.get(username=username)
+        return user
+    except ObjectDoesNotExist:
+        return None
+
 
 @api_view(['POST'])
 def edit_vocab(request):

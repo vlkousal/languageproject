@@ -1,4 +1,4 @@
-import {BACKEND} from "./constants";
+import {BACKEND, Mode} from "./constants";
 
 
 export class ApiTools {
@@ -23,7 +23,6 @@ export class ApiTools {
             throw error;
         }
     }
-
 
     static sendResult(wordId: number, correct: boolean) {
         const data = {
@@ -76,6 +75,33 @@ export class ApiTools {
                 return await response.text();
             }
             throw new Error('Network response was not ok.');
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
+    }
+
+    static async getHighScore(url: string, mode: Mode): Promise<number> {
+        const data = {
+            "token": localStorage.getItem("sessionId"),
+            "url": url,
+            "mode": mode.valueOf()
+        }
+
+        try {
+            const response = await fetch(BACKEND + 'api/gethighscore/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok.');
+            }
+            const json = await response.json();
+            return json.highScore;
         } catch (error) {
             console.error('Error:', error);
             throw error;

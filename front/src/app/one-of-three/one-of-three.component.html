@@ -22,6 +22,6 @@
 </div>
 
 <app-game-settings *ngIf="showContent" [words]="words" (closeSettings)="showContent = false"></app-game-settings>
-<app-end-screen *ngIf="!hideEnd" [score]="score" [words]="words" [wrong]="wrong"
+<app-end-screen *ngIf="!hideEnd" [score]="score" [words]="words" [wrong]="wrong" [correctCount]="correctAnswers"
 (onGoBack)="onGoBack.emit()" (onReplayAll)="replayAll()" (onReplayWrong)="replayWrong()"></app-end-screen>
 

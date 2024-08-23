@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {FLAGS, Word} from "../constants";
 import {ActivatedRoute} from "@angular/router";
-import {ApiTools} from "../apitools";
+import {ApiTools} from "../api-tools";
 import {VocabUtils} from "../vocabutils";
 import {first} from "rxjs";
 import {Utils} from "../utils";

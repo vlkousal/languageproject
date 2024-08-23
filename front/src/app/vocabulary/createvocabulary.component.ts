@@ -2,7 +2,7 @@ import {Component, ElementRef, Renderer2, ViewChild} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {BACKEND, FLAGS, Word} from "../constants";
 import {Router} from "@angular/router";
-import {ApiTools} from "../apitools";
+import {ApiTools} from "../api-tools";
 
 @Component({
   selector: 'app-createvocabulary',

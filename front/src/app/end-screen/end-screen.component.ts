@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Word} from "../constants";
+import {BACKEND, Mode, Word} from "../constants";
+import {ApiTools} from "../api-tools";
 
 @Component({
   selector: 'app-end-screen',
@@ -9,8 +10,10 @@ import {Word} from "../constants";
 export class EndScreenComponent {
 
     @Input() score: number = 0;
+    @Input() correctCount: number = 0;
     @Input() words: Word[] = [];
     @Input() wrong: Word[] = [];
+    @Input() highScore: number = -1;
 
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
     @Output() onReplayAll: EventEmitter<void> = new EventEmitter();
@@ -18,10 +21,9 @@ export class EndScreenComponent {
 
     showSettings: boolean = false;
     showFlashcards: boolean = false;
-    correctCount: number = 0;
 
     ngOnInit(): void {
-        this.correctCount = this.words.length - this.wrong.length;
+
     }
 
     protected readonly Math = Math;
