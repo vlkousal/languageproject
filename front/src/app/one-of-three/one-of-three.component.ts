@@ -29,13 +29,13 @@ export class OneOfThreeComponent {
 
     buttonColors: string[] = ["#F9F8EB", "#F9F8EB", "#F9F8EB"];
     allowAnswering: boolean = true;
+    repeatingWrong: boolean = false;
 
     ngOnInit() {
         Utils.shuffleList(this.words);
         VocabUtils.sortByScore(this.words, Mode.OneOfThree);
         this.setNewWord();
         this.wordsCopy = [...this.words];
-        console.log(this.words, this.wordsCopy);
     }
 
     checkAnswer(answerIndex: number): void {
@@ -47,6 +47,7 @@ export class OneOfThreeComponent {
         if(isCorrect) {
             this.evalCorrect();
         } else{
+            this.evalWrong();
             this.buttonColors[answerIndex] = "#e8a9a9";
             let correctIndex = currentWord.answers.indexOf(currentWord.correct);
             this.buttonColors[correctIndex] = "#9ff19f";
@@ -56,15 +57,17 @@ export class OneOfThreeComponent {
                 this.buttonColors[answerIndex] = "#F9F8EB";
                 this.buttonColors[correctIndex] = "#F9F8EB";
                 this.allowAnswering = true;
-                this.evalWrong();
             }, 200); // back to 2000 after debug
         }
 
-        if(this.lives == 0 || this.index == this.words.length - 1){
-            this.sendResult(isCorrect);
+        if(this.lives == 0 || this.index == this.words.length - 1) {
             this.hideEnd = false;
+            if(!this.repeatingWrong) {
+                this.sendVocabSetResult();
+            }
             return;
         }
+        this.index++;
         this.setNewWord();
     }
 
@@ -75,25 +78,12 @@ export class OneOfThreeComponent {
         }
         this.score += this.streak;
         this.correctAnswers++;
-
-        if(this.index == this.words.length - 1){
-            this.sendVocabSetResult();
-            this.hideEnd = false;
-            return;
-        }
-        this.index++;
     }
 
     evalWrong(): void {
         this.streak = 0;
         this.lives--;
         this.wrong.push(this.words[this.index]);
-        if(this.lives == 0 || this.index == this.words.length - 1) {
-            this.sendVocabSetResult();
-            this.hideEnd = false;
-            return;
-        }
-        this.index++;
     }
 
     setNewWord(): void {
@@ -102,21 +92,17 @@ export class OneOfThreeComponent {
         const coinFlip: number = Utils.flipACoin();
         if(coinFlip == 1) {
             this.isFlipped = true;
-            const temp = currentWord.question;
-            currentWord.question = currentWord.correct;
-            currentWord.correct = temp;
-            currentWord.answers = [...currentWord.flippedAnswers];
+            this.words[this.index] = new Word(currentWord.id, currentWord.score, currentWord.correct,
+                currentWord.phonetic, currentWord.question, currentWord.flippedAnswers, currentWord.answers);
             SpeechUtils.speak(currentWord.question, true);
-        } else{
-            this.isFlipped = false;
-            SpeechUtils.speak(currentWord.question, false);
+            return;
         }
-
+        this.isFlipped = false;
+        SpeechUtils.speak(currentWord.question, false);
     }
 
     replayAll(): void {
         this.words = [...this.wordsCopy];
-        console.log(this.words);
         this.resetStats();
     }
 
@@ -125,11 +111,12 @@ export class OneOfThreeComponent {
         this.wrong.forEach((word) => {
             const found: Word | undefined = this.wordsCopy.find((w) => w.id == word.id);
             if(found !== undefined) {
-                console.log("found", word, found);
-                this.words.push(found);
+                const typed: Word = found;
+                this.words.push(typed);
             }
         })
         this.resetStats();
+        this.repeatingWrong = true;
     }
 
     resetStats(): void {
@@ -142,6 +129,7 @@ export class OneOfThreeComponent {
         this.streak = 0;
         this.wrong = [];
         this.correctAnswers = 0;
+        this.repeatingWrong = false;
     }
 
     sendResult(correct: boolean): void {
