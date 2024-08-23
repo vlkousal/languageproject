@@ -91,8 +91,3 @@ i {
     color: var(--soft-ivory);
     font-size: clamp(18px, 2vw, 24px);
 }
-
-#top-panel-container {
-    border-bottom: 4px solid var(--muted-teal);
-}
-

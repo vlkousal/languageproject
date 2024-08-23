@@ -68,6 +68,7 @@ i {
 }
 
 #stats-container {
+    margin-top: 10%;
     display: flex;
     justify-content: center;
 }
@@ -83,9 +84,4 @@ i {
 
 #counter, #score, #lives {
     margin-left: 8%;
-}
-
-#top-panel-container {
-    border-bottom: 2px solid var(--muted-teal);
-    margin-bottom: 10%;
 }

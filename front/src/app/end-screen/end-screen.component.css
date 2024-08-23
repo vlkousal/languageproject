@@ -1,3 +1,16 @@
 #end {
     text-align: center;
 }
+
+button {
+    margin: 10px;
+    background-color: var(--soft-ivory);
+    color: var(--muted-teal);
+    cursor: pointer;
+    height: 20%;
+    min-width: 100px;
+    min-height: 50px;
+    font-size: clamp(14px, 2vw, 20px);
+    width: max-content !important;
+    border: 2px solid var(--muted-teal);
+}

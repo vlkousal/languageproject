@@ -9,8 +9,6 @@ import {Word} from "../constants";
 export class EndScreenComponent {
 
     @Input() score: number = 0;
-    @Input() correct: number = 0;
-    @Input() wordCount: number = 0;
     @Input() words: Word[] = [];
     @Input() wrong: Word[] = [];
 
@@ -20,5 +18,11 @@ export class EndScreenComponent {
 
     showSettings: boolean = false;
     showFlashcards: boolean = false;
+    correctCount: number = 0;
+
+    ngOnInit(): void {
+        this.correctCount = this.words.length - this.wrong.length;
+    }
+
     protected readonly Math = Math;
 }

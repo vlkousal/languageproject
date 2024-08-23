@@ -1,13 +1,15 @@
 <div class="container" *ngIf="!showSettings && !showFlashcards">
+	<div id="top-panel-container">
+
+	</div>
 	<app-top-panel [showMuteButton]="false" (onGoBack)="onGoBack.emit()" (settingsEmitter)="showSettings = !showSettings"></app-top-panel>
 	<div id="end">
 		<p>Your score was: {{ score }}</p>
-		<p>{{ correct }}/{{ wordCount }} ({{ Math.floor((correct / wordCount) * 100) }}%) </p>
+		<p>{{ correctCount }}/{{ this.words.length }} ({{ Math.floor((correctCount / this.words.length) * 100) }}%) </p>
 
 		<button (click)="onReplayAll.emit()">Repeat All</button>
 		<button *ngIf="wrong.length != 0" (click)="onReplayWrong.emit()">Repeat wrong</button>
 		<button (click)="showFlashcards = true">Show flashcards</button>
-		You're out of touch, I'm out of time
 	</div>
 </div>
 

@@ -4,6 +4,10 @@ body {
     background-color: var(--soft-ivory);
 }
 
+#top-panel-container {
+    border-bottom: 2px solid var(--muted-teal);
+}
+
 .container {
     border-radius: 5px;
     background-color: var(--medium-mint);
