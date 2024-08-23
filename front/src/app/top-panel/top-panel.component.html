@@ -4,8 +4,8 @@
 	</button>
 	<div class="top-buttons">
 		<button (click)="SpeechUtils.toggleMute()" *ngIf="showMuteButton">
-			<i class="fas fa-volume-up" *ngIf="!SpeechUtils.isMuted"></i>
-			<i class="fas fa-volume-off" *ngIf="SpeechUtils.isMuted"></i>
+			<i class="fas fa-volume-up" *ngIf="!SpeechUtils.isMuted()"></i>
+			<i class="fas fa-volume-off" *ngIf="SpeechUtils.isMuted()"></i>
 		</button>
 		<button (click)="toggleSettings()">
 			<i class="fas fa-cog"></i>

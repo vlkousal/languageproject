@@ -2,10 +2,8 @@
 export class SpeechUtils {
 
     static utt: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
-    static isMuted: boolean = false;
 
     public static play(text: string, voice: SpeechSynthesisVoice): void {
-        if(this.isMuted) return;
         const volume = this.getVolume();
         this.utt.text = text;
         this.utt.volume = volume;
@@ -23,6 +21,7 @@ export class SpeechUtils {
     }
 
     public static speak(text: string, useSecondLanguage?: boolean): void {
+        if(this.isMuted()) return;
         let voiceName;
         if(useSecondLanguage) {
             const secondLanguage: string | null = localStorage.getItem("secondLanguage");
@@ -50,15 +49,16 @@ export class SpeechUtils {
     }
 
     public static toggleMute(): void {
-        this.isMuted = !this.isMuted;
-        localStorage.setItem("isMuted", String(this.isMuted));
+        const val = localStorage.getItem("isMuted");
+        if(val === null || val === "false"){
+            localStorage.setItem("isMuted", "true");
+        } else{
+            localStorage.setItem("isMuted", "false");
+        }
     }
 
-    public static checkMute(): void {
+    public static isMuted(): boolean {
         const val = localStorage.getItem("isMuted");
-
-        if(val == "true"){
-            this.isMuted = true;
-        }
+        return val === "true";
     }
 }

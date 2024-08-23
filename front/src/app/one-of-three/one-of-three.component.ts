@@ -34,7 +34,6 @@ export class OneOfThreeComponent {
         Utils.shuffleList(this.words);
         VocabUtils.sortByScore(this.words, Mode.OneOfThree);
         this.setNewWord();
-        SpeechUtils.checkMute();
         this.wordsCopy = [...this.words];
         console.log(this.words, this.wordsCopy);
     }
@@ -53,15 +52,20 @@ export class OneOfThreeComponent {
             this.buttonColors[correctIndex] = "#9ff19f";
             SpeechUtils.speak(currentWord.correct, !this.isFlipped);
             this.allowAnswering = false;
-            this.isFlipped = false;
             setTimeout(() => {
                 this.buttonColors[answerIndex] = "#F9F8EB";
                 this.buttonColors[correctIndex] = "#F9F8EB";
-                this.setNewWord();
                 this.allowAnswering = true;
                 this.evalWrong();
             }, 200); // back to 2000 after debug
         }
+
+        if(this.lives == 0 || this.index == this.words.length - 1){
+            this.sendResult(isCorrect);
+            this.hideEnd = false;
+            return;
+        }
+        this.setNewWord();
     }
 
     evalCorrect(): void {
@@ -93,12 +97,6 @@ export class OneOfThreeComponent {
     }
 
     setNewWord(): void {
-        if(this.index == this.words.length) {
-            console.log("XDDDD");
-            this.hideEnd = false;
-            return;
-        }
-
         const currentWord: Word = this.words[this.index];
         // throw a coin to decide whether the languages get flipped
         const coinFlip: number = Utils.flipACoin();
@@ -113,7 +111,7 @@ export class OneOfThreeComponent {
             this.isFlipped = false;
             SpeechUtils.speak(currentWord.question, false);
         }
-        console.log("current:" + this.words[this.index]);
+
     }
 
     replayAll(): void {
@@ -127,7 +125,7 @@ export class OneOfThreeComponent {
         this.wrong.forEach((word) => {
             const found: Word | undefined = this.wordsCopy.find((w) => w.id == word.id);
             if(found !== undefined) {
-                console.log("found");
+                console.log("found", word, found);
                 this.words.push(found);
             }
         })
@@ -143,6 +141,7 @@ export class OneOfThreeComponent {
         this.score = 0;
         this.streak = 0;
         this.wrong = [];
+        this.correctAnswers = 0;
     }
 
     sendResult(correct: boolean): void {

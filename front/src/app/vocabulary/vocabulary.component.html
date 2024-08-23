@@ -18,9 +18,9 @@
     <button (click)="mode = 'drawing'">Draw Characters</button>
 </div>
 
-<app-oneofthree [words]=words [url]=url (onGoBack)="this.mode = 'none'" *ngIf="mode == 'one of three'"></app-oneofthree>
+<app-one-of-three [words]=words [url]=url (onGoBack)="this.mode = 'none'" *ngIf="mode == 'one of three'"></app-one-of-three>
 <app-writetheanswer [words]=words *ngIf="mode == 'write the answer'"></app-writetheanswer>
-<app-flashcards [words]=words *ngIf="mode == 'flashcards'" (backEmitter)="this.mode = 'none'"></app-flashcards>
+<app-flashcards [words]=words *ngIf="mode == 'flashcards'" (onGoBack)="this.mode = 'none'"></app-flashcards>
 
 
 <!--
