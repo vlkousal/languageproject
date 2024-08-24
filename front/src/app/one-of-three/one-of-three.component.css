@@ -20,16 +20,16 @@
     background-color: var(--pastel-mint);
 }
 
-.question button {
+#question button {
     background: none;
     border: none;
     padding: 0;
     margin: 0;
     color: var(--soft-ivory);
-    font-size: clamp(34px, 6vw, 60px);
+    font-size: clamp(34px, 6vw, 52px);
 }
 
-.question button:hover {
+#question button:hover {
     background-color: var(--medium-mint);
 }
 

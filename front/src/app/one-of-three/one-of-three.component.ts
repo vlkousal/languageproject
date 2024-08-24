@@ -27,7 +27,7 @@ export class OneOfThreeComponent {
     hideEnd: boolean = true;
     showContent: boolean = false;
     isFlipped: boolean = false;
-    highScore: number = 0;
+    highScore: number = -1;
     buttonColors: string[] = ["#F9F8EB", "#F9F8EB", "#F9F8EB"];
     allowAnswering: boolean = true;
     repeatingWrong: boolean = false;
@@ -38,8 +38,8 @@ export class OneOfThreeComponent {
         this.setNewWord();
         this.wordsCopy = [...this.words];
 
-        const highScore: number = await ApiTools.getHighScore(this.url, Mode.OneOfThree);
-        console.log(highScore);
+        this.highScore = await ApiTools.getHighScore(this.url, Mode.OneOfThree);
+        console.log(this.highScore);
     }
 
     checkAnswer(answerIndex: number): void {
@@ -87,7 +87,8 @@ export class OneOfThreeComponent {
     evalWrong(): void {
         this.streak = 0;
         this.lives--;
-        this.wrong.push(this.words[this.index]);
+        const unflippedWord: Word | undefined = this.wordsCopy.find(w => w.id == this.words[this.index].id);
+        if(unflippedWord !== undefined) this.wrong.push(unflippedWord);
     }
 
     setNewWord(): void {

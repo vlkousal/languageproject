@@ -22,6 +22,7 @@ export class SpeechUtils {
 
     public static speak(text: string, useSecondLanguage?: boolean): void {
         if(this.isMuted()) return;
+        console.log(text, useSecondLanguage);
         let voiceName;
         if(useSecondLanguage) {
             const secondLanguage: string | null = localStorage.getItem("secondLanguage");
