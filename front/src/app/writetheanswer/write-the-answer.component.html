@@ -1,7 +1,8 @@
-<div class="container" [hidden]="!showSettings && hideEnd">
+<div class="container" [hidden]="!showEnd && !showSettings">
 	<div id="top-panel-container">
-		<app-top-panel (onGoBack)="this.onGoBack.emit()" (settingsEmitter)="showSettings = true; console.log(showSettings, hideEnd)"></app-top-panel>
+		<app-top-panel (onGoBack)="this.onGoBack.emit()" (settingsEmitter)="showSettings = true"></app-top-panel>
 	</div>
+
 	<div id="stats-container">
 		<i id="flame" class="fas fa-fire">     {{ streak }}</i>
 		<i id="counter" class="fas fa-atlas">     {{ index + 1 }}/{{ words.length }}</i>
@@ -16,5 +17,4 @@
 	<input id="answer" [formControl]="writtenAnswer" (keydown.enter)="checkWrittenAnswer()" autofocus>
 </div>
 
-
-<app-game-settings *ngIf="showSettings" [words]="words" (onGoBack)="showSettings = false; console.log(showSettings, hideEnd)"></app-game-settings>
+<app-game-settings *ngIf="showSettings" [words]="words" (onGoBack)="showSettings = false"></app-game-settings>

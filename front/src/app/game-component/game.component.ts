@@ -12,28 +12,20 @@ import {ApiTools} from "../api-tools";
 })
 export class GameComponent implements OnInit {
 
-    hideEnd: boolean = true;
-
+    showEnd: boolean = false;
     @Input() words: Word[] = [];
     @Input() url: string = "";
     wordsCopy: Word[] = [];
     wrong: Word[] = [];
-
     index: number = 0;
-
     isFlipped: boolean = false;
-
     streak: number = 0;
     lives: number = 3;
     score: number = 0;
     correctAnswers: number = 0;
-
     highScore: number = -1;
-
     repeatingWrong: boolean = false;
-
     showSettings: boolean = false;
-
     mode: Mode;
 
     constructor(mode: Mode) {
@@ -84,7 +76,7 @@ export class GameComponent implements OnInit {
 
     resetStats(): void {
         Utils.shuffleList(this.words);
-        this.hideEnd = true;
+        this.showEnd = false;
         this.index = 0;
         this.setNewWord();
         this.lives = 3;

@@ -1,4 +1,4 @@
-<div class="container" *ngIf="hideEnd && !showSettings">
+<div class="container" *ngIf="!showEnd && !showSettings">
 	<div id="top-panel-container">
 		<app-top-panel (onGoBack)="onGoBack.emit()" (settingsEmitter)="showSettings = !showSettings"></app-top-panel>
 	</div>
@@ -22,6 +22,6 @@
 </div>
 
 <app-game-settings *ngIf="showSettings" [words]="words" (onGoBack)="showSettings = false"></app-game-settings>
-<app-end-screen *ngIf="!hideEnd" [score]="score" [words]="words" [wrong]="wrong" [correctCount]="correctAnswers"
-[highScore]="highScore" (onGoBack)="onGoBack.emit()" (onReplayAll)="replayAll()" (onReplayWrong)="replayWrong()"></app-end-screen>
+<app-end-screen *ngIf="showEnd" [score]="score" [words]="words" [wrong]="wrong" [correctCount]="correctAnswers"
+                [highScore]="highScore" (onGoBack)="onGoBack.emit()" (onReplayAll)="replayAll()" (onReplayWrong)="replayWrong()"></app-end-screen>
 

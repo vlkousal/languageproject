@@ -1,8 +1,7 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {SpeechUtils} from "../speechutils";
 import {FormControl} from "@angular/forms";
-import {MAX_HEALTH, Mode, STREAK_FOR_HEALTH, Word} from "../constants";
-import {Utils} from "../utils";
+import {Mode} from "../constants";
 import {GameComponent} from "../game-component/game.component";
 
 @Component({
@@ -10,7 +9,6 @@ import {GameComponent} from "../game-component/game.component";
   templateUrl: './write-the-answer.component.html',
   styleUrls: ['./write-the-answer.component.css']
 })
-
 export class WriteTheAnswerComponent extends GameComponent {
 
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
@@ -40,7 +38,6 @@ export class WriteTheAnswerComponent extends GameComponent {
         }
     }
 
-    protected readonly SpeechUtils = SpeechUtils;
     protected readonly Math = Math;
     protected readonly localStorage = localStorage;
     protected readonly console = console;

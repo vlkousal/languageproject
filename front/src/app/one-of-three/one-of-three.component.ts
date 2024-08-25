@@ -46,7 +46,7 @@ export class OneOfThreeComponent extends GameComponent {
         }
 
         if(this.lives == 0 || this.index == this.words.length - 1) {
-            this.hideEnd = false;
+            this.showEnd = true;
             if(!this.repeatingWrong) {
                 this.sendVocabSetResult();
             }
