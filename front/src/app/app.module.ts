@@ -20,6 +20,7 @@ import { WriteTheAnswerComponent } from './writetheanswer/write-the-answer.compo
 import { GameSettingsComponent } from './game-settings/game-settings.component';
 import { TopPanelComponent } from './top-panel/top-panel.component';
 import { EndScreenComponent } from './end-screen/end-screen.component';
+import { GameComponent } from './game-component/game.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +38,8 @@ import { EndScreenComponent } from './end-screen/end-screen.component';
     WriteTheAnswerComponent,
     GameSettingsComponent,
     TopPanelComponent,
-    EndScreenComponent
+    EndScreenComponent,
+    GameComponent
   ],
   imports: [
     BrowserModule,
