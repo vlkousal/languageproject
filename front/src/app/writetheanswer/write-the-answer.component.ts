@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {SpeechUtils} from "../speechutils";
 import {FormControl} from "@angular/forms";
 import {MAX_HEALTH, STREAK_FOR_HEALTH, Word} from "../constants";
@@ -13,6 +13,8 @@ import {Utils} from "../utils";
 export class WriteTheAnswerComponent {
 
     @Input() words: Word[] = [];
+    @Output() onGoBack: EventEmitter<void> = new EventEmitter();
+
     index: number = 0;
     current: Word = new Word(-1, [], "q", "p", "c", [], []);
     wrong: Word[] = [];
@@ -23,6 +25,8 @@ export class WriteTheAnswerComponent {
     feedback: string = "";
     correctAnswers: number = 0;
     hideEnd: boolean = true;
+    isFlipped: boolean = false;
+    showSettings: boolean = false;
 
     ngOnInit() {
         Utils.shuffleList(this.words);
@@ -73,6 +77,13 @@ export class WriteTheAnswerComponent {
         //SpeechUtils.speak(this.current.question);
     }
 
+    speakQuestion(): void {
+        const firstLanguage: string | null = localStorage.getItem("firstLanguage");
+        if(firstLanguage != null) {
+            SpeechUtils.speak(this.words[this.index].question, this.isFlipped);
+        }
+    }
+
     replay() {
         Utils.shuffleList(this.words);
         this.current = this.words[0];
@@ -84,4 +95,5 @@ export class WriteTheAnswerComponent {
 
     protected readonly SpeechUtils = SpeechUtils;
     protected readonly Math = Math;
+    protected readonly localStorage = localStorage;
 }

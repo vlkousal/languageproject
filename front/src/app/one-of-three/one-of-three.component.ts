@@ -25,7 +25,7 @@ export class OneOfThreeComponent {
     score: number = 0;
     correctAnswers: number = 0;
     hideEnd: boolean = true;
-    showContent: boolean = false;
+    showSettings: boolean = false;
     isFlipped: boolean = false;
     highScore: number = -1;
     buttonColors: string[] = ["#F9F8EB", "#F9F8EB", "#F9F8EB"];

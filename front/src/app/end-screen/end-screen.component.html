@@ -15,5 +15,5 @@
 	</div>
 </div>
 
-<app-game-settings *ngIf="showSettings" [words]="words" (closeSettings)="showSettings = false"></app-game-settings>
+<app-game-settings *ngIf="showSettings" [words]="words" (onGoBack)="showSettings = false"></app-game-settings>
 <app-flashcards *ngIf="showFlashcards" [words]="wrong" (onGoBack)="showFlashcards = false"></app-flashcards>

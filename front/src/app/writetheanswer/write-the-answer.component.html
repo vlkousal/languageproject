@@ -1,24 +1,19 @@
-<!--  WRITE THE ANSWER -->
-<div class="container" [hidden]="!hideEnd">
-	<p>{{ index + 1 }}/{{ words.length }}     Score: {{ score }}</p>
-	<p>Streak: {{ streak }}</p>
-	<div title="Lives: {{ lives }}" class="hearts" *ngFor="let item of [].constructor(lives); let i = index">
-		<img src="../../assets/heart.png" alt="Lives">
+<div class="container" [hidden]="!showSettings && !hideEnd">
+	<div id="top-panel-container">
+		<app-top-panel (onGoBack)="this.onGoBack.emit()"></app-top-panel>
 	</div>
-	<br><br>
-	<strong style="font-size: 20px">{{ feedback }}</strong>
-	<div title="{{ current.phonetic}}" class="question">
-		<button (click)="SpeechUtils.speak(current.question)">{{ current.question }}</button>
+	<div id="stats-container">
+		<i id="flame" class="fas fa-fire">     {{ streak }}</i>
+		<i id="counter" class="fas fa-atlas">     {{ index + 1 }}/{{ words.length }}</i>
+		<i id="score" class="fas fa-star">     {{ score }}</i>
+		<i id="lives" class="fas fa-heart">     {{ lives }}</i>
 	</div>
-	<input [formControl]="writtenAnswer" (keydown.enter)="checkWrittenAnswer()">
+
+	<div id="question">
+		<button (click)="speakQuestion()">{{ words[index].question }}</button>
+	</div>
+	<p id="phonetic" [style.visibility]="(localStorage.getItem('showPhonetic') != 'false' && !isFlipped) ? 'visible' : 'hidden'">{{  words[index].phonetic }}</p>
+	<input id="answer" [formControl]="writtenAnswer" (keydown.enter)="checkWrittenAnswer()" autofocus>
 </div>
 
-<!--  END SCREEN -->
-<div class="end" [hidden]="hideEnd">
-	<h1>Final score: {{ score }}</h1>
-	<h3>{{correctAnswers}}/{{ words.length }} ({{ Math.floor(correctAnswers / (words.length / 100)) }}%)</h3>
-	<button (click)="replay()">Restart</button>
-	<div *ngFor="let word of wrong">
-		<p><button (click)="SpeechUtils.speak(word.question)">{{ word.question }}</button> ({{ word.phonetic }}) - {{ word.correct }}</p>
-	</div>
-</div>
+<app-game-settings (onGoBack)="showSettings = !showSettings" *ngIf="showSettings"></app-game-settings>

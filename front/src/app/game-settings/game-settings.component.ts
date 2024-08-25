@@ -11,7 +11,7 @@ import {FLAGS, Word} from "../constants";
 export class GameSettingsComponent {
 
     @Input() words: Word[] = [];
-    @Output() closeSettings: EventEmitter<void> = new EventEmitter();
+    @Output() onGoBack: EventEmitter<void> = new EventEmitter();
     volume: number = 1;
     languageNames: string[] = [];
     firstLanguage: string = "first";

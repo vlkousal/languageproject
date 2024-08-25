@@ -18,4 +18,4 @@
 	</div>
 </div>
 
-<app-game-settings *ngIf="showSettings" [words]="words" (closeSettings)="showSettings = false"></app-game-settings>
+<app-game-settings *ngIf="showSettings" [words]="words" (onGoBack)="showSettings = false"></app-game-settings>

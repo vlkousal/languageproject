@@ -22,9 +22,5 @@ export class EndScreenComponent {
     showSettings: boolean = false;
     showFlashcards: boolean = false;
 
-    ngOnInit(): void {
-
-    }
-
     protected readonly Math = Math;
 }
