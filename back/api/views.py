@@ -1,7 +1,6 @@
 from datetime import timedelta
 from random import randint
-from typing import List, Optional
-
+from typing import List
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
@@ -11,8 +10,6 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from .models import Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord
-from utils import Mode
-
 
 @api_view(['POST'])
 def get_high_score(request):
@@ -29,7 +26,11 @@ def get_high_score(request):
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    highest_score_set = VocabularySetRecord.objects.filter(user=user, set=vocab_set).order_by('-score').first()
+    if mode is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    highest_score_set = VocabularySetRecord.objects.filter(user=user, set=vocab_set, mode=str(mode)).order_by(
+    '-score').first()
     if highest_score_set is None:
         return Response(data={"highScore": -1}, status=status.HTTP_200_OK)
     return Response(data={"highScore": highest_score_set.score}, status=status.HTTP_200_OK)
@@ -70,27 +71,26 @@ def edit_vocab(request):
 
 @api_view(['POST'])
 def send_vocab_result(request):
-  token = request.data.get("token")
+    token: str = request.data.get("token")
+    set_url = request.data.get("setUrl")
+    score = request.data.get("score")
+    mode: str = request.data.get("mode")
 
-  try:
-      username = Session.objects.get(session_key=token).session_data
-      user = User.objects.get(username=username)
-  except ObjectDoesNotExist:
-      return Response(status=status.HTTP_401_UNAUTHORIZED)
+    try:
+        username = Session.objects.get(session_key=token).session_data
+        user = User.objects.get(username=username)
+    except ObjectDoesNotExist:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-  set_url = request.data.get("setUrl")
+    try:
+        vocab_set = VocabularySet.objects.get(url=set_url)
+    except ObjectDoesNotExist:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
-  try:
-      vocab_set = VocabularySet.objects.get(url=set_url)
-  except ObjectDoesNotExist:
-      return Response(status=status.HTTP_400_BAD_REQUEST)
-
-  score = request.data.get("score")
-  if score is None:
-    return Response(status=status.HTTP_400_BAD_REQUEST)
-
-  VocabularySetRecord.objects.create(user=user, set=vocab_set, score=score).save()
-  return Response(status=status.HTTP_200_OK)
+    if score is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    VocabularySetRecord.objects.create(user=user, set=vocab_set, score=score, mode=str(mode)).save()
+    return Response(status=status.HTTP_200_OK)
 
 
 @api_view(["POST"])
@@ -114,26 +114,33 @@ def add_result(request):
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+    if mode is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
     filtered = WordRecord.objects.filter(user=user, word=word)
     if not filtered.exists():
         record = WordRecord.objects.create(user=user, word=word)
+        record.save()
     else:
         record = filtered.first()
 
-    if mode == Mode.ONE_OF_THREE.value:
-        if correct:
-            new_score: int = record.one_of_three_score + 10 + record.one_of_three_streak
-            if new_score > 100:
-                record.one_of_three_score = 100
+    if correct:
+        if str(mode) == VocabularySetRecord.Mode.ONE_OF_THREE:
+            if correct:
+                new_score: int = record.one_of_three_score + 10 + record.one_of_three_streak
+                record.one_of_three_score = 100 if new_score > 100 else new_score
+                record.one_of_three_streak += 1
             else:
-                record.one_of_three_score = new_score
-            record.one_of_three_streak += 1
-        else:
-            if record.one_of_three_score - 10 < 0:
-                record.one_of_three_score = 0
+                record.one_of_three_score = 0 if record.one_of_three_score - 10 < 0 else record.one_of_three_score - 10
+                record.one_of_three_streak = 0
+        elif str(mode) == VocabularySetRecord.Mode.WRITE_THE_ANSWER:
+            if correct:
+                new_score: int = record.write_the_answer_score + 10 + record.write_the_answer_score
+                record.write_the_answer_score = 100 if new_score > 100 else new_score
+                record.write_the_answer_streak += 1
             else:
-                record.one_of_three_score = record.one_of_three_score - 10
-            record.one_of_three_streak = 0
+                record.write_the_answer_score = 0 if record.write_the_answer_score - 10 < 0 else record.write_the_answer_score - 10
+                record.write_the_answer_streak = 0
     record.save()
     return Response(status=status.HTTP_200_OK)
 

@@ -21,6 +21,7 @@ import { GameSettingsComponent } from './game-settings/game-settings.component';
 import { TopPanelComponent } from './top-panel/top-panel.component';
 import { EndScreenComponent } from './end-screen/end-screen.component';
 import { GameComponent } from './game-component/game.component';
+import { DrawCharactersComponent } from './draw-characters/draw-characters.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +40,8 @@ import { GameComponent } from './game-component/game.component';
     GameSettingsComponent,
     TopPanelComponent,
     EndScreenComponent,
-    GameComponent
+    GameComponent,
+    DrawCharactersComponent
   ],
   imports: [
     BrowserModule,

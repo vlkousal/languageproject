@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {SpeechUtils} from "../speechutils";
 import {FormControl} from "@angular/forms";
-import {Mode} from "../constants";
+import {Mode, Word} from "../constants";
 import {GameComponent} from "../game-component/game.component";
 
 @Component({
@@ -18,17 +18,28 @@ export class WriteTheAnswerComponent extends GameComponent {
         super(Mode.WriteTheAnswer)
     }
 
-    checkWrittenAnswer(): void{
+    checkAnswer(): void {
         const answer: string = this.writtenAnswer.getRawValue();
-        if(answer.length != 0) {
-            if(this.words[this.index].correct == answer) {
-                this.evalCorrect();
-            } else{
-                this.evalWrong();
-            }
-            this.setNewWord();
+        const currentWord: Word = this.words[this.index];
+        const isCorrect: boolean = currentWord.correct == answer;
+        this.sendResult(isCorrect);
+        if(isCorrect) {
+            this.evalCorrect();
+        } else{
+            this.evalWrong();
+            SpeechUtils.speak(currentWord.correct, !this.isFlipped);
         }
         this.writtenAnswer.setValue("");
+
+        if(this.lives == 0 || this.index == this.words.length - 1) {
+            this.showEnd = true;
+            if(!this.repeatingWrong) {
+                this.sendVocabSetResult();
+            }
+            return;
+        }
+        this.index++;
+        this.setNewWord();
     }
 
     speakQuestion(): void {

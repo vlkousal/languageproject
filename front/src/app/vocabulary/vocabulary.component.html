@@ -19,7 +19,7 @@
 </div>
 
 <app-one-of-three [words]=words [url]=url (onGoBack)="this.mode = 'none'" *ngIf="mode == 'one of three'"></app-one-of-three>
-<app-writetheanswer [words]=words (onGoBack)="this.mode = 'none'" *ngIf="mode == 'write the answer'"></app-writetheanswer>
+<app-writetheanswer [words]=words [url]="url" (onGoBack)="this.mode = 'none'" *ngIf="mode == 'write the answer'"></app-writetheanswer>
 <app-flashcards [words]=words *ngIf="mode == 'flashcards'" (onGoBack)="this.mode = 'none'"></app-flashcards>
 
 

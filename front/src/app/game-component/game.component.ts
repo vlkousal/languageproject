@@ -119,4 +119,21 @@ export class GameComponent implements OnInit {
         this.isFlipped = false;
         SpeechUtils.speak(currentWord.question, false);
     }
+
+    sendVocabSetResult(): void {
+        const data = {
+            token: localStorage.getItem("sessionId"),
+            setUrl: this.url,
+            score: this.score,
+            mode: this.mode
+        }
+
+        fetch(`${BACKEND}api/sendvocabresult/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })
+    }
 }

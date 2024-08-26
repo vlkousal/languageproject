@@ -23,7 +23,7 @@ export class OneOfThreeComponent extends GameComponent {
         if(!this.allowAnswering) return;
 
         const currentWord: Word = this.words[this.index];
-        let isCorrect: boolean = currentWord.answers[answerIndex] == currentWord.correct;
+        const isCorrect: boolean = currentWord.answers[answerIndex] == currentWord.correct;
         this.sendResult(isCorrect);
         if(isCorrect) {
             this.evalCorrect();
@@ -50,22 +50,6 @@ export class OneOfThreeComponent extends GameComponent {
         }
         this.index++;
         this.setNewWord();
-    }
-
-    sendVocabSetResult(): void {
-        const data = {
-            token: localStorage.getItem("sessionId"),
-            setUrl: this.url,
-            score: this.score
-        }
-
-        fetch(`${BACKEND}api/sendvocabresult/`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data)
-        })
     }
 
     speakQuestion(): void {

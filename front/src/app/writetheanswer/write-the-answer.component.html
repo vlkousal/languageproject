@@ -14,7 +14,9 @@
 		<button (click)="speakQuestion()">{{ words[index].question }}</button>
 	</div>
 	<p id="phonetic" [style.visibility]="(localStorage.getItem('showPhonetic') != 'false' && !isFlipped) ? 'visible' : 'hidden'">{{  words[index].phonetic }}</p>
-	<input id="answer" [formControl]="writtenAnswer" (keydown.enter)="checkWrittenAnswer()" autofocus>
+	<input id="answer" [formControl]="writtenAnswer" (keydown.enter)="checkAnswer()" autofocus>
 </div>
 
 <app-game-settings *ngIf="showSettings" [words]="words" (onGoBack)="showSettings = false"></app-game-settings>
+<app-end-screen *ngIf="showEnd" [score]="score" [words]="words" [wrong]="wrong" [correctCount]="correctAnswers"
+                [highScore]="highScore" (onGoBack)="onGoBack.emit()" (onReplayAll)="replayAll()" (onReplayWrong)="replayWrong()"></app-end-screen>

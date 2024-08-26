@@ -40,8 +40,11 @@ class VocabularySet(models.Model):
 class WordRecord(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     word = models.ForeignKey(WordEntry, on_delete=models.CASCADE)
+
     one_of_three_score = models.IntegerField(default=0)
     one_of_three_streak = models.IntegerField(default=0)
+    write_the_answer_score = models.IntegerField(default=0)
+    write_the_answer_streak = models.IntegerField(default=0)
 
     def __str__(self):
         return (self.user.username + " - " + self.word.first +
@@ -50,8 +53,8 @@ class WordRecord(models.Model):
 
 class VocabularySetRecord(models.Model):
     class Mode(models.TextChoices):
-        ONE_OF_THREE = 'OTT', _('One Of Three')
-        WRITE_THE_ANSWER = 'WTA', _('Write The Answer')
+        ONE_OF_THREE = 0, _('One Of Three')
+        WRITE_THE_ANSWER = 1, _('Write The Answer')
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     set = models.ForeignKey(VocabularySet, on_delete=models.CASCADE)
