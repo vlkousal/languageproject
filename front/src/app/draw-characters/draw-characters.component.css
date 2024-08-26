@@ -1,0 +1,23 @@
+#stats-container {
+    margin-top: 10%;
+    display: flex;
+    justify-content: center;
+}
+
+#counter, #score, #lives {
+    margin-left: 8%;
+}
+
+i {
+    color: var(--soft-ivory);
+    font-size: clamp(20px, 2vw, 28px);
+}
+
+.canvas-container{
+    text-align: center;
+}
+
+canvas {
+    border: 2px solid var(--muted-teal);
+    background-color: var(--soft-ivory);
+}

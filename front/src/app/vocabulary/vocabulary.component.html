@@ -21,12 +21,4 @@
 <app-one-of-three [words]=words [url]=url (onGoBack)="this.mode = null" *ngIf="mode == Mode.OneOfThree"></app-one-of-three>
 <app-writetheanswer [words]=words [url]="url" (onGoBack)="this.mode = null" *ngIf="mode == Mode.WriteTheAnswer"></app-writetheanswer>
 <app-flashcards [words]=words *ngIf="mode == Mode.Flashcards" (onGoBack)="this.mode = null"></app-flashcards>
-<app-draw-characters [words]=words *ngIf="mode == Mode.DrawCharacters" (onGoBack)="this.mode = null"></app-draw-characters>
-<!--
-<div class="canvas-container" [hidden]="mode == 'drawing'">
-	<canvas id="canvas" width="201" height="201"></canvas>
-
-	<button (click)="resetCanvas()">Clear</button>
-	<button (click)="checkDrawing()">Check</button>
-</div>
--->
+<app-draw-characters [words]=characters *ngIf="mode == Mode.DrawCharacters" (onGoBack)="this.mode = null"></app-draw-characters>

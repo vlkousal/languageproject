@@ -1,13 +1,17 @@
-<div class="container" *ngIf="!showEnd && !showSettings">
+<div class="container">
 	<div id="top-panel-container">
-		<app-top-panel (onGoBack)="onGoBack.emit()" (settingsEmitter)="showSettings = !showSettings"></app-top-panel>
+		<app-top-panel (onGoBack)="onGoBack.emit()"></app-top-panel>
 	</div>
 
 	<div id="stats-container">
-		<i id="flame" class="fas fa-fire">     {{ streak }}</i>
 		<i id="counter" class="fas fa-atlas">     {{ index + 1 }}/{{ words.length }}</i>
-		<i id="score" class="fas fa-star">     {{ score }}</i>
-		<i id="lives" class="fas fa-heart">     {{ lives }}</i>
+	</div>
+
+	<div class="canvas-container">
+		<canvas id="canvas" width="201" height="201"></canvas>
+
+		<button (click)="resetCanvas()">Clear</button>
+		<button (click)="checkDrawing()">Check</button>
 	</div>
 
 </div>

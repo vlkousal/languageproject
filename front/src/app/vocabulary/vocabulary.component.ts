@@ -14,6 +14,8 @@ import {Utils} from "../utils";
 export class VocabularyComponent {
 
     words: Word[] = [];
+    characters: Word[] = [];
+
     index: number = 0;
     feedback: string = "";
     url: string = "";
@@ -33,11 +35,10 @@ export class VocabularyComponent {
             this.url = params['vocabUrl'];
         });
         await this.setup();
+        this.characters = this.words.filter(w => w.question.length === 1);
 
         this.languageNames.sort();
-        //Drawing.prepCanvas();
         this.loading = false;
-
         localStorage.setItem("firstLanguage", this.firstLanguage);
         localStorage.setItem("secondLanguage", this.secondLanguage);
     }
@@ -74,22 +75,6 @@ export class VocabularyComponent {
         this.words = words;
         VocabUtils.sortByFirst(this.words);
         this.VocabUtils.sortByFirst(this.words);
-    }
-
-    resetCanvas() {
-        const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-        const context = canvas.getContext("2d");
-        if(context == null) return;
-        // Clear the entire canvas
-        context.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    checkDrawing() {
-        const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-        const context = canvas.getContext('2d');
-        if(context != null) {
-            context.fillText("我", 0, 170);
-        }
     }
 
     protected readonly VocabUtils = VocabUtils;
