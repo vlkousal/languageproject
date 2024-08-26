@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {FLAGS, Word} from "../constants";
+import {FLAGS, Mode, Word} from "../constants";
 import {ActivatedRoute} from "@angular/router";
 import {ApiTools} from "../api-tools";
 import {VocabUtils} from "../vocabutils";
@@ -23,7 +23,7 @@ export class VocabularyComponent {
     firstLanguage: string = "";
     secondLanguage: string = "";
     languageNames: string[] = [];
-    mode: string = "none";
+    mode: Mode | null = null;
     loading: boolean = true;
 
     constructor(private route: ActivatedRoute) {}
@@ -95,4 +95,5 @@ export class VocabularyComponent {
     protected readonly VocabUtils = VocabUtils;
     protected readonly first = first;
     protected readonly FLAGS = FLAGS;
+    protected readonly Mode = Mode;
 }

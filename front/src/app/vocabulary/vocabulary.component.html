@@ -3,7 +3,7 @@
 <div class="spinner" [hidden]="!loading"></div>
 
 <!--  PREVIEW -->
-<div id="container" *ngIf="mode == 'none' && !loading">
+<div id="container" *ngIf="mode == null && !loading">
 	<div id="top-panel">
 		<h2>{{ name }} {{ FLAGS[firstLanguage] }} {{ FLAGS[secondLanguage] }}</h2>
 		<button class="settings-button" >
@@ -12,16 +12,16 @@
 	</div>
     <p id="description">{{ description }}</p>
 	<p>{{ contributor}}</p>
-    <button (click)= "mode = 'one of three'">One Of Three</button>
-    <button (click)="mode = 'write the answer'">Write The Answer</button>
-    <button (click)="mode = 'flashcards'">Flashcards</button>
-    <button (click)="mode = 'drawing'">Draw Characters</button>
+    <button (click)= "mode = Mode.OneOfThree">One Of Three</button>
+    <button (click)="mode = Mode.WriteTheAnswer">Write The Answer</button>
+    <button (click)="mode = Mode.Flashcards">Flashcards</button>
+    <button (click)="mode = Mode.DrawCharacters">Draw Characters</button>
 </div>
 
-<app-one-of-three [words]=words [url]=url (onGoBack)="this.mode = 'none'" *ngIf="mode == 'one of three'"></app-one-of-three>
-<app-writetheanswer [words]=words [url]="url" (onGoBack)="this.mode = 'none'" *ngIf="mode == 'write the answer'"></app-writetheanswer>
-<app-flashcards [words]=words *ngIf="mode == 'flashcards'" (onGoBack)="this.mode = 'none'"></app-flashcards>
-<app-draw-characters [words]=words *ngIf="mode == 'draw characters'" (onGoBack)="this.mode = 'none'"></app-draw-characters>
+<app-one-of-three [words]=words [url]=url (onGoBack)="this.mode = null" *ngIf="mode == Mode.OneOfThree"></app-one-of-three>
+<app-writetheanswer [words]=words [url]="url" (onGoBack)="this.mode = null" *ngIf="mode == Mode.WriteTheAnswer"></app-writetheanswer>
+<app-flashcards [words]=words *ngIf="mode == Mode.Flashcards" (onGoBack)="this.mode = null"></app-flashcards>
+<app-draw-characters [words]=words *ngIf="mode == Mode.DrawCharacters" (onGoBack)="this.mode = null"></app-draw-characters>
 <!--
 <div class="canvas-container" [hidden]="mode == 'drawing'">
 	<canvas id="canvas" width="201" height="201"></canvas>
