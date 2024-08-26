@@ -5,7 +5,8 @@ export const BACKEND: string = "http://localhost:8000/";
 
 export enum Mode {
     OneOfThree = 0,
-    WriteTheAnswer = 1
+    WriteTheAnswer = 1,
+    DrawCharacters = 2
 }
 
 type FlagsDict = {

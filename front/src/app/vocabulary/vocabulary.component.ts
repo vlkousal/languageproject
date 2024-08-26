@@ -5,7 +5,6 @@ import {ApiTools} from "../api-tools";
 import {VocabUtils} from "../vocabutils";
 import {first} from "rxjs";
 import {Utils} from "../utils";
-import {SpeechUtils} from "../speechutils";
 
 @Component({
     selector: 'app-vocabulary',

@@ -1,1 +1,13 @@
-<p>draw-characters works!</p>
+<div class="container" *ngIf="!showEnd && !showSettings">
+	<div id="top-panel-container">
+		<app-top-panel (onGoBack)="onGoBack.emit()" (settingsEmitter)="showSettings = !showSettings"></app-top-panel>
+	</div>
+
+	<div id="stats-container">
+		<i id="flame" class="fas fa-fire">     {{ streak }}</i>
+		<i id="counter" class="fas fa-atlas">     {{ index + 1 }}/{{ words.length }}</i>
+		<i id="score" class="fas fa-star">     {{ score }}</i>
+		<i id="lives" class="fas fa-heart">     {{ lives }}</i>
+	</div>
+
+</div>
