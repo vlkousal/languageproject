@@ -5,6 +5,7 @@ import {SpeechUtils} from "../speechutils";
 import {VocabUtils} from "../vocabutils";
 import {ApiTools} from "../api-tools";
 
+
 @Component({
   selector: 'app-game-component',
   templateUrl: './game.component.html',
@@ -37,7 +38,7 @@ export class GameComponent implements OnInit {
         VocabUtils.sortByScore(this.words, Mode.OneOfThree);
         this.setNewWord();
         this.wordsCopy = [...this.words];
-        this.highScore = await ApiTools.getHighScore(this.url, Mode.OneOfThree);
+        this.highScore = await ApiTools.getHighScore(this.url, this.mode);
     }
 
     evalCorrect(): void {
@@ -91,7 +92,7 @@ export class GameComponent implements OnInit {
         const data = {
             token: localStorage.getItem("sessionId"),
             wordId: this.words[this.index].id,
-            mode: Mode.OneOfThree,
+            mode: this.mode,
             correct: correct
         };
 

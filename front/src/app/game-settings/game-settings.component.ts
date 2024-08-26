@@ -12,6 +12,7 @@ export class GameSettingsComponent {
 
     @Input() words: Word[] = [];
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
+
     volume: number = 1;
     languageNames: string[] = [];
     firstLanguage: string = "first";

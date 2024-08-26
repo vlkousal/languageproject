@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 
 
 class Language(models.Model):
@@ -48,8 +49,13 @@ class WordRecord(models.Model):
 
 
 class VocabularySetRecord(models.Model):
+    class Mode(models.TextChoices):
+        ONE_OF_THREE = 'OTT', _('One Of Three')
+        WRITE_THE_ANSWER = 'WTA', _('Write The Answer')
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     set = models.ForeignKey(VocabularySet, on_delete=models.CASCADE)
+    mode = models.CharField(choices=Mode.choices, default=Mode.ONE_OF_THREE, max_length=16)
     date = models.DateTimeField(auto_now_add=True)
     score = models.IntegerField(default=0)
 

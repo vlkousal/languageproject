@@ -1,10 +1,7 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {BACKEND, MAX_HEALTH, Mode, STREAK_FOR_HEALTH, Word} from "../constants";
+import {Component, EventEmitter, Output} from '@angular/core';
+import {BACKEND, Mode, Word} from "../constants";
 import {SpeechUtils} from "../speechutils";
-import {Utils} from "../utils";
 import {GameSettingsComponent} from "../game-settings/game-settings.component";
-import {VocabUtils} from "../vocabutils";
-import {ApiTools} from "../api-tools";
 import {GameComponent} from "../game-component/game.component";
 
 @Component({
@@ -15,7 +12,6 @@ import {GameComponent} from "../game-component/game.component";
 export class OneOfThreeComponent extends GameComponent {
 
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
-    @Output() settingsEmitter: EventEmitter<void> = new EventEmitter();
     buttonColors: string[] = ["#F9F8EB", "#F9F8EB", "#F9F8EB"];
     allowAnswering: boolean = true;
 
