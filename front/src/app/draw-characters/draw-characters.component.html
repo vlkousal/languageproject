@@ -4,14 +4,20 @@
 	</div>
 
 	<div id="stats-container">
+		<i id="flame" class="fas fa-fire">     {{ streak }}</i>
 		<i id="counter" class="fas fa-atlas">     {{ index + 1 }}/{{ words.length }}</i>
+		<i id="score" class="fas fa-star">     {{ score }}</i>
+		<i id="lives" class="fas fa-heart">     {{ lives }}</i>
 	</div>
+    <p>{{ this.words[this.index].phonetic}}</p>
+	<div id="canvas-container">
+		<canvas id="canvas" width="200" height="200"></canvas>
+		<canvas id="testingCanvas" width="200" height="200"></canvas> <!-- hidden canvas for checking-->
 
-	<div class="canvas-container">
-		<canvas id="canvas" width="201" height="201"></canvas>
-
-		<button (click)="resetCanvas()">Clear</button>
-		<button (click)="checkDrawing()">Check</button>
+		<div id="button-container">
+			<i class="fa fa-eraser" (click)="resetCanvas()"></i>
+			<i class="fa fa-check" (click)="checkDrawing()"></i>
+			<i class="fa fa-headphones" (click)="SpeechUtils.speak(this.words[this.index].question)"></i>
+		</div>
 	</div>
-
 </div>

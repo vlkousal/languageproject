@@ -24,6 +24,7 @@ def get_high_score(request):
     try:
         vocab_set: VocabularySet = VocabularySet.objects.get(url=vocab_url)
     except ObjectDoesNotExist:
+        print(vocab_url)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     if mode is None:

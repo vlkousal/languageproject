@@ -1,19 +1,22 @@
 
 export class Drawing {
 
-    static prepCanvas() {
+    static currentSymbol: string;
+
+    static prepCanvas(symbol: string) {
+        this.currentSymbol = symbol;
         const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+        const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
         const context = canvas.getContext('2d');
+        const testingContext = testingCanvas.getContext('2d');
+        const originalCharacter: string = symbol;
 
-        if(context == null) {
-            return;
-        }
-        // Replace this with your desired Chinese character
-        const originalCharacter = "明";
+        if(context == null || testingContext == null) return;
 
-        // Draw the original character on the canvas in a large size
         context.font = '200px Arial';
-        context.fillStyle = 'grey'; // Change the color as needed
+        testingContext.font = "200px Arial";
+        context.fillStyle = "grey";
+        testingContext.fillStyle = "black";
         context.fillText(originalCharacter, 0, 170);
 
         let isDrawing = false;
@@ -35,27 +38,22 @@ export class Drawing {
         }
 
         function draw(e: { clientX: number; clientY: number; }) {
-            if (!isDrawing || context == null) return;
+            if (!isDrawing || context == null || testingContext == null) return;
 
-            // Get current mouse coordinates
             const x = e.clientX - canvas.getBoundingClientRect().left;
             const y = e.clientY - canvas.getBoundingClientRect().top;
 
-            // Draw a line from the last position to the current position
             context.beginPath();
             context.moveTo(lastX, lastY);
             context.lineTo(x, y);
-            context.strokeStyle = 'black'; // Change the color as needed
-            context.lineWidth = 10;
+            context.strokeStyle = 'black';
+            context.lineWidth = 14;
             context.lineCap = 'round';
             context.stroke();
 
-            // Update last position
             lastX = x;
             lastY = y;
         }
-
-        // Event listeners for mouse actions
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mousemove', draw);

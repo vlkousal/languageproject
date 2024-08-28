@@ -13,11 +13,16 @@ i {
     font-size: clamp(20px, 2vw, 28px);
 }
 
-.canvas-container{
+#canvas-container {
     text-align: center;
+    margin-top: 6%;
 }
 
 canvas {
     border: 2px solid var(--muted-teal);
     background-color: var(--soft-ivory);
+}
+
+#button-container {
+
 }

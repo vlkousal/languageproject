@@ -4,6 +4,7 @@ import {Utils} from "../utils";
 import {SpeechUtils} from "../speechutils";
 import {VocabUtils} from "../vocabutils";
 import {ApiTools} from "../api-tools";
+import {Drawing} from "../drawing";
 
 
 @Component({
@@ -39,6 +40,10 @@ export class GameComponent implements OnInit {
         this.setNewWord();
         this.wordsCopy = [...this.words];
         this.highScore = await ApiTools.getHighScore(this.url, this.mode);
+
+        if(this.mode == Mode.DrawCharacters) {
+            Drawing.prepCanvas(this.words[this.index].question);
+        }
     }
 
     evalCorrect(): void {
@@ -107,9 +112,10 @@ export class GameComponent implements OnInit {
 
     setNewWord(): void {
         const currentWord: Word = this.words[this.index];
+
         // throw a coin to decide whether the languages get flipped
         const coinFlip: number = Utils.flipACoin();
-        if(coinFlip == 1) {
+        if(this.mode != Mode.DrawCharacters && coinFlip == 1) {
             this.isFlipped = true;
             this.words[this.index] = new Word(currentWord.id, currentWord.score, currentWord.correct,
                 currentWord.phonetic, currentWord.question, currentWord.flippedAnswers, currentWord.answers);
