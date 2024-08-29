@@ -19,10 +19,14 @@ i {
 }
 
 canvas {
-    border: 2px solid var(--muted-teal);
+    border: 4px solid var(--muted-teal);
     background-color: var(--soft-ivory);
 }
 
-#button-container {
+#phonetic {
+    font-size: clamp(14px, 2vw, 20px);
+}
 
+#correct {
+    font-size: clamp(20px, 2vw, 28px);
 }

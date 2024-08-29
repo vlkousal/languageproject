@@ -36,14 +36,12 @@ export class GameComponent implements OnInit {
 
     async ngOnInit(): Promise<any> {
         Utils.shuffleList(this.words);
-        VocabUtils.sortByScore(this.words, Mode.OneOfThree);
+        VocabUtils.sortByScore(this.words, this.mode);
+        console.log(this.words);
         this.setNewWord();
         this.wordsCopy = [...this.words];
         this.highScore = await ApiTools.getHighScore(this.url, this.mode);
-
-        if(this.mode == Mode.DrawCharacters) {
-            Drawing.prepCanvas(this.words[this.index].question);
-        }
+        if(this.mode == Mode.DrawCharacters) Drawing.prepCanvas(this.words[this.index].question);
     }
 
     evalCorrect(): void {
@@ -111,6 +109,7 @@ export class GameComponent implements OnInit {
     }
 
     setNewWord(): void {
+        this.index++;
         const currentWord: Word = this.words[this.index];
 
         // throw a coin to decide whether the languages get flipped

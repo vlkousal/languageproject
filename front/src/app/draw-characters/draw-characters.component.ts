@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {GameComponent} from "../game-component/game.component";
-import {Mode, Word} from "../constants";
-import {Drawing} from "../drawing";
+import {Mode} from "../constants";
 import {SpeechUtils} from "../speechutils";
 
 @Component({
@@ -20,8 +19,11 @@ export class DrawCharactersComponent extends GameComponent {
     resetCanvas(): void {
         const canvas = document.getElementById("canvas") as HTMLCanvasElement;
         const context = canvas.getContext("2d");
-        if(context == null) return;
+        const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
+        const testingContext = testingCanvas.getContext('2d');
+        if(context == null || testingContext == null) return;
         context.clearRect(0, 0, canvas.width, canvas.height);
+        testingContext.clearRect(0, 0, canvas.width, canvas.height);
         context.fillText(this.words[this.index].question, 0, 170);
     }
 
@@ -34,8 +36,11 @@ export class DrawCharactersComponent extends GameComponent {
         if(canvasContext != null && testingCanvasContext != null) {
             testingCanvasContext.fillText(this.words[this.index].question, 0, 170);
         }
-        this.getCorrectPixelCount() > 34000 ? this.evalCorrect() : this.evalWrong();
-        this.getCorrectPixelCount();
+        const isCorrect: boolean = this.getCorrectPixelCount() > 32000;
+        isCorrect ? this.evalCorrect() : this.evalWrong();
+        this.sendResult(isCorrect);
+        this.setNewWord();
+        this.resetCanvas();
     }
 
     getCorrectPixelCount(): number {

@@ -9,8 +9,9 @@
 		<i id="score" class="fas fa-star">     {{ score }}</i>
 		<i id="lives" class="fas fa-heart">     {{ lives }}</i>
 	</div>
-    <p>{{ this.words[this.index].phonetic}}</p>
 	<div id="canvas-container">
+		<p id="phonetic">{{ this.words[this.index].phonetic }}</p>
+		<p id="correct">{{ this.words[this.index].correct }}</p>
 		<canvas id="canvas" width="200" height="200"></canvas>
 		<canvas id="testingCanvas" width="200" height="200"></canvas> <!-- hidden canvas for checking-->
 

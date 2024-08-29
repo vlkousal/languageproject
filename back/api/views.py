@@ -125,23 +125,30 @@ def add_result(request):
     else:
         record = filtered.first()
 
-    if correct:
-        if str(mode) == VocabularySetRecord.Mode.ONE_OF_THREE:
-            if correct:
-                new_score: int = record.one_of_three_score + 10 + record.one_of_three_streak
-                record.one_of_three_score = 100 if new_score > 100 else new_score
-                record.one_of_three_streak += 1
-            else:
-                record.one_of_three_score = 0 if record.one_of_three_score - 10 < 0 else record.one_of_three_score - 10
-                record.one_of_three_streak = 0
-        elif str(mode) == VocabularySetRecord.Mode.WRITE_THE_ANSWER:
-            if correct:
-                new_score: int = record.write_the_answer_score + 10 + record.write_the_answer_score
-                record.write_the_answer_score = 100 if new_score > 100 else new_score
-                record.write_the_answer_streak += 1
-            else:
-                record.write_the_answer_score = 0 if record.write_the_answer_score - 10 < 0 else record.write_the_answer_score - 10
-                record.write_the_answer_streak = 0
+    if str(mode) == VocabularySetRecord.Mode.ONE_OF_THREE:
+        if correct:
+            new_score: int = record.one_of_three_score + 10 + record.one_of_three_streak
+            record.one_of_three_score = 100 if new_score > 100 else new_score
+            record.one_of_three_streak += 1
+        else:
+            record.one_of_three_score = 0 if record.one_of_three_score - 10 < 0 else record.one_of_three_score - 10
+            record.one_of_three_streak = 0
+    elif str(mode) == VocabularySetRecord.Mode.WRITE_THE_ANSWER:
+        if correct:
+            new_score: int = record.write_the_answer_score + 10 + record.write_the_answer_score
+            record.write_the_answer_score = 100 if new_score > 100 else new_score
+            record.write_the_answer_streak += 1
+        else:
+            record.write_the_answer_score = 0 if record.write_the_answer_score - 10 < 0 else record.write_the_answer_score - 10
+            record.write_the_answer_streak = 0
+    elif str(mode) == VocabularySetRecord.Mode.DRAW_CHARACTER:
+        if correct:
+            new_score: int = record.draw_character_score + 10 + record.draw_character_score
+            record.draw_character_score = 100 if new_score > 100 else new_score
+            record.draw_character_streak += 1
+        else:
+            record.draw_character_score = 0 if record.draw_character_score - 10 < 0 else record.draw_character_score - 10
+            record.draw_character_streak = 0
     record.save()
     return Response(status=status.HTTP_200_OK)
 
@@ -228,16 +235,16 @@ def get_vocab_sets(request):
 @api_view(["POST"])
 def get_vocab(request):
     token = request.data.get("token")
+    url = request.data.get("url")
 
-    user = None
+    no_user: bool = True
     try:
         username: str = Session.objects.get(session_key=token).session_data
         user = User.objects.get(username=username)
-        no_user: bool = False
+        no_user = False
     except ObjectDoesNotExist:
-        no_user: bool = True
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-    url = request.data.get("url")
     try:
         vocab = VocabularySet.objects.get(url=url)
     except VocabularySet.DoesNotExist:
@@ -246,13 +253,17 @@ def get_vocab(request):
     words = []
     for word in vocab.vocabulary.all():
         # getting the scores
-        scores: List[int] = [0]
+        scores: List[int] = [-1 for i in range(len(VocabularySetRecord.Mode.choices))]
         if not no_user:
-          try:
-              record = WordRecord.objects.get(user=user, word=word)
-              scores[0] = record.one_of_three_score
-          except ObjectDoesNotExist:
-              pass
+            try:
+                record = WordRecord.objects.get(user=user, word=word)
+                scores[0] = record.one_of_three_score
+                scores[int(VocabularySetRecord.Mode.ONE_OF_THREE.value)] = record.one_of_three_score
+                scores[int(VocabularySetRecord.Mode.WRITE_THE_ANSWER.value)] = record.write_the_answer_score
+                scores[int(VocabularySetRecord.Mode.DRAW_CHARACTER.value)] = record.draw_character_score
+            except ObjectDoesNotExist:
+                pass
+        print(scores)
 
 
         word = {"question": word.first,

@@ -38,7 +38,6 @@ export class WriteTheAnswerComponent extends GameComponent {
             }
             return;
         }
-        this.index++;
         this.setNewWord();
     }
 

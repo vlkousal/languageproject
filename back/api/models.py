@@ -45,6 +45,8 @@ class WordRecord(models.Model):
     one_of_three_streak = models.IntegerField(default=0)
     write_the_answer_score = models.IntegerField(default=0)
     write_the_answer_streak = models.IntegerField(default=0)
+    draw_character_score = models.IntegerField(default=0)
+    draw_character_streak = models.IntegerField(default=0)
 
     def __str__(self):
         return (self.user.username + " - " + self.word.first +
@@ -55,6 +57,7 @@ class VocabularySetRecord(models.Model):
     class Mode(models.TextChoices):
         ONE_OF_THREE = 0, _('One Of Three')
         WRITE_THE_ANSWER = 1, _('Write The Answer')
+        FLASHCARDS = 2, _("Flashcards")
         DRAW_CHARACTER = 3, _('Draw Characters')
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)

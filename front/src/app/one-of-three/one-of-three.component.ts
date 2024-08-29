@@ -48,7 +48,6 @@ export class OneOfThreeComponent extends GameComponent {
             }
             return;
         }
-        this.index++;
         this.setNewWord();
     }
 

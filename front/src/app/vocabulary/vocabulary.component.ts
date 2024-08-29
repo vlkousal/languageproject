@@ -74,10 +74,8 @@ export class VocabularyComponent {
         });
         this.words = words;
         VocabUtils.sortByFirst(this.words);
-        this.VocabUtils.sortByFirst(this.words);
     }
 
-    protected readonly VocabUtils = VocabUtils;
     protected readonly first = first;
     protected readonly FLAGS = FLAGS;
     protected readonly Mode = Mode;

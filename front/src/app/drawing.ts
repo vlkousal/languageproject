@@ -47,7 +47,7 @@ export class Drawing {
             context.moveTo(lastX, lastY);
             context.lineTo(x, y);
             context.strokeStyle = 'black';
-            context.lineWidth = 14;
+            context.lineWidth = 16;
             context.lineCap = 'round';
             context.stroke();
 
