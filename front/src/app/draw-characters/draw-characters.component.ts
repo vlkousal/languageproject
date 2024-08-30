@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {GameComponent} from "../game-component/game.component";
-import {Mode} from "../constants";
+import {Mode, Word} from "../constants";
 import {SpeechUtils} from "../speechutils";
 
 @Component({
@@ -66,13 +66,14 @@ export class DrawCharactersComponent extends GameComponent {
     }
 
     checkDrawing(): void {
+        const currentWord: Word = this.words[this.index];
         const canvas = document.getElementById('canvas') as HTMLCanvasElement;
         const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
         const canvasContext = canvas.getContext('2d');
         const testingCanvasContext = testingCanvas.getContext('2d');
         if(canvasContext == null) return;
         if(testingCanvasContext != null) {
-            testingCanvasContext.fillText(this.words[this.index].question, 0, 170);
+            testingCanvasContext.fillText(currentWord.question, 0, 170);
         }
         const isCorrect: boolean = this.getCorrectPixelCount() > this.correctMinimum;
 
@@ -84,7 +85,8 @@ export class DrawCharactersComponent extends GameComponent {
         } else{
             this.evalCorrect();
         }
-        canvasContext.fillText(this.words[this.index].question, 0, 170);
+        SpeechUtils.speak(currentWord.correct, true);
+        canvasContext.fillText(currentWord.question, 0, 170);
         setTimeout(() => {
             this.setNewWord();
             this.resetCanvas();

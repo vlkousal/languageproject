@@ -13,7 +13,7 @@
 		<p id="phonetic">{{ this.words[this.index].phonetic }}</p>
 		<p id="correct">{{ this.words[this.index].correct }}</p>
 		<canvas id="canvas" width="200" height="200"></canvas>
-		<canvas id="testingCanvas" width="200" height="200"></canvas> <!-- hidden canvas for checking-->
+		<canvas id="testingCanvas" width="200" height="200" hidden="hidden"></canvas> <!-- hidden canvas for checking-->
 
 		<div id="button-container">
 			<i class="fa fa-eraser" (click)="resetCanvas()"></i>
