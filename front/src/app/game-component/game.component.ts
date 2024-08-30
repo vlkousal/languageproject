@@ -34,7 +34,7 @@ export class GameComponent implements OnInit {
         this.mode = mode;
     }
 
-    async ngOnInit(): Promise<any> {
+    async ngOnInit(): Promise<void> {
         Utils.shuffleList(this.words);
         VocabUtils.sortByScore(this.words, this.mode);
         this.setNewWord();

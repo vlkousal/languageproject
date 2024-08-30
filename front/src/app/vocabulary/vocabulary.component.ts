@@ -53,7 +53,7 @@ export class VocabularyComponent {
         this.secondLanguage = json.second_language;
 
         const words: Word[] = [];
-        json.vocabulary.forEach((word: any, i: number) => {
+        json.vocabulary.forEach((word: Word, i: number) => {
             let answers: string[] = [word.correct];
             for(let answer = 0; answer < 2; answer++) {
                 const index = Utils.getRandomDifferentIndex(i, json.vocabulary.length);
@@ -68,7 +68,7 @@ export class VocabularyComponent {
             }
             flippedAnswers = Utils.shuffleList(flippedAnswers);
 
-            word = new Word(word.id, word.scores, word.question, word.phonetic,
+            word = new Word(word.id, word.score, word.question, word.phonetic,
               word.correct, answers, flippedAnswers);
             words.push(word);
         });

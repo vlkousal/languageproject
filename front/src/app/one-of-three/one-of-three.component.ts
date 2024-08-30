@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {BACKEND, Mode, Word} from "../constants";
+import {Mode, Word} from "../constants";
 import {SpeechUtils} from "../speechutils";
 import {GameSettingsComponent} from "../game-settings/game-settings.component";
 import {GameComponent} from "../game-component/game.component";
@@ -16,7 +16,7 @@ export class OneOfThreeComponent extends GameComponent {
     allowAnswering: boolean = true;
 
     constructor() {
-        super(Mode.OneOfThree)
+        super(Mode.OneOfThree);
     }
 
     checkAnswer(answerIndex: number): void {
@@ -30,7 +30,7 @@ export class OneOfThreeComponent extends GameComponent {
         } else{
             this.evalWrong();
             this.buttonColors[answerIndex] = "#fd7676";
-            let correctIndex = currentWord.answers.indexOf(currentWord.correct);
+            const correctIndex = currentWord.answers.indexOf(currentWord.correct);
             this.buttonColors[correctIndex] = "#59bd59";
             SpeechUtils.speak(currentWord.correct, !this.isFlipped);
             this.allowAnswering = false;

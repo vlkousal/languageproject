@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {GameComponent} from "../game-component/game.component";
 import {Mode} from "../constants";
 import {SpeechUtils} from "../speechutils";
@@ -71,7 +71,7 @@ export class DrawCharactersComponent extends GameComponent {
         const canvasContext = canvas.getContext('2d');
         const testingCanvasContext = testingCanvas.getContext('2d');
         if(canvasContext == null) return;
-        if(canvasContext != null && testingCanvasContext != null) {
+        if(testingCanvasContext != null) {
             testingCanvasContext.fillText(this.words[this.index].question, 0, 170);
         }
         const isCorrect: boolean = this.getCorrectPixelCount() > this.correctMinimum;
