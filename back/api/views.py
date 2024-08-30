@@ -24,7 +24,6 @@ def get_high_score(request):
     try:
         vocab_set: VocabularySet = VocabularySet.objects.get(url=vocab_url)
     except ObjectDoesNotExist:
-        print(vocab_url)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     if mode is None:
@@ -263,7 +262,6 @@ def get_vocab(request):
                 scores[int(VocabularySetRecord.Mode.DRAW_CHARACTER.value)] = record.draw_character_score
             except ObjectDoesNotExist:
                 pass
-        print(scores)
 
 
         word = {"question": word.first,

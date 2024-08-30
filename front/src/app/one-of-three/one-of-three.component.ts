@@ -29,16 +29,17 @@ export class OneOfThreeComponent extends GameComponent {
             this.evalCorrect();
         } else{
             this.evalWrong();
-            this.buttonColors[answerIndex] = "#e8a9a9";
+            this.buttonColors[answerIndex] = "#fd7676";
             let correctIndex = currentWord.answers.indexOf(currentWord.correct);
-            this.buttonColors[correctIndex] = "#9ff19f";
+            this.buttonColors[correctIndex] = "#59bd59";
             SpeechUtils.speak(currentWord.correct, !this.isFlipped);
             this.allowAnswering = false;
             setTimeout(() => {
                 this.buttonColors[answerIndex] = "#F9F8EB";
                 this.buttonColors[correctIndex] = "#F9F8EB";
                 this.allowAnswering = true;
-            }, 200); // back to 2000 after debug
+                this.setNewWord();
+            }, 1500); // back to 2000 after debug
         }
 
         if(this.lives == 0 || this.index == this.words.length - 1) {
@@ -48,7 +49,6 @@ export class OneOfThreeComponent extends GameComponent {
             }
             return;
         }
-        this.setNewWord();
     }
 
     speakQuestion(): void {

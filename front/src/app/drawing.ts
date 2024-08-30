@@ -1,10 +1,7 @@
 
 export class Drawing {
 
-    static currentSymbol: string;
-
     static prepCanvas(symbol: string) {
-        this.currentSymbol = symbol;
         const canvas = document.getElementById('canvas') as HTMLCanvasElement;
         const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
         const context = canvas.getContext('2d');
@@ -18,6 +15,7 @@ export class Drawing {
         context.fillStyle = "grey";
         testingContext.fillStyle = "black";
         context.fillText(originalCharacter, 0, 170);
+        testingContext.fillText(originalCharacter, 0, 170);
 
         let isDrawing = false;
         let lastX = 0;

@@ -37,7 +37,6 @@ export class GameComponent implements OnInit {
     async ngOnInit(): Promise<any> {
         Utils.shuffleList(this.words);
         VocabUtils.sortByScore(this.words, this.mode);
-        console.log(this.words);
         this.setNewWord();
         this.wordsCopy = [...this.words];
         this.highScore = await ApiTools.getHighScore(this.url, this.mode);
