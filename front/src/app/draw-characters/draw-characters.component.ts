@@ -2,6 +2,7 @@ import {Component, EventEmitter, Output} from '@angular/core';
 import {GameComponent} from "../game-component/game.component";
 import {Mode, Word} from "../constants";
 import {SpeechUtils} from "../speechutils";
+import {Utils} from "../utils";
 
 @Component({
   selector: 'app-draw-characters',
@@ -12,6 +13,7 @@ export class DrawCharactersComponent extends GameComponent {
 
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
     correctMinimum: number = 0;
+    allowAnswering: boolean = true;
 
     constructor() {
         super(Mode.DrawCharacters);
@@ -65,7 +67,30 @@ export class DrawCharactersComponent extends GameComponent {
         return counter;
     }
 
+    override replayAll(): void {
+        GameComponent.prepDrawingCanvas();
+        this.words = [...this.wordsCopy];
+        this.resetStats();
+    }
+
+    override replayWrong() : void {
+        this.words = [...this.wrong];
+        this.resetStats();
+        this.resetCanvas();
+        this.repeatingWrong = true;
+    }
+
+    override setNewWord(): void {
+        console.log("novy index", this.index);
+        const currentWord: Word = this.words[this.index];
+        this.resetCanvas();
+        SpeechUtils.speak(currentWord.question, false);
+        this.index++;
+    }
+
     checkDrawing(): void {
+        if(!this.allowAnswering) return;
+        this.allowAnswering = false;
         const currentWord: Word = this.words[this.index];
         const canvas = document.getElementById('canvas') as HTMLCanvasElement;
         const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
@@ -86,11 +111,22 @@ export class DrawCharactersComponent extends GameComponent {
             this.evalCorrect();
         }
         SpeechUtils.speak(currentWord.correct, true);
+
         canvasContext.fillText(currentWord.question, 0, 170);
         setTimeout(() => {
             this.setNewWord();
             this.resetCanvas();
-        }, 2000);
+            this.allowAnswering = true;
+
+            if(this.lives == 0 || this.index == this.words.length - 1) {
+                this.showEnd = true;
+                if(!this.repeatingWrong) {
+                    this.sendVocabSetResult();
+                }
+                return;
+            }
+
+        }, 1500);
     }
 
     getCorrectPixelCount(): number {
@@ -134,4 +170,6 @@ export class DrawCharactersComponent extends GameComponent {
     }
 
 protected readonly SpeechUtils = SpeechUtils;
+    protected readonly localStorage = localStorage;
+    protected readonly Mode = Mode;
 }

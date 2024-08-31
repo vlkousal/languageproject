@@ -4,7 +4,6 @@ import {Utils} from "../utils";
 import {SpeechUtils} from "../speechutils";
 import {VocabUtils} from "../vocabutils";
 import {ApiTools} from "../api-tools";
-import {Drawing} from "../drawing";
 
 
 @Component({
@@ -37,10 +36,10 @@ export class GameComponent implements OnInit {
     async ngOnInit(): Promise<void> {
         Utils.shuffleList(this.words);
         VocabUtils.sortByScore(this.words, this.mode);
-        this.setNewWord();
         this.wordsCopy = [...this.words];
         this.highScore = await ApiTools.getHighScore(this.url, this.mode);
-        if(this.mode == Mode.DrawCharacters) Drawing.prepCanvas(this.words[this.index].question);
+        if(this.mode == Mode.DrawCharacters) GameComponent.prepDrawingCanvas();
+        this.setNewWord();
     }
 
     evalCorrect(): void {
@@ -64,13 +63,12 @@ export class GameComponent implements OnInit {
         this.resetStats();
     }
 
-    replayWrong() : void {
+    replayWrong(): void {
         this.words = [];
         this.wrong.forEach((word) => {
             const found: Word | undefined = this.wordsCopy.find((w) => w.id == word.id);
             if(found !== undefined) {
-                const typed: Word = found;
-                this.words.push(typed);
+                this.words.push(found);
             }
         })
         this.resetStats();
@@ -108,7 +106,7 @@ export class GameComponent implements OnInit {
     }
 
     setNewWord(): void {
-        this.index++;
+        console.log("word index", this.index);
         const currentWord: Word = this.words[this.index];
 
         // throw a coin to decide whether the languages get flipped
@@ -122,6 +120,7 @@ export class GameComponent implements OnInit {
         }
         this.isFlipped = false;
         SpeechUtils.speak(currentWord.question, false);
+        this.index++;
     }
 
     sendVocabSetResult(): void {
@@ -139,5 +138,56 @@ export class GameComponent implements OnInit {
             },
             body: JSON.stringify(data)
         })
+    }
+
+    static prepDrawingCanvas() {
+        const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+        const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
+        const context = canvas.getContext('2d');
+        const testingContext = testingCanvas.getContext('2d');
+
+        if(context == null || testingContext == null) return;
+
+        context.font = '200px Arial';
+        testingContext.font = "200px Arial";
+
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        function startDrawing(e: { clientX: number; clientY: number; }) {
+            isDrawing = true;
+            lastX = e.clientX - canvas.getBoundingClientRect().left;
+            lastY = e.clientY - canvas.getBoundingClientRect().top;
+            draw(e);
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            if(context != null) {
+                context.beginPath();
+            }
+        }
+
+        function draw(e: { clientX: number; clientY: number; }) {
+            if (!isDrawing || context == null || testingContext == null) return;
+
+            const x = e.clientX - canvas.getBoundingClientRect().left;
+            const y = e.clientY - canvas.getBoundingClientRect().top;
+
+            context.beginPath();
+            context.moveTo(lastX, lastY);
+            context.lineTo(x, y);
+            context.strokeStyle = 'black';
+            context.lineWidth = 16;
+            context.lineCap = 'round';
+            context.stroke();
+
+            lastX = x;
+            lastY = y;
+        }
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mousemove', draw);
     }
 }

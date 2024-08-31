@@ -15,7 +15,7 @@ i {
 
 #canvas-container {
     text-align: center;
-    margin-top: 6%;
+    margin-top: 8%;
 }
 
 canvas {
@@ -29,4 +29,8 @@ canvas {
 
 #correct {
     font-size: clamp(20px, 2vw, 28px);
+}
+
+p {
+    color: var(--soft-ivory);
 }

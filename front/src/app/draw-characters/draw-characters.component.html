@@ -1,17 +1,17 @@
-<div class="container">
+<div class="container" [hidden]="!(!showSettings && !showEnd)">
 	<div id="top-panel-container">
 		<app-top-panel (onGoBack)="onGoBack.emit()"></app-top-panel>
 	</div>
 
 	<div id="stats-container">
 		<i id="flame" class="fas fa-fire">     {{ streak }}</i>
-		<i id="counter" class="fas fa-atlas">     {{ index + 1 }}/{{ words.length }}</i>
-		<i id="score" class="fas fa-star">     {{ score }}</i>
+		<i id="counter" class="fas fa-atlas">     {{ index }}/{{ words.length }}</i>
+		<i id="score" class="fas fa-star">     {{ this.words[this.index].score[Mode.DrawCharacters] }}</i>
 		<i id="lives" class="fas fa-heart">     {{ lives }}</i>
 	</div>
 	<div id="canvas-container">
-		<p id="phonetic">{{ this.words[this.index].phonetic }}</p>
 		<p id="correct">{{ this.words[this.index].correct }}</p>
+		<p id="phonetic" [style.visibility]="(localStorage.getItem('showPhonetic') != 'false' && !isFlipped) ? 'visible' : 'hidden'">{{ this.words[this.index].phonetic }}</p>
 		<canvas id="canvas" width="200" height="200"></canvas>
 		<canvas id="testingCanvas" width="200" height="200" hidden="hidden"></canvas> <!-- hidden canvas for checking-->
 
@@ -22,3 +22,7 @@
 		</div>
 	</div>
 </div>
+
+<app-game-settings *ngIf="showSettings" [words]="words" (onGoBack)="showSettings = false"></app-game-settings>
+<app-end-screen *ngIf="showEnd" [score]="score" [words]="words" [wrong]="wrong" [correctCount]="correctAnswers"
+                [highScore]="highScore" (onGoBack)="onGoBack.emit()" (onReplayAll)="replayAll()" (onReplayWrong)="replayWrong()"></app-end-screen>
