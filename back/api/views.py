@@ -3,13 +3,17 @@ from random import randint
 from typing import List
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
-from .models import Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord
+from rest_framework.status import HTTP_200_OK
+
+from .models import Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord, VocabularyUserRelationship
+
 
 @api_view(['POST'])
 def get_high_score(request):
@@ -36,6 +40,13 @@ def get_high_score(request):
     return Response(data={"highScore": highest_score_set.score}, status=status.HTTP_200_OK)
 
 
+@api_view(['POST'])
+def get_username(request):
+    token: str = request.data.get("token")
+    username: str = Session.objects.get(session_key=token).session_data
+    return Response(data={"username": username}, status=status.HTTP_200_OK)
+
+
 def get_user(token: str):
     try:
         username: str = Session.objects.get(session_key=token).session_data
@@ -43,6 +54,50 @@ def get_user(token: str):
         return user
     except ObjectDoesNotExist:
         return None
+
+
+@api_view(["POST"])
+def get_save_status(request):
+    token: str = request.data.get("token")
+    user: User = get_user(token)
+
+    if user is None:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    url: str = request.data.get("url")
+    vocab_set: VocabularySet = get_object_or_404(VocabularySet, url=url)
+
+    save_status: bool = False
+    try:
+        relationship: VocabularyUserRelationship = VocabularyUserRelationship.objects.get(user=user, set=vocab_set)
+        save_status = relationship.saved
+    except ObjectDoesNotExist:
+        pass
+    return Response(status=status.HTTP_200_OK, data={"status": save_status})
+
+@api_view(["POST"])
+def save_set(request):
+    token: str = request.data.get("token")
+    user: User = get_user(token)
+    if user is None:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    url: str = request.data.get("url")
+    vocab_set = VocabularySet.objects.get(url=url)
+    if vocab_set is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    is_saved: bool = request.data.get("isSaved")
+    print(is_saved)
+    vocab_set: VocabularySet = VocabularySet.objects.get(url=url)
+    try:
+        relationship: VocabularyUserRelationship = VocabularyUserRelationship.objects.get(user=user, set=vocab_set)
+        relationship.saved = not(is_saved)
+        print(relationship.saved)
+    except ObjectDoesNotExist:
+        relationship: VocabularyUserRelationship = VocabularyUserRelationship.objects.create(user=user, set=vocab_set, saved=True)
+    relationship.save()
+    return Response(status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -390,4 +445,4 @@ def login(request):
 
 
 def generate_key():
-    return get_random_string(length=randint(4000, 4097))
+    return get_random_string(512)

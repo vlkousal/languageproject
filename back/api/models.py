@@ -81,3 +81,6 @@ class VocabularyUserRelationship(models.Model):
     rating = models.CharField(choices=Rating.choices, default=Rating.NONE, max_length=16)
     saved = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.set.name + " - " + self.user.username
+

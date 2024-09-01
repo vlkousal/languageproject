@@ -30,9 +30,7 @@ export class Utils {
     }
 
     static getRandomElement(list: Word[]) {
-        // Generate a random index within the range of the list's length
         const randomIndex = Math.floor(Math.random() * list.length);
-        // Return the element at the random index
         return list[randomIndex];
     }
 

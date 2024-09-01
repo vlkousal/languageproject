@@ -32,5 +32,8 @@ urlpatterns = [
     path("api/editvocab/", api_views.edit_vocab),
     path("api/addresult/", api_views.add_result),
     path("api/sendvocabresult/", api_views.send_vocab_result),
-    path("api/gethighscore/", api_views.get_high_score)
+    path("api/gethighscore/", api_views.get_high_score),
+    path("api/getusername/", api_views.get_username),
+    path("api/saveset/", api_views.save_set),
+    path("api/getsavestatus/", api_views.get_save_status)
 ]

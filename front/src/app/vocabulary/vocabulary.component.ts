@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import {FLAGS, Mode} from "../constants";
+import {BACKEND, FLAGS, Mode} from "../constants";
 import {ActivatedRoute} from "@angular/router";
 import {ApiTools} from "../api-tools";
 import {first} from "rxjs";
 import {Utils} from "../utils";
 import {Word} from "../../word";
 import {SpeechUtils} from "../speechutils";
+import {style} from "@angular/animations";
 
 @Component({
     selector: 'app-vocabulary',
@@ -31,6 +32,9 @@ export class VocabularyComponent {
 
     selectedMode: Mode | null = null;
     tableWords: Word[] = [];
+    username: string = "";
+
+    isSaved: boolean = false;
 
     constructor(private route: ActivatedRoute) {}
 
@@ -43,13 +47,81 @@ export class VocabularyComponent {
 
         this.languageNames.sort();
         Word.sortByAverageScore(this.words);
-        this.loading = false;
         localStorage.setItem("firstLanguage", this.firstLanguage);
         localStorage.setItem("secondLanguage", this.secondLanguage);
         this.tableWords = [...this.words];
+
+        this.username = JSON.parse(await this.getUsername())["username"];
+        this.isSaved = JSON.parse(await this.getSavedStatus())["status"];
+        console.log(this.isSaved);
+        this.loading = false;
     }
 
-    async setup() {
+    async getSavedStatus(): Promise<string> {
+        const data = {
+            "token": localStorage.getItem("sessionId"),
+            "url": this.url,
+        }
+
+        try {
+            const response = await fetch(BACKEND + "api/getsavestatus/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+            return await response.text();
+        } catch(error) {
+            console.error("Error:", error);
+            throw error;
+        }
+    }
+
+    async saveSet(): Promise<void> {
+        const data = {
+            "token": localStorage.getItem("sessionId"),
+            "url": this.url,
+            "isSaved": this.isSaved
+        }
+
+        try {
+            const response = await fetch(BACKEND + "api/saveset/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data)
+            });
+        } catch (error) {
+            console.error("Error:", error);
+            throw error;
+        }
+        this.isSaved = !this.isSaved;
+    }
+
+    async getUsername(): Promise<string> {
+        try {
+            const response = await fetch(BACKEND + "api/getusername/", {
+                method: "POST",
+                headers: {
+                    'Content-Type': "application/json",
+                },
+                body: JSON.stringify({"token": localStorage.getItem("sessionId")})
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok.");
+            }
+            return await response.text();
+
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
+    }
+
+    async setup(): Promise<void> {
         const vocab: string =  await ApiTools.getVocabJson(this.url)
         const json = JSON.parse(vocab);
         this.name = json.name;
@@ -87,4 +159,5 @@ export class VocabularyComponent {
     protected readonly Mode = Mode;
     protected readonly SpeechUtils = SpeechUtils;
     protected readonly Word = Word;
+    protected readonly style = style;
 }
