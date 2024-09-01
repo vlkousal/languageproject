@@ -1,22 +1,24 @@
-
 .set-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 2px solid var(--muted-teal);
     border-radius: 5px;
-    width: 400px;
     font-size: 20px;
     text-align: center;
+    margin-left: 1%;
+    width: 60%;
+    background-color: var(--medium-mint);
 }
 
 
 .set-link {
     text-decoration: none;
-    color: #333;
     margin-right: 10px;
+    color: var(--soft-ivory);
+    font-size: clamp(14px, 2vw, 24px);
 }
 
 .button-group {
@@ -26,7 +28,7 @@
 .edit-button,
 .delete-button {
     padding: 8px 12px;
-    margin-left: 5px; /* Adjust the margin as needed */
+    margin-left: 5px;
     border: none;
     border-radius: 3px;
     color: #fff;
@@ -48,7 +50,6 @@
 }
 
 .delete-prompt {
-    background-color: #f8d7da;
     border: 1px solid #f5c6cb;
     border-radius: 5px;
     padding: 10px;
@@ -64,7 +65,6 @@
 .button-group {
     display: flex;
     justify-content: flex-end;
-    margin-top: 10px;
 }
 
 .delete-yes,
@@ -92,10 +92,20 @@
     filter: brightness(1.2);
 }
 
-.container {
-    /* Adjust width as needed */
-    max-width: 800px; /* For example */
-    width: 100%; /* Ensure it takes full width of the container */
-    margin-left: 20%;
-    margin-top: 10%;
+
+#container {
+    min-height: 600px;
+}
+
+.header {
+    font-size: clamp(20px, 1vw, 36px);
+}
+
+p {
+    color: var(--soft-ivory);
+}
+
+input {
+    border: 2px solid var(--medium-mint);
+    height: 20px;
 }
