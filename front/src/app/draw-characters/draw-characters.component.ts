@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {GameComponent} from "../game-component/game.component";
-import {Mode, Word} from "../constants";
+import {Mode} from "../constants";
 import {SpeechUtils} from "../speechutils";
-import {Utils} from "../utils";
+import {Word} from "../../word";
 
 @Component({
   selector: 'app-draw-characters',

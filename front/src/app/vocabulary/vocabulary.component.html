@@ -2,20 +2,57 @@
 
 <div class="spinner" [hidden]="!loading"></div>
 
-<!--  PREVIEW -->
-<div id="container" *ngIf="mode == null && !loading">
+<div id="container" [hidden]="!(mode == null && !loading)">
 	<div id="top-panel">
-		<h2>{{ name }} {{ FLAGS[firstLanguage] }} {{ FLAGS[secondLanguage] }}</h2>
-		<button class="settings-button" >
-			<i class="fas fa-cog"></i>
-		</button>
+		<div id="name-container">
+			<i>{{ name }} {{ FLAGS[firstLanguage] }} {{ FLAGS[secondLanguage] }}</i>
+		</div>
+		<div id="rating-buttons">
+			<p>{{ contributor }}</p>
+			<i class="fa fa-bookmark"></i>
+			<i class="fa fa-thumbs-up"></i>
+			<i class="fa fa-thumbs-down"></i>
+			<i class="fa fa-cog"></i>
+		</div>
 	</div>
-    <p id="description">{{ description }}</p>
-	<p>{{ contributor}}</p>
-    <button (click)= "mode = Mode.OneOfThree">One Of Three</button>
-    <button (click)="mode = Mode.WriteTheAnswer">Write The Answer</button>
-    <button (click)="mode = Mode.Flashcards">Flashcards</button>
-    <button (click)="mode = Mode.DrawCharacters">Draw Characters</button>
+
+	<div id="content-container">
+		<div id="mode-buttons-container">
+			<button (click)="selectedMode = null"><i class="fa fa-file">     Summary</i></button>
+			<button (click)="selectedMode = Mode.OneOfThree"><i class="fa fa-bars">     One Of Three</i></button>
+			<button (click)="selectedMode = Mode.WriteTheAnswer"><i class="fa fa-pen-nib">     Write The Answer</i></button>
+			<button (click)="selectedMode = Mode.DrawCharacters"><i class="fa fa-brush">     Draw Characters</i></button>
+			<button (click)="mode = Mode.Flashcards"><i class="fa fa-image">     Flashcards</i></button>
+		</div>
+
+		<div id="summary" *ngIf="selectedMode == null">
+			<div>
+				<p id="description">{{ description }}</p>
+			</div>
+			<div class="table-container">
+				<table id="summary-table">
+					<thead>
+					<th (click)="Word.sortByFirst(this.tableWords)">First Language</th>
+					<th (click)="Word.sortByPhonetic(this.tableWords)">Phonetic</th>
+					<th (click)="Word.sortByAnswer(this.tableWords)">Second Language</th>
+					<th (click)="Word.sortByAverageScore(this.tableWords)">Average Score</th>
+					</thead>
+
+					<tbody>
+					<tr *ngFor="let word of tableWords">
+						<td (click)="SpeechUtils.speak(word.question)">{{ word.question }}</td>
+						<td (click)="SpeechUtils.speak(word.question)">{{ word.phonetic }}</td>
+						<td (click)="SpeechUtils.speak(word.correct, true)">{{ word.correct }}</td>
+						<td>{{ word.getAverageScore() }}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div *ngIf="selectedMode != null">
+			<app-vocab-table (onPlayClick)="mode = selectedMode" [mode]="selectedMode!" [words]="words"></app-vocab-table>
+		</div>
+	</div>
 </div>
 
 <app-one-of-three [words]=words [url]=url (onGoBack)="this.mode = null" *ngIf="mode == Mode.OneOfThree"></app-one-of-three>

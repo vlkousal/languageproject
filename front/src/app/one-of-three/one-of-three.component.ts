@@ -1,8 +1,9 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {Mode, Word} from "../constants";
+import {Mode} from "../constants";
 import {SpeechUtils} from "../speechutils";
 import {GameSettingsComponent} from "../game-settings/game-settings.component";
 import {GameComponent} from "../game-component/game.component";
+import {Word} from "../../word";
 
 @Component({
     selector: 'app-one-of-three',
@@ -27,6 +28,8 @@ export class OneOfThreeComponent extends GameComponent {
         this.sendResult(isCorrect);
         if(isCorrect) {
             this.evalCorrect();
+            this.index++;
+            this.setNewWord();
         } else{
             this.evalWrong();
             this.buttonColors[answerIndex] = "#fd7676";
@@ -38,6 +41,7 @@ export class OneOfThreeComponent extends GameComponent {
                 this.buttonColors[answerIndex] = "#F9F8EB";
                 this.buttonColors[correctIndex] = "#F9F8EB";
                 this.allowAnswering = true;
+                this.index++;
                 this.setNewWord();
             }, 1500); // back to 2000 after debug
         }

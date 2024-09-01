@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import {FLAGS, Mode, Word} from "../constants";
+import {FLAGS, Mode} from "../constants";
 import {ActivatedRoute} from "@angular/router";
 import {ApiTools} from "../api-tools";
-import {VocabUtils} from "../vocabutils";
 import {first} from "rxjs";
 import {Utils} from "../utils";
+import {Word} from "../../word";
+import {SpeechUtils} from "../speechutils";
 
 @Component({
     selector: 'app-vocabulary',
@@ -28,6 +29,9 @@ export class VocabularyComponent {
     mode: Mode | null = null;
     loading: boolean = true;
 
+    selectedMode: Mode | null = null;
+    tableWords: Word[] = [];
+
     constructor(private route: ActivatedRoute) {}
 
     async ngOnInit() {
@@ -38,9 +42,11 @@ export class VocabularyComponent {
         this.characters = this.words.filter(w => w.question.length === 1);
 
         this.languageNames.sort();
+        Word.sortByAverageScore(this.words);
         this.loading = false;
         localStorage.setItem("firstLanguage", this.firstLanguage);
         localStorage.setItem("secondLanguage", this.secondLanguage);
+        this.tableWords = [...this.words];
     }
 
     async setup() {
@@ -73,10 +79,12 @@ export class VocabularyComponent {
             words.push(word);
         });
         this.words = words;
-        VocabUtils.sortByFirst(this.words);
+        Word.sortByFirst(this.words);
     }
 
     protected readonly first = first;
     protected readonly FLAGS = FLAGS;
     protected readonly Mode = Mode;
+    protected readonly SpeechUtils = SpeechUtils;
+    protected readonly Word = Word;
 }

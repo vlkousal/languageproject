@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Word} from "../constants";
+import {Word} from "../../word";
 
 @Component({
   selector: 'app-end-screen',

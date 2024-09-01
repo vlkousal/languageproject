@@ -22,6 +22,7 @@ import { TopPanelComponent } from './top-panel/top-panel.component';
 import { EndScreenComponent } from './end-screen/end-screen.component';
 import { GameComponent } from './game-component/game.component';
 import { DrawCharactersComponent } from './draw-characters/draw-characters.component';
+import { VocabTableComponent } from './vocab-table/vocab-table.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +42,8 @@ import { DrawCharactersComponent } from './draw-characters/draw-characters.compo
     TopPanelComponent,
     EndScreenComponent,
     GameComponent,
-    DrawCharactersComponent
+    DrawCharactersComponent,
+    VocabTableComponent
   ],
   imports: [
     BrowserModule,

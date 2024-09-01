@@ -124,30 +124,6 @@ export const FLAGS: FlagsDict = {
     "Zulu": "🇿🇦"
 };
 
-
-export class Word {
-
-    id: number;
-    score: number[];
-    question: string;
-    phonetic: string;
-    correct: string;
-    answers: string[];
-    flippedAnswers: string[];
-
-    constructor(id: number,  score: number[], question: string,
-                phonetic: string, correct: string, answers: string[],
-                flippedAnswers: string[]) {
-        this.id = id;
-        this.score = score;
-        this.question = question;
-        this.phonetic = phonetic
-        this.correct = correct;
-        this.answers = answers;
-        this.flippedAnswers = flippedAnswers;
-    }
-}
-
 export class VocabularySet {
 
     name: string;

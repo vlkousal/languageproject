@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {ActivatedRoute, Router} from '@angular/router';
-import {BACKEND, FLAGS, Word} from "../constants";
+import {BACKEND, FLAGS} from "../constants";
 import {ApiTools} from "../api-tools";
+import {Word} from "../../word";
 
 
 @Component({

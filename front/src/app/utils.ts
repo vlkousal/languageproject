@@ -1,4 +1,4 @@
-import {Word} from "./constants";
+import {Word} from "../word";
 
 export class Utils {
 

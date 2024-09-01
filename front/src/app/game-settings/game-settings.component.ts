@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Utils} from "../utils";
 import {SpeechUtils} from "../speechutils";
-import {FLAGS, Word} from "../constants";
+import {FLAGS} from "../constants";
+import {Word} from "../../word";
 
 @Component({
   selector: 'app-game-settings',

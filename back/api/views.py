@@ -252,7 +252,7 @@ def get_vocab(request):
     words = []
     for word in vocab.vocabulary.all():
         # getting the scores
-        scores: List[int] = [-1 for i in range(len(VocabularySetRecord.Mode.choices))]
+        scores: List[int] = [0 for i in range(len(VocabularySetRecord.Mode.choices))]
         if not no_user:
             try:
                 record = WordRecord.objects.get(user=user, word=word)

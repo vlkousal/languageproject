@@ -1,0 +1,22 @@
+<p>Average score: {{ Word.getAverageModeScore(this.words, this.mode) }}</p>
+<button (click)="onPlayClick.emit()">Play</button>
+
+<div class="table-container">
+	<table id="vocab-table">
+		<thead>
+		<th (click)="Word.sortByFirst(this.words)">First Language</th>
+		<th (click)="Word.sortByPhonetic(this.words)">Phonetic</th>
+		<th (click)="Word.sortByAnswer(this.words)">Second Language</th>
+		<th (click)="Word.sortByModeScore(this.words, mode)">Score</th>
+		</thead>
+
+		<tbody>
+		<tr *ngFor="let word of words">
+			<td (click)="SpeechUtils.speak(word.question)">{{ word.question }}</td>
+			<td (click)="SpeechUtils.speak(word.question)">{{ word.phonetic }}</td>
+			<td (click)="SpeechUtils.speak(word.correct, true)">{{ word.correct }}</td>
+			<td>{{ word.getModeScore(mode) }}</td>
+		</tr>
+		</tbody>
+	</table>
+</div>

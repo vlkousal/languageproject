@@ -1,8 +1,9 @@
 import {Component, ElementRef, Renderer2, ViewChild} from '@angular/core';
 import {FormControl} from "@angular/forms";
-import {BACKEND, FLAGS, Word} from "../constants";
+import {BACKEND, FLAGS} from "../constants";
 import {Router} from "@angular/router";
 import {ApiTools} from "../api-tools";
+import {Word} from "../../word";
 
 @Component({
   selector: 'app-createvocabulary',

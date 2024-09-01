@@ -1,0 +1,35 @@
+#vocab-table {
+    table-layout: auto;
+    width: 100%;
+    overflow: hidden;
+    border-collapse: collapse;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+thead, tbody {
+    color: var(--soft-ivory);
+    font-size: clamp(14px, 1vw, 20px);
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: var(--medium-mint);
+}
+
+td {
+    border: 2px solid var(--muted-teal);
+    width: 50px;
+}
+
+table tbody tr:nth-of-type(even) {
+    background-color: var(--soft-ivory);
+    color: var(--muted-teal);
+}
+
+.table-container {
+    width: 100%;
+    max-height: 320px;
+    overflow: scroll;
+}

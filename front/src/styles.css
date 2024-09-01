@@ -5,10 +5,10 @@ body {
 }
 
 #top-panel-container {
-    border-bottom: 2px solid var(--muted-teal);
+    border-bottom: 4px solid var(--muted-teal);
 }
 
-.container {
+#container {
     border-radius: 5px;
     background-color: var(--medium-mint);
     position: absolute;

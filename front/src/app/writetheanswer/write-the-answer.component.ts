@@ -1,8 +1,9 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {SpeechUtils} from "../speechutils";
 import {FormControl} from "@angular/forms";
-import {Mode, Word} from "../constants";
+import {Mode} from "../constants";
 import {GameComponent} from "../game-component/game.component";
+import {Word} from "../../word";
 
 @Component({
   selector: 'app-writetheanswer',
@@ -38,6 +39,7 @@ export class WriteTheAnswerComponent extends GameComponent {
             }
             return;
         }
+        this.index++;
         this.setNewWord();
     }
 

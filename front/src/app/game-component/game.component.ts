@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {BACKEND, MAX_HEALTH, Mode, STREAK_FOR_HEALTH, Word} from "../constants";
+import {BACKEND, MAX_HEALTH, Mode, STREAK_FOR_HEALTH} from "../constants";
 import {Utils} from "../utils";
 import {SpeechUtils} from "../speechutils";
-import {VocabUtils} from "../vocabutils";
 import {ApiTools} from "../api-tools";
+import {Word} from "../../word";
 
 
 @Component({
@@ -35,7 +35,7 @@ export class GameComponent implements OnInit {
 
     async ngOnInit(): Promise<void> {
         Utils.shuffleList(this.words);
-        VocabUtils.sortByScore(this.words, this.mode);
+        Word.sortByScore(this.words, this.mode);
         this.wordsCopy = [...this.words];
         this.highScore = await ApiTools.getHighScore(this.url, this.mode);
         if(this.mode == Mode.DrawCharacters) GameComponent.prepDrawingCanvas();
@@ -106,21 +106,20 @@ export class GameComponent implements OnInit {
     }
 
     setNewWord(): void {
-        console.log("word index", this.index);
         const currentWord: Word = this.words[this.index];
+        console.log("word index", this.index, currentWord.question);
 
         // throw a coin to decide whether the languages get flipped
         const coinFlip: number = Utils.flipACoin();
-        if(this.mode != Mode.DrawCharacters && coinFlip == 1) {
+        if(coinFlip == 1) {
             this.isFlipped = true;
-            this.words[this.index] = new Word(currentWord.id, currentWord.score, currentWord.correct,
+            this.words[this.index] = new Word(currentWord.id, currentWord.scores, currentWord.correct,
                 currentWord.phonetic, currentWord.question, currentWord.flippedAnswers, currentWord.answers);
             SpeechUtils.speak(this.words[this.index].question, true);
             return;
         }
         this.isFlipped = false;
         SpeechUtils.speak(currentWord.question, false);
-        this.index++;
     }
 
     sendVocabSetResult(): void {

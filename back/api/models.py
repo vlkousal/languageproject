@@ -68,3 +68,16 @@ class VocabularySetRecord(models.Model):
 
     def __str__(self):
         return self.user.username + " - " + self.set.name + "(" + str(self.score) + ")"
+
+
+class VocabularyUserRelationship(models.Model):
+    class Rating(models.TextChoices):
+        LIKED = 1, _("Liked")
+        NONE = 0, _("None")
+        DISLIKED = -1, _("Disliked")
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    set = models.ForeignKey(VocabularySet, on_delete=models.CASCADE)
+    rating = models.CharField(choices=Rating.choices, default=Rating.NONE, max_length=16)
+    saved = models.BooleanField(default=False)
+

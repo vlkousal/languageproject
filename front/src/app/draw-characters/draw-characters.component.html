@@ -1,4 +1,4 @@
-<div class="container" [hidden]="!(!showSettings && !showEnd)">
+<div id="container" [hidden]="!(!showSettings && !showEnd)">
 	<div id="top-panel-container">
 		<app-top-panel (onGoBack)="onGoBack.emit()"></app-top-panel>
 	</div>
@@ -6,7 +6,7 @@
 	<div id="stats-container">
 		<i id="flame" class="fas fa-fire">     {{ streak }}</i>
 		<i id="counter" class="fas fa-atlas">     {{ index }}/{{ words.length }}</i>
-		<i id="score" class="fas fa-star">     {{ this.words[this.index].score[Mode.DrawCharacters] }}</i>
+		<i id="score" class="fas fa-star">     {{ this.words[this.index].scores[Mode.DrawCharacters] }}</i>
 		<i id="lives" class="fas fa-heart">     {{ lives }}</i>
 	</div>
 	<div id="canvas-container">
