@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from "@angular/router";
-import {BACKEND, FLAGS, VocabularySet} from "../constants";
-import { HttpClient } from '@angular/common/http';
+import {BACKEND, FLAGS} from "../constants";
+import {VocabularySet} from "../../vocabulary-set";
 
 @Component({
   selector: 'app-collection',
@@ -16,7 +16,7 @@ export class CollectionComponent {
     urlToDelete: string = "";
     deleteClickCount: number = 0;
 
-    constructor(private router: Router, private http: HttpClient) {}
+    constructor(private router: Router) {}
 
     async ngOnInit() {
         if (localStorage.getItem("sessionId") == null) {

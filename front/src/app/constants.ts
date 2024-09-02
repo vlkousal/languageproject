@@ -123,18 +123,3 @@ export const FLAGS: FlagsDict = {
     "Yoruba": "🇳🇬",
     "Zulu": "🇿🇦"
 };
-
-export class VocabularySet {
-
-    name: string;
-    url: string;
-    first_flag: string;
-    second_flag: string;
-
-    constructor(name: string, url: string, first_flag: string, second_flag: string) {
-        this.name = name;
-        this.url = url;
-        this.first_flag = first_flag;
-        this.second_flag = second_flag;
-    }
-}

@@ -5,7 +5,7 @@
 	<input type="input">
 	<div class="set-container" *ngFor="let set of sets">
 		<a class="set-link" routerLink="/vocab/{{ set.url }}">
-			{{ set.first_flag }} {{ set.second_flag }} {{ set.name }}
+			{{ set.firstFlag }} {{ set.secondFlag }} {{ set.name }}
 		</a>
 		<div *ngIf="urlToDelete == set.url">
 			<div class="button-group">
