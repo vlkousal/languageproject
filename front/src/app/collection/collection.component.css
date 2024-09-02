@@ -8,16 +8,16 @@
     border-radius: 5px;
     font-size: 20px;
     text-align: center;
-    margin-left: 1%;
-    width: 60%;
-    background-color: var(--medium-mint);
+    width: 80%;
+    margin-left: 8%;
+    background-color: var(--pastel-mint);
 }
 
 
 .set-link {
     text-decoration: none;
     margin-right: 10px;
-    color: var(--soft-ivory);
+    color: var(--muted-teal);
     font-size: clamp(14px, 2vw, 24px);
 }
 
@@ -27,7 +27,7 @@
 
 .edit-button,
 .delete-button {
-    padding: 8px 12px;
+    padding: 4px 4px;
     margin-left: 5px;
     border: none;
     border-radius: 3px;
@@ -49,19 +49,6 @@
     filter: brightness(1.2);
 }
 
-.delete-prompt {
-    border: 1px solid #f5c6cb;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px 0;
-    width: 400px;
-}
-
-.delete-prompt p {
-    margin: 0;
-    color: #721c24;
-}
-
 .button-group {
     display: flex;
     justify-content: flex-end;
@@ -69,10 +56,11 @@
 
 .delete-yes,
 .delete-no {
-    padding: 8px 12px;
+    padding: 4px 4px;
     margin-left: 5px;
     border: none;
     border-radius: 3px;
+    color: #fff;
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -92,20 +80,19 @@
     filter: brightness(1.2);
 }
 
-
-#container {
-    min-height: 600px;
-}
-
-.header {
-    font-size: clamp(20px, 1vw, 36px);
-}
-
-p {
-    color: var(--soft-ivory);
-}
-
 input {
     border: 2px solid var(--medium-mint);
     height: 20px;
+    margin-bottom: 5%;
+}
+
+#header {
+    font-size: clamp(14px, 2vw, 24px);
+    color: var(--soft-ivory);
+    margin-bottom: 5%;
+}
+
+#container {
+    height: 60%;
+    overflow: scroll;
 }

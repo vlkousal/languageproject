@@ -10,8 +10,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
-from rest_framework.status import HTTP_200_OK
-
 from .models import Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord, VocabularyUserRelationship
 
 
@@ -228,17 +226,22 @@ def delete_set(request):
 
 @api_view(["POST"])
 def get_own_sets(request):
-    token = request.data.get("token")
-    try:
-        username = Session.objects.get(session_key=token).session_data
-    except ObjectDoesNotExist:
+    token: str = request.data.get("token")
+
+    user: User = get_user(token)
+    if user is None:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
-    user = User.objects.get(username=username)
     json = {"sets": []}
 
     for vocab_set in VocabularySet.objects.filter(author=user):
         set_json = {"name": vocab_set.name, "url": vocab_set.url, "first_language": vocab_set.first_language.name,
-                    "second_language": vocab_set.second_language.name}
+                    "second_language": vocab_set.second_language.name, "is_own": True}
+        json["sets"].append(set_json)
+
+    for relationship in VocabularyUserRelationship.objects.filter(user=user, saved=True):
+        vocab_set: VocabularySet = relationship.set
+        set_json = {"name": vocab_set.name, "url": vocab_set.url, "first_language": vocab_set.first_language.name,
+                  "second_language": vocab_set.second_language.name, "is_own": False}
         json["sets"].append(set_json)
     return Response(status=status.HTTP_200_OK, data=json)
 

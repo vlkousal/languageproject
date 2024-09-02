@@ -13,6 +13,7 @@ export class CollectionComponent {
 
     token: string|null = localStorage.getItem("sessionId");
     sets: VocabularySet[] = [];
+    filteredSets: VocabularySet[] = [];
     urlToDelete: string = "";
     deleteClickCount: number = 0;
 
@@ -23,6 +24,25 @@ export class CollectionComponent {
             this.router.navigate(["/"]);
         }
         await this.getOwnSets();
+
+        VocabularySet.sortByName(this.sets);
+        console.log("sorted", this.sets);
+
+        this.filteredSets = this.sets;
+        console.log(this.sets);
+        console.log(this.filteredSets);
+    }
+
+    onFilterChange(event: Event): void {
+        const newFilter: VocabularySet[] = [];
+        const filter: string = (event.target as HTMLInputElement).value;
+        for(let i = 0; i < this.sets.length; i++) {
+            const set = this.sets[i];
+            if(set.name.toLowerCase().includes(filter.toLowerCase())) {
+                newFilter.push(set);
+            }
+        }
+        this.filteredSets = [...newFilter];
     }
 
     async getOwnSets() {
@@ -40,11 +60,12 @@ export class CollectionComponent {
                     name: string,
                     url: string,
                     first_language: string,
-                    second_language: string
+                    second_language: string,
+                    is_own: boolean
                 }) => {
                     this.sets.push(new VocabularySet(item.name, item.url,
                         FLAGS[item.first_language],
-                        FLAGS[item.second_language]));
+                        FLAGS[item.second_language], item.is_own));
                 })
             }
             return [];
