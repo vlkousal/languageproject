@@ -1,5 +1,4 @@
 from datetime import timedelta
-from random import randint
 from typing import List
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
@@ -419,6 +418,7 @@ def get_languages(request):
 @api_view(['POST', "PUT"])
 def register(request):
     username = request.data.get("username")
+    email = request.data.get("email")
     password = request.data.get("password")
     existing = User.objects.filter(username=username)
     if existing.exists():
@@ -426,7 +426,7 @@ def register(request):
     key = generate_key()
     Session.objects.create(expire_date=timezone.now() + timedelta(weeks=2),
                            session_key=key, session_data=username)
-    User.objects.create_user(username=username, password=password)
+    User.objects.create_user(username=username, email=email, password=password)
     return Response(key, status=status.HTTP_200_OK)
 
 

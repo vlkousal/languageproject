@@ -12,6 +12,7 @@ export class RegisterComponent {
 
     constructor(private router: Router) { }
     username = new FormControl("") as FormControl<string>;
+    email = new FormControl("") as FormControl<string>;
     password = new FormControl("") as FormControl<string>;
     password_again = new FormControl("") as FormControl<string>;
     isValid = false;
@@ -27,9 +28,11 @@ export class RegisterComponent {
         if(!this.isValid) {
             return;
         }
-        const data =
-          {"username": this.username.getRawValue(),
-          "password": this.password.getRawValue()};
+        const data = {
+            "username": this.username.getRawValue(),
+            "email": this.username.getRawValue(),
+            "password": this.password.getRawValue()
+        };
 
         fetch(BACKEND + 'api/register/', {
         method: 'POST',
@@ -51,6 +54,7 @@ export class RegisterComponent {
 
     onInputChange() {
         const username = this.username.getRawValue();
+        const email = this.email.getRawValue();
         const password = this.password.getRawValue();
         const password_again = this.password_again.getRawValue();
 
@@ -72,6 +76,11 @@ export class RegisterComponent {
 
         if(username.length > 16) {
             this.feedback = "Your username is too long.";
+            return;
+        }
+
+        if(email.length == 0) {
+            this.feedback = "Enter an e-mail.";
             return;
         }
 

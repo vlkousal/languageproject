@@ -1,12 +1,14 @@
 <app-base></app-base>
 
 <div class="form">
-  <label for="username">Username:</label>
-  <input (keydown.enter)="onRegister()" (input)="onInputChange()" id="username" type="text" [formControl]="username" required>
-  <label for="password">Password:</label>
-  <input (keydown.enter)="onRegister()" (input)="onInputChange()" id=password type="password" [formControl]="password" required>
-  <label for="password_again">Password again:</label>
-  <input (keydown.enter)="onRegister()" (input)="onInputChange()" id=password_again type="password" [formControl]="password_again" required>
-  <button (click)="onRegister()">Register</button>
-  <p>{{ feedback }}</p>
+    <label for="username">Username:</label>
+    <input (keydown.enter)="onRegister()" (input)="onInputChange()" id="username" type="text" [formControl]="username" required>
+	<label for="email">E-mail:</label>
+	<input (keydown.enter)="onRegister()" (input)="onInputChange()" id="email" type="email" [formControl]="email" required>
+	<label for="password">Password:</label>
+    <input (keydown.enter)="onRegister()" (input)="onInputChange()" id=password type="password" [formControl]="password" required>
+    <label for="password_again">Password again:</label>
+    <input (keydown.enter)="onRegister()" (input)="onInputChange()" id=password_again type="password" [formControl]="password_again" required>
+    <button (click)="onRegister()">Register</button>
+    <p id="feedback">{{ feedback }}</p>
 </div>
