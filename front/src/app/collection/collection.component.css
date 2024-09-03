@@ -19,6 +19,7 @@
     margin-right: 10px;
     color: var(--muted-teal);
     font-size: clamp(14px, 2vw, 24px);
+    font-weight: bold;
 }
 
 .button-group {
