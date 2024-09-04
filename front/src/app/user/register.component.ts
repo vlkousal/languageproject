@@ -29,13 +29,13 @@ export class RegisterComponent {
 
     constructor(private router: Router) { }
 
-    ngOnInit() {
+    ngOnInit(): void {
         if(localStorage.getItem("sessionId") != null) {
             this.router.navigate(["/"]);
         }
     }
 
-    onRegister() {
+    onRegister(): void {
         if(!this.isValid) {
             return;
         }
@@ -63,7 +63,7 @@ export class RegisterComponent {
         })
     }
 
-    onInputChange() {
+    onInputChange(): void {
         const username = this.registerForm.controls["username"].value;
         const password = this.registerForm.controls["password"].value;
         const password_again = this.registerForm.controls["password_again"].value;

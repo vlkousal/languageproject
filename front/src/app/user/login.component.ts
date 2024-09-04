@@ -15,15 +15,14 @@ export class LoginComponent {
     username = new FormControl("") as FormControl<string>;
     password = new FormControl("") as FormControl<string>;
     isValid = false;
-    feedback = "Enter a username.";
 
-    ngOnInit() {
+    ngOnInit(): void {
         if(localStorage.getItem("sessionId") != null) {
             this.router.navigate(["/"]);
         }
     }
 
-    onLogin() {
+    onLogin(): void {
         if(!this.isValid) {
             return;
         }
@@ -38,9 +37,6 @@ export class LoginComponent {
         },
         body: JSON.stringify(data),
         }).then(async response => {
-            if (!response.ok) {
-                this.feedback = "Wrong credentials.";
-            }
             if(response.ok) {
                 const sessionId = (await response.text()).replace(/^"(.*)"$/, '$1');
                 localStorage.setItem("sessionId", sessionId);
@@ -49,24 +45,11 @@ export class LoginComponent {
         })
     }
 
-    onInputChange() {
+    onInputChange(): void {
         const username = this.username.getRawValue();
         const password = this.password.getRawValue();
-        this.isValid = false;
 
-        if(username.length == 0) {
-            this.feedback = "Enter a username.";
-            return;
-        }
-
-        if(password.length == 0) {
-            this.feedback = "Enter a password.";
-            return;
-        }
-        this.feedback = "Go for it!";
-        if(/^[a-zA-Z0-9&-._]+$/.test(username) && username.length >= 4
-            && username.length <= 16 && password.length >= 5) {
-            this.isValid = true;
-        }
+        this.isValid = /^[a-zA-Z0-9&-._]+$/.test(username) && username.length >= 4
+            && username.length <= 16 && password.length >= 5;
     }
 }
