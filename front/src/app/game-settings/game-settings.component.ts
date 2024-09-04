@@ -51,8 +51,8 @@ export class GameSettingsComponent {
     }
 
     setFirstAndSecondLanguage(): void {
-        const first = localStorage.getItem("firstLanguage");
-        const second = localStorage.getItem("secondLanguage");
+        const first = sessionStorage.getItem("firstLanguage");
+        const second = sessionStorage.getItem("secondLanguage");
         if(first == null || second == null) return;
         this.firstLanguage = first;
         this.secondLanguage = second;

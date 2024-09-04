@@ -13,8 +13,8 @@ export class SpeechUtils {
     }
 
     public static getVoices(): string[] {
-        let voices: string[] = [];
-        for(let voice of speechSynthesis.getVoices()) {
+        const voices: string[] = [];
+        for(const voice of speechSynthesis.getVoices()) {
             voices.push(voice.name);
         }
         return voices;
@@ -24,15 +24,15 @@ export class SpeechUtils {
         if(this.isMuted()) return;
         let voiceName;
         if(useSecondLanguage) {
-            const secondLanguage: string | null = localStorage.getItem("secondLanguage");
+            const secondLanguage: string | null = sessionStorage.getItem("secondLanguage");
             if(secondLanguage == null) return;
             voiceName = localStorage.getItem(secondLanguage);
         } else {
-            const firstLanguage: string | null = localStorage.getItem("firstLanguage");
+            const firstLanguage: string | null = sessionStorage.getItem("firstLanguage");
             if(firstLanguage == null) return;
             voiceName = localStorage.getItem(firstLanguage);
         }
-        for(let voice of speechSynthesis.getVoices()) {
+        for(const voice of speechSynthesis.getVoices()) {
             if(voice.name == voiceName){
                 this.play(text, voice);
             }

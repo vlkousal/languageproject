@@ -44,7 +44,7 @@ export class WriteTheAnswerComponent extends GameComponent {
     }
 
     speakQuestion(): void {
-        const firstLanguage: string | null = localStorage.getItem("firstLanguage");
+        const firstLanguage: string | null = sessionStorage.getItem("firstLanguage");
         if(firstLanguage != null) {
             SpeechUtils.speak(this.words[this.index].question, this.isFlipped);
         }
