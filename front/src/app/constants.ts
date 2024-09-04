@@ -1,6 +1,9 @@
 export const STREAK_FOR_HEALTH: number = 3;
 export const MAX_HEALTH: number = 10;
 export const BACKEND: string = "http://localhost:8000/";
+export const USERNAME_MIN_LENGTH: number = 4
+export const USERNAME_MAX_LENGTH: number = 16
+export const PASSWORD_MIN_LENGTH: number = 5;
 
 
 export enum Mode {

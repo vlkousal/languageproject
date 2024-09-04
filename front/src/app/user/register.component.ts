@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import {FormControl} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import { Router } from '@angular/router';
-import {BACKEND} from "../constants";
+import {BACKEND, PASSWORD_MIN_LENGTH, USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH} from "../constants";
+
 @Component({
   selector: 'app-user',
   templateUrl: './register.component.html',
@@ -10,13 +11,23 @@ import {BACKEND} from "../constants";
 
 export class RegisterComponent {
 
-    constructor(private router: Router) { }
-    username = new FormControl("") as FormControl<string>;
-    email = new FormControl("") as FormControl<string>;
-    password = new FormControl("") as FormControl<string>;
-    password_again = new FormControl("") as FormControl<string>;
+    registerForm: FormGroup = new FormGroup({
+        username: new FormControl("", [
+            Validators.required,
+            Validators.pattern("^[a-zA-Z0-9&-._]+$")
+        ]),
+        email: new FormControl("", [
+            Validators.required,
+            Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
+        ]),
+        password: new FormControl(""),
+        password_again: new FormControl("")
+
+    })
     isValid = false;
     feedback = "Enter a username.";
+
+    constructor(private router: Router) { }
 
     ngOnInit() {
         if(localStorage.getItem("sessionId") != null) {
@@ -29,9 +40,9 @@ export class RegisterComponent {
             return;
         }
         const data = {
-            "username": this.username.getRawValue(),
-            "email": this.username.getRawValue(),
-            "password": this.password.getRawValue()
+            "username": this.registerForm.controls["username"].value,
+            "email": this.registerForm.controls["email"].value,
+            "password": this.registerForm.controls["password"].value
         };
 
         fetch(BACKEND + 'api/register/', {
@@ -53,10 +64,9 @@ export class RegisterComponent {
     }
 
     onInputChange() {
-        const username = this.username.getRawValue();
-        const email = this.email.getRawValue();
-        const password = this.password.getRawValue();
-        const password_again = this.password_again.getRawValue();
+        const username = this.registerForm.controls["username"].value;
+        const password = this.registerForm.controls["password"].value;
+        const password_again = this.registerForm.controls["password_again"].value;
 
         this.isValid = false;
         if(username.length == 0) {
@@ -64,38 +74,28 @@ export class RegisterComponent {
             return;
         }
 
-        if(!/^[a-zA-Z0-9&-._]+$/.test(username)) {
+        if(!/^[a-zA-Z0-9-._]+$/.test(username)) {
             this.feedback = "Your username is illegal.";
             return;
         }
 
-        if(username.length < 4) {
+        if(username.length < USERNAME_MIN_LENGTH) {
             this.feedback = "Your username is too short.";
             return;
         }
 
-        if(username.length > 16) {
+        if(username.length > USERNAME_MAX_LENGTH) {
             this.feedback = "Your username is too long.";
             return;
         }
 
-        if(email.length == 0) {
-            this.feedback = "Enter an e-mail.";
+        if(!this.registerForm.controls["email"].valid) {
+            this.feedback = "The given e-mail is not valid.";
             return;
         }
 
-        if(password.length == 0) {
-            this.feedback = "Enter a password.";
-            return;
-        }
-
-        if(password.length < 5) {
+        if(password.length < PASSWORD_MIN_LENGTH) {
             this.feedback = "Your password is too short.";
-            return;
-        }
-
-        if(password.length == 0) {
-            this.feedback = "Enter your password again.";
             return;
         }
 

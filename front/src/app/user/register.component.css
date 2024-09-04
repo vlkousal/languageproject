@@ -26,15 +26,16 @@ input {
     background-color: var(--pastel-mint);
 }
 
-button {
+input[type=submit] {
     width: calc(100% - 5px);
     padding: 8px;
     background-color: var(--pastel-mint);
-    color: white;
     border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
     border: 1px solid var(--muted-teal);
+    font-weight: bold;
+    color: var(--soft-ivory);
 }
 
 button:hover {
