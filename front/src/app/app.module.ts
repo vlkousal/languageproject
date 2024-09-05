@@ -23,6 +23,7 @@ import { GameComponent } from './game-component/game.component';
 import { DrawCharactersComponent } from './draw-characters/draw-characters.component';
 import { VocabTableComponent } from './vocab-table/vocab-table.component';
 import {CookieModule} from "ngx-cookie";
+import { ManageSetComponent } from './manage-set/manage-set.component';
 
 @NgModule({
     declarations: [
@@ -44,7 +45,8 @@ import {CookieModule} from "ngx-cookie";
         EndScreenComponent,
         GameComponent,
         DrawCharactersComponent,
-        VocabTableComponent
+        VocabTableComponent,
+        ManageSetComponent
     ],
     imports: [
         BrowserModule,
@@ -53,7 +55,7 @@ import {CookieModule} from "ngx-cookie";
             {path: "register", component: RegisterComponent},
             {path: "logout", component: LogoutComponent},
             {path: "login", component: LoginComponent},
-            {path: "create", component: CreateVocabularyComponent},
+            {path: "create", component: ManageSetComponent},
             {path: "", component: IndexComponent},
             {path: "collection", component: CollectionComponent},
             {path: "edit/:vocabUrl", component: EditVocabularyComponent}

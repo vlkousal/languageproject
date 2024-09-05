@@ -13,7 +13,7 @@ import {CookieService} from "ngx-cookie";
   styleUrls: ['./game.component.css']
 })
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class GameComponent implements OnInit {
 
