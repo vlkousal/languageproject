@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {BACKEND, FLAGS} from "../constants";
 import {ApiTools} from "../api-tools";
 import {Word} from "../../word";
+import {CookieService} from "ngx-cookie";
 
 
 @Component({
@@ -32,7 +33,8 @@ export class EditVocabularyComponent {
     filter: FormControl<string> = new FormControl("") as FormControl<string>;
     filteredRelevantWords: Set<Word> = new Set<Word>();
 
-    constructor(private route: ActivatedRoute, private router: Router) { }
+    constructor(private route: ActivatedRoute, private router: Router,
+                private cookieService: CookieService) { }
 
     async ngOnInit() {
         ApiTools.getLanguageJson().then((result: string) => {
@@ -45,7 +47,7 @@ export class EditVocabularyComponent {
             this.url.setValue(params["vocabUrl"]);
             this.previousurl = params["vocabUrl"];
         })
-        const vocabData = await ApiTools.getVocabJson(this.url.getRawValue());
+        const vocabData = await ApiTools.getVocabJson(this.url.getRawValue(), this.cookieService);
         const parsed = JSON.parse(vocabData);
         this.name.setValue(parsed.name);
         this.description.setValue(parsed.description);
@@ -115,14 +117,14 @@ export class EditVocabularyComponent {
         if(this.counter >= 3) {
             const vocabString = this.vocab.getRawValue().replaceAll(this.delimiter.getRawValue(), ";");
             const json = {
-                "session_id": localStorage.getItem("sessionId"),
-                "name": this.name.getRawValue(),
-                "description": this.description.getRawValue(),
-                "url": this.url.getRawValue(),
-                "previous_url": this.previousurl,
-                "first_language": this.firstLanguage.getRawValue(),
-                "second_language": this.secondLanguage.getRawValue(),
-                "vocabulary": vocabString
+                token: this.cookieService.get("token"),
+                name: this.name.getRawValue(),
+                description: this.description.getRawValue(),
+                url: this.url.getRawValue(),
+                previous_url: this.previousurl,
+                first_language: this.firstLanguage.getRawValue(),
+                second_language: this.secondLanguage.getRawValue(),
+                vocabulary: vocabString
             }
 
             fetch(BACKEND + "api/editvocab/", {

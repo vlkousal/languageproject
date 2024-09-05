@@ -37,4 +37,10 @@ export class Utils {
     static flipACoin(): 0 | 1 {
         return Math.random() < 0.5 ? 0 : 1;
     }
+
+    static getThirtyDaysFromNow(): Date {
+        const expiresDate = new Date();
+        expiresDate.setDate(expiresDate.getDate() + 30);
+        return expiresDate;
+    }
 }

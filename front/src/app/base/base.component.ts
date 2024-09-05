@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {BACKEND} from "../constants";
+import {CookieService} from "ngx-cookie";
 
 @Component({
     selector: 'app-base',
@@ -11,24 +12,27 @@ export class BaseComponent {
 
     username: string | null = null;
 
-    async ngOnInit() {
+    constructor(private cookieService: CookieService) {}
+
+    async ngOnInit(): Promise<void> {
         await this.sendTokenToCheck();
     }
 
-    async sendTokenToCheck() {
-        const data = {"token": localStorage.getItem("sessionId")};
+    async sendTokenToCheck(): Promise<void> {
         fetch(BACKEND + "api/checktoken/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify({token: this.cookieService.get("token")})
         }).then(async response => {
             if(response.ok) {
-                this.username = (await response.text()).replace(/^"(.*)"$/, '$1');
-            } else{
-                localStorage.clear();
+                this.username = JSON.parse(await response.text()).username;
+                return;
             }
+            localStorage.clear();
         })
     }
+
+    protected readonly console = console;
 }

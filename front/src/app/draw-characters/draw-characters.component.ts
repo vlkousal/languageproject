@@ -3,6 +3,7 @@ import {GameComponent} from "../game-component/game.component";
 import {Mode} from "../constants";
 import {SpeechUtils} from "../speechutils";
 import {Word} from "../../word";
+import {CookieService} from "ngx-cookie";
 
 @Component({
   selector: 'app-draw-characters',
@@ -15,8 +16,8 @@ export class DrawCharactersComponent extends GameComponent {
     correctMinimum: number = 0;
     allowAnswering: boolean = true;
 
-    constructor() {
-        super(Mode.DrawCharacters);
+    constructor(cookieService: CookieService) {
+        super(Mode.DrawCharacters, cookieService);
     }
 
     resetCanvas(): void {

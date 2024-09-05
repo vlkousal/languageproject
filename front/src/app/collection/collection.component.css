@@ -85,6 +85,7 @@ input {
     border: 2px solid var(--medium-mint);
     height: 20px;
     margin-bottom: 5%;
+    width: 40%;
 }
 
 #header {

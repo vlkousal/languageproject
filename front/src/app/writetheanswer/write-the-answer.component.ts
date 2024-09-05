@@ -4,6 +4,7 @@ import {FormControl} from "@angular/forms";
 import {Mode} from "../constants";
 import {GameComponent} from "../game-component/game.component";
 import {Word} from "../../word";
+import {CookieService} from "ngx-cookie";
 
 @Component({
   selector: 'app-writetheanswer',
@@ -15,8 +16,9 @@ export class WriteTheAnswerComponent extends GameComponent {
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
     writtenAnswer: FormControl<string> = new FormControl("") as FormControl<string>;
 
-    constructor() {
-        super(Mode.WriteTheAnswer)
+
+    constructor(cookieService: CookieService) {
+        super(Mode.WriteTheAnswer, cookieService);
     }
 
     checkAnswer(): void {

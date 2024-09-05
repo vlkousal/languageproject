@@ -1,16 +1,17 @@
 import {BACKEND, Mode} from "./constants";
+import {CookieService} from "ngx-cookie";
 
 
 export class ApiTools {
 
-    static async getVocabJson(url: string): Promise<string> {
+    static async getVocabJson(url: string, cookieService: CookieService): Promise<string> {
         try {
             const response = await fetch(BACKEND + 'api/getvocab/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({"url": url, "token": localStorage.getItem("sessionId")})
+            body: JSON.stringify({url: url, token: cookieService.get("token")}),
         });
 
         if (!response.ok) {
@@ -24,22 +25,6 @@ export class ApiTools {
         }
     }
 
-    static sendResult(wordId: number, correct: boolean) {
-        const data = {
-            "token": localStorage.getItem("sessionId"),
-            "wordId": wordId,
-            "correct": correct
-        }
-
-        fetch(BACKEND + "api/addresult/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-    }
-
     static async getRelevantVocabulary(firstLanguage: string, secondLanguage: string): Promise<string> {
         try {
             const response = await fetch(BACKEND + "api/getlanguagevocab/", {
@@ -47,8 +32,8 @@ export class ApiTools {
                 headers: {
                     "Content-Type": "application/json",
                 }, body: JSON.stringify({
-                    "first_language": firstLanguage,
-                    "second_language": secondLanguage
+                    first_language: firstLanguage,
+                    second_language: secondLanguage
                 })
             });
 
@@ -81,11 +66,11 @@ export class ApiTools {
         }
     }
 
-    static async getHighScore(url: string, mode: Mode): Promise<number> {
+    static async getHighScore(url: string, mode: Mode, cookieService: CookieService): Promise<number> {
         const data = {
-            "token": localStorage.getItem("sessionId"),
-            "url": url,
-            "mode": mode.valueOf()
+            token: cookieService.get("token"),
+            url: url,
+            mode: mode.valueOf()
         }
 
         try {

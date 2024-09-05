@@ -99,9 +99,9 @@ def save_set(request):
 
 @api_view(['POST'])
 def edit_vocab(request):
-    session_id = request.data.get('session_id')
-    previous_url = request.data.get('previous_url')
-    username = Session.objects.get(session_key=session_id).session_data
+    token = request.data.get("token")
+    previous_url = request.data.get("previous_url")
+    username = Session.objects.get(session_key=token).session_data
     user = User.objects.get(username=username)
     author = VocabularySet.objects.get(url=previous_url).author
     vocab_set = VocabularySet.objects.get(url=previous_url)
@@ -253,7 +253,7 @@ def check_token(request):
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
     username = session.session_data
-    return Response(username, status=status.HTTP_200_OK)
+    return Response(data={"username": username }, status=status.HTTP_200_OK)
 
 
 def check_sessions():
@@ -342,8 +342,8 @@ def get_vocab(request):
 
 @api_view(["POST", "PUT"])
 def create_vocab(request):
-    session_id = request.data.get("session_id")
-    session = Session.objects.get(session_key=session_id)
+    token = request.data.get("token")
+    session = Session.objects.get(session_key=token)
     if session is None:
         return Response(status=status.HTTP_400_BAD_REQUEST)
     user = User.objects.get(username=session.session_data)
@@ -427,10 +427,10 @@ def register(request):
     Session.objects.create(expire_date=timezone.now() + timedelta(weeks=2),
                            session_key=key, session_data=username)
     User.objects.create_user(username=username, email=email, password=password)
-    return Response(key, status=status.HTTP_200_OK)
+    return Response(data={"token": key}, status=status.HTTP_200_OK)
 
 
-@api_view(["POST", "PUT"])
+@api_view(["POST"])
 def login(request):
     username = request.data.get("username")
     password = request.data.get("password")
@@ -441,10 +441,11 @@ def login(request):
     if not user.check_password(password):
         return Response(status=status.HTTP_400_BAD_REQUEST)
     key = generate_key()
-    Session.objects.create(expire_date=timezone.now() + timedelta(weeks=2),
+    print(key)
+    Session.objects.create(expire_date=timezone.now() + timedelta(weeks=4),
                            session_key=key,
                            session_data=username)
-    return Response(key, status=status.HTTP_200_OK)
+    return Response(data={"token": key}, status=status.HTTP_200_OK)
 
 
 def generate_key():

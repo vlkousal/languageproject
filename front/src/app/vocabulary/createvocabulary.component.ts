@@ -4,6 +4,7 @@ import {BACKEND, FLAGS} from "../constants";
 import {Router} from "@angular/router";
 import {ApiTools} from "../api-tools";
 import {Word} from "../../word";
+import {CookieService} from "ngx-cookie";
 
 @Component({
   selector: 'app-createvocabulary',
@@ -42,7 +43,7 @@ export class CreateVocabularyComponent {
     @ViewChild('relevantButton', { static: true }) relevantButton!: ElementRef;
     @ViewChild('summaryButton', { static: true }) summaryButton!: ElementRef;
 
-    constructor(private router: Router, private renderer: Renderer2) { }
+    constructor(private router: Router, private renderer: Renderer2, private cookieService: CookieService) { }
 
     async ngOnInit() {
         this.randomizeLanguages();
@@ -156,13 +157,13 @@ export class CreateVocabularyComponent {
         if(this.counter >= 3) {
             const vocabString = this.content.replaceAll(this.delimiter.getRawValue(), ";");
             const json = {
-                "session_id": localStorage.getItem("sessionId"),
-                "name": this.name.getRawValue(),
-                "description": this.description.getRawValue(),
-                "url": this.url.getRawValue(),
-                "first_language": this.firstLanguage.getRawValue(),
-                "second_language": this.secondLanguage.getRawValue(),
-                "vocabulary": vocabString
+                token: this.cookieService.get("token"),
+                name: this.name.getRawValue(),
+                description: this.description.getRawValue(),
+                url: this.url.getRawValue(),
+                first_language: this.firstLanguage.getRawValue(),
+                second_language: this.secondLanguage.getRawValue(),
+                vocabulary: vocabString
             }
 
             fetch(BACKEND + "api/createvocab/", {

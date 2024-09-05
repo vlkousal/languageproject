@@ -2,6 +2,8 @@ import {Component} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {Router} from '@angular/router';
 import {BACKEND} from "../constants";
+import {CookieService} from "ngx-cookie";
+import {Utils} from "../utils";
 
 @Component({
   selector: 'app-login',
@@ -10,25 +12,23 @@ import {BACKEND} from "../constants";
 })
 export class LoginComponent {
 
-    constructor(private router: Router) { }
+    constructor(private router: Router, private cookieService: CookieService) { }
 
     username = new FormControl("") as FormControl<string>;
     password = new FormControl("") as FormControl<string>;
     isValid = false;
 
-    ngOnInit(): void {
-        if(localStorage.getItem("sessionId") != null) {
-            this.router.navigate(["/"]);
-        }
+    async ngOnInit(): Promise<void> {
+        if(this.cookieService.get("token") != null) await this.router.navigate(["/"]);
     }
 
     onLogin(): void {
-        if(!this.isValid) {
-            return;
-        }
-        const data =
-        {"username": this.username.getRawValue(),
-          "password": this.password.getRawValue()};
+        if(!this.isValid) return;
+
+        const data = {
+            username: this.username.getRawValue(),
+            password: this.password.getRawValue()
+        };
 
         fetch(BACKEND + 'api/login/', {
         method: 'POST',
@@ -38,9 +38,9 @@ export class LoginComponent {
         body: JSON.stringify(data),
         }).then(async response => {
             if(response.ok) {
-                const sessionId = (await response.text()).replace(/^"(.*)"$/, '$1');
-                localStorage.setItem("sessionId", sessionId);
-                window.location.href = '/';
+                const token: string = JSON.parse(await response.text()).token;
+                this.cookieService.put("token", token, {expires: Utils.getThirtyDaysFromNow(), sameSite: "lax"});
+                await this.router.navigate(["/"]);
             }
         })
     }

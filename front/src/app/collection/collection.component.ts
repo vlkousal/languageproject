@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from "@angular/router";
 import {BACKEND, FLAGS} from "../constants";
 import {VocabularySet} from "../../vocabulary-set";
+import {CookieService} from "ngx-cookie";
 
 @Component({
   selector: 'app-collection',
@@ -11,26 +12,21 @@ import {VocabularySet} from "../../vocabulary-set";
 
 export class CollectionComponent {
 
-    token: string|null = localStorage.getItem("sessionId");
+    token: string | undefined = "";
     sets: VocabularySet[] = [];
     filteredSets: VocabularySet[] = [];
     urlToDelete: string = "";
     deleteClickCount: number = 0;
 
-    constructor(private router: Router) {}
+    constructor(private router: Router, private cookieService: CookieService) {}
 
     async ngOnInit() {
-        if (localStorage.getItem("sessionId") == null) {
-            this.router.navigate(["/"]);
-        }
+        this.token = this.cookieService.get("token");
+        if (this.token == null) await this.router.navigate(["/"]);
+
         await this.getOwnSets();
-
         VocabularySet.sortByName(this.sets);
-        console.log("sorted", this.sets);
-
         this.filteredSets = this.sets;
-        console.log(this.sets);
-        console.log(this.filteredSets);
     }
 
     onFilterChange(event: Event): void {
@@ -94,7 +90,7 @@ export class CollectionComponent {
     }
 
     deleteSet(urlToDelete: string) {
-        const data = { "token": this.token, "url_to_delete": urlToDelete };
+        const data = { token: this.token, url_to_delete: urlToDelete };
 
         fetch(BACKEND + "api/deleteset/", {
             method: "DELETE",

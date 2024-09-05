@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import { Router } from '@angular/router';
 import {BACKEND, PASSWORD_MIN_LENGTH, USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH} from "../constants";
+import {CookieService} from "ngx-cookie";
+import {Utils} from "../utils";
 
 @Component({
   selector: 'app-user',
@@ -27,22 +29,19 @@ export class RegisterComponent {
     isValid = false;
     feedback = "Enter a username.";
 
-    constructor(private router: Router) { }
+    constructor(private router: Router, private cookieService: CookieService) { }
 
-    ngOnInit(): void {
-        if(localStorage.getItem("sessionId") != null) {
-            this.router.navigate(["/"]);
-        }
+    async ngOnInit(): Promise<void> {
+        if(this.cookieService.get("token") != null ) await this.router.navigate(["/"]);
     }
 
     onRegister(): void {
-        if(!this.isValid) {
-            return;
-        }
+        if(!this.isValid) return;
+
         const data = {
-            "username": this.registerForm.controls["username"].value,
-            "email": this.registerForm.controls["email"].value,
-            "password": this.registerForm.controls["password"].value
+            username: this.registerForm.controls["username"].value,
+            email: this.registerForm.controls["email"].value,
+            password: this.registerForm.controls["password"].value
         };
 
         fetch(BACKEND + 'api/register/', {
@@ -56,9 +55,9 @@ export class RegisterComponent {
                 this.feedback = "A user with this username already exists.";
             }
             if(response.ok) {
-                const sessionId = (await response.text()).replace(/^"(.*)"$/, '$1');
-                localStorage.setItem("sessionId", sessionId);
-                this.router.navigate(["/"]);
+                const token: string = JSON.parse(await response.text()).token;
+                this.cookieService.put("token", token, {expires: Utils.getThirtyDaysFromNow(), sameSite: "lax"});
+                await this.router.navigate(["/"]);
             }
         })
     }

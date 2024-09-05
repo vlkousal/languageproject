@@ -7,6 +7,7 @@ import {Utils} from "../utils";
 import {Word} from "../../word";
 import {SpeechUtils} from "../speechutils";
 import {style} from "@angular/animations";
+import {CookieService} from "ngx-cookie";
 
 @Component({
     selector: 'app-vocabulary',
@@ -36,7 +37,7 @@ export class VocabularyComponent {
 
     isSaved: boolean = false;
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(private route: ActivatedRoute, private cookieService: CookieService) { }
 
     async ngOnInit() {
         this.route.params.subscribe(params => {
@@ -59,8 +60,8 @@ export class VocabularyComponent {
 
     async getSavedStatus(): Promise<string> {
         const data = {
-            "token": localStorage.getItem("sessionId"),
-            "url": this.url,
+            token: this.cookieService.get("token"),
+            url: this.url,
         }
 
         try {
@@ -80,9 +81,9 @@ export class VocabularyComponent {
 
     async saveSet(): Promise<void> {
         const data = {
-            "token": localStorage.getItem("sessionId"),
-            "url": this.url,
-            "isSaved": this.isSaved
+            token: this.cookieService.get("token"),
+            url: this.url,
+            isSaved: this.isSaved
         }
 
         try {
@@ -107,7 +108,7 @@ export class VocabularyComponent {
                 headers: {
                     'Content-Type': "application/json",
                 },
-                body: JSON.stringify({"token": localStorage.getItem("sessionId")})
+                body: JSON.stringify({token: this.cookieService.get("token")})
             });
 
             if (!response.ok) {
@@ -122,7 +123,7 @@ export class VocabularyComponent {
     }
 
     async setup(): Promise<void> {
-        const vocab: string =  await ApiTools.getVocabJson(this.url)
+        const vocab: string =  await ApiTools.getVocabJson(this.url, this.cookieService);
         const json = JSON.parse(vocab);
         this.name = json.name;
         this.contributor = json.author;
@@ -159,5 +160,4 @@ export class VocabularyComponent {
     protected readonly Mode = Mode;
     protected readonly SpeechUtils = SpeechUtils;
     protected readonly Word = Word;
-    protected readonly style = style;
 }

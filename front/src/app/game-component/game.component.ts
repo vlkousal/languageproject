@@ -1,15 +1,19 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Injectable, Input, OnInit} from '@angular/core';
 import {BACKEND, MAX_HEALTH, Mode, STREAK_FOR_HEALTH} from "../constants";
 import {Utils} from "../utils";
 import {SpeechUtils} from "../speechutils";
 import {ApiTools} from "../api-tools";
 import {Word} from "../../word";
+import {CookieService} from "ngx-cookie";
 
 
 @Component({
   selector: 'app-game-component',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css']
+})
+@Injectable({
+    providedIn: 'root'
 })
 export class GameComponent implements OnInit {
 
@@ -29,15 +33,18 @@ export class GameComponent implements OnInit {
     showSettings: boolean = false;
     mode: Mode;
 
-    constructor(mode: Mode) {
+    protected cookieService: CookieService;
+
+    constructor(mode: Mode, cookieService: CookieService) {
         this.mode = mode;
+        this.cookieService = cookieService;
     }
 
     async ngOnInit(): Promise<void> {
         Utils.shuffleList(this.words);
         Word.sortByScore(this.words, this.mode);
         this.wordsCopy = [...this.words];
-        this.highScore = await ApiTools.getHighScore(this.url, this.mode);
+        this.highScore = await ApiTools.getHighScore(this.url, this.mode, this.cookieService);
         if(this.mode == Mode.DrawCharacters) GameComponent.prepDrawingCanvas();
         this.setNewWord();
     }
@@ -90,7 +97,7 @@ export class GameComponent implements OnInit {
 
     sendResult(correct: boolean): void {
         const data = {
-            token: localStorage.getItem("sessionId"),
+            token: this.cookieService.get("token"),
             wordId: this.words[this.index].id,
             mode: this.mode,
             correct: correct
@@ -124,7 +131,7 @@ export class GameComponent implements OnInit {
 
     sendVocabSetResult(): void {
         const data = {
-            token: localStorage.getItem("sessionId"),
+            token: this.cookieService.get("token"),
             setUrl: this.url,
             score: this.score,
             mode: this.mode

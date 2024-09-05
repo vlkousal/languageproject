@@ -4,6 +4,7 @@ import {SpeechUtils} from "../speechutils";
 import {GameSettingsComponent} from "../game-settings/game-settings.component";
 import {GameComponent} from "../game-component/game.component";
 import {Word} from "../../word";
+import {CookieService} from "ngx-cookie";
 
 @Component({
     selector: 'app-one-of-three',
@@ -16,8 +17,8 @@ export class OneOfThreeComponent extends GameComponent {
     buttonColors: string[] = ["#F9F8EB", "#F9F8EB", "#F9F8EB"];
     allowAnswering: boolean = true;
 
-    constructor() {
-        super(Mode.OneOfThree);
+    constructor(cookieService: CookieService) {
+        super(Mode.OneOfThree, cookieService);
     }
 
     checkAnswer(answerIndex: number): void {

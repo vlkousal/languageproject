@@ -2,7 +2,7 @@
 
 <div id="container">
 	<p id="header">Collection</p>
-	<input type="input" (input)="onFilterChange($event)">
+	<input type="text" (input)="onFilterChange($event)">
 	<div class="set-container" *ngFor="let set of filteredSets">
 		<a class="set-link" routerLink="/vocab/{{ set.url }}">
 			{{ set.firstFlag }} {{ set.secondFlag }} {{ set.name }}
