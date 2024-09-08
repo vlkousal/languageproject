@@ -15,7 +15,7 @@ export class CollectionComponent {
     token: string | undefined = "";
     sets: VocabularySet[] = [];
     filteredSets: VocabularySet[] = [];
-    urlToDelete: string = "";
+    setToDelete: VocabularySet | null = null;
     deleteClickCount: number = 0;
 
     constructor(private router: Router, private cookieService: CookieService) {}
@@ -23,7 +23,6 @@ export class CollectionComponent {
     async ngOnInit() {
         this.token = this.cookieService.get("token");
         if (this.token == null) await this.router.navigate(["/"]);
-
         await this.getOwnSets();
         VocabularySet.sortByName(this.sets);
         this.filteredSets = this.sets;
@@ -41,7 +40,7 @@ export class CollectionComponent {
         this.filteredSets = [...newFilter];
     }
 
-    async getOwnSets() {
+    async getOwnSets(): Promise<void> {
         const data = { "token": this.token };
         fetch(BACKEND + "api/getownsets/", {
             method: "POST",
@@ -68,29 +67,24 @@ export class CollectionComponent {
         })
     }
 
-    onYesButtonClick() {
+    async onYesButtonClick(): Promise<void> {
         this.deleteClickCount++;
         if(this.deleteClickCount == 3) {
-            this.deleteSet(this.urlToDelete);
-            this.onNoButtonClick();
+            await this.deleteSet();
         }
     }
 
-    onNoButtonClick() {
+    onNoButtonClick(): void {
         this.deleteClickCount = 0;
-        this.urlToDelete = "";
+        this.setToDelete = null;
     }
 
-    onDeleteButtonClick(url: string) {
-        this.urlToDelete = url;
+    async onEditButtonClick(set: VocabularySet): Promise<void> {
+        await this.router.navigate(["/edit/" + set.url]);
     }
 
-    onEditButtonClick(url: string) {
-        this.router.navigate(["/edit/" + url]);
-    }
-
-    deleteSet(urlToDelete: string) {
-        const data = { token: this.token, url_to_delete: urlToDelete };
+    async deleteSet(): Promise<void> {
+        const data = { token: this.token, url_to_delete: this.setToDelete!.url };
 
         fetch(BACKEND + "api/deleteset/", {
             method: "DELETE",
@@ -99,8 +93,10 @@ export class CollectionComponent {
             },
             body: JSON.stringify(data),
         }).then(async response => {
-            if(response.ok) {
-                window.location.reload();
+            if(response.ok){
+                this.sets.splice(this.sets.indexOf(this.setToDelete!), 1);
+                this.onNoButtonClick()
+                return;
             }
             console.error("Couldn't delete the set!");
         })

@@ -218,8 +218,8 @@ def delete_set(request):
             author__username=username)
         set_to_delete.delete()
     except ObjectDoesNotExist:
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
-    return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    return Response(status=status.HTTP_200_OK)
 
 
 @api_view(["POST"])

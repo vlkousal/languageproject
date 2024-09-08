@@ -7,16 +7,16 @@
 		<a class="set-link" routerLink="/vocab/{{ set.url }}">
 			{{ set.firstLanguage }} {{ set.secondLanguage }} {{ set.name }}
 		</a>
-		<div *ngIf="urlToDelete == set.url">
+		<div *ngIf="setToDelete == set">
 			<div class="button-group">
 				<i class="fa fa-check delete-yes" (click)="onYesButtonClick()"></i>
 				<i class="fa fa-x delete-no" (click)="onNoButtonClick()"></i>
 			</div>
 		</div>
-		<div *ngIf="set.isOwn && urlToDelete != set.url">
+		<div *ngIf="set.isOwn && setToDelete != set">
 			<div class="button-group">
-				<i class="fa fa-pen-to-square edit-button" (click)="onEditButtonClick(set.url)"></i>
-				<i class="fa fa-trash-can delete-button" (click)="onDeleteButtonClick(set.url)"></i>
+				<i class="fa fa-pen-to-square edit-button" (click)="onEditButtonClick(set)"></i>
+				<i class="fa fa-trash-can delete-button" (click)="setToDelete = set;"></i>
 			</div>
 		</div>
 	</div>
