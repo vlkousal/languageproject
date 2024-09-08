@@ -1,0 +1,72 @@
+<div id="container" *ngIf="state == State.WORD_PAGE">
+
+	<div class="top-buttons">
+		<button #textButton (click)="showText()">Text</button>
+		<button #relevantButton (click)="showRelevant()">Suggestions</button>
+		<button #summaryButton (click)="showTable()">Summary</button>
+	</div>
+
+	<div class="filter" *ngIf="selectedCategory == Category.TEXT">
+		<label for="delimiter">Delimiter: </label>
+		<input (input)="onInputChange()" id=delimiter type="text" [formControl]="delimiter" required size="1" [defaultValue]="';'" style="width: 128px">
+	</div>
+
+	<div class="filter" *ngIf="selectedCategory == Category.RELEVANT">
+		<label for="filter">Filter: </label>
+		<input (input)="onFilterChange()" id="filter" type="text" [formControl]="filter" style="width: 128px">
+	</div>
+
+	<div class="filter" *ngIf="selectedCategory == Category.SUMMARY">
+		<label for="filter">Filter: </label>
+		<input (input)="onWordsFilterChange()" id="wordsFilter" type="text" [formControl]="wordsFilter" style="width: 128px">
+	</div>
+
+	<div class="text-area" *ngIf="selectedCategory == Category.TEXT">
+		<textarea (input)="onInputChange()" [(ngModel)]="content" type="text" class="numbered" id="textarea" required></textarea>
+		<input type="file" (change)="onFileSelected($event)" />
+	</div>
+
+	<div class="relevant-vocabulary" *ngIf="selectedCategory == Category.RELEVANT">
+		<table>
+			<tr>
+				<th>First</th>
+				<th>Phonetic</th>
+				<th>Second</th>
+				<th>Action</th>
+			</tr>
+
+			<tr *ngFor="let word of filteredRelevantWords">
+				<td>{{ word.question }}</td>
+				<td>{{ word.phonetic }}</td>
+				<td>{{ word.correct }}</td>
+				<td><button (click)="addWord(word)">Add</button></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="table-container" *ngIf="selectedCategory == Category.SUMMARY">
+		<table>
+			<tr>
+				<th>First</th>
+				<th>Phonetic</th>
+				<th>Second</th>
+				<th>Action</th>
+			</tr>
+
+			<tr *ngFor="let word of filteredWords">
+				<td>{{ word.question }}</td>
+				<td>{{ word.phonetic }}</td>
+				<td>{{ word.correct }}</td>
+				<td><button (click)="removeWord(word)" style="background-color: #ea6161">Remove</button></td>
+			</tr>
+		</table>
+	</div>
+
+	<div id="bottom-panel">
+		<i class="fas fa-arrow-left" (click)="onGoBack.emit()"></i>
+		<i class="fas fa-arrow-right" (click)="state = State.SUMMARY"></i>
+	</div>
+</div>
+
+<app-vocabulary-creation-summary *ngIf="state == State.SUMMARY" (onGoBack)="state = State.WORD_PAGE"
+[set]="set!" [words]="words"></app-vocabulary-creation-summary>

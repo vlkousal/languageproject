@@ -42,7 +42,7 @@ INSTALLED_APPS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200",  # Přidejte adresu vaší frontendové aplikace
+    "http://localhost:4200",
 ]
 
 MIDDLEWARE = [

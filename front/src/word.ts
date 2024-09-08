@@ -45,6 +45,15 @@ export class Word {
         return this.scores[mode];
     }
 
+    static containsWord(words: Set<Word>, word: Word): boolean {
+        for(const w of words) {
+            if(w.question == word.question && w.phonetic == word.phonetic && w.correct == word.correct) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     static sortByFirst(words: Word[]): void {
         Word.sortByProperty(words, "question", Property.First);
     }
@@ -76,7 +85,6 @@ export class Word {
     }
 
     static sortByModeScore(words: Word[], mode: Mode): void {
-        console.log(mode.toString());
         if(Word.sortProperty != Property.Score) {
             Word.sortProperty = Property.Score;
             words.sort( (a, b) => {

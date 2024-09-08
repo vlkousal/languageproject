@@ -34,7 +34,7 @@ class VocabularySet(models.Model):
     vocabulary = models.ManyToManyField(WordEntry)
 
     def __str__(self):
-        return self.name
+        return self.name + ", URL: /" + self.url
 
 
 class WordRecord(models.Model):

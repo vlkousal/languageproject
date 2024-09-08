@@ -43,4 +43,8 @@ export class Utils {
         expiresDate.setDate(expiresDate.getDate() + 30);
         return expiresDate;
     }
+
+    static removeDiacritics(inputString: string): string {
+        return inputString.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
 }

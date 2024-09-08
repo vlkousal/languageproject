@@ -20,7 +20,7 @@ export class IndexComponent {
             first_language: string;
             second_language: string;
         }) => {
-            this.sets.push(new VocabularySet(item.name, item.url, FLAGS[item.first_language],
+            this.sets.push(new VocabularySet(item.name, item.url, "",FLAGS[item.first_language],
                 FLAGS[item.second_language], false));
         });
         this.debug = await this.getSets();

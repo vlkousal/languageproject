@@ -82,7 +82,6 @@ export class DrawCharactersComponent extends GameComponent {
     }
 
     override setNewWord(): void {
-        console.log("novy index", this.index);
         const currentWord: Word = this.words[this.index];
         this.resetCanvas();
         SpeechUtils.speak(currentWord.question, false);

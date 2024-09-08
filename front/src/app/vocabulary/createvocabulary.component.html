@@ -1,103 +1,28 @@
-<body>
-    <app-base></app-base>
-	<div class="container">
+<app-base></app-base>
+<div class="form" *ngIf="state == State.NAME_PAGE">
+		<label for="name">Name:</label>
+		<input (input)="onInputChange()" id="name" type="text" [formControl]="name" placeholder="The name of the set" required maxlength="48"/>
 
-		<div class="bottom-panel" id="top-panel">
-			<div class="top-buttons">
-				<button #textButton (click)="showText()">Text</button>
-				<button #relevantButton (click)="showRelevant()">Suggestions</button>
-				<button #summaryButton (click)="showTable()">Summary</button>
-			</div>
-		</div>
+		<label for="description">Description:</label>
+		<textarea (input)="onInputChange()" id="description" [formControl]="description" maxlength="256" placeholder="The description of the set (not required)"></textarea>
 
-		<div class="form">
-			<div class="first-form">
-				<label for="name">Name:</label>
-				<input (input)="onFirstInputChange()" id="name" type="text" [formControl]="name" placeholder="The name of the set" required maxlength="48"/>
+		<label for="url">URL:</label>
+		<input (input)="onInputChange()" id="url" type="text" [formControl]="url" maxlength="16" placeholder="The URL of the set" required/>
 
-				<label for="description">Description:</label>
-				<textarea id="description" [formControl]="description" maxlength="256" placeholder="The description of the set (not required)"></textarea>
+		<label for="firstLanguage">First language:</label>
+		<select id="firstLanguage" [formControl]="firstLanguage" (change)="getRelevantWords()">
+			<option *ngFor="let language of languages" [value]="language">{{language}}</option>
+		</select>
 
-				<label for="url">URL:</label>
-				<input (input)="onFirstInputChange()" id="url" type="text" [formControl]="url" maxlength="16" placeholder="The URL of the set" required/>
+		<label for="secondLanguage">Second language:</label>
+		<select id="secondLanguage" [formControl]="secondLanguage" (change)="getRelevantWords()">
+			<option *ngFor="let language of languages" [value]="language">{{language}}</option>
+		</select>
+		<p id="feedback" [ngStyle]="{ 'visibility': isValid ? 'hidden' : 'visible' }">{{ feedback }}</p>
+		<button (click)="checkNamePage()">Continue</button>
+</div>
 
-				<label for="firstLanguage">First language:</label>
-				<select id="firstLanguage" [formControl]="firstLanguage" (change)="findRelevantWords()">
-					<option *ngFor="let language of languages" [value]="language">{{language}}</option>
-				</select>
-
-				<label for="secondLanguage">Second language:</label>
-				<select id="secondLanguage" [formControl]="secondLanguage" (change)="findRelevantWords()">
-					<option *ngFor="let language of languages" [value]="language">{{language}}</option>
-				</select>
-				<p>Valid words: {{ counter }}</p>
-			</div>
-
-			<div class="second-form">
-				<div class="filter" [hidden]="hideText">
-					<label for="delimiter">Delimiter: </label>
-					<input (input)="onInputChange()" id=delimiter type="text" [formControl]="delimiter" required size="1" [defaultValue]="';'" style="width: 128px">
-				</div>
-
-				<div class="filter" [hidden]="hideRelevant">
-					<label for="filter">Filter: </label>
-					<input (input)="onFilterChange()" id="filter" type="text" [formControl]="filter" style="width: 128px">
-				</div>
-
-				<div class="filter" [hidden]="hideTable">
-					<label for="filter">Filter: </label>
-					<input (input)="onWordsFilterChange()" id="wordsFilter" type="text" [formControl]="wordsFilter" style="width: 128px">
-				</div>
-
-				<div class="text-area" [hidden]="hideText">
-					<textarea (input)="onInputChange()" [(ngModel)]="content" type="text" class="numbered" id="textarea" required></textarea>
-					<div class="below-text">
-						<input type="file" (change)="onFileSelected($event)" />
-					</div>
-				</div>
-
-				<div class="relevant-vocabulary" [hidden]="hideRelevant">
-					<table>
-						<tr>
-							<th>First</th>
-							<th>Phonetic</th>
-							<th>Second</th>
-							<th>Action</th>
-						</tr>
-
-						<tr *ngFor="let word of filteredRelevantWords">
-							<td>{{ word.question }}</td>
-							<td>{{ word.phonetic }}</td>
-							<td>{{ word.correct }}</td>
-							<td><button (click)="addWord(word)">Add</button></td>
-						</tr>
-					</table>
-				</div>
-
-				<div class="table-container" [hidden]="hideTable">
-					<table>
-						<tr>
-							<th>First</th>
-							<th>Phonetic</th>
-							<th>Second</th>
-							<th>Action</th>
-						</tr>
-
-						<tr *ngFor="let word of filteredWords">
-							<td>{{ word.question }}</td>
-							<td>{{ word.phonetic }}</td>
-							<td>{{ word.correct }}</td>
-							<td><button (click)="removeWord(word)" style="background-color: #ea6161">Remove</button></td>
-						</tr>
-					</table>
-				</div>
-			</div>
-		</div>
-
-		<div class="bottom-panel">
-			<p id="feedback">{{ feedback }}</p>
-			<button (click)="onSend()">Create</button>
-		</div>
-
-	</div>
-</body>
+<app-set-words-component *ngIf="state == State.WORD_PAGE"
+[relevantWords]="relevantWords"
+[firstLanguage]="getFirstLanguage()" (onGoBack)="state = State.NAME_PAGE" [secondLanguage]="getSecondLanguage()"
+[set]="set"></app-set-words-component>

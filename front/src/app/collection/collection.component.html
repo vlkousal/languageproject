@@ -5,7 +5,7 @@
 	<input type="text" (input)="onFilterChange($event)">
 	<div class="set-container" *ngFor="let set of filteredSets">
 		<a class="set-link" routerLink="/vocab/{{ set.url }}">
-			{{ set.firstFlag }} {{ set.secondFlag }} {{ set.name }}
+			{{ set.firstLanguage }} {{ set.secondLanguage }} {{ set.name }}
 		</a>
 		<div *ngIf="urlToDelete == set.url">
 			<div class="button-group">

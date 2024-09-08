@@ -1,5 +1,6 @@
+import this
 from datetime import timedelta
-from typing import List
+from typing import List, Dict
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
@@ -85,12 +86,10 @@ def save_set(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     is_saved: bool = request.data.get("isSaved")
-    print(is_saved)
     vocab_set: VocabularySet = VocabularySet.objects.get(url=url)
     try:
         relationship: VocabularyUserRelationship = VocabularyUserRelationship.objects.get(user=user, set=vocab_set)
         relationship.saved = not(is_saved)
-        print(relationship.saved)
     except ObjectDoesNotExist:
         relationship: VocabularyUserRelationship = VocabularyUserRelationship.objects.create(user=user, set=vocab_set, saved=True)
     relationship.save()
@@ -245,7 +244,7 @@ def get_own_sets(request):
     return Response(status=status.HTTP_200_OK, data=json)
 
 
-@api_view(['POST'])
+@api_view(['POST', "OPTIONS"])
 def check_token(request):
     token = request.data.get('token')
     try:
@@ -264,17 +263,15 @@ def check_sessions():
 
 @api_view(["POST"])
 def get_language_vocab(request):
-    first_language = request.data.get("first_language")
-    second_language = request.data.get("second_language")
+    first = request.data.get("first_language")
+    second = request.data.get("second_language")
 
-    entries = (WordEntry.objects.filter(first_language__name=first_language,
-                                        second_language__name=second_language)
-               .values("first", "phonetic", "second"))
-    word_list = [{"first": entry["first"], "phonetic": entry["phonetic"],
-                  "second": entry["second"]}
-                 for entry in entries]
-    json = {"words": word_list}
-    return Response(status=status.HTTP_200_OK, data=json)
+    sets = VocabularySet.objects.filter(first_language__name=first, second_language__name=second)
+    words: List[Dict[str, str]] = []
+    for s in sets:
+        for word in s.vocabulary.all():
+            words.append({"first": word.first, "phonetic": word.phonetic, "second": word.second})
+    return Response(status=status.HTTP_200_OK, data={"words": words})
 
 
 @api_view(["GET"])
@@ -342,7 +339,12 @@ def get_vocab(request):
 
 @api_view(["POST", "PUT"])
 def create_vocab(request):
-    token = request.data.get("token")
+    token: str = request.data.get("token")
+    name: str = request.data.get("name")
+    url: str = request.data.get("url")
+    description: str = request.data.get("description")
+    vocabulary = request.data.get("vocabulary")
+
     session = Session.objects.get(session_key=token)
     if session is None:
         return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -350,69 +352,50 @@ def create_vocab(request):
     if user is None:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    name: str = request.data.get("name")
-    description: str = request.data.get("description")
-    url: str = request.data.get("url")
-
     url_filter = VocabularySet.objects.filter(url=url)
     # url is already used
     if len(url_filter) != 0:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="This URL is already used. Please use another one.")
 
-    vocab: str = request.data.get("vocabulary")
     first_language = Language.objects.get(
         name=request.data.get("first_language"))
     second_language = Language.objects.get(
         name=request.data.get("second_language"))
+
     vocab_set = VocabularySet.objects.create(author=user, name=name,
     description=description, url=url, first_language=first_language,
     second_language=second_language)
 
-    set_vocabulary(vocab_set, vocab, first_language, second_language, user)
+    set_vocabulary(vocab_set, user, vocabulary)
     return Response("OK", status=status.HTTP_200_OK)
 
 
-# TODO - make a file for these files that are not APIs
-def set_vocabulary(vocab_set: VocabularySet, vocab_string: str,
-                   first_language: Language, second_language: Language,
-                   user: User):
-    for line in vocab_string.split("\n"):
-        if len(line.split(";")) >= 3:
-            first = line.split(";")[0]
-            phonetic = line.split(";")[1]
-            second = line.split(";")[2]
-
-            # the same word might already exist (even with flipped languages)
-            filter1 = WordEntry.objects.filter(first_language=first_language,
-                                               second_language=second_language,
-                                               first=first, phonetic=phonetic,
-                                               second=second)
-            filter2 = WordEntry.objects.filter(first_language=second_language,
-                                               second_language=first_language,
-                                               first=second, phonetic=phonetic,
-                                               second=first)
-            if len(filter1) > 0:
-                vocab_set.vocabulary.add(filter1.first())
-                continue
-            elif len(filter2) > 0:
-                vocab_set.vocabulary.add(filter2.first())
-                continue
-            word = WordEntry.objects.create(contributor=user,
-                                            first_language=first_language,
-                                            second_language=second_language,
-                                            first=first,
-                                            phonetic=phonetic, second=second)
-            vocab_set.vocabulary.add(word)
+def set_vocabulary(vocab_set: VocabularySet, user: User, vocabulary: List[Dict[str, str]]):
+    for word in vocabulary:
+        # the same word might already exist (even with flipped languages)
+        filter1 = WordEntry.objects.filter(first=word["first"], phonetic=word["phonetic"],
+                                           second=word["second"])
+        filter2 = WordEntry.objects.filter(first=word["second"], phonetic=word["phonetic"],
+                                           second=word["first"])
+        if len(filter1) > 0:
+            vocab_set.vocabulary.add(filter1.first())
+            continue
+        elif len(filter2) > 0:
+            vocab_set.vocabulary.add(filter2.first())
+            continue
+        word = WordEntry.objects.create(contributor=user, first=word["first"], phonetic=word["phonetic"],
+                                        second=word["second"])
+        vocab_set.vocabulary.add(word)
     vocab_set.save()
 
 
 @api_view(["GET"])
 def get_languages(request):
     languages = Language.objects.all()
-    d = {}
+    lang_list = []
     for language in languages:
-        d[language.name] = language.id
-    return Response(d, status=status.HTTP_200_OK)
+        lang_list.append(language.name)
+    return Response(data={"languages": lang_list}, status=status.HTTP_200_OK)
 
 
 @api_view(['POST', "PUT"])
@@ -441,7 +424,7 @@ def login(request):
     if not user.check_password(password):
         return Response(status=status.HTTP_400_BAD_REQUEST)
     key = generate_key()
-    print(key)
+
     Session.objects.create(expire_date=timezone.now() + timedelta(weeks=4),
                            session_key=key,
                            session_data=username)

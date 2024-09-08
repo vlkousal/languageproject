@@ -6,7 +6,6 @@ import {first} from "rxjs";
 import {Utils} from "../utils";
 import {Word} from "../../word";
 import {SpeechUtils} from "../speechutils";
-import {style} from "@angular/animations";
 import {CookieService} from "ngx-cookie";
 
 @Component({
@@ -20,7 +19,6 @@ export class VocabularyComponent {
     characters: Word[] = [];
 
     index: number = 0;
-    feedback: string = "";
     url: string = "";
     name: string = "";
     description: string = "";
@@ -54,7 +52,6 @@ export class VocabularyComponent {
 
         this.username = JSON.parse(await this.getUsername())["username"];
         this.isSaved = JSON.parse(await this.getSavedStatus())["status"];
-        console.log(this.isSaved);
         this.loading = false;
     }
 

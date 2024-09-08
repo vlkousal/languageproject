@@ -2,15 +2,17 @@ export class VocabularySet {
 
     name: string;
     url: string;
-    firstFlag: string;
-    secondFlag: string;
+    description: string;
+    firstLanguage: string;
+    secondLanguage: string;
     isOwn: boolean;
 
-    constructor(name: string, url: string, firstFlag: string, secondFlag: string, isOwn: boolean) {
+    constructor(name: string, url: string, description: string, firstFlag: string, secondFlag: string, isOwn: boolean) {
         this.name = name;
         this.url = url;
-        this.firstFlag = firstFlag;
-        this.secondFlag = secondFlag;
+        this.description = description;
+        this.firstLanguage = firstFlag;
+        this.secondLanguage = secondFlag;
         this.isOwn = isOwn;
     }
 

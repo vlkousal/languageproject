@@ -4,9 +4,6 @@
     --pastel-mint: #A7D7C5;
     --medium-mint: #74B49B;
     --muted-teal: #5C8D89;
-
-    --wrong: #e8a9a9;
-    --correct: #9ff19f;
 }
 
 body {
@@ -45,12 +42,13 @@ body {
 
 label {
     display: block;
+    margin-top: 5px;
     margin-bottom: 5px;
     color: var(--soft-ivory);
     font-weight: bold
 }
 
-input {
+input, select, textarea {
     width: calc(100% - 22px);
     padding: 8px;
     margin-bottom: 10px;
@@ -59,7 +57,8 @@ input {
     background-color: var(--pastel-mint);
 }
 
-input[type=submit] {
+
+input[type=submit], button {
     width: calc(100% - 5px);
     padding: 8px;
     background-color: var(--muted-teal);
@@ -71,7 +70,16 @@ input[type=submit] {
     color: var(--soft-ivory);
 }
 
-input[type=submit]:hover {
+input[type=submit]:hover, button:hover {
     color: var(--muted-teal);
     background-color: var(--soft-ivory);
+}
+
+p {
+    color: var(--soft-ivory);
+}
+
+i {
+    color: var(--soft-ivory);
+    font-size: clamp(20px, 2vw, 28px);
 }

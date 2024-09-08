@@ -5,12 +5,22 @@ export const USERNAME_MIN_LENGTH: number = 4
 export const USERNAME_MAX_LENGTH: number = 16
 export const PASSWORD_MIN_LENGTH: number = 5;
 
+export const SETNAME_MIN_LENGTH: number = 5;
+export const SETNAME_MAX_LENGTH: number = 32;
+export const URL_MAX_LENGTH: number = 16;
+
 
 export enum Mode {
     OneOfThree = 0,
     WriteTheAnswer = 1,
     Flashcards = 2,
     DrawCharacters = 3
+}
+
+export enum State {
+    NAME_PAGE = 0,
+    WORD_PAGE = 1,
+    SUMMARY = 2
 }
 
 type FlagsDict = {
