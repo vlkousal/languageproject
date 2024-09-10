@@ -38,6 +38,7 @@ export class VocabularyComponent {
     constructor(private route: ActivatedRoute, private cookieService: CookieService) { }
 
     async ngOnInit() {
+        console.log(this.route.url.pipe());
         this.route.params.subscribe(params => {
             this.url = params['vocabUrl'];
         });

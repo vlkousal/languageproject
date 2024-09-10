@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {FLAGS, State} from "../constants";
 import {Word} from "../../word";
@@ -15,11 +15,13 @@ export class CreateVocabularyComponent {
 
     feedback: string = "Please enter a name.";
     languages: string[] = [];
-    name: FormControl<string> = new FormControl("") as FormControl<string>;
-    description : FormControl<string> = new FormControl("") as FormControl<string>;
-    url: FormControl<string> = new FormControl("") as FormControl<string>;
-    firstLanguage: FormControl<string> = new FormControl("Albanian") as FormControl<string>;
-    secondLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
+
+    @Input() name: FormControl<string> = new FormControl("") as FormControl<string>;
+    @Input() description : FormControl<string> = new FormControl("") as FormControl<string>;
+    @Input() url: FormControl<string> = new FormControl("") as FormControl<string>;
+    @Input() firstLanguage: FormControl<string> = new FormControl("Albanian") as FormControl<string>;
+    @Input() secondLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
+
     lastNameLength: number = 0;
     state: State = State.NAME_PAGE;
     isValid: boolean = false
