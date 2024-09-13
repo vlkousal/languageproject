@@ -25,4 +25,4 @@
 <app-set-words-component *ngIf="state == State.WORD_PAGE"
 [relevantWords]="relevantWords"
 [firstLanguage]="getFirstLanguage()" (onGoBack)="state = State.NAME_PAGE" [secondLanguage]="getSecondLanguage()"
-[set]="set"></app-set-words-component>
+[set]="set" [previousUrl]="previousUrl"></app-set-words-component>

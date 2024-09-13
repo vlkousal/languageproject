@@ -22,10 +22,11 @@ export class SetWordsComponentComponent {
     @Input() firstLanguage: string = "";
     @Input() secondLanguage: string = "";
     @Input() relevantWords: Set<Word> = new Set<Word>();
+    @Input() previousUrl: string | null = null;
+
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
 
-    words: Set<Word> = new Set<Word>();
-    filteredWords: Set<Word> = new Set<Word>();
+    filteredWords: Word[] = [];
     filter: FormControl<string> = new FormControl("") as FormControl<string>;
     wordsFilter: FormControl<string> = new FormControl("") as FormControl<string>;
     removedFromRelevant: Set<Word> = new Set<Word>();
@@ -45,24 +46,31 @@ export class SetWordsComponentComponent {
 
     ngOnInit(): void {
         this.filteredRelevantWords = this.relevantWords;
-        this.onWordsFilterChange();
+
+        if(this.set != null) {
+            this.set.words.forEach((word: Word) => {
+                this.content += word.question + this.getDelimeter() + word.phonetic + this.getDelimeter() +
+                    word.correct + "\n";
+            });
+        }
+        this.onInputChange();
     }
 
     onWordsFilterChange() {
         const filter: string = Utils.removeDiacritics(this.getWordsFilter());
-        if(filter.length != 0) {
-            this.filteredWords = new Set<Word>();
-            this.words.forEach((word) => {
+        if(filter.length != 0 && this.set != undefined) {
+            this.filteredWords = [];
+            this.set.words.forEach((word) => {
                 const correct = Utils.removeDiacritics(word.correct);
                 const phonetic = Utils.removeDiacritics(word.phonetic);
                 const question = Utils.removeDiacritics(word.question);
                 if(correct.includes(filter) || phonetic.includes(filter) || question.includes(filter)) {
-                    this.filteredWords.add(word);
+                    this.filteredWords.push(word);
                 }
             })
             return;
         }
-        this.filteredWords = this.words;
+        if(this.set != undefined) this.filteredWords = this.set.words;
     }
 
     onFilterChange() {
@@ -127,7 +135,7 @@ export class SetWordsComponentComponent {
     }
 
     addWord(word: Word) {
-        if(this.words.has(word)) return;
+        if(this.set == undefined || this.set.words.includes(word)) return;
 
         const delimeter = this.getDelimeter();
         if(this.content.charAt(this.content.length - 1) != "\n" &&
@@ -166,7 +174,7 @@ export class SetWordsComponentComponent {
     }
 
     onInputChange(): void {
-        this.words = new Set<Word>();
+        if(this.set == undefined) return;
         this.counter = 0;
         const lines: string[] = (this.content + "\n").split("\n");
         const delimiter = this.getDelimeter();
@@ -178,15 +186,14 @@ export class SetWordsComponentComponent {
                 line.split(delimiter)[1], line.split(delimiter)[2], [], []);
 
                 if(this.isValidLine(lines[i]) && word.question.length != 0 && word.correct.length != 0) {
-                    if(!this.words.has(word)) {
-                        this.words.add(word);
+                    if(!this.set.words.includes(word)) {
+                        this.set.words.push(word);
                         this.counter++;
                     }
                 }
             }
         }
         this.onWordsFilterChange();
-
     }
 
     getFilter(): string {

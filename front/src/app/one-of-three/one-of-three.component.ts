@@ -63,7 +63,6 @@ export class OneOfThreeComponent extends GameComponent {
         }
     }
 
-    protected readonly Math = Math;
     protected readonly SpeechUtils = SpeechUtils;
     protected readonly GameSettingsComponent = GameSettingsComponent;
     protected readonly localStorage = localStorage;

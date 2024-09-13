@@ -5,6 +5,14 @@ import {Word} from "../../word";
 import {Utils} from "../utils";
 import {ApiTools} from "../api-tools";
 import {VocabularySet} from "../../vocabulary-set";
+import {CookieService} from "ngx-cookie";
+
+interface WordType {
+    id: number;
+    question: string;
+    phonetic: string;
+    correct: string;
+}
 
 @Component({
   selector: 'app-createvocabulary',
@@ -16,22 +24,40 @@ export class CreateVocabularyComponent {
     feedback: string = "Please enter a name.";
     languages: string[] = [];
 
-    @Input() name: FormControl<string> = new FormControl("") as FormControl<string>;
-    @Input() description : FormControl<string> = new FormControl("") as FormControl<string>;
-    @Input() url: FormControl<string> = new FormControl("") as FormControl<string>;
-    @Input() firstLanguage: FormControl<string> = new FormControl("Albanian") as FormControl<string>;
-    @Input() secondLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
+    name: FormControl<string> = new FormControl("") as FormControl<string>;
+    description : FormControl<string> = new FormControl("") as FormControl<string>;
+    url: FormControl<string> = new FormControl("") as FormControl<string>;
+    firstLanguage: FormControl<string> = new FormControl("Albanian") as FormControl<string>;
+    secondLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
+
+    @Input() previousUrl: string | null = null;
+    words: Word[] = [];
 
     lastNameLength: number = 0;
     state: State = State.NAME_PAGE;
     isValid: boolean = false
-    words: Set<Word> = new Set<Word>();
     relevantWords: Set<Word> = new Set<Word>();
 
     set: VocabularySet | undefined;
 
+    constructor(private cookieService: CookieService) { }
+
     async ngOnInit(): Promise<void> {
         this.prepLanguages();
+        if(this.previousUrl != null) {
+            const vocabData = await ApiTools.getVocabJson(this.previousUrl, this.cookieService);
+            const parsed = JSON.parse(vocabData);
+            this.name.setValue(parsed.name);
+            this.url.setValue(this.previousUrl);
+            this.description.setValue(parsed.description);
+            this.firstLanguage.setValue(FLAGS[parsed.first_language] + " " + parsed.first_language);
+            this.secondLanguage.setValue(FLAGS[parsed.second_language] + " " + parsed.second_language);
+
+            parsed.vocabulary.forEach((word: WordType) => {
+                this.words.push(new Word(word.id, [], word.question, word.phonetic, word.correct, [], []));
+            });
+        }
+        this.onInputChange();
         await this.getRelevantWords();
     }
 
@@ -58,7 +84,7 @@ export class CreateVocabularyComponent {
 
     onInputChange(): void {
         this.set = new VocabularySet(this.getName(), this.getUrl(), this.getDescription(),
-            this.getFirstLanguage(), this.getSecondLanguage(), true);
+            this.getFirstLanguage(), this.getSecondLanguage(), this.words, this.previousUrl != null);
         const nameLength = this.getName().length;
         this.isValid = false;
         // we need to refresh the URL string if name was changed

@@ -2,7 +2,7 @@
 	<h3 title="{{ set.firstLanguage}}, {{ set.secondLanguage }}">{{ FLAGS[set.firstLanguage] }} {{ FLAGS[set.secondLanguage] }} {{ set.name }}</h3>
 	<p>URL: /{{ set.url }}</p>
 	<p>Description: {{ set.description }}</p>
-	<p>Valid words: {{ words.size }}</p>
+	<p>Valid words: {{ set.words.length }}</p>
 	<p>{{ feedback }}</p>
 
 	<div class="table-container">
@@ -13,7 +13,7 @@
 				<th>Second</th>
 			</tr>
 
-			<tr *ngFor="let word of words">
+			<tr *ngFor="let word of set.words">
 				<td>{{ word.question }}</td>
 				<td>{{ word.phonetic }}</td>
 				<td>{{ word.correct }}</td>
@@ -23,6 +23,7 @@
 
 	<div id="bottom-panel">
 		<i id="left-arrow" class="fas fa-arrow-left" (click)="onGoBack.emit()"></i>
-		<button (click)="onCreate()">Create</button>
+		<button *ngIf="!set.isOwn" (click)="onCreate()">Create</button>
+		<button *ngIf="set.isOwn" (click)="onEdit()">Edit</button>
 	</div>
 </div>

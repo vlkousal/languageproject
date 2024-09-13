@@ -98,12 +98,22 @@ def save_set(request):
 
 @api_view(['POST'])
 def edit_vocab(request):
-    token = request.data.get("token")
-    previous_url = request.data.get("previous_url")
-    username = Session.objects.get(session_key=token).session_data
-    user = User.objects.get(username=username)
-    author = VocabularySet.objects.get(url=previous_url).author
-    vocab_set = VocabularySet.objects.get(url=previous_url)
+    token: str = request.data.get("token")
+    previous_url: str = request.data.get("url")
+
+    user: User = get_user(token)
+
+    print(previous_url)
+    try:
+        author = VocabularySet.objects.get(url=previous_url).author
+    except ObjectDoesNotExist:
+        print("primo tady qqplot")
+
+    try:
+        vocab_set = VocabularySet.objects.get(url=previous_url)
+    except ObjectDoesNotExist:
+        print("nn tady brasko")
+
     if author != user:
         return Response(status=status.HTTP_400_BAD_REQUEST)
     vocab_set.name = request.data.get("name")
@@ -115,8 +125,7 @@ def edit_vocab(request):
         name=request.data.get("second_language"))
     vocab_set.save()
     vocab_set.vocabulary.clear()
-    set_vocabulary(vocab_set, request.data.get("vocabulary"),
-                   vocab_set.first_language, vocab_set.second_language, user)
+    set_vocabulary(vocab_set, user, request.data.get("vocabulary"))
     return Response(status=status.HTTP_200_OK)
 
 

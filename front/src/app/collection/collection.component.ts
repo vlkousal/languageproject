@@ -60,7 +60,7 @@ export class CollectionComponent {
                 }) => {
                     this.sets.push(new VocabularySet(item.name, item.url, "",
                         FLAGS[item.first_language],
-                        FLAGS[item.second_language], item.is_own));
+                        FLAGS[item.second_language], [], item.is_own));
                 })
             }
             return [];
