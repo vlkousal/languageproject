@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {VocabularySet} from "../../vocabulary-set";
-import {BACKEND, FLAGS} from "../constants";
+import {VocabularySet} from "../../../vocabulary-set";
+import {BACKEND, FLAGS} from "../../constants";
 import {CookieService} from "ngx-cookie";
 import {Router} from "@angular/router";
 

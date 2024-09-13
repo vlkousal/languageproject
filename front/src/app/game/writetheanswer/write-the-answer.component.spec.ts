@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WriteTheAnswerComponent } from './write-the-answer.component';
 import {ReactiveFormsModule} from "@angular/forms";
-import {Word} from "../constants";
+import {Word} from "../../constants";
 
 describe('WritetheanswerComponent', () => {
     let component: WriteTheAnswerComponent;

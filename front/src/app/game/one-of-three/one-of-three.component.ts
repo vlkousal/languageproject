@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {Mode} from "../constants";
-import {SpeechUtils} from "../speechutils";
+import {Mode} from "../../constants";
+import {SpeechUtils} from "../../speechutils";
 import {GameSettingsComponent} from "../game-settings/game-settings.component";
 import {GameComponent} from "../game-component/game.component";
-import {Word} from "../../word";
+import {Word} from "../../../word";
 import {CookieService} from "ngx-cookie";
 
 @Component({

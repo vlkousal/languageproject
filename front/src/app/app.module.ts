@@ -13,18 +13,18 @@ import {CreateVocabularyComponent} from "./vocabulary/createvocabulary.component
 import {IndexComponent} from "./base/index.component";
 import { CollectionComponent } from './collection/collection.component';
 import {EditVocabularyComponent} from "./vocabulary/editvocabulary.component";
-import { FlashcardsComponent } from './flashcards/flashcards.component';
-import { OneOfThreeComponent } from './one-of-three/one-of-three.component';
-import { WriteTheAnswerComponent } from './writetheanswer/write-the-answer.component';
-import { GameSettingsComponent } from './game-settings/game-settings.component';
+import { FlashcardsComponent } from './game/flashcards/flashcards.component';
+import { OneOfThreeComponent } from './game/one-of-three/one-of-three.component';
+import { WriteTheAnswerComponent } from './game/writetheanswer/write-the-answer.component';
+import { GameSettingsComponent } from './game/game-settings/game-settings.component';
 import { TopPanelComponent } from './top-panel/top-panel.component';
-import { EndScreenComponent } from './end-screen/end-screen.component';
-import { GameComponent } from './game-component/game.component';
-import { DrawCharactersComponent } from './draw-characters/draw-characters.component';
-import { VocabTableComponent } from './vocab-table/vocab-table.component';
+import { EndScreenComponent } from './game/end-screen/end-screen.component';
+import { GameComponent } from './game/game-component/game.component';
+import { DrawCharactersComponent } from './game/draw-characters/draw-characters.component';
+import { VocabTableComponent } from './vocabulary/vocab-table/vocab-table.component';
 import {CookieModule} from "ngx-cookie";
-import { SetWordsComponentComponent } from './set-words-component/set-words-component.component';
-import { VocabularyCreationSummaryComponent } from './vocabulary-creation-summary/vocabulary-creation-summary.component';
+import { SetWordsComponentComponent } from './vocabulary/set-words-component/set-words-component.component';
+import { VocabularyCreationSummaryComponent } from './vocabulary/vocabulary-creation-summary/vocabulary-creation-summary.component';
 
 @NgModule({
     declarations: [

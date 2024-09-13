@@ -1,9 +1,9 @@
 import {Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild} from '@angular/core';
-import {Word} from "../../word";
-import {Utils} from "../utils";
+import {Word} from "../../../word";
+import {Utils} from "../../utils";
 import {FormControl} from "@angular/forms";
-import {State} from "../constants";
-import {VocabularySet} from "../../vocabulary-set";
+import {State} from "../../constants";
+import {VocabularySet} from "../../../vocabulary-set";
 
 enum Category {
     TEXT = 0,

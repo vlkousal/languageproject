@@ -1,9 +1,9 @@
 import {Component, Injectable, Input, OnInit} from '@angular/core';
-import {BACKEND, MAX_HEALTH, Mode, STREAK_FOR_HEALTH} from "../constants";
-import {Utils} from "../utils";
-import {SpeechUtils} from "../speechutils";
-import {ApiTools} from "../api-tools";
-import {Word} from "../../word";
+import {BACKEND, MAX_HEALTH, Mode, STREAK_FOR_HEALTH} from "../../constants";
+import {Utils} from "../../utils";
+import {SpeechUtils} from "../../speechutils";
+import {ApiTools} from "../../api-tools";
+import {Word} from "../../../word";
 import {CookieService} from "ngx-cookie";
 
 

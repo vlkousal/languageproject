@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output, SimpleChanges} from '@angular/core';
-import {Word} from "../../word";
-import {Mode} from "../constants";
-import {SpeechUtils} from "../speechutils";
+import {Word} from "../../../word";
+import {Mode} from "../../constants";
+import {SpeechUtils} from "../../speechutils";
 
 @Component({
   selector: 'app-vocab-table',
