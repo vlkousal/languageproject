@@ -8,7 +8,8 @@ RUN npm install && npm run build --prod
 FROM python:3.10-slim as django
 WORKDIR /app
 COPY ./back /app
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt && \
+    apt update && apt install -y nodejs npm
 
 # Angular, Django ports
 EXPOSE 4200 8000
