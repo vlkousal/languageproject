@@ -9,9 +9,8 @@ import {VocabularySet} from "../../vocabulary-set";
 
 
 @Component({
-  selector: 'app-editvocabulary',
-  templateUrl: './editvocabulary.component.html',
-  styleUrls: ['./editvocabulary.component.css']
+    selector: 'app-editvocabulary',
+    template: "<app-createvocabulary [previousUrl]=\"previousUrl\"></app-createvocabulary>"
 })
 export class EditVocabularyComponent {
 

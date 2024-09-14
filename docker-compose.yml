@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  angular:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: npm start
+    volumes:
+      - ./front:/app
+
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver
+    volumes:
+      - ./back:/app
+
