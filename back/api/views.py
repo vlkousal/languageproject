@@ -280,6 +280,12 @@ def get_language_vocab(request):
 
 @api_view(["GET"])
 def get_vocab_sets(request):
+    # TODO
+    supabase: Client = create_client(URL, KEY)
+
+    sets = supabase.table("vocabulary_set").select("*").order("id").execute()
+
+    # XDDDDDDDDDDDDDD
     sets = VocabularySet.objects.all().order_by("-id")
 
     data = [{"name": s.name, "url": s.url,
@@ -340,37 +346,91 @@ def get_vocab(request):
     return Response(data, status=status.HTTP_200_OK)
 
 
+def get_user_id_from_token(client: Client, token: str) -> int or None:
+    response = client.table("session").select("user_id").eq("session_key", token).limit(1).execute()
+    if len(response.data) == 0:
+        return None
+    return response.data[-1].get("user_id")
+
+
 @api_view(["POST", "PUT"])
 def create_vocab(request):
     token: str = request.data.get("token")
     name: str = request.data.get("name")
     url: str = request.data.get("url")
     description: str = request.data.get("description")
-    vocabulary = request.data.get("vocabulary")
+    vocabulary: List[Dict[str, str]] = request.data.get("vocabulary")
+    first: str = request.data.get("first_language")
+    second: str = request.data.get("second_language")
+    supabase: Client = create_client(URL, KEY)
 
-    session = Session.objects.get(session_key=token)
-    if session is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    user = User.objects.get(username=session.session_data)
-    if user is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+    user_id: int = get_user_id_from_token(supabase, token)
+    if user_id is None:
+        return Response(status=status.HTTP_401_UNAUTHORIZED, data={"message": "Session invalid."})
 
-    url_filter = VocabularySet.objects.filter(url=url)
+    url_filter = supabase.table("vocabulary_set").select("*").eq("url", url).execute()
     # url is already used
-    if len(url_filter) != 0:
+    if len(url_filter.data) != 0:
         return Response(status=status.HTTP_400_BAD_REQUEST, data="This URL is already used. Please use another one.")
 
-    first_language = Language.objects.get(
-        name=request.data.get("first_language"))
-    second_language = Language.objects.get(
-        name=request.data.get("second_language"))
+    first_id = supabase.table("language").select("id").eq("name", first).single().execute().data.get("id")
+    second_id = supabase.table("language").select("id").eq("name", second).single().execute().data.get("id")
 
-    vocab_set = VocabularySet.objects.create(author=user, name=name,
-    description=description, url=url, first_language=first_language,
-    second_language=second_language)
-
-    set_vocabulary(vocab_set, user, vocabulary)
+    # create the set itself
+    response = supabase.table("vocabulary_set").insert(
+        {
+            "contributor_id": user_id,
+            "name": name,
+            "description": description,
+            "url": url,
+            "first_id": first_id,
+            "second_id": second_id
+         }
+    ).execute()
+    set_id: int = response.data[-1].get("id")
+    temp_name(supabase, vocabulary, set_id, user_id)
+    #set_vocabulary(None, user_id, vocabulary, supabase)
     return Response("OK", status=status.HTTP_200_OK)
+
+
+def temp_name(client: Client, vocabulary: List[Dict[str, str]], set_id: int, user_id: int) -> None:
+    for word in vocabulary:
+        print(word)
+        # the same word already exists, and thus there is no reason to create it anymore
+        filter1 = (client.table("word_entry").select("*")
+                   .eq("first", word["first"])
+                   .eq("phonetic", word["phonetic"])
+                   .eq("second", word["second"])).limit(1).execute()
+        if len(filter1.data) != 0:
+            client.table("vocabulary_set_word_entry").insert(
+                {"set_id": set_id, "word_id": filter1.data[-1].get("id")}
+            )
+            continue
+        # the same word already exists as a flipped version
+        filter2 = (client.table("word_entry").select("*")
+                   .eq("first", word["second"])
+                   .eq("phonetic", word["phonetic"])
+                   .eq("second", word["first"])).limit(1).execute()
+        print(filter2)
+        print("-------")
+
+def set_vocabulary(vocab_set: VocabularySet, user_id: int, vocabulary: List[Dict[str, str]], client: Client):
+    for word in vocabulary:
+        # the same word might already exist (even with flipped languages)
+        filter1 = WordEntry.objects.filter(first=word["first"], phonetic=word["phonetic"],
+                                           second=word["second"])
+        filter2 = WordEntry.objects.filter(first=word["second"], phonetic=word["phonetic"],
+                                           second=word["first"])
+        if len(filter1) > 0:
+            vocab_set.vocabulary.add(filter1.first())
+            continue
+        elif len(filter2) > 0:
+            vocab_set.vocabulary.add(filter2.first())
+            continue
+        word = WordEntry.objects.create(contributor=user, first=word["first"], phonetic=word["phonetic"],
+                                        second=word["second"])
+        vocab_set.vocabulary.add(word)
+    vocab_set.save()
 
 
 @api_view(["GET"])
@@ -444,21 +504,3 @@ def email_exists(client: Client, email: str) -> bool:
 def generate_token():
     return get_random_string(128)
 
-
-def set_vocabulary(vocab_set: VocabularySet, user: User, vocabulary: List[Dict[str, str]]):
-    for word in vocabulary:
-        # the same word might already exist (even with flipped languages)
-        filter1 = WordEntry.objects.filter(first=word["first"], phonetic=word["phonetic"],
-                                           second=word["second"])
-        filter2 = WordEntry.objects.filter(first=word["second"], phonetic=word["phonetic"],
-                                           second=word["first"])
-        if len(filter1) > 0:
-            vocab_set.vocabulary.add(filter1.first())
-            continue
-        elif len(filter2) > 0:
-            vocab_set.vocabulary.add(filter2.first())
-            continue
-        word = WordEntry.objects.create(contributor=user, first=word["first"], phonetic=word["phonetic"],
-                                        second=word["second"])
-        vocab_set.vocabulary.add(word)
-    vocab_set.save()

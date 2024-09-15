@@ -132,9 +132,11 @@ CREATE TABLE language (
 create_word_entry_query: str = """
 CREATE TABLE word_entry (
     id SERIAL PRIMARY KEY,
+    contributor INTEGER NOT NULL,
     first VARCHAR(255) NOT NULL,
     phonetic VARCHAR(255),
-    second VARCHAR(255) NOT NULL
+    second VARCHAR(255) NOT NULL,
+    FOREIGN KEY (contributor) REFERENCES "user"(id)
 );
 """
 
@@ -153,15 +155,15 @@ create_vocabulary_set_query: str = """
 CREATE TABLE "vocabulary_set" (
     id SERIAL PRIMARY KEY,
     contributor_id INTEGER NOT NULL,
-    name VARCHAR(255) NOT NULL,
+    name VARCHAR(32) NOT NULL,
     description VARCHAR(255),
-    url VARCHAR(255),
-    first_id INTEGER NOT NULL,
-    second_id INTEGER NOT NULL,
+    url VARCHAR(16),
+    first_language_id INTEGER NOT NULL,
+    second_language_id INTEGER NOT NULL,
 
     FOREIGN KEY (contributor_id) REFERENCES "user"(id),
-    FOREIGN KEY (first_id) REFERENCES language(id),
-    FOREIGN KEY (second_id) REFERENCES language(id)
+    FOREIGN KEY (first_language_id) REFERENCES language(id),
+    FOREIGN KEY (second_language_id) REFERENCES language(id)
 );
 """
 
