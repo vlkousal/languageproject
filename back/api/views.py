@@ -460,6 +460,17 @@ def login(request):
     return Response(data={"token": key}, status=status.HTTP_200_OK)
 
 
+@api_view(["POST"])
+def logout(request):
+    token = request.data
+    print(token)
+    supabase: Client = create_client(URL, KEY)
+
+    result = supabase.table("session").delete().eq("session_key", token).execute()
+    print("Result:", result)
+    return Response(status=status.HTTP_200_OK)
+
+
 @api_view(["POST", "GET"])
 def test(request):
     supabase: Client = create_client(URL, KEY)

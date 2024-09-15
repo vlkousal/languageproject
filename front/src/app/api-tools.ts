@@ -47,25 +47,6 @@ export class ApiTools {
         }
     }
 
-    static async getLanguageJson(): Promise<string> {
-        try {
-            const response = await fetch(BACKEND + 'api/get_languages/', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (response.ok) {
-                return await response.text();
-            }
-            throw new Error('Network response was not ok.');
-        } catch (error) {
-            console.error('Error:', error);
-            throw error;
-        }
-    }
-
     static async getHighScore(url: string, mode: Mode, cookieService: CookieService): Promise<number> {
         const data = {
             token: cookieService.get("token"),
