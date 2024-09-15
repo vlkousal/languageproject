@@ -104,10 +104,8 @@ def save_set(request):
 def edit_vocab(request):
     token: str = request.data.get("token")
     previous_url: str = request.data.get("url")
-
     user: User = get_user(token)
 
-    print(previous_url)
     try:
         author = VocabularySet.objects.get(url=previous_url).author
     except ObjectDoesNotExist:
@@ -429,7 +427,6 @@ def register(request):
 
     id: int = int(user_creation_result.data[0].get("id"))
     key = generate_token()
-
     supabase.table("session").insert({"session_key": key, "user_id": id}).execute()
     return Response(data={"token": key}, status=status.HTTP_200_OK)
 
@@ -446,28 +443,26 @@ def email_exists(client: Client, email: str) -> bool:
 def login(request):
     username = request.data.get("username")
     password = request.data.get("password")
-    existing = User.objects.filter(username=username)
-    if not existing.exists():
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    user = User.objects.get(username=username)
-    if not user.check_password(password):
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    key = generate_token()
+    supabase: Client = create_client(URL, KEY)
 
-    Session.objects.create(expire_date=timezone.now() + timedelta(weeks=4),
-                           session_key=key,
-                           session_data=username)
+    if not user_exists(supabase, username):
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="Bad credentials.")
+
+    response = supabase.table("user").select("password", "id").eq("username", username).single().execute()
+    if not check_password(password, response.data.get("password")):
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="Bad credentials.")
+
+    key: str = generate_token()
+    id: int = response.data.get("id")
+    supabase.table("session").insert({"session_key": key, "user_id": id}).execute()
     return Response(data={"token": key}, status=status.HTTP_200_OK)
 
 
 @api_view(["POST"])
 def logout(request):
     token = request.data
-    print(token)
     supabase: Client = create_client(URL, KEY)
-
-    result = supabase.table("session").delete().eq("session_key", token).execute()
-    print("Result:", result)
+    supabase.table("session").delete().eq("session_key", token).execute()
     return Response(status=status.HTTP_200_OK)
 
 
@@ -479,7 +474,6 @@ def test(request):
         .insert({"name": "Denmark"})
         .execute()
     )
-    print(response)
     return Response(status=status.HTTP_200_OK)
 
 def generate_token():
