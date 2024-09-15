@@ -1,3 +1,5 @@
+from distutils.util import execute
+
 from db_config import URL, KEY
 from supabase import create_client, Client
 
@@ -13,7 +15,7 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from .models import Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord, VocabularyUserRelationship
-
+from django.contrib.auth.hashers import make_password, check_password
 
 @api_view(['POST'])
 def get_high_score(request):
@@ -409,19 +411,37 @@ def get_languages(request):
     return Response(data={"languages": lang_list}, status=status.HTTP_200_OK)
 
 
-@api_view(['POST', "PUT"])
+@api_view(["POST"])
 def register(request):
     username = request.data.get("username")
     email = request.data.get("email")
     password = request.data.get("password")
-    existing = User.objects.filter(username=username)
-    if existing.exists():
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    key = generate_key()
-    Session.objects.create(expire_date=timezone.now() + timedelta(weeks=2),
-                           session_key=key, session_data=username)
-    User.objects.create_user(username=username, email=email, password=password)
+    supabase: Client = create_client(URL, KEY)
+    if user_exists(supabase, username):
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="This username is already used.")
+
+    if email_exists(supabase, email):
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="This email is already used.")
+
+    user_creation_result = (
+        supabase.table("user")
+        .insert({"username": username, "email": email, "password": make_password(password)})
+        .execute()
+    )
+
+    id: int = int(user_creation_result.data[0].get("id"))
+    key = generate_token()
+
+    supabase.table("session").insert({"session_key": key, "user_id": id}).execute()
     return Response(data={"token": key}, status=status.HTTP_200_OK)
+
+
+def user_exists(client: Client, username: str) -> bool:
+    return len(client.table("user").select("*").eq("username", username).execute().data) != 0
+
+
+def email_exists(client: Client, email: str) -> bool:
+    return len(client.table("user").select("*").eq("email", email).execute().data) != 0
 
 
 @api_view(["POST"])
@@ -434,7 +454,7 @@ def login(request):
     user = User.objects.get(username=username)
     if not user.check_password(password):
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    key = generate_key()
+    key = generate_token()
 
     Session.objects.create(expire_date=timezone.now() + timedelta(weeks=4),
                            session_key=key,
@@ -453,5 +473,5 @@ def test(request):
     print(response)
     return Response(status=status.HTTP_200_OK)
 
-def generate_key():
-    return get_random_string(512)
+def generate_token():
+    return get_random_string(128)

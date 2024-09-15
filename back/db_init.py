@@ -169,6 +169,7 @@ create_session_query: str = """
 CREATE TABLE session (
   session_key VARCHAR(128) PRIMARY KEY NOT NULL,
   user_id int,
+  expiry_time TIMESTAMP DEFAULT (CURRENT_TIMESTAMP + INTERVAL '2 weeks'),
   FOREIGN KEY (user_id) REFERENCES "user"(id)
 )
 """
