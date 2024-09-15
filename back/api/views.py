@@ -1,14 +1,9 @@
-from distutils.util import execute
-
 from db_config import URL, KEY
 from supabase import create_client, Client
-
-from datetime import timedelta
 from typing import List, Dict
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
-from django.utils import timezone
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -299,7 +294,6 @@ def get_vocab(request):
     token = request.data.get("token")
     url = request.data.get("url")
 
-    no_user: bool = True
     try:
         username: str = Session.objects.get(session_key=token).session_data
         user = User.objects.get(username=username)
@@ -379,25 +373,6 @@ def create_vocab(request):
     return Response("OK", status=status.HTTP_200_OK)
 
 
-def set_vocabulary(vocab_set: VocabularySet, user: User, vocabulary: List[Dict[str, str]]):
-    for word in vocabulary:
-        # the same word might already exist (even with flipped languages)
-        filter1 = WordEntry.objects.filter(first=word["first"], phonetic=word["phonetic"],
-                                           second=word["second"])
-        filter2 = WordEntry.objects.filter(first=word["second"], phonetic=word["phonetic"],
-                                           second=word["first"])
-        if len(filter1) > 0:
-            vocab_set.vocabulary.add(filter1.first())
-            continue
-        elif len(filter2) > 0:
-            vocab_set.vocabulary.add(filter2.first())
-            continue
-        word = WordEntry.objects.create(contributor=user, first=word["first"], phonetic=word["phonetic"],
-                                        second=word["second"])
-        vocab_set.vocabulary.add(word)
-    vocab_set.save()
-
-
 @api_view(["GET"])
 def get_languages(request):
     languages = Language.objects.all()
@@ -431,14 +406,6 @@ def register(request):
     return Response(data={"token": key}, status=status.HTTP_200_OK)
 
 
-def user_exists(client: Client, username: str) -> bool:
-    return len(client.table("user").select("*").eq("username", username).execute().data) != 0
-
-
-def email_exists(client: Client, email: str) -> bool:
-    return len(client.table("user").select("*").eq("email", email).execute().data) != 0
-
-
 @api_view(["POST"])
 def login(request):
     username = request.data.get("username")
@@ -466,15 +433,32 @@ def logout(request):
     return Response(status=status.HTTP_200_OK)
 
 
-@api_view(["POST", "GET"])
-def test(request):
-    supabase: Client = create_client(URL, KEY)
-    response = (
-        supabase.table("language")
-        .insert({"name": "Denmark"})
-        .execute()
-    )
-    return Response(status=status.HTTP_200_OK)
+def user_exists(client: Client, username: str) -> bool:
+    return len(client.table("user").select("*").eq("username", username).execute().data) != 0
+
+
+def email_exists(client: Client, email: str) -> bool:
+    return len(client.table("user").select("*").eq("email", email).execute().data) != 0
+
 
 def generate_token():
     return get_random_string(128)
+
+
+def set_vocabulary(vocab_set: VocabularySet, user: User, vocabulary: List[Dict[str, str]]):
+    for word in vocabulary:
+        # the same word might already exist (even with flipped languages)
+        filter1 = WordEntry.objects.filter(first=word["first"], phonetic=word["phonetic"],
+                                           second=word["second"])
+        filter2 = WordEntry.objects.filter(first=word["second"], phonetic=word["phonetic"],
+                                           second=word["first"])
+        if len(filter1) > 0:
+            vocab_set.vocabulary.add(filter1.first())
+            continue
+        elif len(filter2) > 0:
+            vocab_set.vocabulary.add(filter2.first())
+            continue
+        word = WordEntry.objects.create(contributor=user, first=word["first"], phonetic=word["phonetic"],
+                                        second=word["second"])
+        vocab_set.vocabulary.add(word)
+    vocab_set.save()

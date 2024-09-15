@@ -36,6 +36,5 @@ urlpatterns = [
     path("api/getusername/", api_views.get_username),
     path("api/saveset/", api_views.save_set),
     path("api/getsavestatus/", api_views.get_save_status),
-    path("api/logout/", api_views.logout),
-    path("api/test/", api_views.test)
+    path("api/logout/", api_views.logout)
 ]
