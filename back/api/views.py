@@ -446,11 +446,11 @@ def login(request):
     supabase: Client = create_client(URL, KEY)
 
     if not user_exists(supabase, username):
-        return Response(status=status.HTTP_400_BAD_REQUEST, data="Bad credentials.")
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     response = supabase.table("user").select("password", "id").eq("username", username).single().execute()
     if not check_password(password, response.data.get("password")):
-        return Response(status=status.HTTP_400_BAD_REQUEST, data="Bad credentials.")
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     key: str = generate_token()
     id: int = response.data.get("id")
