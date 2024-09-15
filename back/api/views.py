@@ -1,4 +1,4 @@
-import this
+from db_config import URL, KEY
 from datetime import timedelta
 from typing import List, Dict
 from django.contrib.sessions.models import Session
@@ -11,6 +11,7 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from .models import Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord, VocabularyUserRelationship
+from supabase import create_client, Client
 
 
 @api_view(['POST'])
@@ -439,6 +440,17 @@ def login(request):
                            session_data=username)
     return Response(data={"token": key}, status=status.HTTP_200_OK)
 
+
+@api_view(["POST", "GET"])
+def test(request):
+    supabase: Client = create_client(URL, KEY)
+    response = (
+        supabase.table("language")
+        .insert({"name": "Denmark"})
+        .execute()
+    )
+    print(response)
+    return Response(status=status.HTTP_200_OK)
 
 def generate_key():
     return get_random_string(512)
