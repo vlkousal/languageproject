@@ -257,21 +257,19 @@ def get_own_sets(request):
     return Response(status=status.HTTP_200_OK, data=json)
 
 
-@api_view(['POST', "OPTIONS"])
+@api_view(["POST"])
 def check_token(request):
-    token = request.data.get('token')
-    try:
-        session = Session.objects.get(session_key=token)
-    except ObjectDoesNotExist:
+    token = request.data.get("token")
+    supabase: Client = create_client(URL, KEY)
+
+    response = supabase.table("session").select("user_id").eq("session_key", token).limit(1).execute()
+    if len(response.data) == 0:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
-    username = session.session_data
-    return Response(data={"username": username }, status=status.HTTP_200_OK)
 
-
-def check_sessions():
-    for session in Session.objects.all():
-        if session.expire_date < timezone.now():
-            session.delete()
+    user_id: int = response.data[0].get("user_id")
+    response = supabase.table("user").select("username").eq("id", user_id).single().execute()
+    username: str = response.data.get("username")
+    return Response(status=status.HTTP_200_OK, data={"username": username})
 
 
 @api_view(["POST"])

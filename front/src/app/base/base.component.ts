@@ -10,7 +10,7 @@ import {CookieService} from "ngx-cookie";
 
 export class BaseComponent {
 
-    username: string | null = null;
+    username: string | null = localStorage.getItem("username");
 
     constructor(private cookieService: CookieService) {}
 
@@ -27,7 +27,9 @@ export class BaseComponent {
             body: JSON.stringify({token: this.cookieService.get("token")})
         }).then(async response => {
             if(response.ok) {
-                this.username = JSON.parse(await response.text()).username;
+                const username: string = JSON.parse(await response.text()).username;
+                localStorage.setItem("username", username);
+                this.username = username;
                 return;
             }
             localStorage.clear();

@@ -52,7 +52,8 @@ export class RegisterComponent {
         body: JSON.stringify(data),
         }).then(async response => {
             if (!response.ok) {
-                this.feedback = "A user with this username already exists.";
+                const text: string = await response.text();
+                this.feedback = text.slice(1, text.length - 1);
             }
             if(response.ok) {
                 const token: string = JSON.parse(await response.text()).token;
