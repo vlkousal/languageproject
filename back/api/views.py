@@ -284,6 +284,7 @@ def get_vocab_sets(request):
     supabase: Client = create_client(URL, KEY)
 
     sets = supabase.table("vocabulary_set").select("*").order("id").execute()
+    print("Sets", sets)
 
     # XDDDDDDDDDDDDDD
     sets = VocabularySet.objects.all().order_by("-id")
@@ -383,19 +384,17 @@ def create_vocab(request):
             "name": name,
             "description": description,
             "url": url,
-            "first_id": first_id,
-            "second_id": second_id
+            "first_language_id": first_id,
+            "second_language_id": second_id
          }
     ).execute()
     set_id: int = response.data[-1].get("id")
-    temp_name(supabase, vocabulary, set_id, user_id)
-    #set_vocabulary(None, user_id, vocabulary, supabase)
-    return Response("OK", status=status.HTTP_200_OK)
+    create_entries(supabase, vocabulary, set_id, user_id)
+    return Response(status=status.HTTP_200_OK)
 
 
-def temp_name(client: Client, vocabulary: List[Dict[str, str]], set_id: int, user_id: int) -> None:
+def create_entries(client: Client, vocabulary: List[Dict[str, str]], set_id: int, user_id: int) -> None:
     for word in vocabulary:
-        print(word)
         # the same word already exists, and thus there is no reason to create it anymore
         filter1 = (client.table("word_entry").select("*")
                    .eq("first", word["first"])
@@ -404,15 +403,18 @@ def temp_name(client: Client, vocabulary: List[Dict[str, str]], set_id: int, use
         if len(filter1.data) != 0:
             client.table("vocabulary_set_word_entry").insert(
                 {"set_id": set_id, "word_id": filter1.data[-1].get("id")}
-            )
+            ).execute()
             continue
-        # the same word already exists as a flipped version
-        filter2 = (client.table("word_entry").select("*")
-                   .eq("first", word["second"])
-                   .eq("phonetic", word["phonetic"])
-                   .eq("second", word["first"])).limit(1).execute()
-        print(filter2)
-        print("-------")
+        creation_result = client.table("word_entry").insert({
+            "contributor": user_id,
+            "first": word["first"],
+            "phonetic": word["phonetic"],
+            "second": word["second"]
+        }).execute()
+        word_id: int = creation_result.data[-1].get("id")
+        client.table("vocabulary_set_word_entry").insert(
+            {"set_id": set_id, "word_id": word_id}
+        ).execute()
 
 def set_vocabulary(vocab_set: VocabularySet, user_id: int, vocabulary: List[Dict[str, str]], client: Client):
     for word in vocabulary:

@@ -181,8 +181,8 @@ CREATE TABLE vocabulary_set_word_entry (
     set_id INTEGER NOT NULL,
     word_id INTEGER NOT NULL,
     PRIMARY KEY (set_id, word_id),
-    FOREIGN KEY (set_id) REFERENCES vocabulary_set(id),
-    FOREIGN KEY (word_id) REFERENCES word_entry(id)
+    FOREIGN KEY (set_id) REFERENCES vocabulary_set(id) ON DELETE CASCADE,
+    FOREIGN KEY (word_id) REFERENCES word_entry(id) ON DELETE CASCADE
 );
 """
 
