@@ -280,19 +280,25 @@ def get_language_vocab(request):
 
 @api_view(["GET"])
 def get_vocab_sets(request):
-    # TODO
     supabase: Client = create_client(URL, KEY)
 
     sets = supabase.table("vocabulary_set").select("*").order("id").execute()
-    print("Sets", sets)
 
-    # XDDDDDDDDDDDDDD
-    sets = VocabularySet.objects.all().order_by("-id")
+    data = []
+    for vocab_set in sets.data:
+        first_language = (supabase.table("language")
+                          .select("name").eq("id", vocab_set["first_language_id"])
+                          .single().execute())
+        second_language = (supabase.table("language")
+                           .select("name").eq("id", vocab_set["second_language_id"]).single().execute())
 
-    data = [{"name": s.name, "url": s.url,
-             "first_language": s.first_language.name,
-             "second_language": s.second_language.name}
-            for s in sets]
+        json = {
+            "name": vocab_set["name"],
+            "url": vocab_set["url"],
+            "first_language": first_language.data["name"],
+            "second_language": second_language.data["name"]
+        }
+        data.append(json)
     return Response(data, status=status.HTTP_200_OK)
 
 
