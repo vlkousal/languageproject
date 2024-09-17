@@ -1,20 +1,20 @@
-from db_config import URL, KEY
-from supabase import create_client, Client
+import this
+from datetime import timedelta
 from typing import List, Dict
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from .models import Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord, VocabularyUserRelationship
-from django.contrib.auth.hashers import make_password, check_password
+
 
 @api_view(['POST'])
 def get_high_score(request):
-    # TODO
     token: str = request.data.get("token")
     vocab_url: str = request.data.get("url")
     mode: int = request.data.get("mode")
@@ -40,14 +40,12 @@ def get_high_score(request):
 
 @api_view(['POST'])
 def get_username(request):
-    # TODO
     token: str = request.data.get("token")
     username: str = Session.objects.get(session_key=token).session_data
     return Response(data={"username": username}, status=status.HTTP_200_OK)
 
 
 def get_user(token: str):
-    # TODO
     try:
         username: str = Session.objects.get(session_key=token).session_data
         user = User.objects.get(username=username)
@@ -58,7 +56,6 @@ def get_user(token: str):
 
 @api_view(["POST"])
 def get_save_status(request):
-    # TODO
     token: str = request.data.get("token")
     user: User = get_user(token)
 
@@ -78,7 +75,6 @@ def get_save_status(request):
 
 @api_view(["POST"])
 def save_set(request):
-    # TODO
     token: str = request.data.get("token")
     user: User = get_user(token)
     if user is None:
@@ -102,11 +98,12 @@ def save_set(request):
 
 @api_view(['POST'])
 def edit_vocab(request):
-    # TODO
     token: str = request.data.get("token")
     previous_url: str = request.data.get("url")
+
     user: User = get_user(token)
 
+    print(previous_url)
     try:
         author = VocabularySet.objects.get(url=previous_url).author
     except ObjectDoesNotExist:
@@ -134,7 +131,6 @@ def edit_vocab(request):
 
 @api_view(['POST'])
 def send_vocab_result(request):
-    # TODO
     token: str = request.data.get("token")
     set_url = request.data.get("setUrl")
     score = request.data.get("score")
@@ -159,7 +155,6 @@ def send_vocab_result(request):
 
 @api_view(["POST"])
 def add_result(request):
-    # TODO
     token = request.data.get("token")
     correct = request.data.get("correct")
     mode = request.data.get("mode")
@@ -219,7 +214,6 @@ def add_result(request):
 
 @api_view(['DELETE'])
 def delete_set(request):
-    # TODO
     token = request.data.get("token")
     url_to_delete = request.data.get("url_to_delete")
     try:
@@ -239,7 +233,6 @@ def delete_set(request):
 
 @api_view(["POST"])
 def get_own_sets(request):
-    # TODO
     token: str = request.data.get("token")
 
     user: User = get_user(token)
@@ -260,24 +253,25 @@ def get_own_sets(request):
     return Response(status=status.HTTP_200_OK, data=json)
 
 
-@api_view(["POST"])
+@api_view(['POST', "OPTIONS"])
 def check_token(request):
-    token = request.data.get("token")
-    supabase: Client = create_client(URL, KEY)
-
-    response = supabase.table("session").select("user_id").eq("session_key", token).limit(1).execute()
-    if len(response.data) == 0:
+    token = request.data.get('token')
+    try:
+        session = Session.objects.get(session_key=token)
+    except ObjectDoesNotExist:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+    username = session.session_data
+    return Response(data={"username": username }, status=status.HTTP_200_OK)
 
-    user_id: int = response.data[0].get("user_id")
-    response = supabase.table("user").select("username").eq("id", user_id).single().execute()
-    username: str = response.data.get("username")
-    return Response(status=status.HTTP_200_OK, data={"username": username})
+
+def check_sessions():
+    for session in Session.objects.all():
+        if session.expire_date < timezone.now():
+            session.delete()
 
 
 @api_view(["POST"])
 def get_language_vocab(request):
-    # TODO
     first = request.data.get("first_language")
     second = request.data.get("second_language")
 
@@ -289,37 +283,23 @@ def get_language_vocab(request):
     return Response(status=status.HTTP_200_OK, data={"words": words})
 
 
-# returns the newest sets shown on the index page
 @api_view(["GET"])
 def get_vocab_sets(request):
-    supabase: Client = create_client(URL, KEY)
+    sets = VocabularySet.objects.all().order_by("-id")
 
-    sets = supabase.table("vocabulary_set").select("*").order("id").execute()
-
-    data = []
-    for vocab_set in sets.data:
-        first_language = (supabase.table("language")
-                          .select("name").eq("id", vocab_set["first_language_id"])
-                          .single().execute())
-        second_language = (supabase.table("language")
-                           .select("name").eq("id", vocab_set["second_language_id"]).single().execute())
-
-        json = {
-            "name": vocab_set["name"],
-            "url": vocab_set["url"],
-            "first_language": first_language.data["name"],
-            "second_language": second_language.data["name"]
-        }
-        data.append(json)
+    data = [{"name": s.name, "url": s.url,
+             "first_language": s.first_language.name,
+             "second_language": s.second_language.name}
+            for s in sets]
     return Response(data, status=status.HTTP_200_OK)
 
 
 @api_view(["POST"])
 def get_vocab(request):
-    # TODO
     token = request.data.get("token")
     url = request.data.get("url")
 
+    no_user: bool = True
     try:
         username: str = Session.objects.get(session_key=token).session_data
         user = User.objects.get(username=username)
@@ -366,79 +346,40 @@ def get_vocab(request):
     return Response(data, status=status.HTTP_200_OK)
 
 
-def get_user_id_from_token(client: Client, token: str) -> int or None:
-    response = client.table("session").select("user_id").eq("session_key", token).limit(1).execute()
-    if len(response.data) == 0:
-        return None
-    return response.data[-1].get("user_id")
-
-
-# creates a new vocabulary_set
 @api_view(["POST", "PUT"])
 def create_vocab(request):
     token: str = request.data.get("token")
     name: str = request.data.get("name")
     url: str = request.data.get("url")
     description: str = request.data.get("description")
-    vocabulary: List[Dict[str, str]] = request.data.get("vocabulary")
-    first: str = request.data.get("first_language")
-    second: str = request.data.get("second_language")
-    supabase: Client = create_client(URL, KEY)
+    vocabulary = request.data.get("vocabulary")
 
-    user_id: int = get_user_id_from_token(supabase, token)
-    if user_id is None:
-        return Response(status=status.HTTP_401_UNAUTHORIZED, data={"message": "Session invalid."})
+    session = Session.objects.get(session_key=token)
+    if session is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    user = User.objects.get(username=session.session_data)
+    if user is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    url_filter = supabase.table("vocabulary_set").select("*").eq("url", url).execute()
+    url_filter = VocabularySet.objects.filter(url=url)
     # url is already used
-    if len(url_filter.data) != 0:
+    if len(url_filter) != 0:
         return Response(status=status.HTTP_400_BAD_REQUEST, data="This URL is already used. Please use another one.")
 
-    first_id = supabase.table("language").select("id").eq("name", first).single().execute().data.get("id")
-    second_id = supabase.table("language").select("id").eq("name", second).single().execute().data.get("id")
+    first_language = Language.objects.get(
+        name=request.data.get("first_language"))
+    second_language = Language.objects.get(
+        name=request.data.get("second_language"))
 
-    # create the set itself
-    response = supabase.table("vocabulary_set").insert(
-        {
-            "contributor_id": user_id,
-            "name": name,
-            "description": description,
-            "url": url,
-            "first_language_id": first_id,
-            "second_language_id": second_id
-         }
-    ).execute()
-    set_id: int = response.data[-1].get("id")
-    create_entries(supabase, vocabulary, set_id, user_id)
-    return Response(status=status.HTTP_200_OK)
+    vocab_set = VocabularySet.objects.create(author=user, name=name,
+    description=description, url=url, first_language=first_language,
+    second_language=second_language)
+
+    set_vocabulary(vocab_set, user, vocabulary)
+    return Response("OK", status=status.HTTP_200_OK)
 
 
-# a help function that adds vocabulary to the newly created vocabulary set
-def create_entries(client: Client, vocabulary: List[Dict[str, str]], set_id: int, user_id: int) -> None:
-    for word in vocabulary:
-        # the same word already exists, and thus there is no reason to create it anymore
-        filter1 = (client.table("word_entry").select("*")
-                   .eq("first", word["first"])
-                   .eq("phonetic", word["phonetic"])
-                   .eq("second", word["second"])).limit(1).execute()
-        if len(filter1.data) != 0:
-            client.table("vocabulary_set_word_entry").insert(
-                {"set_id": set_id, "word_id": filter1.data[-1].get("id")}
-            ).execute()
-            continue
-        creation_result = client.table("word_entry").insert({
-            "contributor": user_id,
-            "first": word["first"],
-            "phonetic": word["phonetic"],
-            "second": word["second"]
-        }).execute()
-        word_id: int = creation_result.data[-1].get("id")
-        client.table("vocabulary_set_word_entry").insert(
-            {"set_id": set_id, "word_id": word_id}
-        ).execute()
-
-# TODO - rework, remove
-def set_vocabulary(vocab_set: VocabularySet, user_id: int, vocabulary: List[Dict[str, str]], client: Client):
+def set_vocabulary(vocab_set: VocabularySet, user: User, vocabulary: List[Dict[str, str]]):
     for word in vocabulary:
         # the same word might already exist (even with flipped languages)
         filter1 = WordEntry.objects.filter(first=word["first"], phonetic=word["phonetic"],
@@ -457,10 +398,8 @@ def set_vocabulary(vocab_set: VocabularySet, user_id: int, vocabulary: List[Dict
     vocab_set.save()
 
 
-# gets a list of all languages available
 @api_view(["GET"])
 def get_languages(request):
-    # TODO
     languages = Language.objects.all()
     lang_list = []
     for language in languages:
@@ -468,27 +407,18 @@ def get_languages(request):
     return Response(data={"languages": lang_list}, status=status.HTTP_200_OK)
 
 
-@api_view(["POST"])
+@api_view(['POST', "PUT"])
 def register(request):
     username = request.data.get("username")
     email = request.data.get("email")
     password = request.data.get("password")
-    supabase: Client = create_client(URL, KEY)
-    if user_exists(supabase, username):
-        return Response(status=status.HTTP_400_BAD_REQUEST, data="This username is already used.")
-
-    if email_exists(supabase, email):
-        return Response(status=status.HTTP_400_BAD_REQUEST, data="This email is already used.")
-
-    user_creation_result = (
-        supabase.table("user")
-        .insert({"username": username, "email": email, "password": make_password(password)})
-        .execute()
-    )
-
-    id: int = int(user_creation_result.data[0].get("id"))
-    key = generate_token()
-    supabase.table("session").insert({"session_key": key, "user_id": id}).execute()
+    existing = User.objects.filter(username=username)
+    if existing.exists():
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    key = generate_key()
+    Session.objects.create(expire_date=timezone.now() + timedelta(weeks=2),
+                           session_key=key, session_data=username)
+    User.objects.create_user(username=username, email=email, password=password)
     return Response(data={"token": key}, status=status.HTTP_200_OK)
 
 
@@ -496,37 +426,19 @@ def register(request):
 def login(request):
     username = request.data.get("username")
     password = request.data.get("password")
-    supabase: Client = create_client(URL, KEY)
-
-    if not user_exists(supabase, username):
+    existing = User.objects.filter(username=username)
+    if not existing.exists():
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
-    response = supabase.table("user").select("password", "id").eq("username", username).single().execute()
-    if not check_password(password, response.data.get("password")):
+    user = User.objects.get(username=username)
+    if not user.check_password(password):
         return Response(status=status.HTTP_400_BAD_REQUEST)
+    key = generate_key()
 
-    key: str = generate_token()
-    id: int = response.data.get("id")
-    supabase.table("session").insert({"session_key": key, "user_id": id}).execute()
+    Session.objects.create(expire_date=timezone.now() + timedelta(weeks=4),
+                           session_key=key,
+                           session_data=username)
     return Response(data={"token": key}, status=status.HTTP_200_OK)
 
 
-@api_view(["POST"])
-def logout(request):
-    # TODO
-    token = request.data
-    supabase: Client = create_client(URL, KEY)
-    supabase.table("session").delete().eq("session_key", token).execute()
-    return Response(status=status.HTTP_200_OK)
-
-
-def user_exists(client: Client, username: str) -> bool:
-    return len(client.table("user").select("*").eq("username", username).execute().data) != 0
-
-
-def email_exists(client: Client, email: str) -> bool:
-    return len(client.table("user").select("*").eq("email", email).execute().data) != 0
-
-
-def generate_token():
-    return get_random_string(128)
+def generate_key():
+    return get_random_string(40)

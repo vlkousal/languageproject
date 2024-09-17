@@ -35,6 +35,5 @@ urlpatterns = [
     path("api/gethighscore/", api_views.get_high_score),
     path("api/getusername/", api_views.get_username),
     path("api/saveset/", api_views.save_set),
-    path("api/getsavestatus/", api_views.get_save_status),
-    path("api/logout/", api_views.logout)
+    path("api/getsavestatus/", api_views.get_save_status)
 ]
