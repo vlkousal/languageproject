@@ -1,4 +1,4 @@
-<p>Average score: {{ Word.getAverageModeScore(this.words, this.mode) }}</p>
+<p *ngIf="averageScore != -1">Average score: {{ averageScore }}</p>
 <button (click)="onPlayClick.emit()">Play</button>
 
 <div class="table-container">

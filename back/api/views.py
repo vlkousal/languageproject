@@ -20,6 +20,7 @@ def get_high_score(request):
     mode: int = request.data.get("mode")
 
     user: User = get_user(token)
+
     if user is None:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
@@ -41,7 +42,11 @@ def get_high_score(request):
 @api_view(['POST'])
 def get_username(request):
     token: str = request.data.get("token")
-    username: str = Session.objects.get(session_key=token).session_data
+    username: str = ""
+    try:
+        username: str = Session.objects.get(session_key=token).session_data
+    except ObjectDoesNotExist:
+        username = ""
     return Response(data={"username": username}, status=status.HTTP_200_OK)
 
 
@@ -61,7 +66,7 @@ def get_save_status(request):
     user: User = get_user(token)
 
     if user is None:
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
+        return Response(status=status.HTTP_200_OK, data={"status": False})
 
     url: str = request.data.get("url")
     vocab_set: VocabularySet = get_object_or_404(VocabularySet, url=url)
@@ -306,13 +311,19 @@ def get_vocab(request):
     token = request.data.get("token")
     url = request.data.get("url")
 
-    no_user: bool = True
     try:
-        username: str = Session.objects.get(session_key=token).session_data
-        user = User.objects.get(username=username)
-        no_user = False
+        session = Session.objects.get(session_key=token)
+        username = session.session_data
+        is_logged_in = True
     except ObjectDoesNotExist:
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
+        is_logged_in = False
+
+    if is_logged_in:
+        try:
+           user = User.objects.get(username=username)
+           is_logged_in = True
+        except ObjectDoesNotExist:
+            is_logged_in = False
 
     try:
         vocab = VocabularySet.objects.get(url=url)
@@ -322,8 +333,8 @@ def get_vocab(request):
     words = []
     for word in vocab.vocabulary.all():
         # getting the scores
-        scores: List[int] = [0 for i in range(len(VocabularySetRecord.Mode.choices))]
-        if not no_user:
+        scores: List[int] = [-1 for i in range(len(VocabularySetRecord.Mode.choices))]
+        if is_logged_in:
             try:
                 record = WordRecord.objects.get(user=user, word=word)
                 scores[0] = record.one_of_three_score
