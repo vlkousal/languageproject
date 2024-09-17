@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import {CookieService} from "ngx-cookie";
 import {BACKEND} from "../constants";
-import {Utils} from "../utils";
 
 @Component({
   selector: 'app-logout',
@@ -24,6 +23,4 @@ export class LogoutComponent {
         this.cookieService.removeAll();
         this.router.navigate(["/"]);
     }
-
-
 }

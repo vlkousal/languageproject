@@ -15,6 +15,9 @@ export class ApiTools {
         });
 
         if (!response.ok) {
+            if(response.status === 404) {
+                return "404";
+            }
             throw new Error('Network response was not ok.');
         }
         return await response.text();

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {BACKEND, FLAGS, Mode} from "../constants";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {ApiTools} from "../api-tools";
 import {first} from "rxjs";
 import {Utils} from "../utils";
@@ -35,7 +35,7 @@ export class VocabularyComponent {
 
     isSaved: boolean = false;
 
-    constructor(private route: ActivatedRoute, private cookieService: CookieService) { }
+    constructor(private route: ActivatedRoute, private router: Router, private cookieService: CookieService) { }
 
     async ngOnInit() {
         this.route.params.subscribe(params => {
@@ -121,6 +121,9 @@ export class VocabularyComponent {
 
     async setup(): Promise<void> {
         const vocab: string =  await ApiTools.getVocabJson(this.url, this.cookieService);
+        if(vocab == "404") {
+            this.router.navigate(["/404"]);
+        }
         const json = JSON.parse(vocab);
         this.name = json.name;
         this.contributor = json.author;

@@ -25,6 +25,7 @@ import { VocabTableComponent } from './vocabulary/vocab-table/vocab-table.compon
 import {CookieModule} from "ngx-cookie";
 import { SetWordsComponentComponent } from './vocabulary/set-words-component/set-words-component.component';
 import { VocabularyCreationSummaryComponent } from './vocabulary/vocabulary-creation-summary/vocabulary-creation-summary.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
     declarations: [
@@ -48,7 +49,8 @@ import { VocabularyCreationSummaryComponent } from './vocabulary/vocabulary-crea
         DrawCharactersComponent,
         VocabTableComponent,
         SetWordsComponentComponent,
-        VocabularyCreationSummaryComponent
+        VocabularyCreationSummaryComponent,
+        NotFoundComponent
     ],
     imports: [
         BrowserModule,
@@ -60,7 +62,8 @@ import { VocabularyCreationSummaryComponent } from './vocabulary/vocabulary-crea
             {path: "create", component: CreateVocabularyComponent},
             {path: "", component: IndexComponent},
             {path: "collection", component: CollectionComponent},
-            {path: "edit/:vocabUrl", component: EditVocabularyComponent}
+            {path: "edit/:vocabUrl", component: EditVocabularyComponent},
+            {path: "404", component: NotFoundComponent}
         ]),
         FormsModule,
         ReactiveFormsModule,
