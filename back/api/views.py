@@ -12,6 +12,7 @@ from django.utils.crypto import get_random_string
 from .models import Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord, VocabularyUserRelationship
 
 
+# returns a high score based on the set and the mode
 @api_view(['POST'])
 def get_high_score(request):
     token: str = request.data.get("token")
@@ -53,6 +54,7 @@ def get_user(token: str):
         return None
 
 
+# returns whether a given set is saved by the user
 @api_view(["POST"])
 def get_save_status(request):
     token: str = request.data.get("token")
@@ -72,6 +74,7 @@ def get_save_status(request):
         pass
     return Response(status=status.HTTP_200_OK, data={"status": save_status})
 
+# saves a set into a user's collection
 @api_view(["POST"])
 def save_set(request):
     token: str = request.data.get("token")
@@ -95,6 +98,7 @@ def save_set(request):
     return Response(status=status.HTTP_200_OK)
 
 
+# edits a vocabulary
 @api_view(['POST'])
 def edit_vocab(request):
     token: str = request.data.get("token")
@@ -102,16 +106,15 @@ def edit_vocab(request):
 
     user: User = get_user(token)
 
-    print(previous_url)
     try:
         author = VocabularySet.objects.get(url=previous_url).author
     except ObjectDoesNotExist:
-        print("primo tady qqplot")
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     try:
         vocab_set = VocabularySet.objects.get(url=previous_url)
     except ObjectDoesNotExist:
-        print("nn tady brasko")
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     if author != user:
         return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -128,6 +131,7 @@ def edit_vocab(request):
     return Response(status=status.HTTP_200_OK)
 
 
+# saves the result of a just finished set in a given mode
 @api_view(['POST'])
 def send_vocab_result(request):
     token: str = request.data.get("token")
@@ -211,6 +215,7 @@ def add_result(request):
     return Response(status=status.HTTP_200_OK)
 
 
+# deletes a set
 @api_view(['DELETE'])
 def delete_set(request):
     token = request.data.get("token")
@@ -230,6 +235,7 @@ def delete_set(request):
     return Response(status=status.HTTP_200_OK)
 
 
+# returns a user's collection
 @api_view(["POST"])
 def get_own_sets(request):
     token: str = request.data.get("token")
@@ -282,6 +288,7 @@ def get_language_vocab(request):
     return Response(status=status.HTTP_200_OK, data={"words": words})
 
 
+# retuns
 @api_view(["GET"])
 def get_vocab_sets(request):
     sets = VocabularySet.objects.all().order_by("-id")
@@ -293,6 +300,7 @@ def get_vocab_sets(request):
     return Response(data, status=status.HTTP_200_OK)
 
 
+# returns a requested /vocab/name vocabulary set
 @api_view(["POST"])
 def get_vocab(request):
     token = request.data.get("token")
@@ -378,6 +386,7 @@ def create_vocab(request):
     return Response("OK", status=status.HTTP_200_OK)
 
 
+# a help function that adds words to a newly created vocabulary set
 def set_vocabulary(vocab_set: VocabularySet, user: User, vocabulary: List[Dict[str, str]]):
     for word in vocabulary:
         # the same word might already exist (even with flipped languages)
@@ -397,6 +406,7 @@ def set_vocabulary(vocab_set: VocabularySet, user: User, vocabulary: List[Dict[s
     vocab_set.save()
 
 
+# get all languages
 @api_view(["GET"])
 def get_languages(request):
     languages = Language.objects.all()
