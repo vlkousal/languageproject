@@ -14,6 +14,7 @@ from django.contrib.auth.hashers import make_password, check_password
 
 @api_view(['POST'])
 def get_high_score(request):
+    # TODO
     token: str = request.data.get("token")
     vocab_url: str = request.data.get("url")
     mode: int = request.data.get("mode")
@@ -39,12 +40,14 @@ def get_high_score(request):
 
 @api_view(['POST'])
 def get_username(request):
+    # TODO
     token: str = request.data.get("token")
     username: str = Session.objects.get(session_key=token).session_data
     return Response(data={"username": username}, status=status.HTTP_200_OK)
 
 
 def get_user(token: str):
+    # TODO
     try:
         username: str = Session.objects.get(session_key=token).session_data
         user = User.objects.get(username=username)
@@ -55,6 +58,7 @@ def get_user(token: str):
 
 @api_view(["POST"])
 def get_save_status(request):
+    # TODO
     token: str = request.data.get("token")
     user: User = get_user(token)
 
@@ -74,6 +78,7 @@ def get_save_status(request):
 
 @api_view(["POST"])
 def save_set(request):
+    # TODO
     token: str = request.data.get("token")
     user: User = get_user(token)
     if user is None:
@@ -97,6 +102,7 @@ def save_set(request):
 
 @api_view(['POST'])
 def edit_vocab(request):
+    # TODO
     token: str = request.data.get("token")
     previous_url: str = request.data.get("url")
     user: User = get_user(token)
@@ -128,6 +134,7 @@ def edit_vocab(request):
 
 @api_view(['POST'])
 def send_vocab_result(request):
+    # TODO
     token: str = request.data.get("token")
     set_url = request.data.get("setUrl")
     score = request.data.get("score")
@@ -152,6 +159,7 @@ def send_vocab_result(request):
 
 @api_view(["POST"])
 def add_result(request):
+    # TODO
     token = request.data.get("token")
     correct = request.data.get("correct")
     mode = request.data.get("mode")
@@ -211,6 +219,7 @@ def add_result(request):
 
 @api_view(['DELETE'])
 def delete_set(request):
+    # TODO
     token = request.data.get("token")
     url_to_delete = request.data.get("url_to_delete")
     try:
@@ -230,6 +239,7 @@ def delete_set(request):
 
 @api_view(["POST"])
 def get_own_sets(request):
+    # TODO
     token: str = request.data.get("token")
 
     user: User = get_user(token)
@@ -267,6 +277,7 @@ def check_token(request):
 
 @api_view(["POST"])
 def get_language_vocab(request):
+    # TODO
     first = request.data.get("first_language")
     second = request.data.get("second_language")
 
@@ -278,6 +289,7 @@ def get_language_vocab(request):
     return Response(status=status.HTTP_200_OK, data={"words": words})
 
 
+# returns the newest sets shown on the index page
 @api_view(["GET"])
 def get_vocab_sets(request):
     supabase: Client = create_client(URL, KEY)
@@ -304,6 +316,7 @@ def get_vocab_sets(request):
 
 @api_view(["POST"])
 def get_vocab(request):
+    # TODO
     token = request.data.get("token")
     url = request.data.get("url")
 
@@ -360,6 +373,7 @@ def get_user_id_from_token(client: Client, token: str) -> int or None:
     return response.data[-1].get("user_id")
 
 
+# creates a new vocabulary_set
 @api_view(["POST", "PUT"])
 def create_vocab(request):
     token: str = request.data.get("token")
@@ -399,6 +413,7 @@ def create_vocab(request):
     return Response(status=status.HTTP_200_OK)
 
 
+# a help function that adds vocabulary to the newly created vocabulary set
 def create_entries(client: Client, vocabulary: List[Dict[str, str]], set_id: int, user_id: int) -> None:
     for word in vocabulary:
         # the same word already exists, and thus there is no reason to create it anymore
@@ -422,6 +437,7 @@ def create_entries(client: Client, vocabulary: List[Dict[str, str]], set_id: int
             {"set_id": set_id, "word_id": word_id}
         ).execute()
 
+# TODO - rework, remove
 def set_vocabulary(vocab_set: VocabularySet, user_id: int, vocabulary: List[Dict[str, str]], client: Client):
     for word in vocabulary:
         # the same word might already exist (even with flipped languages)
@@ -441,8 +457,10 @@ def set_vocabulary(vocab_set: VocabularySet, user_id: int, vocabulary: List[Dict
     vocab_set.save()
 
 
+# gets a list of all languages available
 @api_view(["GET"])
 def get_languages(request):
+    # TODO
     languages = Language.objects.all()
     lang_list = []
     for language in languages:
@@ -495,6 +513,7 @@ def login(request):
 
 @api_view(["POST"])
 def logout(request):
+    # TODO
     token = request.data
     supabase: Client = create_client(URL, KEY)
     supabase.table("session").delete().eq("session_key", token).execute()
@@ -511,4 +530,3 @@ def email_exists(client: Client, email: str) -> bool:
 
 def generate_token():
     return get_random_string(128)
-
