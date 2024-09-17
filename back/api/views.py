@@ -1,4 +1,3 @@
-import this
 from datetime import timedelta
 from typing import List, Dict
 from django.contrib.sessions.models import Session
