@@ -63,7 +63,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
             {path: "", component: IndexComponent},
             {path: "collection", component: CollectionComponent},
             {path: "edit/:vocabUrl", component: EditVocabularyComponent},
-            {path: "404", component: NotFoundComponent}
+            {path: "**", component: NotFoundComponent}
         ]),
         FormsModule,
         ReactiveFormsModule,
