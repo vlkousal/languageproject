@@ -11,8 +11,6 @@
 			<p>{{ contributor }}</p>
 			<div *ngIf="contributor != username">
 				<i class="fa fa-bookmark" (click)="saveSet()" [style.color]="isSaved ? 'green' : '#F9F8EB'"></i>
-				<i class="fa fa-thumbs-up"></i>
-				<i class="fa fa-thumbs-down"></i>
 			</div>
 			<i class="fa fa-cog"></i>
 		</div>
