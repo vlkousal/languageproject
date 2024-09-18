@@ -39,7 +39,8 @@ export class LoginComponent {
         }).then(async response => {
             if(response.ok) {
                 const token: string = JSON.parse(await response.text()).token;
-                this.cookieService.put("token", token, {expires: Utils.getThirtyDaysFromNow(), sameSite: "lax"});
+                this.cookieService.put("token", token, {expires: Utils.getThirtyDaysFromNow(), sameSite: "lax",
+                httpOnly: false});
                 await this.router.navigate(["/"]);
             }
         })

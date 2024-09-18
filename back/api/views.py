@@ -22,8 +22,7 @@ def get_high_score(request):
     user: User = get_user(token)
 
     if user is None:
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
-
+        return Response(data={"highScore": -1}, status=status.HTTP_200_OK)
     try:
         vocab_set: VocabularySet = VocabularySet.objects.get(url=vocab_url)
     except ObjectDoesNotExist:
@@ -326,14 +325,16 @@ def get_vocab(request):
             is_logged_in = False
 
     try:
-        vocab = VocabularySet.objects.get(url=url)
+        vocab = VocabularySet.objects.select_related(
+            'author', 'first_language', 'second_language'
+        ).prefetch_related('vocabulary').get(url=url)
     except VocabularySet.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     words = []
     for word in vocab.vocabulary.all():
         # getting the scores
-        scores: List[int] = [-1 for i in range(len(VocabularySetRecord.Mode.choices))]
+        scores: List[int] = [-1 for _ in range(len(VocabularySetRecord.Mode.choices))]
         if is_logged_in:
             try:
                 record = WordRecord.objects.get(user=user, word=word)
@@ -342,7 +343,7 @@ def get_vocab(request):
                 scores[int(VocabularySetRecord.Mode.WRITE_THE_ANSWER.value)] = record.write_the_answer_score
                 scores[int(VocabularySetRecord.Mode.DRAW_CHARACTER.value)] = record.draw_character_score
             except ObjectDoesNotExist:
-                pass
+                scores = [0 for _ in range(len(VocabularySetRecord.Mode.choices))]
 
 
         word = {"question": word.first,
@@ -458,6 +459,17 @@ def login(request):
                            session_key=key,
                            session_data=username)
     return Response(data={"token": key}, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+def logout(request):
+    token = request.data
+
+    try:
+        Session.objects.get(session_key=token).delete()
+    except ObjectDoesNotExist:
+        pass
+    return Response(status=status.HTTP_200_OK)
 
 
 def generate_key():

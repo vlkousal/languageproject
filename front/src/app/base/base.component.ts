@@ -7,7 +7,6 @@ import {CookieService} from "ngx-cookie";
     templateUrl: './base.component.html',
     styleUrls: ['./base.component.css']
 })
-
 export class BaseComponent {
 
     username: string | null = localStorage.getItem("username");
@@ -32,7 +31,9 @@ export class BaseComponent {
                 this.username = username;
                 return;
             }
-            localStorage.clear();
+            this.username = null;
+            localStorage.removeItem("username");
+            this.cookieService.removeAll();
         })
     }
 
