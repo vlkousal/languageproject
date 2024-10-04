@@ -324,6 +324,7 @@ def get_vocab(request):
         except ObjectDoesNotExist:
             is_logged_in = False
 
+
     try:
         vocab = VocabularySet.objects.select_related(
             'author', 'first_language', 'second_language'
@@ -331,20 +332,28 @@ def get_vocab(request):
     except VocabularySet.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+    word_records = {}
+    if is_logged_in:
+        word_records = {
+            record.word_id: record for record in WordRecord.objects.filter(
+                user=user,
+                word__in=vocab.vocabulary.all()
+            )
+        }
+
+    print("tohle je pomaly proste")
     words = []
     for word in vocab.vocabulary.all():
         # getting the scores
         scores: List[int] = [-1 for _ in range(len(VocabularySetRecord.Mode.choices))]
-        if is_logged_in:
+        if is_logged_in and word.id in word_records:
             try:
-                record = WordRecord.objects.get(user=user, word=word)
-                scores[0] = record.one_of_three_score
+                record = word_records[word.id]
                 scores[int(VocabularySetRecord.Mode.ONE_OF_THREE.value)] = record.one_of_three_score
                 scores[int(VocabularySetRecord.Mode.WRITE_THE_ANSWER.value)] = record.write_the_answer_score
                 scores[int(VocabularySetRecord.Mode.DRAW_CHARACTER.value)] = record.draw_character_score
             except ObjectDoesNotExist:
                 scores = [0 for _ in range(len(VocabularySetRecord.Mode.choices))]
-
 
         word = {"question": word.first,
                 "phonetic": word.phonetic,
