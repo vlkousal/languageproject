@@ -341,7 +341,6 @@ def get_vocab(request):
             )
         }
 
-    print("tohle je pomaly proste")
     words = []
     for word in vocab.vocabulary.all():
         # getting the scores

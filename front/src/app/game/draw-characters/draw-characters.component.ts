@@ -85,7 +85,6 @@ export class DrawCharactersComponent extends GameComponent {
         const currentWord: Word = this.words[this.index];
         this.resetCanvas();
         SpeechUtils.speak(currentWord.question, false);
-        this.index++;
     }
 
     checkDrawing(): void {
@@ -114,6 +113,7 @@ export class DrawCharactersComponent extends GameComponent {
 
         canvasContext.fillText(currentWord.question, 0, 170);
         setTimeout(() => {
+            this.index++;
             this.setNewWord();
             this.resetCanvas();
             this.allowAnswering = true;
