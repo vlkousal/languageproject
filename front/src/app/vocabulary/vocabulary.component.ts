@@ -55,6 +55,13 @@ export class VocabularyComponent {
         this.loading = false;
     }
 
+    async onGoBack(): Promise<void> {
+        this.mode = null;
+        this.loading = true;
+        await this.setup();
+        this.loading = false;
+    }
+
     async getSavedStatus(): Promise<string> {
         const data = {
             token: this.cookieService.get("token"),
