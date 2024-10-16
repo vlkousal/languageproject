@@ -57,6 +57,6 @@
 </div>
 
 <app-one-of-three [words]=words [url]=url (onGoBack)="onGoBack()" *ngIf="mode == Mode.OneOfThree"></app-one-of-three>
-<app-writetheanswer [words]=words [url]="url" (onGoBack)="this.mode = null" *ngIf="mode == Mode.WriteTheAnswer"></app-writetheanswer>
-<app-flashcards [words]=words *ngIf="mode == Mode.Flashcards" (onGoBack)="this.mode = null"></app-flashcards>
-<app-draw-characters [words]=characters [url]="url" *ngIf="mode == Mode.DrawCharacters" (onGoBack)="this.mode = null"></app-draw-characters>
+<app-writetheanswer [words]=words [url]="url" (onGoBack)="onGoBack()" *ngIf="mode == Mode.WriteTheAnswer"></app-writetheanswer>
+<app-flashcards [words]=words *ngIf="mode == Mode.Flashcards" (onGoBack)="onGoBack()"></app-flashcards>
+<app-draw-characters [words]=characters [url]="url" *ngIf="mode == Mode.DrawCharacters" (onGoBack)="onGoBack()"></app-draw-characters>
