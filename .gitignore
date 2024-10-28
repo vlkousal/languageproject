@@ -45,5 +45,6 @@ back/db.sqlite3
 back/languageproject_back/__pycache__
 back/__pycache__
 back/api/migrations/__pycache__
+back/api/migrations
 back/db_config.py
 
