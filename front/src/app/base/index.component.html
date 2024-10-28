@@ -1,14 +1,7 @@
-<head>
-  <meta charset="UTF-8">
-  <title>XD</title>
-</head>
-<body>
+<app-base></app-base>
 
-    <app-base></app-base>
+<h3>Vocabulary sets:</h3>
 
-    <h3>Vocabulary sets:</h3>
-    <div *ngFor = "let set of sets">
-        <a routerLink="/vocab/{{ set.url }}">{{ set.language }} {{ set.name }}</a>
-    </div>
-
-</body>
+<div *ngFor = "let set of sets">
+	<a routerLink="/vocab/{{ set.url }}">{{ set.language }} {{ set.name }}</a>
+</div>
