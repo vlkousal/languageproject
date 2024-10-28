@@ -5,7 +5,7 @@
 <div id="container" [hidden]="!(mode == null && !loading)">
 	<div id="top-panel">
 		<div id="name-container">
-			<i>{{ name }} {{ FLAGS[firstLanguage] }} {{ FLAGS[secondLanguage] }}</i>
+			<i>{{ name }} {{ FLAGS[language] }}</i>
 		</div>
 		<div id="rating-buttons">
 			<p>{{ contributor }}</p>
@@ -33,9 +33,9 @@
 			<div class="table-container">
 				<table id="summary-table">
 					<thead>
-					<th (click)="Word.sortByFirst(this.tableWords)">First Language</th>
+					<th (click)="Word.sortByFirst(this.tableWords)">Word</th>
 					<th (click)="Word.sortByPhonetic(this.tableWords)">Phonetic</th>
-					<th (click)="Word.sortByAnswer(this.tableWords)">Second Language</th>
+					<th (click)="Word.sortByAnswer(this.tableWords)">Translation</th>
 					<th (click)="Word.sortByAverageScore(this.tableWords)">Average Score</th>
 					</thead>
 

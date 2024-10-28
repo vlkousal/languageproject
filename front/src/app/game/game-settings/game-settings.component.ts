@@ -16,8 +16,7 @@ export class GameSettingsComponent {
 
     volume: number = 1;
     languageNames: string[] = [];
-    firstLanguage: string = "first";
-    secondLanguage: string = "second";
+    language: string = "language";
     firstVoice: string = "";
     secondVoice: string = "";
     showPhonetic: boolean = false;
@@ -45,39 +44,22 @@ export class GameSettingsComponent {
         SpeechUtils.speak(randomWord.question);
     }
 
-    testSecondVoice(): void {
-        const randomWord = Utils.getRandomElement(this.words);
-        SpeechUtils.speak(randomWord.correct, true);
-    }
-
     setFirstAndSecondLanguage(): void {
         const first = sessionStorage.getItem("firstLanguage");
         const second = sessionStorage.getItem("secondLanguage");
         if(first == null || second == null) return;
-        this.firstLanguage = first;
-        this.secondLanguage = second;
+        this.language = first;
 
-        if(this.firstLanguage != null) {
-            const firstVoice: string | null = localStorage.getItem(this.firstLanguage);
+        if(this.language != null) {
+            const firstVoice: string | null = localStorage.getItem(this.language);
             if(firstVoice != null){
                 this.firstVoice = firstVoice;
-            }
-        }
-
-        if(this.secondLanguage != null) {
-            const secondVoice: string | null = localStorage.getItem(this.secondLanguage);
-            if(secondVoice != null){
-                this.secondVoice = secondVoice;
             }
         }
     }
 
     onFirstLanguageChange(): void {
-        localStorage.setItem(this.firstLanguage, this.firstVoice);
-    }
-
-    onSecondLanguageChange(): void {
-        localStorage.setItem(this.secondLanguage, this.secondVoice);
+        localStorage.setItem(this.language, this.firstVoice);
     }
 
     onShowPhoneticChange(): void {

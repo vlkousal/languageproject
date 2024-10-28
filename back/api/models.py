@@ -12,12 +12,12 @@ class Language(models.Model):
 
 class WordEntry(models.Model):
     contributor = models.ForeignKey(User, on_delete=models.CASCADE)
-    first = models.CharField(max_length=64)
+    word = models.CharField(max_length=64)
     phonetic = models.CharField(max_length=64)
-    second = models.CharField(max_length=64)
+    translation = models.CharField(max_length=64)
 
     def __str__(self):
-        return self.first + " - " + self.phonetic + " - " + self.second
+        return self.word + " - " + self.phonetic + " - " + self.translation
 
 
 class VocabularySet(models.Model):
@@ -25,12 +25,7 @@ class VocabularySet(models.Model):
     description = models.CharField(max_length=256)
     url = models.CharField(max_length=32)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    first_language = models.ForeignKey(Language,
-                                       on_delete=models.CASCADE,
-                                       related_name="set_first_language")
-    second_language = models.ForeignKey(Language,
-                                        on_delete=models.CASCADE,
-                                        related_name="set_second_language")
+    language = models.ForeignKey(Language, on_delete=models.CASCADE, related_name="set_first_language")
     vocabulary = models.ManyToManyField(WordEntry)
 
     def __str__(self):
@@ -49,8 +44,8 @@ class WordRecord(models.Model):
     draw_character_streak = models.IntegerField(default=0)
 
     def __str__(self):
-        return (self.user.username + " - " + self.word.first +
-                "(" + self.word.second + ")")
+        return (self.user.username + " - " + self.word.word +
+                "(" + self.word.translation + ")")
 
 
 class VocabularySetRecord(models.Model):

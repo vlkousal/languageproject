@@ -14,17 +14,11 @@
 		</div>
 	</div>
 
-	<p class="language-name">{{ FLAGS[firstLanguage]}}  {{ firstLanguage }}</p>
+	<p class="language-name">{{ FLAGS[language]}}  {{ language }}</p>
 	<select id="firstLanguageName" [(ngModel)]="firstVoice" (change)="onFirstLanguageChange()">
 		<option *ngFor="let language of languageNames" [value]="language">{{ language }}</option>
 	</select>
 	<button (click)="testFirstVoice()">Test</button>
-
-	<p class="language-name">{{ FLAGS[secondLanguage]}} {{ secondLanguage }}</p>
-	<select id="secondLanguageName" [(ngModel)]="secondVoice" (change)="onSecondLanguageChange()">
-		<option *ngFor="let language of languageNames" [value]="language">{{ language }}</option>
-	</select>
-	<button (click)="testSecondVoice()">Test</button>
 
 	<div id="show-phonetic">
 		Show Phonetic

@@ -19,8 +19,7 @@ enum Category {
 export class SetWordsComponentComponent {
 
     @Input() set: VocabularySet | undefined;
-    @Input() firstLanguage: string = "";
-    @Input() secondLanguage: string = "";
+    @Input() language: string = "";
     @Input() relevantWords: Set<Word> = new Set<Word>();
     @Input() previousUrl: string | null = null;
 

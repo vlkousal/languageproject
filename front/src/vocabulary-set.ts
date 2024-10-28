@@ -5,18 +5,15 @@ export class VocabularySet {
     name: string;
     url: string;
     description: string;
-    firstLanguage: string;
-    secondLanguage: string;
+    language: string;
     words: Word[];
     isOwn: boolean;
 
-    constructor(name: string, url: string, description: string, firstLanguage: string, secondLanguage: string,
-                words: Word[], isOwn: boolean) {
+    constructor(name: string, url: string, description: string, firstLanguage: string, words: Word[], isOwn: boolean) {
         this.name = name;
         this.url = url;
         this.description = description;
-        this.firstLanguage = firstLanguage;
-        this.secondLanguage = secondLanguage;
+        this.language = firstLanguage;
         this.words = words;
         this.isOwn = isOwn;
     }

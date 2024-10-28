@@ -17,11 +17,9 @@ export class IndexComponent {
         JSON.parse(await this.getSets()).forEach((item: {
             name: string;
             url: string;
-            first_language: string;
-            second_language: string;
+            language: string;
         }) => {
-            this.sets.push(new VocabularySet(item.name, item.url, "",FLAGS[item.first_language],
-                FLAGS[item.second_language], [], false));
+            this.sets.push(new VocabularySet(item.name, item.url, "",FLAGS[item.language], [], false));
         });
         this.debug = await this.getSets();
     }

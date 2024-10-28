@@ -125,10 +125,8 @@ def edit_vocab(request):
     vocab_set.name = request.data.get("name")
     vocab_set.description = request.data.get("description")
     vocab_set.url = request.data.get("url")
-    vocab_set.first_language = Language.objects.get(
-        name=request.data.get("first_language"))
-    vocab_set.second_language = Language.objects.get(
-        name=request.data.get("second_language"))
+    vocab_set.language = Language.objects.get(
+        name=request.data.get("language"))
     vocab_set.save()
     vocab_set.vocabulary.clear()
     set_vocabulary(vocab_set, user, request.data.get("vocabulary"))
@@ -250,14 +248,14 @@ def get_own_sets(request):
     json = {"sets": []}
 
     for vocab_set in VocabularySet.objects.filter(author=user):
-        set_json = {"name": vocab_set.name, "url": vocab_set.url, "first_language": vocab_set.first_language.name,
-                    "second_language": vocab_set.second_language.name, "is_own": True}
+        set_json = {"name": vocab_set.name, "url": vocab_set.url,
+                    "language": vocab_set.language.name, "is_own": True}
         json["sets"].append(set_json)
 
     for relationship in VocabularyUserRelationship.objects.filter(user=user, saved=True):
         vocab_set: VocabularySet = relationship.set
-        set_json = {"name": vocab_set.name, "url": vocab_set.url, "first_language": vocab_set.first_language.name,
-                  "second_language": vocab_set.second_language.name, "is_own": False}
+        set_json = {"name": vocab_set.name, "url": vocab_set.url,
+                    "language": vocab_set.language.name, "is_own": False}
         json["sets"].append(set_json)
     return Response(status=status.HTTP_200_OK, data=json)
 
@@ -281,14 +279,13 @@ def check_sessions():
 
 @api_view(["POST"])
 def get_language_vocab(request):
-    first = request.data.get("first_language")
-    second = request.data.get("second_language")
+    language = request.data.get("language")
 
-    sets = VocabularySet.objects.filter(first_language__name=first, second_language__name=second)
+    sets = VocabularySet.objects.filter(language__name=language)
     words: List[Dict[str, str]] = []
     for s in sets:
         for word in s.vocabulary.all():
-            words.append({"first": word.first, "phonetic": word.phonetic, "second": word.second})
+            words.append({"word": word.word, "phonetic": word.phonetic, "translation": word.translation})
     return Response(status=status.HTTP_200_OK, data={"words": words})
 
 
@@ -298,8 +295,7 @@ def get_vocab_sets(request):
     sets = VocabularySet.objects.all().order_by("-id")
 
     data = [{"name": s.name, "url": s.url,
-             "first_language": s.first_language.name,
-             "second_language": s.second_language.name}
+             "language": s.language.name}
             for s in sets]
     return Response(data, status=status.HTTP_200_OK)
 
@@ -327,8 +323,7 @@ def get_vocab(request):
 
     try:
         vocab = VocabularySet.objects.select_related(
-            'author', 'first_language', 'second_language'
-        ).prefetch_related('vocabulary').get(url=url)
+            'author', 'language').prefetch_related('vocabulary').get(url=url)
     except VocabularySet.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -354,9 +349,9 @@ def get_vocab(request):
             except ObjectDoesNotExist:
                 scores = [0 for _ in range(len(VocabularySetRecord.Mode.choices))]
 
-        word = {"question": word.first,
+        word = {"question": word.word,
                 "phonetic": word.phonetic,
-                "correct": word.second,
+                "correct": word.translation,
                 "id": word.id,
                 "scores": scores
                 }
@@ -366,8 +361,7 @@ def get_vocab(request):
         "name": vocab.name,
         "author": vocab.author.username,
         "description": vocab.description,
-        "first_language": vocab.first_language.name,
-        "second_language": vocab.second_language.name,
+        "language": vocab.language.name,
         "vocabulary": words
     }
     return Response(data, status=status.HTTP_200_OK)
@@ -393,14 +387,10 @@ def create_vocab(request):
     if len(url_filter) != 0:
         return Response(status=status.HTTP_400_BAD_REQUEST, data="This URL is already used. Please use another one.")
 
-    first_language = Language.objects.get(
-        name=request.data.get("first_language"))
-    second_language = Language.objects.get(
-        name=request.data.get("second_language"))
+    language = Language.objects.get(name=request.data.get("language"))
 
     vocab_set = VocabularySet.objects.create(author=user, name=name,
-    description=description, url=url, first_language=first_language,
-    second_language=second_language)
+    description=description, url=url, language=language)
 
     set_vocabulary(vocab_set, user, vocabulary)
     return Response("OK", status=status.HTTP_200_OK)
@@ -409,19 +399,14 @@ def create_vocab(request):
 # a help function that adds words to a newly created vocabulary set
 def set_vocabulary(vocab_set: VocabularySet, user: User, vocabulary: List[Dict[str, str]]):
     for word in vocabulary:
-        # the same word might already exist (even with flipped languages)
-        filter1 = WordEntry.objects.filter(first=word["first"], phonetic=word["phonetic"],
-                                           second=word["second"])
-        filter2 = WordEntry.objects.filter(first=word["second"], phonetic=word["phonetic"],
-                                           second=word["first"])
-        if len(filter1) > 0:
-            vocab_set.vocabulary.add(filter1.first())
+        # the same word might already exist
+        fltr = WordEntry.objects.filter(word=word["word"], phonetic=word["phonetic"],
+                                           translation=word["translation"])
+        if len(fltr) > 0:
+            vocab_set.vocabulary.add(fltr.first())
             continue
-        elif len(filter2) > 0:
-            vocab_set.vocabulary.add(filter2.first())
-            continue
-        word = WordEntry.objects.create(contributor=user, first=word["first"], phonetic=word["phonetic"],
-                                        second=word["second"])
+        word = WordEntry.objects.create(contributor=user, word=word["word"], phonetic=word["phonetic"],
+                                        translation=word["translation"])
         vocab_set.vocabulary.add(word)
     vocab_set.save()
 

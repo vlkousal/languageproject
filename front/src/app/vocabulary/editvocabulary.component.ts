@@ -19,8 +19,7 @@ export class EditVocabularyComponent {
     words: Set<Word> = new Set<Word>();
     counter: number = 0;
     previousUrl: string = "";
-    firstLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
-    secondLanguage: FormControl<string> = new FormControl("English") as FormControl<string>;
+    language: FormControl<string> = new FormControl("Czech") as FormControl<string>;
     set: VocabularySet | null = null;
 
     constructor(private route: ActivatedRoute, private cookieService: CookieService) {
@@ -33,9 +32,7 @@ export class EditVocabularyComponent {
         const vocabData = await ApiTools.getVocabJson(this.previousUrl, this.cookieService);
         const parsed = JSON.parse(vocabData);
         this.set = new VocabularySet(parsed.name, this.previousUrl, parsed.description,
-            FLAGS[parsed.first_language] + " " + parsed.first_language,
-            FLAGS[parsed.second_language] + " " + parsed.second_language, [], true
-        );
+            FLAGS[parsed.first_language] + " " + parsed.first_language, [], true);
     }
 
     protected readonly FLAGS = FLAGS;

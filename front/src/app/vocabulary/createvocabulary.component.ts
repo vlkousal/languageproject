@@ -27,8 +27,7 @@ export class CreateVocabularyComponent {
     name: FormControl<string> = new FormControl("") as FormControl<string>;
     description : FormControl<string> = new FormControl("") as FormControl<string>;
     url: FormControl<string> = new FormControl("") as FormControl<string>;
-    firstLanguage: FormControl<string> = new FormControl("Albanian") as FormControl<string>;
-    secondLanguage: FormControl<string> = new FormControl("Czech") as FormControl<string>;
+    language: FormControl<string> = new FormControl("Albanian") as FormControl<string>;
 
     @Input() previousUrl: string | null = null;
     words: Word[] = [];
@@ -50,8 +49,7 @@ export class CreateVocabularyComponent {
             this.name.setValue(parsed.name);
             this.url.setValue(this.previousUrl);
             this.description.setValue(parsed.description);
-            this.firstLanguage.setValue(FLAGS[parsed.first_language] + " " + parsed.first_language);
-            this.secondLanguage.setValue(FLAGS[parsed.second_language] + " " + parsed.second_language);
+            this.language.setValue(FLAGS[parsed.first_language] + " " + parsed.first_language);
 
             parsed.vocabulary.forEach((word: WordType) => {
                 this.words.push(new Word(word.id, [], word.question, word.phonetic, word.correct, [], []));
@@ -84,7 +82,7 @@ export class CreateVocabularyComponent {
 
     onInputChange(): void {
         this.set = new VocabularySet(this.getName(), this.getUrl(), this.getDescription(),
-            this.getFirstLanguage(), this.getSecondLanguage(), this.words, this.previousUrl != null);
+            this.getFirstLanguage(), this.words, this.previousUrl != null);
         const nameLength = this.getName().length;
         this.isValid = false;
         // we need to refresh the URL string if name was changed
@@ -102,11 +100,6 @@ export class CreateVocabularyComponent {
             this.feedback = "The URL is empty.";
             return;
         }
-
-        if(this.getFirstLanguage() == this.getSecondLanguage()) {
-            this.feedback = "The languages must be different.";
-            return;
-        }
         this.isValid = true;
     }
 
@@ -122,13 +115,12 @@ export class CreateVocabularyComponent {
         if(firstIndex == secondIndex) {
             secondIndex = (secondIndex + 1) % keys.length;
         }
-        this.firstLanguage.setValue(FLAGS[keys[firstIndex]] + " " + keys[firstIndex]);
-        this.secondLanguage.setValue(FLAGS[keys[secondIndex]] + " " + keys[secondIndex]);
+        this.language.setValue(FLAGS[keys[firstIndex]] + " " + keys[firstIndex]);
     }
 
     async getRelevantWords(): Promise<void> {
         this.relevantWords = new Set<Word>();
-        const parsed = JSON.parse(await ApiTools.getRelevantVocabulary(this.getFirstLanguage(), this.getSecondLanguage()));
+        const parsed = JSON.parse(await ApiTools.getRelevantVocabulary(this.getFirstLanguage()));
         for(let i = 0; i < parsed.words.length; i++) {
             const word = new Word(0, [],  parsed.words[i].first, parsed.words[i].phonetic, parsed.words[i].second, [], []);
             if(!this.relevantWords.has(word)) this.relevantWords.add(word);
@@ -153,11 +145,7 @@ export class CreateVocabularyComponent {
 
     // the flag and the space gets removed
     getFirstLanguage(): string {
-        return this.firstLanguage.getRawValue().substring(5);
-    }
-
-    getSecondLanguage(): string {
-        return this.secondLanguage.getRawValue().substring(5);
+        return this.language.getRawValue().substring(5);
     }
 
     protected readonly State = State;

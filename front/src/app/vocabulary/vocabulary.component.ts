@@ -23,8 +23,7 @@ export class VocabularyComponent {
     name: string = "";
     description: string = "";
     contributor: string = "";
-    firstLanguage: string = "";
-    secondLanguage: string = "";
+    language: string = "";
     languageNames: string[] = [];
     mode: Mode | null = null;
     loading: boolean = true;
@@ -46,8 +45,7 @@ export class VocabularyComponent {
 
         this.languageNames.sort();
         Word.sortByAverageScore(this.words);
-        sessionStorage.setItem("firstLanguage", this.firstLanguage);
-        sessionStorage.setItem("secondLanguage", this.secondLanguage);
+        sessionStorage.setItem("firstLanguage", this.language);
         this.tableWords = [...this.words];
 
         this.username = JSON.parse(await this.getUsername())["username"];
@@ -135,8 +133,7 @@ export class VocabularyComponent {
         this.name = json.name;
         this.contributor = json.author;
         this.description = json.description;
-        this.firstLanguage = json.first_language;
-        this.secondLanguage = json.second_language;
+        this.language = json.language;
 
         const words: Word[] = [];
         json.vocabulary.forEach((word: any, i: number) => {

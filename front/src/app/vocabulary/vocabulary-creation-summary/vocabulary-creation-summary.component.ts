@@ -11,7 +11,7 @@ import {Router} from "@angular/router";
 })
 export class VocabularyCreationSummaryComponent {
 
-    @Input() set: VocabularySet = new VocabularySet("", "", "", "", "", [], true);
+    @Input() set: VocabularySet = new VocabularySet("", "", "", "", [], true);
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
 
     feedback: string = "";
@@ -29,8 +29,7 @@ export class VocabularyCreationSummaryComponent {
             name: this.set.name,
             url: this.set.url,
             description: this.set.description,
-            first_language: this.set.firstLanguage,
-            second_language: this.set.secondLanguage,
+            language: this.set.language,
             vocabulary: this.getVocabularyJSON()
         }
 
@@ -60,8 +59,7 @@ export class VocabularyCreationSummaryComponent {
             name: this.set.name,
             url: this.set.url,
             description: this.set.description,
-            first_language: this.set.firstLanguage,
-            second_language: this.set.secondLanguage,
+            language: this.set.language,
             vocabulary: this.getVocabularyJSON()
         }
 

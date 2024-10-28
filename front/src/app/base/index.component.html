@@ -7,6 +7,6 @@
 
     <h3>Vocabulary sets:</h3>
     <div *ngFor = "let set of sets">
-        <a routerLink="/vocab/{{ set.url }}">{{ set.firstLanguage }} {{ set.secondLanguage }} {{ set.name }}</a>
+        <a routerLink="/vocab/{{ set.url }}">{{ set.language }} {{ set.name }}</a>
     </div>
 </body>
