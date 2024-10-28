@@ -3,10 +3,16 @@
   <title>XD</title>
 </head>
 <body>
+<link
+		rel="stylesheet"
+		href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"
+/>
     <app-base></app-base>
 
     <h3>Vocabulary sets:</h3>
     <div *ngFor = "let set of sets">
         <a routerLink="/vocab/{{ set.url }}">{{ set.language }} {{ set.name }}</a>
     </div>
+
+    <span class="fi fi-cz"></span> Greece
 </body>
