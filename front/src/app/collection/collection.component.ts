@@ -54,12 +54,12 @@ export class CollectionComponent {
                 (json.sets).forEach((item: {
                     name: string,
                     url: string,
-                    first_language: string,
-                    second_language: string,
+                    language: string,
                     is_own: boolean
                 }) => {
+                    console.log(item.language);
                     this.sets.push(new VocabularySet(item.name, item.url, "",
-                        FLAGS[item.first_language], [], item.is_own));
+                        item.language, [], item.is_own));
                 })
             }
             return [];
@@ -100,4 +100,6 @@ export class CollectionComponent {
             console.error("Couldn't delete the set!");
         })
     }
+
+    protected readonly FLAGS = FLAGS;
 }
