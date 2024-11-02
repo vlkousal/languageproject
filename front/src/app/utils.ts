@@ -34,8 +34,8 @@ export class Utils {
         return list[randomIndex];
     }
 
-    static flipACoin(): 0 | 1 {
-        return Math.random() < 0.5 ? 0 : 1;
+    static getRandomInteger(l: number, r: number) {
+        return Math.floor(Math.random() * (r - l + 1)) + l;
     }
 
     static getThirtyDaysFromNow(): Date {

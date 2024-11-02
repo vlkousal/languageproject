@@ -116,7 +116,7 @@ export class GameComponent implements OnInit {
         const currentWord: Word = this.words[this.index];
 
         // throw a coin to decide whether the languages get flipped
-        const coinFlip: number = Utils.flipACoin();
+        const coinFlip: number = Utils.getRandomInteger(0, 1);
         if(coinFlip == 1) {
             this.isFlipped = true;
             this.words[this.index] = new Word(currentWord.id, currentWord.scores, currentWord.correct,
