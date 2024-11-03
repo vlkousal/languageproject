@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './user/register.component';
@@ -26,6 +26,7 @@ import {CookieModule} from "ngx-cookie";
 import { SetWordsComponentComponent } from './vocabulary/set-words-component/set-words-component.component';
 import { VocabularyCreationSummaryComponent } from './vocabulary/vocabulary-creation-summary/vocabulary-creation-summary.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
     declarations: [
@@ -68,7 +69,13 @@ import { NotFoundComponent } from './not-found/not-found.component';
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
-        CookieModule.withOptions()
+        CookieModule.withOptions(),
+        ServiceWorkerModule.register('ngsw-worker.js', {
+          enabled: !isDevMode(),
+          // Register the ServiceWorker as soon as the application is stable
+          // or after 30 seconds (whichever comes first).
+          registrationStrategy: 'registerWhenStable:30000'
+        })
     ],
     providers: [
         { provide: Window, useValue: window },

@@ -19,7 +19,6 @@
 	<div id="content-container">
 		<div id="mode-buttons-container">
 			<button (click)="selectedMode = null"><i class="fa fa-file">     Summary</i></button>
-
 			<button (click)="selectedMode = Mode.OneOfThree" *ngIf="words.length >= 3"><i class="fa fa-bars">     One Of Three</i></button>
 			<button (click)="selectedMode = Mode.WriteTheAnswer"><i class="fa fa-pen-nib">     Write The Answer</i></button>
 			<button (click)="selectedMode = Mode.DrawCharacters" *ngIf="characters.length != 0"><i class="fa fa-brush">     Draw Characters</i></button>
