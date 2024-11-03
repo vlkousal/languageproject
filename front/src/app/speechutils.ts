@@ -23,7 +23,6 @@ export class SpeechUtils {
     public static speak(text: string, useEnglish?: boolean): void {
         if(this.isMuted()) return;
 
-        console.log(text, useEnglish);
         let voiceName;
         if(useEnglish) {
             voiceName = localStorage.getItem("English");

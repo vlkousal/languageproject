@@ -79,11 +79,8 @@ export class DrawCharactersComponent extends GameComponent {
                 const choice: number = Utils.getRandomInteger(0, 3);
                 const randomOption: Coordinates = options[choice];
                 context.clearRect(randomOption.startX, randomOption.startY, randomOption.endX, randomOption.endY);
-                console.log("Choice: ", choice);
             }
         }
-        console.log("Current passrate:", this.currentPassrate + " %");
-
     }
 
     override replayAll(): void {
@@ -146,10 +143,7 @@ export class DrawCharactersComponent extends GameComponent {
                 }
             }
         }
-        console.log("Black pixel count: " + this.getBlackPixelCount());
         const percentage: number = (counter / blackPixelCount) * 100;
-        console.log(counter + " / " + blackPixelCount + " - " + percentage + "%");
-
         const isCorrect: boolean = percentage >= this.currentPassrate;
 
         canvasContext.fillStyle = "#59bd59";
