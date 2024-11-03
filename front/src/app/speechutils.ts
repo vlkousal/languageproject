@@ -20,21 +20,22 @@ export class SpeechUtils {
         return voices;
     }
 
-    public static speak(text: string, useSecondLanguage?: boolean): void {
+    public static speak(text: string, useEnglish?: boolean): void {
         if(this.isMuted()) return;
+
+        console.log(text, useEnglish);
         let voiceName;
-        if(useSecondLanguage) {
-            const secondLanguage: string | null = sessionStorage.getItem("secondLanguage");
-            if(secondLanguage == null) return;
-            voiceName = localStorage.getItem(secondLanguage);
+        if(useEnglish) {
+            voiceName = localStorage.getItem("English");
         } else {
-            const firstLanguage: string | null = sessionStorage.getItem("firstLanguage");
-            if(firstLanguage == null) return;
-            voiceName = localStorage.getItem(firstLanguage);
+            const language: string | null = sessionStorage.getItem("language");
+            if(language == null) return;
+            voiceName = localStorage.getItem(language);
         }
         for(const voice of speechSynthesis.getVoices()) {
             if(voice.name == voiceName){
                 this.play(text, voice);
+                return;
             }
         }
     }

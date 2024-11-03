@@ -1,5 +1,5 @@
 <!-- SETTINGS -->
-<div id="settings" class="container">
+<div id="container">
 	<div class="top-panel">
 		<button class="back-button" (click)="onGoBack.emit()">
 			<i class="fas fa-arrow-left"> </i>
@@ -15,10 +15,16 @@
 	</div>
 
 	<p class="language-name">{{ FLAGS[language]}}  {{ language }}</p>
-	<select id="firstLanguageName" [(ngModel)]="firstVoice" (change)="onFirstLanguageChange()">
+	<select [(ngModel)]="languageVoice" (change)="onLanguageVoiceChange()">
 		<option *ngFor="let language of languageNames" [value]="language">{{ language }}</option>
 	</select>
-	<button (click)="testFirstVoice()">Test</button>
+	<button (click)="testLanguageVoice()">Test</button>
+
+	<p class="english-voice">{{ FLAGS["English"]}} English</p>
+	<select [(ngModel)]="englishVoice" (change)="onEnglishVoiceChange()">
+		<option *ngFor="let language of languageNames" [value]="language">{{ language }}</option>
+	</select>
+	<button (click)="testEnglishVoice()">Test</button>
 
 	<div id="show-phonetic">
 		Show Phonetic

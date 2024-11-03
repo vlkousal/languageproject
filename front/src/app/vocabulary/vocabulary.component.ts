@@ -45,7 +45,7 @@ export class VocabularyComponent {
 
         this.languageNames.sort();
         Word.sortByAverageScore(this.words);
-        sessionStorage.setItem("firstLanguage", this.language);
+        sessionStorage.setItem("language", this.language);
         this.tableWords = [...this.words];
 
         this.username = JSON.parse(await this.getUsername())["username"];

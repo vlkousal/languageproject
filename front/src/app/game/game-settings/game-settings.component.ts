@@ -17,8 +17,8 @@ export class GameSettingsComponent {
     volume: number = 1;
     languageNames: string[] = [];
     language: string = "language";
-    firstVoice: string = "";
-    secondVoice: string = "";
+    languageVoice: string = "";
+    englishVoice: string = "";
     showPhonetic: boolean = false;
 
     ngOnInit(): void {
@@ -28,6 +28,12 @@ export class GameSettingsComponent {
         } else {
             this.volume = Math.round(Number(volume) * 100);
         }
+
+        const languageName: string | null = sessionStorage.getItem("language");
+        if(languageName != null){
+            this.language = sessionStorage.getItem("language")!;
+        }
+
 
         const phonetic = localStorage.getItem("showPhonetic");
         this.showPhonetic = phonetic == "true";
@@ -39,9 +45,14 @@ export class GameSettingsComponent {
         localStorage.setItem("volume", String(this.volume / 100));
     }
 
-    testFirstVoice(): void {
+    testLanguageVoice(): void {
         const randomWord = Utils.getRandomElement(this.words);
         SpeechUtils.speak(randomWord.question);
+    }
+
+    testEnglishVoice(): void {
+        const randomWord = Utils.getRandomElement(this.words);
+        SpeechUtils.speak(randomWord.correct);
     }
 
     setFirstAndSecondLanguage(): void {
@@ -53,13 +64,17 @@ export class GameSettingsComponent {
         if(this.language != null) {
             const firstVoice: string | null = localStorage.getItem(this.language);
             if(firstVoice != null){
-                this.firstVoice = firstVoice;
+                this.languageVoice = firstVoice;
             }
         }
     }
 
-    onFirstLanguageChange(): void {
-        localStorage.setItem(this.language, this.firstVoice);
+    onLanguageVoiceChange(): void {
+        localStorage.setItem(this.language, this.languageVoice);
+    }
+
+    onEnglishVoiceChange(): void {
+        localStorage.setItem("English", this.englishVoice);
     }
 
     onShowPhoneticChange(): void {
