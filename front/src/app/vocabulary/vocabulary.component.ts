@@ -27,6 +27,7 @@ export class VocabularyComponent {
     languageNames: string[] = [];
     mode: Mode | null = null;
     loading: boolean = true;
+    showSettings: boolean = false;
 
     selectedMode: Mode | null = null;
     tableWords: Word[] = [];
