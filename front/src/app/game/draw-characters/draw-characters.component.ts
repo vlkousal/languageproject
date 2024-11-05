@@ -32,6 +32,8 @@ export class DrawCharactersComponent extends GameComponent {
     HALF_HINT_PASSRATE: number = 30;
     HINT_PASSRATE: number = 50;
 
+    OFFSET: number = 5;
+
     currentPassrate: number = this.NO_HINT_PASSRATE;
 
     constructor(cookieService: CookieService) {
@@ -81,6 +83,11 @@ export class DrawCharactersComponent extends GameComponent {
                 context.clearRect(randomOption.startX, randomOption.startY, randomOption.endX, randomOption.endY);
             }
         }
+
+        this.getTopLeftPoint();
+        this.getTopRightPoint();
+        this.getBottomLeftPoint();
+        this.getBottomRightPoint();
     }
 
     override replayAll(): void {
@@ -128,11 +135,11 @@ export class DrawCharactersComponent extends GameComponent {
                 const r1 = canvasData[index];
                 const r2 = testData[index];
 
-                const g1 = canvasData[index];
-                const g2 = testData[index];
+                const g1 = canvasData[index + 1];
+                const g2 = testData[index + 1];
 
-                const b1 = canvasData[index];
-                const b2 = testData[index];
+                const b1 = canvasData[index + 2];
+                const b2 = testData[index + 2];
 
                 const canvasColor: string = this.rgbToHex(r1, g1, b1);
                 const testCanvasColor: string = this.rgbToHex(r2, g2, b2);
@@ -186,8 +193,8 @@ export class DrawCharactersComponent extends GameComponent {
             for (let x = 0; x < width; x++) {
                 const index = (y * width + x) * 4;
                 const r = testData[index];
-                const g = testData[index];
-                const b = testData[index];
+                const g = testData[index + 1];
+                const b = testData[index + 2];
 
                 const testCanvasColor: string = this.rgbToHex(r, g, b);
 
@@ -198,6 +205,137 @@ export class DrawCharactersComponent extends GameComponent {
             }
         }
         return counter;
+    }
+
+    getTopLeftPoint(): void {
+        const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+        const canvasContext = canvas.getContext('2d');
+
+        const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
+        const testingCanvasContext = testingCanvas.getContext('2d');
+        if(testingCanvasContext == null || canvasContext == null) return;
+
+        const width: number = testingCanvas.width;
+        const height: number = testingCanvas.height;
+        const pixels = testingCanvasContext.getImageData(0, 0, width, height).data;
+
+        // go through left half, from the top, from the left
+        for(let x = 0; x < testingCanvas.width / 2; x++) {
+            for(let y = 0; y < testingCanvas.height / 2; y++) {
+                const index = (y * width + x) * 4;
+                const r = pixels[index];
+                const g = pixels[index + 1];
+                const b = pixels[index + 2];
+
+                const color: string = this.rgbToHex(r, g, b);
+                if(color == this.PEN_COLOR) {
+                    console.log("Top left ", x, y);
+                    canvasContext.beginPath();
+                    canvasContext.arc(x, y, 5, 0, 2 * Math.PI);
+                    canvasContext.fillStyle = "black";
+                    canvasContext.fill();
+                    return;
+                }
+            }
+        }
+    }
+
+    getTopRightPoint(): void {
+        const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+        const canvasContext = canvas.getContext('2d');
+
+        const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
+        const testingCanvasContext = testingCanvas.getContext('2d');
+        if(testingCanvasContext == null || canvasContext == null) return;
+
+        const width: number = testingCanvas.width;
+        const height: number = testingCanvas.height;
+        const pixels = testingCanvasContext.getImageData(0, 0, width, height).data;
+
+        for(let x = testingCanvas.width - 1; x >= testingCanvas.width / 2; x--) {
+            for(let y = 0; y < testingCanvas.height / 2; y++) {
+                const index = (y * width + x) * 4;
+                const r = pixels[index];
+                const g = pixels[index + 1];
+                const b = pixels[index + 2];
+
+                const color: string = this.rgbToHex(r, g, b);
+                if(color == this.PEN_COLOR) {
+                    console.log("Top right ", x, y);
+                    canvasContext.beginPath();
+                    canvasContext.arc(x, y, 5, 0, 2 * Math.PI);
+                    canvasContext.fillStyle = "orange";
+                    canvasContext.fill();
+                    return;
+                }
+            }
+        }
+    }
+
+    getBottomLeftPoint(): void {
+        const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+        const canvasContext = canvas.getContext('2d');
+
+        const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
+        const testingCanvasContext = testingCanvas.getContext('2d');
+        if(testingCanvasContext == null || canvasContext == null) return;
+
+        const width: number = testingCanvas.width;
+        const height: number = testingCanvas.height;
+        const pixels = testingCanvasContext.getImageData(0, 0, width, height).data;
+
+        // go through left half, from the top, from the left
+        for(let x = 0; x < testingCanvas.width / 2; x++) {
+            for(let y = testingCanvas.height - 1; y >= testingCanvas.height / 2; y--) {
+                const index = (y * width + x) * 4;
+                const r = pixels[index];
+                const g = pixels[index + 1];
+                const b = pixels[index + 2];
+
+                const color: string = this.rgbToHex(r, g, b);
+                if(color == this.PEN_COLOR) {
+                    console.log("Bottom left, ", x, y);
+                    canvasContext.beginPath();
+                    canvasContext.arc(x, y, 5, 0, 2 * Math.PI);
+                    canvasContext.fillStyle = "cyan";
+                    canvasContext.fill();
+                    return;
+                }
+            }
+        }
+    }
+
+    getBottomRightPoint(): void {
+        const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+        const canvasContext = canvas.getContext('2d');
+
+        const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
+        const testingCanvasContext = testingCanvas.getContext('2d');
+        if(testingCanvasContext == null || canvasContext == null) return;
+
+        const width: number = testingCanvas.width;
+        const height: number = testingCanvas.height;
+        const pixels = testingCanvasContext.getImageData(0, 0, width, height).data;
+
+        // go through left half, from the top, from the left
+        for (let x = testingCanvas.width - 1; x >= testingCanvas.width / 2; x--) {
+            for (let y = testingCanvas.height - 1; y >= testingCanvas.height / 2; y--) {
+                const index = (y * width + x) * 4;
+                const r = pixels[index];
+                const g = pixels[index + 1];
+                const b = pixels[index + 2];
+
+                const color: string = this.rgbToHex(r, g, b);
+                if (color == this.PEN_COLOR) {
+                    console.log("Bottom right ", x, y);
+                    canvasContext.beginPath();
+                    canvasContext.arc(x, y, 5, 0, 2 * Math.PI);
+                    canvasContext.fillStyle = "pink";
+                    canvasContext.fill();
+                    return;
+                }
+            }
+        }
     }
 
     rgbToHex(r: number, g: number, b: number): string {
