@@ -400,13 +400,13 @@ def create_vocab(request):
 def set_vocabulary(vocab_set: VocabularySet, user: User, vocabulary: List[Dict[str, str]]):
     for word in vocabulary:
         # the same word might already exist
-        fltr = WordEntry.objects.filter(word=word["word"], phonetic=word["phonetic"],
-                                           translation=word["translation"])
+        fltr = WordEntry.objects.filter(word=word["first"], phonetic=word["phonetic"],
+                                           translation=word["second"])
         if len(fltr) > 0:
             vocab_set.vocabulary.add(fltr.first())
             continue
-        word = WordEntry.objects.create(contributor=user, word=word["word"], phonetic=word["phonetic"],
-                                        translation=word["translation"])
+        word = WordEntry.objects.create(contributor=user, word=word["first"], phonetic=word["phonetic"],
+                                        translation=word["second"])
         vocab_set.vocabulary.add(word)
     vocab_set.save()
 
