@@ -1,5 +1,9 @@
+import io
 from datetime import timedelta
 from typing import List, Dict
+
+import cv2
+from PIL import Image
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
@@ -10,6 +14,27 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from .models import Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord, VocabularyUserRelationship
+import base64
+import easyocr
+
+
+# checks the drawn character
+@api_view(['POST'])
+def check_image(request):
+    image: str = request.data.get("image")
+    correct: str = request.data.get("correct")
+
+    # decodes the base64 string
+    b = bytes(image.split(",")[1], encoding='utf-8')
+    image_data = base64.b64decode(b)
+    reader = easyocr.Reader(['ch_sim'])
+    result = reader.readtext(image_data)
+
+    for column in result:
+        canvas_pos, character, prob = column
+        if character == correct:
+            return Response(status=status.HTTP_200_OK, data={"result": True})
+    return Response(status=status.HTTP_200_OK, data={"result": False})
 
 
 # returns a high score based on the set and the mode

@@ -147,14 +147,10 @@ export class GameComponent implements OnInit {
 
     static prepDrawingCanvas() {
         const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-        const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
         const context = canvas.getContext('2d');
-        const testingContext = testingCanvas.getContext('2d');
-
-        if(context == null || testingContext == null) return;
+        if(context == null) return;
 
         context.font = '200px Arial';
-        testingContext.font = "200px Arial";
 
         let isDrawing = false;
         let lastX = 0;
@@ -175,7 +171,7 @@ export class GameComponent implements OnInit {
         }
 
         function draw(e: { clientX: number; clientY: number; }) {
-            if (!isDrawing || context == null || testingContext == null) return;
+            if (!isDrawing || context == null) return;
 
             const x = e.clientX - canvas.getBoundingClientRect().left;
             const y = e.clientY - canvas.getBoundingClientRect().top;
@@ -183,7 +179,8 @@ export class GameComponent implements OnInit {
             context.beginPath();
             context.moveTo(lastX, lastY);
             context.lineTo(x, y);
-            context.strokeStyle = 'black';
+            context.strokeStyle = ('black');
+            context.globalAlpha = 100;
             context.lineWidth = 16;
             context.lineCap = 'round';
             context.stroke();

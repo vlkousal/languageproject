@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {GameComponent} from "../game-component/game.component";
-import {Mode} from "../../constants";
+import {BACKEND, Mode} from "../../constants";
 import {SpeechUtils} from "../../speechutils";
 import {Word} from "../../../word";
 import {CookieService} from "ngx-cookie";
@@ -24,15 +24,14 @@ export class DrawCharactersComponent extends GameComponent {
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
     allowAnswering: boolean = true;
 
-    BACKGROUND_COLOR: string = "#F9F8EB";
     HINT_COLOR: string = "#cbcbc8";
     PEN_COLOR: string = "#000000";
-
     NO_HINT_PASSRATE: number = 0;
     HALF_HINT_PASSRATE: number = 30;
-    HINT_PASSRATE: number = 50;
+    BACKGROUND_COLOR: string = "#F9F8EB";
 
-    OFFSET: number = 5;
+    CORRECT_HIGHLIGHT_COLOR: string = "#59bd59";
+    WRONG_HIGHLIGHT_COLOR: string = "#f65858";
 
     currentPassrate: number = this.NO_HINT_PASSRATE;
 
@@ -43,26 +42,14 @@ export class DrawCharactersComponent extends GameComponent {
     resetCanvas(): void {
         const canvas = document.getElementById("canvas") as HTMLCanvasElement;
         const context = canvas.getContext("2d");
-        const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
-        const testingContext = testingCanvas.getContext('2d');
-        if(context == null || testingContext == null) return;
+
+        if(context == null) return;
 
         this.currentPassrate = this.NO_HINT_PASSRATE;
+        this.clearCanvas();
 
-        // clears the canvas
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        testingContext.clearRect(0, 0, canvas.width, canvas.height);
-
-        // sets the background color
         context.fillStyle = this.BACKGROUND_COLOR;
         context.fillRect(0, 0, canvas.width, canvas.height);
-
-        testingContext.fillStyle = this.BACKGROUND_COLOR;
-        testingContext.fillRect(0, 0, canvas.width, canvas.height);
-
-        // fills the canvas for checking the answer
-        testingContext.fillStyle = this.PEN_COLOR;
-        testingContext.fillText(this.words[this.index].question, 0, 170);
 
         const characterScore: number = this.words[this.index].getModeScore(Mode.DrawCharacters);
         if (characterScore < 75) {
@@ -83,11 +70,6 @@ export class DrawCharactersComponent extends GameComponent {
                 context.clearRect(randomOption.startX, randomOption.startY, randomOption.endX, randomOption.endY);
             }
         }
-
-        this.getTopLeftPoint();
-        this.getTopRightPoint();
-        this.getBottomLeftPoint();
-        this.getBottomRightPoint();
     }
 
     override replayAll(): void {
@@ -109,61 +91,57 @@ export class DrawCharactersComponent extends GameComponent {
         SpeechUtils.speak(currentWord.question, false);
     }
 
-    checkDrawing(): void {
+    async getDrawingResult(img: string): Promise<boolean> {
+        try {
+            const response = await fetch(BACKEND + "api/checkimage/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }, body: JSON.stringify({
+                    image: img,
+                    correct: this.words[this.index].question,
+                })
+            });
+
+            if(response.ok) {
+                return JSON.parse(await response.text()).result;
+            } else{
+                throw new Error("XD ROFL LMAO");
+            }
+        }  catch(error) {
+            console.error("Error:", error);
+            return false;
+        }
+    }
+
+    async checkDrawing(): Promise<void> {
         if(!this.allowAnswering) return;
         this.allowAnswering = false;
+
+        this.removeAllGrayPixels();
+
         const currentWord: Word = this.words[this.index];
         const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-        const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
-        const canvasContext = canvas.getContext('2d');
-        const testingCanvasContext = testingCanvas.getContext('2d');
-        if(canvasContext == null || testingCanvasContext == null) return;
+        const context = canvas.getContext('2d');
+        if(context == null) return;
 
-        testingCanvasContext.fillText(currentWord.question, 0, 170);
+        const cnvs = document.getElementById('canvas') as HTMLCanvasElement;
+        const img    = cnvs.toDataURL('image/jpg');
+        const isCorrect: boolean = await this.getDrawingResult(img);
 
-        const width: number = testingCanvas.width;
-        const height: number = testingCanvas.height;
-        const canvasData = canvasContext.getImageData(0, 0, width, height).data;
-        const testData = testingCanvasContext.getImageData(0, 0, width, height).data;
-        let counter: number = 0;
-
-        const blackPixelCount: number = this.getBlackPixelCount();
-        for (let y = 0; y < height; y++) {
-            for (let x = 0; x < width; x++) {
-                const index = (y * width + x) * 4;
-
-                const r1 = canvasData[index];
-                const r2 = testData[index];
-
-                const g1 = canvasData[index + 1];
-                const g2 = testData[index + 1];
-
-                const b1 = canvasData[index + 2];
-                const b2 = testData[index + 2];
-
-                const canvasColor: string = this.rgbToHex(r1, g1, b1);
-                const testCanvasColor: string = this.rgbToHex(r2, g2, b2);
-
-                // checks whether the whole canvas isn't filled
-                if(canvasColor == this.PEN_COLOR || testCanvasColor == this.PEN_COLOR) {
-                    testCanvasColor == canvasColor ? counter++ : counter--;
-                }
-            }
-        }
-        const percentage: number = (counter / blackPixelCount) * 100;
-        const isCorrect: boolean = percentage >= this.currentPassrate;
-
-        canvasContext.fillStyle = "#59bd59";
+        // clears the canvas, draws the character correctly
+        this.clearCanvas();
+        context.fillStyle = this.CORRECT_HIGHLIGHT_COLOR;
         this.sendResult(isCorrect);
         if(!isCorrect){
             this.evalWrong();
-            canvasContext.fillStyle = "#fd7676";
+            context.fillStyle = this.WRONG_HIGHLIGHT_COLOR;
         } else{
             this.evalCorrect();
         }
         SpeechUtils.speak(currentWord.correct, true);
 
-        canvasContext.fillText(currentWord.question, 0, 170);
+        context.fillText(currentWord.question, 0, 170);
         setTimeout(() => {
             this.index++;
             this.setNewWord();
@@ -177,165 +155,48 @@ export class DrawCharactersComponent extends GameComponent {
                 }
                 return;
             }
-        }, 1500);
+        }, 2500);
     }
 
-    getBlackPixelCount(): number {
-        const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
-        const testingCanvasContext = testingCanvas.getContext('2d');
-        if(testingCanvasContext == null) return 0;
+    removeAllGrayPixels(): void {
+        const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+        const context = canvas.getContext('2d');
+        if (context == null) return;
 
-        const width: number = testingCanvas.width;
-        const height: number = testingCanvas.height;
-        const testData = testingCanvasContext.getImageData(0, 0, width, height).data;
-        let counter: number = 0;
+        const width: number = canvas.width;
+        const height: number = canvas.height;
+
+        // Get ImageData object, not just the pixel data array
+        const canvasData = context.getImageData(0, 0, width, height);
+        const data = canvasData.data; // This is the pixel data array
+
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 const index = (y * width + x) * 4;
-                const r = testData[index];
-                const g = testData[index + 1];
-                const b = testData[index + 2];
+                const r = data[index];
+                const g = data[index + 1];
+                const b = data[index + 2];
 
-                const testCanvasColor: string = this.rgbToHex(r, g, b);
+                const pixelColor: string = this.rgbToHex(r, g, b);
 
-                // checks whether the whole canvas isn't filled
-                if(testCanvasColor == this.PEN_COLOR) {
-                    counter++
+                // Check if this pixel color matches the hint color
+                if (pixelColor != this.PEN_COLOR) {
+                    const backgroundColor = this.hexToRgb(this.BACKGROUND_COLOR);
+                    data[index] = backgroundColor.r;
+                    data[index + 1] = backgroundColor.g;
+                    data[index + 2] = backgroundColor.b;
                 }
             }
         }
-        return counter;
+        context.putImageData(canvasData, 0, 0);
     }
 
-    getTopLeftPoint(): void {
-        const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-        const canvasContext = canvas.getContext('2d');
+    clearCanvas(): void {
+        const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+        const context = canvas.getContext('2d');
+        if (context == null) return;
 
-        const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
-        const testingCanvasContext = testingCanvas.getContext('2d');
-        if(testingCanvasContext == null || canvasContext == null) return;
-
-        const width: number = testingCanvas.width;
-        const height: number = testingCanvas.height;
-        const pixels = testingCanvasContext.getImageData(0, 0, width, height).data;
-
-        // go through left half, from the top, from the left
-        for(let x = 0; x < testingCanvas.width / 2; x++) {
-            for(let y = 0; y < testingCanvas.height / 2; y++) {
-                const index = (y * width + x) * 4;
-                const r = pixels[index];
-                const g = pixels[index + 1];
-                const b = pixels[index + 2];
-
-                const color: string = this.rgbToHex(r, g, b);
-                if(color == this.PEN_COLOR) {
-                    console.log("Top left ", x, y);
-                    canvasContext.beginPath();
-                    canvasContext.arc(x, y, 5, 0, 2 * Math.PI);
-                    canvasContext.fillStyle = "black";
-                    canvasContext.fill();
-                    return;
-                }
-            }
-        }
-    }
-
-    getTopRightPoint(): void {
-        const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-        const canvasContext = canvas.getContext('2d');
-
-        const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
-        const testingCanvasContext = testingCanvas.getContext('2d');
-        if(testingCanvasContext == null || canvasContext == null) return;
-
-        const width: number = testingCanvas.width;
-        const height: number = testingCanvas.height;
-        const pixels = testingCanvasContext.getImageData(0, 0, width, height).data;
-
-        for(let x = testingCanvas.width - 1; x >= testingCanvas.width / 2; x--) {
-            for(let y = 0; y < testingCanvas.height / 2; y++) {
-                const index = (y * width + x) * 4;
-                const r = pixels[index];
-                const g = pixels[index + 1];
-                const b = pixels[index + 2];
-
-                const color: string = this.rgbToHex(r, g, b);
-                if(color == this.PEN_COLOR) {
-                    console.log("Top right ", x, y);
-                    canvasContext.beginPath();
-                    canvasContext.arc(x, y, 5, 0, 2 * Math.PI);
-                    canvasContext.fillStyle = "orange";
-                    canvasContext.fill();
-                    return;
-                }
-            }
-        }
-    }
-
-    getBottomLeftPoint(): void {
-        const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-        const canvasContext = canvas.getContext('2d');
-
-        const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
-        const testingCanvasContext = testingCanvas.getContext('2d');
-        if(testingCanvasContext == null || canvasContext == null) return;
-
-        const width: number = testingCanvas.width;
-        const height: number = testingCanvas.height;
-        const pixels = testingCanvasContext.getImageData(0, 0, width, height).data;
-
-        // go through left half, from the top, from the left
-        for(let x = 0; x < testingCanvas.width / 2; x++) {
-            for(let y = testingCanvas.height - 1; y >= testingCanvas.height / 2; y--) {
-                const index = (y * width + x) * 4;
-                const r = pixels[index];
-                const g = pixels[index + 1];
-                const b = pixels[index + 2];
-
-                const color: string = this.rgbToHex(r, g, b);
-                if(color == this.PEN_COLOR) {
-                    console.log("Bottom left, ", x, y);
-                    canvasContext.beginPath();
-                    canvasContext.arc(x, y, 5, 0, 2 * Math.PI);
-                    canvasContext.fillStyle = "cyan";
-                    canvasContext.fill();
-                    return;
-                }
-            }
-        }
-    }
-
-    getBottomRightPoint(): void {
-        const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-        const canvasContext = canvas.getContext('2d');
-
-        const testingCanvas = document.getElementById("testingCanvas") as HTMLCanvasElement;
-        const testingCanvasContext = testingCanvas.getContext('2d');
-        if(testingCanvasContext == null || canvasContext == null) return;
-
-        const width: number = testingCanvas.width;
-        const height: number = testingCanvas.height;
-        const pixels = testingCanvasContext.getImageData(0, 0, width, height).data;
-
-        // go through left half, from the top, from the left
-        for (let x = testingCanvas.width - 1; x >= testingCanvas.width / 2; x--) {
-            for (let y = testingCanvas.height - 1; y >= testingCanvas.height / 2; y--) {
-                const index = (y * width + x) * 4;
-                const r = pixels[index];
-                const g = pixels[index + 1];
-                const b = pixels[index + 2];
-
-                const color: string = this.rgbToHex(r, g, b);
-                if (color == this.PEN_COLOR) {
-                    console.log("Bottom right ", x, y);
-                    canvasContext.beginPath();
-                    canvasContext.arc(x, y, 5, 0, 2 * Math.PI);
-                    canvasContext.fillStyle = "pink";
-                    canvasContext.fill();
-                    return;
-                }
-            }
-        }
+        context.clearRect(0, 0, canvas.width, canvas.height);
     }
 
     rgbToHex(r: number, g: number, b: number): string {
@@ -345,7 +206,16 @@ export class DrawCharactersComponent extends GameComponent {
         return `#${red}${green}${blue}`;
     }
 
-protected readonly SpeechUtils = SpeechUtils;
+    hexToRgb(hex: string): { r: number; g: number; b: number } {
+        hex = hex.replace(/^#/, "");
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+        return {r, g, b};
+    }
+
+
+    protected readonly SpeechUtils = SpeechUtils;
     protected readonly localStorage = localStorage;
     protected readonly Mode = Mode;
 }
