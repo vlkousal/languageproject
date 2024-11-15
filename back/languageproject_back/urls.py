@@ -21,7 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/register/", api_views.register),
     path("api/login/", api_views.login),
-    path("api/get_languages/", api_views.get_languages),
+    path("api/getlanguages/", api_views.get_languages),
     path("api/createvocab/", api_views.create_vocab),
     path("api/getvocab/", api_views.get_vocab),
     path("api/getvocabsets/", api_views.get_vocab_sets),
@@ -37,6 +37,5 @@ urlpatterns = [
     path("api/saveset/", api_views.save_set),
     path("api/getsavestatus/", api_views.get_save_status),
     path("api/logout/", api_views.logout),
-
     path("api/checkimage/", api_views.check_image)
 ]

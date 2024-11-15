@@ -27,7 +27,7 @@ export class CreateVocabularyComponent {
     name: FormControl<string> = new FormControl("") as FormControl<string>;
     description : FormControl<string> = new FormControl("") as FormControl<string>;
     url: FormControl<string> = new FormControl("") as FormControl<string>;
-    language: FormControl<string> = new FormControl("Albanian") as FormControl<string>;
+    language: FormControl<string> = new FormControl("") as FormControl<string>;
 
     @Input() previousUrl: string | null = null;
     words: Word[] = [];
@@ -42,7 +42,11 @@ export class CreateVocabularyComponent {
     constructor(private cookieService: CookieService) { }
 
     async ngOnInit(): Promise<void> {
-        this.prepLanguages();
+        this.languages = await ApiTools.getLanguages();
+        if(this.languages.length != 0) {
+            const randomIndex: number = Math.floor(Math.random() * this.languages.length);
+            this.language.setValue(this.languages[randomIndex]);
+        }
         if(this.previousUrl != null) {
             const vocabData = await ApiTools.getVocabJson(this.previousUrl, this.cookieService);
             const parsed = JSON.parse(vocabData);
@@ -82,7 +86,7 @@ export class CreateVocabularyComponent {
 
     onInputChange(): void {
         this.set = new VocabularySet(this.getName(), this.getUrl(), this.getDescription(),
-            this.getFirstLanguage(), this.words, this.previousUrl != null);
+            this.getLanguage(), this.words, this.previousUrl != null);
         const nameLength = this.getName().length;
         this.isValid = false;
         // we need to refresh the URL string if name was changed
@@ -103,24 +107,9 @@ export class CreateVocabularyComponent {
         this.isValid = true;
     }
 
-    prepLanguages(): void {
-        const keys = Object.keys(FLAGS);
-
-        keys.forEach(lang => {
-            this.languages.push(FLAGS[lang] + " " + lang);
-        })
-
-        const firstIndex = Math.floor(Math.random() * keys.length);
-        let secondIndex = Math.floor(Math.random() * keys.length);
-        if(firstIndex == secondIndex) {
-            secondIndex = (secondIndex + 1) % keys.length;
-        }
-        this.language.setValue(FLAGS[keys[firstIndex]] + " " + keys[firstIndex]);
-    }
-
     async getRelevantWords(): Promise<void> {
         this.relevantWords = new Set<Word>();
-        const parsed = JSON.parse(await ApiTools.getRelevantVocabulary(this.getFirstLanguage()));
+        const parsed = JSON.parse(await ApiTools.getRelevantVocabulary(this.getLanguage()));
         for(let i = 0; i < parsed.words.length; i++) {
             const word = new Word(0, [],  parsed.words[i].first, parsed.words[i].phonetic, parsed.words[i].second, [], []);
             if(!this.relevantWords.has(word)) this.relevantWords.add(word);
@@ -144,8 +133,8 @@ export class CreateVocabularyComponent {
     }
 
     // the flag and the space gets removed
-    getFirstLanguage(): string {
-        return this.language.getRawValue().substring(5);
+    getLanguage(): string {
+        return this.language.getRawValue();
     }
 
     protected readonly State = State;

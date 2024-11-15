@@ -19,6 +19,6 @@
 </div>
 
 <app-set-words-component *ngIf="state == State.WORD_PAGE"
-[relevantWords]="relevantWords"
-[language]="getFirstLanguage()" (onGoBack)="state = State.NAME_PAGE"
-[set]="set" [previousUrl]="previousUrl"></app-set-words-component>
+                         [relevantWords]="relevantWords"
+                         [language]="getLanguage()" (onGoBack)="state = State.NAME_PAGE"
+                         [set]="set" [previousUrl]="previousUrl"></app-set-words-component>
