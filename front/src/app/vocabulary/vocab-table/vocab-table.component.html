@@ -4,14 +4,14 @@
 <div class="table-container">
 	<table id="vocab-table">
 		<thead>
-		<th (click)="Word.sortByFirst(this.words)">Word</th>
-		<th (click)="Word.sortByPhonetic(this.words)">Phonetic</th>
-		<th (click)="Word.sortByAnswer(this.words)">Translation</th>
-		<th (click)="Word.sortByModeScore(this.words, mode)">Score</th>
+		<th (click)="Word.sortByFirst(set.words)">Word</th>
+		<th (click)="Word.sortByPhonetic(set.words)">Phonetic</th>
+		<th (click)="Word.sortByAnswer(set.words)">Translation</th>
+		<th (click)="Word.sortByModeScore(set.words, mode)">Score</th>
 		</thead>
 
 		<tbody>
-		<tr *ngFor="let word of words">
+		<tr *ngFor="let word of set.words">
 			<td (click)="SpeechUtils.speak(word.question)">{{ word.question }}</td>
 			<td (click)="SpeechUtils.speak(word.question)">{{ word.phonetic }}</td>
 			<td (click)="SpeechUtils.speak(word.correct, true)">{{ word.correct }}</td>

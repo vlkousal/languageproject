@@ -1,4 +1,5 @@
 import {Word} from "./word";
+import {Mode} from "./app/constants";
 
 export class VocabularySet {
 
@@ -20,19 +21,28 @@ export class VocabularySet {
         this.isOwn = isOwn;
     }
 
+    getAverageModeScore(mode: Mode): number {
+        let add = 0;
+        for(let i = 0; i < this.words.length; i++) {
+            add += this.words[i].scores[mode.valueOf()];
+        }
+        return Math.floor(add / this.words.length);
+    }
+
+    // returns the average score of all words and modes
+    getAverageScore(): number {
+        let avgOfAvg: number = 0;
+        this.words.forEach(word => {
+            avgOfAvg += word.getAverageScore();
+        })
+        return avgOfAvg / this.words.length;
+    }
+
     static sortByName(sets: VocabularySet[]) {
         sets.sort( (a, b) => {
             if(a.name < b.name) return -1;
             if(a.name > b.name) return 1;
             return 0;
         })
-    }
-
-    static getAverageScore(set: VocabularySet) {
-        let avgOfAvg: number = 0;
-        set.words.forEach(word => {
-            avgOfAvg += word.getAverageScore();
-        })
-        return avgOfAvg / set.words.length;
     }
 }

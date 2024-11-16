@@ -24,36 +24,7 @@
 			<button (click)="selectedMode = Mode.DrawCharacters" *ngIf="characters.length != 0"><i class="fa fa-brush">     Draw Characters</i></button>
 			<button (click)="mode = Mode.Flashcards"><i class="fa fa-image">     Flashcards</i></button>
 		</div>
-
-		<div id="summary" *ngIf="selectedMode == null">
-			<div>
-				<p id="description">{{ this.set.description }}</p>
-			</div>
-			<div class="table-container">
-				<table id="summary-table">
-					<thead>
-					<th (click)="Word.sortByFirst(this.tableWords)">Word</th>
-					<th (click)="Word.sortByPhonetic(this.tableWords)">Phonetic</th>
-					<th (click)="Word.sortByAnswer(this.tableWords)">Translation</th>
-					<th (click)="Word.sortByAverageScore(this.tableWords)">Average Score</th>
-					</thead>
-
-					<tbody>
-					<tr *ngFor="let word of tableWords">
-						<td (click)="SpeechUtils.speak(word.question)">{{ word.question }}</td>
-						<td (click)="SpeechUtils.speak(word.question)">{{ word.phonetic }}</td>
-						<td (click)="SpeechUtils.speak(word.correct, true)">{{ word.correct }}</td>
-						<td>{{ word.getAverageScore() }}</td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div *ngIf="selectedMode != null">
-			<div style="width: 100%;">
-				<app-vocab-table (onPlayClick)="mode = selectedMode" [mode]="selectedMode!" [words]="set.words"></app-vocab-table>
-			</div>
-		</div>
+		<app-vocab-table (onPlayClick)="mode = selectedMode" [mode]="selectedMode!" [set]="set"></app-vocab-table>
 	</div>
 </div>
 

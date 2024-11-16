@@ -41,7 +41,9 @@ export class Word {
         return value / this.scores.length;
     }
 
+    // returns the score based on the mode, null means the average of all
     getModeScore(mode: Mode): number {
+        if(mode == null) return this.getAverageScore();
         return this.scores[mode];
     }
 
@@ -102,15 +104,18 @@ export class Word {
         })
     }
 
-    static getAverageModeScore(words: Word[], mode: Mode): number {
-        let add = 0;
-        for(let i = 0; i < words.length; i++) {
-            add += words[i].scores[mode.valueOf()];
-        }
-        return Math.floor(add / words.length);
-    }
-
+    // compares the words based on mode, null means the average of all words
     static sortByScore(words: Word[], mode: Mode): Word[] {
+        if(mode == null) {
+            console.log("tohle neni pravda ale");
+            words.sort((a, b) => {
+                if(a.getAverageScore() < b.getAverageScore()) return -1;
+                if(a.getAverageScore() > b.getAverageScore()) return 1;
+                return 0;
+            })
+            return words;
+        }
+        console.log("WF");
         words.sort((a, b) => {
             if (a.scores[mode] < b.scores[mode]) return -1;
             if (a.scores[mode] > b.scores[mode]) return 1;
