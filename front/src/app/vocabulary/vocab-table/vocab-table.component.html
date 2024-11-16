@@ -15,7 +15,7 @@
 			<td (click)="SpeechUtils.speak(word.question)">{{ word.question }}</td>
 			<td (click)="SpeechUtils.speak(word.question)">{{ word.phonetic }}</td>
 			<td (click)="SpeechUtils.speak(word.correct, true)">{{ word.correct }}</td>
-			<td>{{ word.getModeScore(mode) }}</td>
+			<td>{{ Math.floor(word.getModeScore(mode)) }}</td>
 		</tr>
 		</tbody>
 	</table>

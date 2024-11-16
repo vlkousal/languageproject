@@ -5,11 +5,11 @@
 <div id="container" [hidden]="!(mode == null && !loading)" *ngIf="mode == null && !loading && !showSettings">
 	<div id="top-panel">
 		<div id="name-container">
-			<i>{{ this.set.name }} {{ FLAGS[this.set.language] }}</i>
+			<i>{{ set.name }} {{ FLAGS[set.language] }}</i>
 		</div>
 		<div id="rating-buttons">
-			<p>{{ this.set.contributor }}</p>
-			<div *ngIf="this.set.contributor != username">
+			<p>{{ set.contributor }}</p>
+			<div *ngIf="set.isOwn">
 				<i class="fa fa-bookmark" (click)="saveSet()" [style.color]="isSaved ? 'green' : '#F9F8EB'"></i>
 			</div>
 			<i class="fa fa-cog" (click)="showSettings = true"></i>

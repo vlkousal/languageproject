@@ -42,9 +42,8 @@ export class VocabularyComponent {
         this.languageNames.sort();
         Word.sortByAverageScore(this.set.words);
         sessionStorage.setItem("language", this.set.language);
-        this.tableWords = [...this.set.words];
 
-        this.username = JSON.parse(await this.getUsername())["username"];
+        this.tableWords = [...this.set.words];
         this.isSaved = JSON.parse(await this.getSavedStatus())["status"];
         this.loading = false;
     }
@@ -122,6 +121,8 @@ export class VocabularyComponent {
 
     async setup(): Promise<void> {
         const vocab: string =  await ApiTools.getVocabJson(this.id, this.cookieService);
+        const username: string = JSON.parse(await this.getUsername())["username"];
+
         if(vocab == "404") {
             this.router.navigate(["/404"]);
         }

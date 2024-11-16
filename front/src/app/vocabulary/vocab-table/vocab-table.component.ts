@@ -19,9 +19,9 @@ export class VocabTableComponent {
 
     ngOnInit() {
         if(this.mode == null) {
-            this.averageScore = this.set.getAverageScore();
+            this.averageScore = Math.floor(this.set.getAverageScore());
         } else {
-            this.averageScore = this.set.getAverageModeScore(this.mode);
+            this.averageScore = Math.floor(this.set.getAverageModeScore(this.mode));
         }
         Word.sortByScore(this.set.words, this.mode);
     }
@@ -30,11 +30,10 @@ export class VocabTableComponent {
         if(changes["mode"]) {
             console.log(changes["mode"]);
             Word.sortByScore(this.set.words, this.mode);
-            this.mode == null ? this.averageScore = this.set.getAverageScore() :  this.averageScore = this.set.getAverageModeScore(this.mode);
             if(this.mode == null) {
-                this.averageScore = this.set.getAverageScore();
+                this.averageScore = Math.floor(this.set.getAverageScore());
             } else {
-                this.averageScore = this.set.getAverageModeScore(this.mode);
+                this.averageScore = Math.floor(this.set.getAverageModeScore(this.mode));
             }
         }
     }
@@ -42,4 +41,5 @@ export class VocabTableComponent {
     protected readonly Word = Word;
     protected readonly Mode = Mode;
     protected readonly SpeechUtils = SpeechUtils;
+    protected readonly Math = Math;
 }
