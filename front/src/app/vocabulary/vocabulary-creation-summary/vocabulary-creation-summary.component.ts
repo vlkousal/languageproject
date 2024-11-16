@@ -11,7 +11,7 @@ import {Router} from "@angular/router";
 })
 export class VocabularyCreationSummaryComponent {
 
-    @Input() set: VocabularySet = new VocabularySet("", "", "", "", [], true);
+    @Input() set: VocabularySet = new VocabularySet("", -1, "", "", [], true);
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
 
     feedback: string = "";
@@ -27,7 +27,6 @@ export class VocabularyCreationSummaryComponent {
         const json = {
             token: this.cookieService.get("token"),
             name: this.set.name,
-            url: this.set.url,
             description: this.set.description,
             language: this.set.language,
             vocabulary: this.getVocabularyJSON()
@@ -41,7 +40,7 @@ export class VocabularyCreationSummaryComponent {
             body: JSON.stringify(json),
         }).then(async response => {
             if(response.ok){
-                await this.router.navigate(["/vocab/" + this.set.url]);
+                await this.router.navigate(["/vocab/" + this.set.id]);
                 return;
             }
             this.feedback = (await response.text()).slice(1, -1);
@@ -57,7 +56,7 @@ export class VocabularyCreationSummaryComponent {
         const json = {
             token: this.cookieService.get("token"),
             name: this.set.name,
-            url: this.set.url,
+            id: this.set.id,
             description: this.set.description,
             language: this.set.language,
             vocabulary: this.getVocabularyJSON()
@@ -71,7 +70,7 @@ export class VocabularyCreationSummaryComponent {
             body: JSON.stringify(json),
         }).then(async response => {
             if(response.ok){
-                await this.router.navigate(["/vocab/" + this.set.url]);
+                await this.router.navigate(["/vocab/" + this.set.id]);
                 return;
             }
             this.feedback = (await response.text()).slice(1, -1);

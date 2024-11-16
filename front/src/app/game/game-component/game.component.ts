@@ -19,7 +19,7 @@ export class GameComponent implements OnInit {
 
     showEnd: boolean = false;
     @Input() words: Word[] = [];
-    @Input() url: string = "";
+    @Input() id: number = -1;
     wordsCopy: Word[] = [];
     wrong: Word[] = [];
     index: number = 0;
@@ -44,7 +44,7 @@ export class GameComponent implements OnInit {
         Utils.shuffleList(this.words);
         Word.sortByScore(this.words, this.mode);
         this.wordsCopy = [...this.words];
-        this.highScore = await ApiTools.getHighScore(this.url, this.mode, this.cookieService);
+        this.highScore = await ApiTools.getHighScore(this.id, this.mode, this.cookieService);
         if(this.mode == Mode.DrawCharacters) GameComponent.prepDrawingCanvas();
         this.setNewWord();
     }
@@ -131,7 +131,7 @@ export class GameComponent implements OnInit {
     sendVocabSetResult(): void {
         const data = {
             token: this.cookieService.get("token"),
-            setUrl: this.url,
+            id: this.id,
             score: this.score,
             mode: this.mode
         }

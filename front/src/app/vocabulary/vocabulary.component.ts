@@ -19,7 +19,7 @@ export class VocabularyComponent {
     characters: Word[] = [];
 
     index: number = 0;
-    url: string = "";
+    id: number = -1;
     name: string = "";
     description: string = "";
     contributor: string = "";
@@ -39,7 +39,7 @@ export class VocabularyComponent {
 
     async ngOnInit() {
         this.route.params.subscribe(params => {
-            this.url = params['vocabUrl'];
+            this.id = params["vocabID"];
         });
         await this.setup();
         this.characters = this.words.filter(w => w.question.length === 1);
@@ -64,7 +64,7 @@ export class VocabularyComponent {
     async getSavedStatus(): Promise<string> {
         const data = {
             token: this.cookieService.get("token"),
-            url: this.url,
+            id: this.id,
         }
 
         try {
@@ -85,7 +85,7 @@ export class VocabularyComponent {
     async saveSet(): Promise<void> {
         const data = {
             token: this.cookieService.get("token"),
-            url: this.url,
+            id: this.id,
             isSaved: this.isSaved
         }
 
@@ -126,7 +126,7 @@ export class VocabularyComponent {
     }
 
     async setup(): Promise<void> {
-        const vocab: string =  await ApiTools.getVocabJson(this.url, this.cookieService);
+        const vocab: string =  await ApiTools.getVocabJson(this.id, this.cookieService);
         if(vocab == "404") {
             this.router.navigate(["/404"]);
         }

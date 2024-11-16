@@ -23,7 +23,6 @@ class WordEntry(models.Model):
 class VocabularySet(models.Model):
     name = models.CharField(max_length=64)
     description = models.CharField(max_length=256)
-    url = models.CharField(max_length=32)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     language = models.ForeignKey(Language, on_delete=models.CASCADE, related_name="set_first_language")
     vocabulary = models.ManyToManyField(WordEntry)

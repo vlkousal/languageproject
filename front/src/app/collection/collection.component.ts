@@ -53,11 +53,11 @@ export class CollectionComponent {
                 const json = await response.json();
                 (json.sets).forEach((item: {
                     name: string,
-                    url: string,
+                    id: number,
                     language: string,
                     is_own: boolean
                 }) => {
-                    this.sets.push(new VocabularySet(item.name, item.url, "",
+                    this.sets.push(new VocabularySet(item.name, item.id, "",
                         item.language, [], item.is_own));
                 })
             }
@@ -78,11 +78,11 @@ export class CollectionComponent {
     }
 
     async onEditButtonClick(set: VocabularySet): Promise<void> {
-        await this.router.navigate(["/edit/" + set.url]);
+        await this.router.navigate(["/edit/" + set.id]);
     }
 
     async deleteSet(): Promise<void> {
-        const data = { token: this.token, url_to_delete: this.setToDelete!.url };
+        const data = { token: this.token, id: this.setToDelete!.id };
 
         fetch(BACKEND + "api/deleteset/", {
             method: "DELETE",

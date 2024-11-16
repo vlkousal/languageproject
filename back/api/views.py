@@ -41,7 +41,7 @@ def check_image(request):
 @api_view(['POST'])
 def get_high_score(request):
     token: str = request.data.get("token")
-    vocab_url: str = request.data.get("url")
+    id: str = request.data.get("id")
     mode: int = request.data.get("mode")
 
     user: User = get_user(token)
@@ -49,7 +49,7 @@ def get_high_score(request):
     if user is None:
         return Response(data={"highScore": -1}, status=status.HTTP_200_OK)
     try:
-        vocab_set: VocabularySet = VocabularySet.objects.get(url=vocab_url)
+        vocab_set: VocabularySet = VocabularySet.objects.get(id=id)
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -92,8 +92,8 @@ def get_save_status(request):
     if user is None:
         return Response(status=status.HTTP_200_OK, data={"status": False})
 
-    url: str = request.data.get("url")
-    vocab_set: VocabularySet = get_object_or_404(VocabularySet, url=url)
+    id: int = request.data.get("id")
+    vocab_set: VocabularySet = get_object_or_404(VocabularySet, id=id)
 
     save_status: bool = False
     try:
@@ -111,13 +111,13 @@ def save_set(request):
     if user is None:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-    url: str = request.data.get("url")
-    vocab_set = VocabularySet.objects.get(url=url)
+    id: int = request.data.get("id")
+    vocab_set = VocabularySet.objects.get(id=id)
     if vocab_set is None:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     is_saved: bool = request.data.get("isSaved")
-    vocab_set: VocabularySet = VocabularySet.objects.get(url=url)
+    vocab_set: VocabularySet = VocabularySet.objects.get(id=id)
     try:
         relationship: VocabularyUserRelationship = VocabularyUserRelationship.objects.get(user=user, set=vocab_set)
         relationship.saved = not(is_saved)
@@ -131,17 +131,17 @@ def save_set(request):
 @api_view(['POST'])
 def edit_vocab(request):
     token: str = request.data.get("token")
-    previous_url: str = request.data.get("url")
+    id: str = request.data.get("id")
 
     user: User = get_user(token)
 
     try:
-        author = VocabularySet.objects.get(url=previous_url).author
+        author = VocabularySet.objects.get(id=id).author
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        vocab_set = VocabularySet.objects.get(url=previous_url)
+        vocab_set = VocabularySet.objects.get(id=id)
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -149,7 +149,6 @@ def edit_vocab(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
     vocab_set.name = request.data.get("name")
     vocab_set.description = request.data.get("description")
-    vocab_set.url = request.data.get("url")
     vocab_set.language = Language.objects.get(
         name=request.data.get("language"))
     vocab_set.save()
@@ -162,7 +161,7 @@ def edit_vocab(request):
 @api_view(['POST'])
 def send_vocab_result(request):
     token: str = request.data.get("token")
-    set_url = request.data.get("setUrl")
+    id = request.data.get("id")
     score = request.data.get("score")
     mode: str = request.data.get("mode")
 
@@ -173,7 +172,7 @@ def send_vocab_result(request):
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     try:
-        vocab_set = VocabularySet.objects.get(url=set_url)
+        vocab_set = VocabularySet.objects.get(id=id)
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -246,7 +245,7 @@ def add_result(request):
 @api_view(['DELETE'])
 def delete_set(request):
     token = request.data.get("token")
-    url_to_delete = request.data.get("url_to_delete")
+    id = request.data.get("id")
     try:
         username = Session.objects.get(session_key=token).session_data
     except ObjectDoesNotExist:
@@ -254,7 +253,7 @@ def delete_set(request):
 
     try:
         set_to_delete = VocabularySet.objects.get(
-            url=url_to_delete,
+            id=id,
             author__username=username)
         set_to_delete.delete()
     except ObjectDoesNotExist:
@@ -273,13 +272,13 @@ def get_own_sets(request):
     json = {"sets": []}
 
     for vocab_set in VocabularySet.objects.filter(author=user):
-        set_json = {"name": vocab_set.name, "url": vocab_set.url,
+        set_json = {"name": vocab_set.name, "id": vocab_set.id,
                     "language": vocab_set.language.name, "is_own": True}
         json["sets"].append(set_json)
 
     for relationship in VocabularyUserRelationship.objects.filter(user=user, saved=True):
         vocab_set: VocabularySet = relationship.set
-        set_json = {"name": vocab_set.name, "url": vocab_set.url,
+        set_json = {"name": vocab_set.name, "id": vocab_set.id,
                     "language": vocab_set.language.name, "is_own": False}
         json["sets"].append(set_json)
     return Response(status=status.HTTP_200_OK, data=json)
@@ -319,7 +318,7 @@ def get_language_vocab(request):
 def get_vocab_sets(request):
     sets = VocabularySet.objects.all().order_by("-id")
 
-    data = [{"name": s.name, "url": s.url,
+    data = [{"name": s.name, "id": s.id,
              "language": s.language.name}
             for s in sets]
     return Response(data, status=status.HTTP_200_OK)
@@ -329,7 +328,7 @@ def get_vocab_sets(request):
 @api_view(["POST"])
 def get_vocab(request):
     token = request.data.get("token")
-    url = request.data.get("url")
+    id = request.data.get("id")
 
     try:
         session = Session.objects.get(session_key=token)
@@ -348,7 +347,7 @@ def get_vocab(request):
 
     try:
         vocab = VocabularySet.objects.select_related(
-            'author', 'language').prefetch_related('vocabulary').get(url=url)
+            'author', 'language').prefetch_related('vocabulary').get(id=id)
     except VocabularySet.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -396,7 +395,6 @@ def get_vocab(request):
 def create_vocab(request):
     token: str = request.data.get("token")
     name: str = request.data.get("name")
-    url: str = request.data.get("url")
     description: str = request.data.get("description")
     vocabulary = request.data.get("vocabulary")
 
@@ -407,15 +405,10 @@ def create_vocab(request):
     if user is None:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    url_filter = VocabularySet.objects.filter(url=url)
-    # url is already used
-    if len(url_filter) != 0:
-        return Response(status=status.HTTP_400_BAD_REQUEST, data="This URL is already used. Please use another one.")
-
     language = Language.objects.get(name=request.data.get("language"))
 
     vocab_set = VocabularySet.objects.create(author=user, name=name,
-    description=description, url=url, language=language)
+    description=description, language=language)
 
     set_vocabulary(vocab_set, user, vocabulary)
     return Response("OK", status=status.HTTP_200_OK)

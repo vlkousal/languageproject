@@ -21,7 +21,7 @@ export class SetWordsComponentComponent {
     @Input() set: VocabularySet | undefined;
     @Input() language: string = "";
     @Input() relevantWords: Set<Word> = new Set<Word>();
-    @Input() previousUrl: string | null = null;
+    @Input() setID: number | null = null;
 
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
 

@@ -4,14 +4,14 @@ import {CookieService} from "ngx-cookie";
 
 export class ApiTools {
 
-    static async getVocabJson(url: string, cookieService: CookieService): Promise<string> {
+    static async getVocabJson(id: number, cookieService: CookieService): Promise<string> {
         try {
             const response = await fetch(BACKEND + 'api/getvocab/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({url: url, token: cookieService.get("token")}),
+            body: JSON.stringify({id: id, token: cookieService.get("token")}),
         });
 
         if (!response.ok) {
@@ -49,10 +49,10 @@ export class ApiTools {
         }
     }
 
-    static async getHighScore(url: string, mode: Mode, cookieService: CookieService): Promise<number> {
+    static async getHighScore(id: number, mode: Mode, cookieService: CookieService): Promise<number> {
         const data = {
             token: cookieService.get("token"),
-            url: url,
+            id: id,
             mode: mode.valueOf()
         }
 

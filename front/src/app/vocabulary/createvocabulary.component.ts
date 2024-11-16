@@ -2,7 +2,6 @@ import {Component, Input} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {FLAGS, State} from "../constants";
 import {Word} from "../../word";
-import {Utils} from "../utils";
 import {ApiTools} from "../api-tools";
 import {VocabularySet} from "../../vocabulary-set";
 import {CookieService} from "ngx-cookie";
@@ -26,10 +25,10 @@ export class CreateVocabularyComponent {
 
     name: FormControl<string> = new FormControl("") as FormControl<string>;
     description : FormControl<string> = new FormControl("") as FormControl<string>;
-    url: FormControl<string> = new FormControl("") as FormControl<string>;
+
     language: FormControl<string> = new FormControl("") as FormControl<string>;
 
-    @Input() previousUrl: string | null = null;
+    @Input() setID: number | null = null;
     words: Word[] = [];
 
     lastNameLength: number = 0;
@@ -47,11 +46,10 @@ export class CreateVocabularyComponent {
             const randomIndex: number = Math.floor(Math.random() * this.languages.length);
             this.language.setValue(this.languages[randomIndex]);
         }
-        if(this.previousUrl != null) {
-            const vocabData = await ApiTools.getVocabJson(this.previousUrl, this.cookieService);
+        if(this.setID != null) {
+            const vocabData = await ApiTools.getVocabJson(this.setID, this.cookieService);
             const parsed = JSON.parse(vocabData);
             this.name.setValue(parsed.name);
-            this.url.setValue(this.previousUrl);
             this.description.setValue(parsed.description);
             this.language.setValue(FLAGS[parsed.first_language] + " " + parsed.first_language);
 
@@ -63,45 +61,15 @@ export class CreateVocabularyComponent {
         await this.getRelevantWords();
     }
 
-    adaptURLText(): void {
-        const name = this.getName();
-        let urlString = "";
-        let limit = 16;
-        if(name.length <= 16) limit = name.length;
-
-        for(let i = 0; i < limit; i++) {
-            const symbol = Utils.removeDiacritics(name.charAt(i));
-            const alphanumericRegex = /^[-_a-zA-Z0-9]$/;
-            if(alphanumericRegex.test(symbol)) {
-                urlString += symbol;
-            } else if(symbol == " " && urlString.charAt(urlString.length - 1) != "-") {
-                urlString += "-";
-            }
-        }
-        while(urlString.charAt(urlString.length - 1) == "-") {
-            urlString = urlString.slice(0, -1);
-        }
-        this.url.setValue(Utils.removeDiacritics(urlString).toLowerCase());
-    }
-
     onInputChange(): void {
-        this.set = new VocabularySet(this.getName(), this.getUrl(), this.getDescription(),
-            this.getLanguage(), this.words, this.previousUrl != null);
+        this.set = new VocabularySet(this.getName(), -1, this.getDescription(),
+            this.getLanguage(), this.words, this.setID != null);
         const nameLength = this.getName().length;
         this.isValid = false;
-        // we need to refresh the URL string if name was changed
-        if(this.lastNameLength != nameLength) {
-            this.adaptURLText();
-        }
 
         this.lastNameLength = nameLength;
         if(this.getName().length == 0) {
             this.feedback = "Please enter a name.";
-            return;
-        }
-
-        if(this.getUrl().length == 0) {
-            this.feedback = "The URL is empty.";
             return;
         }
         this.isValid = true;
@@ -122,10 +90,6 @@ export class CreateVocabularyComponent {
 
     getName(): string {
         return this.name.getRawValue();
-    }
-
-    getUrl(): string {
-        return this.url.getRawValue();
     }
 
     getDescription(): string {

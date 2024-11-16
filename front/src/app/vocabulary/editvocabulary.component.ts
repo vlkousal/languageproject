@@ -10,28 +10,27 @@ import {VocabularySet} from "../../vocabulary-set";
 
 @Component({
     selector: 'app-editvocabulary',
-    template: "<app-createvocabulary [previousUrl]=\"previousUrl\"></app-createvocabulary>"
+    template: "<app-createvocabulary [setID]=\"setID\"></app-createvocabulary>"
 })
 export class EditVocabularyComponent {
 
     vocab = new FormControl("") as FormControl<string>;
     content: string = "";
     words: Set<Word> = new Set<Word>();
-    counter: number = 0;
-    previousUrl: string = "";
+    setID: number = -1;
     language: FormControl<string> = new FormControl("Czech") as FormControl<string>;
     set: VocabularySet | null = null;
 
     constructor(private route: ActivatedRoute, private cookieService: CookieService) {
         this.route.params.subscribe( params => {
-            this.previousUrl = params["vocabUrl"];
+            this.setID = params["vocabID"];
         })
     }
 
     async ngOnInit() {
-        const vocabData = await ApiTools.getVocabJson(this.previousUrl, this.cookieService);
+        const vocabData = await ApiTools.getVocabJson(this.setID, this.cookieService);
         const parsed = JSON.parse(vocabData);
-        this.set = new VocabularySet(parsed.name, this.previousUrl, parsed.description,
+        this.set = new VocabularySet(parsed.name, this.setID, parsed.description,
             FLAGS[parsed.first_language] + " " + parsed.first_language, [], true);
     }
 

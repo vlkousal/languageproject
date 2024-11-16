@@ -15,10 +15,10 @@ export class IndexComponent {
     async ngOnInit() {
         JSON.parse(await this.getSets()).forEach((item: {
             name: string;
-            url: string;
+            id: number;
             language: string;
         }) => {
-            this.sets.push(new VocabularySet(item.name, item.url, "",FLAGS[item.language], [], false));
+            this.sets.push(new VocabularySet(item.name, item.id, "",FLAGS[item.language], [], false));
         });
         this.debug = await this.getSets();
     }

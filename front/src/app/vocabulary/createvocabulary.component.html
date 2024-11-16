@@ -6,9 +6,6 @@
 		<label for="description">Description:</label>
 		<textarea (input)="onInputChange()" id="description" [formControl]="description" maxlength="256" placeholder="The description of the set (not required)"></textarea>
 
-		<label for="url">URL:</label>
-		<input (input)="onInputChange()" id="url" type="text" [formControl]="url" maxlength="16" placeholder="The URL of the set" required/>
-
 		<label for="firstLanguage">Language:</label>
 		<select id="firstLanguage" [formControl]="language" (change)="getRelevantWords()">
 			<option *ngFor="let language of languages" [value]="language">{{language}}</option>
@@ -21,4 +18,4 @@
 <app-set-words-component *ngIf="state == State.WORD_PAGE"
                          [relevantWords]="relevantWords"
                          [language]="getLanguage()" (onGoBack)="state = State.NAME_PAGE"
-                         [set]="set" [previousUrl]="previousUrl"></app-set-words-component>
+                         [set]="set" [setID]="setID"></app-set-words-component>

@@ -56,14 +56,14 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     imports: [
         BrowserModule,
         RouterModule.forRoot([
-            {path: "vocab/:vocabUrl", component: VocabularyComponent},
+            {path: "vocab/:vocabID", component: VocabularyComponent},
             {path: "register", component: RegisterComponent},
             {path: "logout", component: LogoutComponent},
             {path: "login", component: LoginComponent},
             {path: "create", component: CreateVocabularyComponent},
             {path: "", component: IndexComponent},
             {path: "collection", component: CollectionComponent},
-            {path: "edit/:vocabUrl", component: EditVocabularyComponent},
+            {path: "edit/:vocabID", component: EditVocabularyComponent},
             {path: "**", component: NotFoundComponent}
         ]),
         FormsModule,
