@@ -6,8 +6,8 @@
 		<label for="description">Description:</label>
 		<textarea (input)="onInputChange()" id="description" [formControl]="description" maxlength="256" placeholder="The description of the set (not required)"></textarea>
 
-		<label for="firstLanguage">Language:</label>
-		<select id="firstLanguage" [formControl]="language" (change)="getRelevantWords()">
+		<label for="language">Language:</label>
+		<select id="language" [formControl]="language" (change)="getRelevantWords()">
 			<option *ngFor="let language of languages" [value]="language">{{language}}</option>
 		</select>
 

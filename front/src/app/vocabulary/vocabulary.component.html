@@ -50,7 +50,9 @@
 			</div>
 		</div>
 		<div *ngIf="selectedMode != null">
-			<app-vocab-table (onPlayClick)="mode = selectedMode" [mode]="selectedMode!" [words]="words"></app-vocab-table>
+			<div style="width: 100%;">
+				<app-vocab-table (onPlayClick)="mode = selectedMode" [mode]="selectedMode!" [words]="words"></app-vocab-table>
+			</div>
 		</div>
 	</div>
 </div>

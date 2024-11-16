@@ -28,14 +28,14 @@ export class ApiTools {
         }
     }
 
-    static async getRelevantVocabulary(firstLanguage: string, ): Promise<string> {
+    static async getRelevantVocabulary(language: string): Promise<string> {
         try {
             const response = await fetch(BACKEND + "api/getlanguagevocab/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 }, body: JSON.stringify({
-                    first_language: firstLanguage
+                    language: language
                 })
             });
 

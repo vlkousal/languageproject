@@ -38,7 +38,7 @@ export class GameSettingsComponent {
         const phonetic = localStorage.getItem("showPhonetic");
         this.showPhonetic = phonetic == "true";
         this.languageNames = SpeechUtils.getVoices().sort();
-        this.setFirstAndSecondLanguage();
+        this.setLanguageVoice();
     }
 
     onVolumeChange(): void {
@@ -55,10 +55,9 @@ export class GameSettingsComponent {
         SpeechUtils.speak(randomWord.correct);
     }
 
-    setFirstAndSecondLanguage(): void {
-        const first = sessionStorage.getItem("firstLanguage");
-        const second = sessionStorage.getItem("secondLanguage");
-        if(first == null || second == null) return;
+    setLanguageVoice(): void {
+        const first = sessionStorage.getItem("language");
+        if(first == null) return;
         this.language = first;
 
         if(this.language != null) {

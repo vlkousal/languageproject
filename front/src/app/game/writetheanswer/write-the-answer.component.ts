@@ -46,13 +46,11 @@ export class WriteTheAnswerComponent extends GameComponent {
     }
 
     speakQuestion(): void {
-        const firstLanguage: string | null = sessionStorage.getItem("firstLanguage");
-        if(firstLanguage != null) {
+        const language: string | null = sessionStorage.getItem("language");
+        if(language != null) {
             SpeechUtils.speak(this.words[this.index].question, this.isFlipped);
         }
     }
 
-    protected readonly Math = Math;
     protected readonly localStorage = localStorage;
-    protected readonly console = console;
 }

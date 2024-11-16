@@ -66,7 +66,6 @@ def get_high_score(request):
 @api_view(['POST'])
 def get_username(request):
     token: str = request.data.get("token")
-    username: str = ""
     try:
         username: str = Session.objects.get(session_key=token).session_data
     except ObjectDoesNotExist:
