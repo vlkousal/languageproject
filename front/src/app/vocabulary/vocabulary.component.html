@@ -5,11 +5,11 @@
 <div id="container" [hidden]="!(mode == null && !loading)" *ngIf="mode == null && !loading && !showSettings">
 	<div id="top-panel">
 		<div id="name-container">
-			<i>{{ name }} {{ FLAGS[language] }}</i>
+			<i>{{ this.set.name }} {{ FLAGS[this.set.language] }}</i>
 		</div>
 		<div id="rating-buttons">
-			<p>{{ contributor }}</p>
-			<div *ngIf="contributor != username">
+			<p>{{ this.set.contributor }}</p>
+			<div *ngIf="this.set.contributor != username">
 				<i class="fa fa-bookmark" (click)="saveSet()" [style.color]="isSaved ? 'green' : '#F9F8EB'"></i>
 			</div>
 			<i class="fa fa-cog" (click)="showSettings = true"></i>
@@ -19,7 +19,7 @@
 	<div id="content-container">
 		<div id="mode-buttons-container">
 			<button (click)="selectedMode = null"><i class="fa fa-file">     Summary</i></button>
-			<button (click)="selectedMode = Mode.OneOfThree" *ngIf="words.length >= 3"><i class="fa fa-bars">     One Of Three</i></button>
+			<button (click)="selectedMode = Mode.OneOfThree" *ngIf="set.words.length >= 3"><i class="fa fa-bars">     One Of Three</i></button>
 			<button (click)="selectedMode = Mode.WriteTheAnswer"><i class="fa fa-pen-nib">     Write The Answer</i></button>
 			<button (click)="selectedMode = Mode.DrawCharacters" *ngIf="characters.length != 0"><i class="fa fa-brush">     Draw Characters</i></button>
 			<button (click)="mode = Mode.Flashcards"><i class="fa fa-image">     Flashcards</i></button>
@@ -27,7 +27,7 @@
 
 		<div id="summary" *ngIf="selectedMode == null">
 			<div>
-				<p id="description">{{ description }}</p>
+				<p id="description">{{ this.set.description }}</p>
 			</div>
 			<div class="table-container">
 				<table id="summary-table">
@@ -51,15 +51,15 @@
 		</div>
 		<div *ngIf="selectedMode != null">
 			<div style="width: 100%;">
-				<app-vocab-table (onPlayClick)="mode = selectedMode" [mode]="selectedMode!" [words]="words"></app-vocab-table>
+				<app-vocab-table (onPlayClick)="mode = selectedMode" [mode]="selectedMode!" [words]="set.words"></app-vocab-table>
 			</div>
 		</div>
 	</div>
 </div>
 
-<app-game-settings *ngIf="showSettings" [words]="words" (onGoBack)="showSettings = false"></app-game-settings>
+<app-game-settings *ngIf="showSettings" [words]="set.words" (onGoBack)="showSettings = false"></app-game-settings>
 
-<app-one-of-three [words]=words [id]="id" (onGoBack)="onGoBack()" *ngIf="mode == Mode.OneOfThree"></app-one-of-three>
-<app-writetheanswer [words]=words [id]="id" (onGoBack)="onGoBack()" *ngIf="mode == Mode.WriteTheAnswer"></app-writetheanswer>
-<app-flashcards [words]=words *ngIf="mode == Mode.Flashcards" (onGoBack)="onGoBack()"></app-flashcards>
+<app-one-of-three [words]=set.words [id]="id" (onGoBack)="onGoBack()" *ngIf="mode == Mode.OneOfThree"></app-one-of-three>
+<app-writetheanswer [words]=set.words [id]="id" (onGoBack)="onGoBack()" *ngIf="mode == Mode.WriteTheAnswer"></app-writetheanswer>
+<app-flashcards [words]=set.words *ngIf="mode == Mode.Flashcards" (onGoBack)="onGoBack()"></app-flashcards>
 <app-draw-characters [words]=characters [id]="id" *ngIf="mode == Mode.DrawCharacters" (onGoBack)="onGoBack()"></app-draw-characters>

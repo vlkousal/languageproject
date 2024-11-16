@@ -11,7 +11,7 @@ import {Router} from "@angular/router";
 })
 export class VocabularyCreationSummaryComponent {
 
-    @Input() set: VocabularySet = new VocabularySet("", -1, "", "", [], true);
+    @Input() set: VocabularySet = new VocabularySet("", -1, "", "", "", [], true);
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
 
     feedback: string = "";

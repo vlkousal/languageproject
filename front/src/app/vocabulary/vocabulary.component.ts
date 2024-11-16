@@ -7,6 +7,7 @@ import {Utils} from "../utils";
 import {Word} from "../../word";
 import {SpeechUtils} from "../speechutils";
 import {CookieService} from "ngx-cookie";
+import {VocabularySet} from "../../vocabulary-set";
 
 @Component({
     selector: 'app-vocabulary',
@@ -15,24 +16,18 @@ import {CookieService} from "ngx-cookie";
 })
 export class VocabularyComponent {
 
-    words: Word[] = [];
+    set: VocabularySet = new VocabularySet("", -1, "", "", "", [], false);
     characters: Word[] = [];
 
     index: number = 0;
     id: number = -1;
-    name: string = "";
-    description: string = "";
-    contributor: string = "";
-    language: string = "";
     languageNames: string[] = [];
     mode: Mode | null = null;
     loading: boolean = true;
     showSettings: boolean = false;
-
     selectedMode: Mode | null = null;
     tableWords: Word[] = [];
     username: string = "";
-
     isSaved: boolean = false;
 
     constructor(private route: ActivatedRoute, private router: Router, private cookieService: CookieService) { }
@@ -42,12 +37,12 @@ export class VocabularyComponent {
             this.id = params["vocabID"];
         });
         await this.setup();
-        this.characters = this.words.filter(w => w.question.length === 1);
+        this.characters = this.set.words.filter(w => w.question.length === 1);
 
         this.languageNames.sort();
-        Word.sortByAverageScore(this.words);
-        sessionStorage.setItem("language", this.language);
-        this.tableWords = [...this.words];
+        Word.sortByAverageScore(this.set.words);
+        sessionStorage.setItem("language", this.set.language);
+        this.tableWords = [...this.set.words];
 
         this.username = JSON.parse(await this.getUsername())["username"];
         this.isSaved = JSON.parse(await this.getSavedStatus())["status"];
@@ -131,10 +126,6 @@ export class VocabularyComponent {
             this.router.navigate(["/404"]);
         }
         const json = JSON.parse(vocab);
-        this.name = json.name;
-        this.contributor = json.author;
-        this.description = json.description;
-        this.language = json.language;
 
         const words: Word[] = [];
         json.vocabulary.forEach((word: any, i: number) => {
@@ -156,8 +147,9 @@ export class VocabularyComponent {
               word.correct, answers, flippedAnswers);
             words.push(word);
         });
-        this.words = words;
-        Word.sortByFirst(this.words);
+        this.set = new VocabularySet(json.name, this.id, json.author, json.description,
+            json.language, words, false);
+        Word.sortByFirst(this.set.words);
     }
 
     protected readonly first = first;

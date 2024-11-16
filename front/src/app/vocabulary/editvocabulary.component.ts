@@ -30,7 +30,7 @@ export class EditVocabularyComponent {
     async ngOnInit() {
         const vocabData = await ApiTools.getVocabJson(this.setID, this.cookieService);
         const parsed = JSON.parse(vocabData);
-        this.set = new VocabularySet(parsed.name, this.setID, parsed.description,
+        this.set = new VocabularySet(parsed.name, this.setID, parsed.author, parsed.description,
             FLAGS[parsed.first_language] + " " + parsed.first_language, [], true);
     }
 

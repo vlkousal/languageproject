@@ -62,7 +62,7 @@ export class CreateVocabularyComponent {
     }
 
     onInputChange(): void {
-        this.set = new VocabularySet(this.getName(), -1, this.getDescription(),
+        this.set = new VocabularySet(this.getName(), -1, "", this.getDescription(),
             this.getLanguage(), this.words, this.setID != null);
         const nameLength = this.getName().length;
         this.isValid = false;

@@ -18,7 +18,7 @@ export class IndexComponent {
             id: number;
             language: string;
         }) => {
-            this.sets.push(new VocabularySet(item.name, item.id, "",FLAGS[item.language], [], false));
+            this.sets.push(new VocabularySet(item.name, item.id, "", "",FLAGS[item.language], [], false));
         });
         this.debug = await this.getSets();
     }

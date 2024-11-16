@@ -57,7 +57,7 @@ export class CollectionComponent {
                     language: string,
                     is_own: boolean
                 }) => {
-                    this.sets.push(new VocabularySet(item.name, item.id, "",
+                    this.sets.push(new VocabularySet(item.name, item.id, "", "",
                         item.language, [], item.is_own));
                 })
             }
