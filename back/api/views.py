@@ -11,6 +11,39 @@ from django.utils.crypto import get_random_string
 from .models import User, Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord, VocabularyUserRelationship
 import base64
 import easyocr
+import supabase
+
+def add_ordinal_suffix(day: int):
+    if 10 <= day % 100 <= 20:
+        return f"{day}th"
+    else:
+        suffixes = {1: "st", 2: "nd", 3: "rd"}
+        return f"{day}{suffixes.get(day % 10, 'th')}"
+
+
+def format_datetime_with_ordinal(datetime_object):
+    day_with_suffix = add_ordinal_suffix(datetime_object.day)
+    formatted_date = datetime_object.strftime(f"%B {day_with_suffix} %Y")
+    return formatted_date
+
+
+# returns the user's profile information
+@api_view(["POST"])
+def get_user_info(request):
+    username: str = request.data.get("username")
+
+    try:
+        user: User = User.objects.get(username=username)
+    except ObjectDoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    formatted_date: str = format_datetime_with_ordinal(user.date_joined)
+    return Response(status=status.HTTP_200_OK, data={"username": username,
+                                                     "date_joined": formatted_date,
+                                                     "profile_picture": user.profile_picture,
+                                                     "bio": user.bio,
+                                                     "location": user.location
+                                                     })
 
 
 # checks the drawn character
