@@ -27,6 +27,7 @@ import { SetWordsComponentComponent } from './vocabulary/set-words-component/set
 import { VocabularyCreationSummaryComponent } from './vocabulary/vocabulary-creation-summary/vocabulary-creation-summary.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 @NgModule({
     declarations: [
@@ -51,7 +52,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
         VocabTableComponent,
         SetWordsComponentComponent,
         VocabularyCreationSummaryComponent,
-        NotFoundComponent
+        NotFoundComponent,
+        UserProfileComponent
     ],
     imports: [
         BrowserModule,
@@ -64,7 +66,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
             {path: "", component: IndexComponent},
             {path: "collection", component: CollectionComponent},
             {path: "edit/:vocabID", component: EditVocabularyComponent},
-            {path: "**", component: NotFoundComponent}
+            {path: "user/:username", component: UserProfileComponent},
+            {path: "**", component: NotFoundComponent},
         ]),
         FormsModule,
         ReactiveFormsModule,
