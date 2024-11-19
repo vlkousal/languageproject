@@ -1,9 +1,5 @@
-import io
 from datetime import timedelta
 from typing import List, Dict
-
-import cv2
-from PIL import Image
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
@@ -11,9 +7,8 @@ from django.utils import timezone
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
-from .models import Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord, VocabularyUserRelationship
+from .models import User, Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord, VocabularyUserRelationship
 import base64
 import easyocr
 
