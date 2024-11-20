@@ -1,5 +1,8 @@
-
+<app-base></app-base>
 <div id="container">
+	<div id="top-panel-container">
+		<app-top-panel [showMuteButton]="true"></app-top-panel>
+	</div>
 	<strong>{{ username }}</strong>
 	<p>Member since: {{ dateJoined }}</p>
 	<img src="{{ profile_picture }}" alt="nevim">

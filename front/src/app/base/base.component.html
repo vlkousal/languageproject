@@ -5,7 +5,7 @@
 <div class="base-content">
     <!-- if logged in -->
     <div class="navbar" *ngIf="username != null; else anonymousBlock">
-        <span class="username">{{ username }}</span>
+	    <a routerLink="/user/{{username}}">{{ username }}</a>
         <a routerLink="/" class="nav-link">Home</a>
 	    <a routerLink="/collection" class="nav-link">Collection</a>
         <a routerLink="/create" class="nav-link">Create</a>

@@ -51,4 +51,6 @@ export class UserProfileComponent {
             return;
         }
     }
+
+    protected readonly console = console;
 }

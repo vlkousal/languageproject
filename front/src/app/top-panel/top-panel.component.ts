@@ -19,5 +19,4 @@ export class TopPanelComponent {
     }
 
     protected readonly SpeechUtils = SpeechUtils;
-    protected readonly console = console;
 }
