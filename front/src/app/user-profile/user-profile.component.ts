@@ -5,10 +5,11 @@ import {BACKEND} from "../constants";
 
 interface UserProfile {
     username: string,
-    dateJoined: string,
+    date_joined: string,
     profile_picture: string,
     bio: string,
-    location: string
+    location: string,
+    isOwn: boolean
 }
 
 @Component({
@@ -35,6 +36,7 @@ export class UserProfileComponent {
                 headers: {
                     "Content-Type": "application/json",
                 }, body: JSON.stringify({
+                    token: this.cookieService.get("token"),
                     username: username
                 })
             });
@@ -51,6 +53,4 @@ export class UserProfileComponent {
             return;
         }
     }
-
-    protected readonly console = console;
 }

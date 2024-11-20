@@ -31,19 +31,31 @@ def format_datetime_with_ordinal(datetime_object):
 @api_view(["POST"])
 def get_user_info(request):
     username: str = request.data.get("username")
+    token: str = request.data.get("token")
+    print(token)
 
     try:
         user: User = User.objects.get(username=username)
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+    try:
+        request_username: str = Session.objects.get(session_key=token).session_data
+        is_own: bool = username == request_username
+    except ObjectDoesNotExist:
+        is_own: bool = False
+
     formatted_date: str = format_datetime_with_ordinal(user.date_joined)
-    return Response(status=status.HTTP_200_OK, data={"username": username,
-                                                     "date_joined": formatted_date,
-                                                     "profile_picture": user.profile_picture,
-                                                     "bio": user.bio,
-                                                     "location": user.location
-                                                     })
+
+    data = {
+        "username": username,
+        "date_joined": formatted_date,
+        "profile_picture": user.profile_picture,
+        "bio": user.bio,
+        "location": user.location,
+        "isOwn": is_own
+    }
+    return Response(status=status.HTTP_200_OK, data=data)
 
 
 # checks the drawn character
