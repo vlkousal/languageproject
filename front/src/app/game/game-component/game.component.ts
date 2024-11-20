@@ -150,7 +150,7 @@ export class GameComponent implements OnInit {
         const context = canvas.getContext('2d');
         if(context == null) return;
 
-        context.font = '100px Arial';
+        context.font = '200px Arial';
 
         let isDrawing = false;
         let lastX = 0;

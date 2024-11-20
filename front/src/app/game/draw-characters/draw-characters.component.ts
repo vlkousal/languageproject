@@ -60,10 +60,10 @@ export class DrawCharactersComponent extends GameComponent {
             // one half of the hint is erased
             if(characterScore >= 50) {
                 const options: Coordinates[] = [
-                    {"startX": 0, "startY": 0, "endX": 200, "endY": 0},
-                    {"startX": 0, "startY": 100, "endX": 200, "endY": 200},
-                    {"startX": 0, "startY": 0, "endX": 100, "endY": 200},
-                    {"startX": 100, "startY": 0, "endX": 200, "endY": 200},
+                    {"startX": 0, "startY": 0, "endX": canvas.width, "endY": 0},
+                    {"startX": 0, "startY": canvas.height / 2, "endX": canvas.width, "endY": canvas.height},
+                    {"startX": 0, "startY": 0, "endX": canvas.width / 2, "endY": canvas.height},
+                    {"startX": canvas.width / 2, "startY": 0, "endX": canvas.width, "endY": canvas.height},
                 ];
                 const choice: number = Utils.getRandomInteger(0, 3);
                 const randomOption: Coordinates = options[choice];
