@@ -13,6 +13,20 @@ import base64
 import easyocr
 import supabase
 
+
+@api_view(["POST"])
+def update_user_info(request):
+    new_profile = request.data.get("profile")
+
+    user: User = get_user(request.data.get("token"))
+    if user is None:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+    user.location = new_profile["location"]
+    user.bio = new_profile["bio"]
+    user.save()
+    return Response(status=status.HTTP_200_OK)
+
+
 def add_ordinal_suffix(day: int):
     if 10 <= day % 100 <= 20:
         return f"{day}th"
@@ -113,7 +127,7 @@ def get_username(request):
     return Response(data={"username": username}, status=status.HTTP_200_OK)
 
 
-def get_user(token: str):
+def get_user(token: str) -> User or None:
     try:
         username: str = Session.objects.get(session_key=token).session_data
         user = User.objects.get(username=username)

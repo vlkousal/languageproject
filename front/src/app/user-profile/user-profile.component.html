@@ -6,13 +6,23 @@
 		<div id="picture-frame">
 			<img src="{{ profile?.profile_picture }}" alt="Profile Picture">
 		</div>
-		<i class="fa-solid fa-cake-candles"> {{ profile?.date_joined }}</i>
-		<i class="fa-solid fa-map-pin"> {{ profile?.location }}</i>
-		<button id="edit-button" *ngIf="profile?.isOwn">Edit</button>
+
+		<i *ngIf="!editMode" class="fa-solid fa-cake-candles"> {{ profile?.date_joined }}</i>
+
+		<div class="block">
+			<i *ngIf="!editMode!" class="fa-solid fa-map-pin"> {{ profile?.location }}</i>
+			<input *ngIf="editMode" [formControl]="location" placeholder="Location" maxlength="32">
+		</div>
+
+		<div class="block">
+			<button id="cancel-button" *ngIf="editMode" (click)="editMode = false">X</button>
+			<button id="edit-button" *ngIf="profile?.isOwn" (click)="editProfile()">Edit</button>
+		</div>
 	</div>
 
 	<div id="bio-box">
-		<p>{{ profile?.bio }}</p>
+		<p *ngIf="!editMode">{{ profile?.bio }}</p>
+		<textarea *ngIf="editMode"  [formControl]="bio" placeholder="Is there anything you want other users to know about you?" maxlength="256"></textarea>
 	</div>
 </div>
 

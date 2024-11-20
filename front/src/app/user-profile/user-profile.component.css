@@ -17,26 +17,49 @@ i {
 }
 
 #container {
-    padding: 2%;
+    padding: 1%;
     display: flex;
 }
 
 #left-box {
-    display: block;
+    display: grid;
     width: 50%;
+    justify-content: center;
     align-items: center;
+    place-items: center;
 }
 
 #left-box i {
-    margin-top: 3%;
+    margin-top: 8%;
     display: block;
 }
 
 #edit-button {
-    width: 50%;
+    width: 100%;
+}
+
+#cancel-button {
+    width: 10%;
 }
 
 #bio-box {
     border: 2px solid var(--muted-teal);
     border-radius: 5px;
+    width: 50%;
+}
+
+#bio-box textarea {
+    width: 100%;
+    height: 95%;
+}
+
+.block {
+    display: flex;
+}
+
+input {
+    margin-top: 8%;
+    width: 50%;
+    height: 1%;
+    display: block;
 }

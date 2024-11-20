@@ -38,5 +38,6 @@ urlpatterns = [
     path("api/getsavestatus/", api_views.get_save_status),
     path("api/logout/", api_views.logout),
     path("api/checkimage/", api_views.check_image),
-    path("api/getuserinfo/", api_views.get_user_info)
+    path("api/getuserinfo/", api_views.get_user_info),
+    path("api/updateuserinfo/", api_views.update_user_info)
 ]
