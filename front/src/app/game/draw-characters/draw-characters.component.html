@@ -6,18 +6,18 @@
 	<div id="stats-container">
 		<i id="flame" class="fas fa-fire">     {{ streak }}</i>
 		<i id="counter" class="fas fa-atlas">     {{ index }}/{{ words.length }}</i>
-		<i id="score" class="fas fa-star">     {{ this.words[this.index].scores[Mode.DrawCharacters] }}</i>
+		<i id="score" class="fas fa-star">     {{ words[index].scores[Mode.DrawCharacters] }}</i>
 		<i id="lives" class="fas fa-heart">     {{ lives }}</i>
 	</div>
 	<div id="canvas-container">
-		<p id="correct">{{ this.words[this.index].correct }}</p>
-		<p id="phonetic" [style.visibility]="(localStorage.getItem('showPhonetic') != 'false' && !isFlipped) ? 'visible' : 'hidden'">{{ this.words[this.index].phonetic }}</p>
+		<p id="correct">{{ words[index].correct }}</p>
+		<p id="phonetic" [style.visibility]="(localStorage.getItem('showPhonetic') != 'false' && !isFlipped) ? 'visible' : 'hidden'">{{ words[index].phonetic }}</p>
 		<canvas id="canvas" width="200" height="200"></canvas>
 
 		<div id="button-container">
 			<i class="fa fa-eraser" (click)="resetCanvas()"></i>
 			<i class="fa fa-check" (click)="checkDrawing()"></i>
-			<i class="fa fa-headphones" (click)="SpeechUtils.speak(this.words[this.index].question)"></i>
+			<i class="fa fa-headphones" (click)="SpeechUtils.speak(words[index].question)"></i>
 		</div>
 	</div>
 </div>

@@ -1,6 +1,6 @@
 <div id="container" *ngIf="!showEnd && !showSettings">
 	<div id="top-panel-container">
-		<app-top-panel (onGoBack)="this.onGoBack.emit()" (settingsEmitter)="showSettings = true"></app-top-panel>
+		<app-top-panel (onGoBack)="onGoBack.emit()" (settingsEmitter)="showSettings = true"></app-top-panel>
 	</div>
 
 	<div id="stats-container">
