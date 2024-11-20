@@ -3,6 +3,14 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {CookieService} from "ngx-cookie";
 import {BACKEND} from "../constants";
 
+interface UserProfile {
+    username: string,
+    dateJoined: string,
+    profile_picture: string,
+    bio: string,
+    location: string
+}
+
 @Component({
     selector: 'app-user-profile',
     templateUrl: './user-profile.component.html',
@@ -10,11 +18,7 @@ import {BACKEND} from "../constants";
 })
 export class UserProfileComponent {
 
-    username: string = "";
-    dateJoined: string = "";
-    profile_picture: string = "";
-    bio: string = "";
-    location: string = "";
+    profile: UserProfile | null = null;
 
     constructor(private route: ActivatedRoute, private router: Router, private cookieService: CookieService) {}
 
@@ -37,11 +41,7 @@ export class UserProfileComponent {
 
             if(response.ok) {
                 const resp = await response.json();
-                this.username = resp.username;
-                this.dateJoined = resp.date_joined;
-                this.profile_picture = resp.profile_picture;
-                this.bio = resp.bio;
-                this.location = resp.location;
+                this.profile = resp;
                 return;
             } else{
                 this.router.navigate(['404']);

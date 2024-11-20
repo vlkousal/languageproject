@@ -3,11 +3,10 @@
 	<div id="top-panel-container">
 		<app-top-panel [showMuteButton]="true"></app-top-panel>
 	</div>
-	<strong>{{ username }}</strong>
-	<p>Member since: {{ dateJoined }}</p>
-	<img src="{{ profile_picture }}" alt="nevim">
-	<p>Bio: {{ bio }}</p>
-	<p>Location: {{ location }}</p>
-
+	<strong>{{ profile?.username }}</strong>
+	<p>Member since: {{ profile?.dateJoined }}</p>
+	<img src="{{ profile?.profile_picture }}" alt="nevim">
+	<p>Bio: {{ profile?.bio }}</p>
+	<p>Location: {{ profile?.location }}</p>
 </div>
 
