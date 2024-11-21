@@ -16,11 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+import api.user_views as user_views
 import api.views as api_views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/register/", api_views.register),
-    path("api/login/", api_views.login),
+    path("api/register/", user_views.register),
+    path("api/login/", user_views.login),
     path("api/getlanguages/", api_views.get_languages),
     path("api/createvocab/", api_views.create_vocab),
     path("api/getvocab/", api_views.get_vocab),
@@ -33,12 +34,12 @@ urlpatterns = [
     path("api/addresult/", api_views.add_result),
     path("api/sendvocabresult/", api_views.send_vocab_result),
     path("api/gethighscore/", api_views.get_high_score),
-    path("api/getusername/", api_views.get_username),
+    path("api/getusername/", user_views.get_username),
     path("api/saveset/", api_views.save_set),
     path("api/getsavestatus/", api_views.get_save_status),
-    path("api/logout/", api_views.logout),
+    path("api/logout/", user_views.logout),
     path("api/checkimage/", api_views.check_image),
-    path("api/getuserinfo/", api_views.get_user_info),
-    path("api/updateuserinfo/", api_views.update_user_info),
-    path("api/updateprofilepicture/", api_views.update_profile_picture)
+    path("api/getuserinfo/", user_views.get_user_info),
+    path("api/updateuserinfo/", user_views.update_user_info),
+    path("api/updateprofilepicture/", user_views.update_profile_picture)
 ]
