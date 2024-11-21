@@ -27,7 +27,6 @@ export class VocabularyComponent {
     showSettings: boolean = false;
     selectedMode: Mode | null = null;
     tableWords: Word[] = [];
-    username: string = "";
     isSaved: boolean = false;
 
     constructor(private route: ActivatedRoute, private router: Router, private cookieService: CookieService) { }
@@ -121,7 +120,6 @@ export class VocabularyComponent {
 
     async setup(): Promise<void> {
         const vocab: string =  await ApiTools.getVocabJson(this.id, this.cookieService);
-        const username: string = JSON.parse(await this.getUsername())["username"];
 
         if(vocab == "404") {
             this.router.navigate(["/404"]);
