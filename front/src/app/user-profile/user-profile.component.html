@@ -1,10 +1,12 @@
 <app-base></app-base>
-<div id="container">
 
+<input id="imageSelect" type="file" accept="image/*" (change)="onFileSelected($event)" style="display: none;" />
+
+<div id="container">
 	<div id="left-box">
-		<strong>{{ profile?.username }}</strong>
+		<strong id="username">{{ profile?.username }}</strong>
 		<div id="picture-frame">
-			<img src="{{ profile?.profile_picture }}" alt="Profile Picture">
+			<img id="avatar" src="{{ profile?.profile_picture }}" alt="Profile Picture" (click)="openImageSelection()">
 		</div>
 
 		<i *ngIf="!editMode" class="fa-solid fa-cake-candles"> {{ profile?.date_joined }}</i>

@@ -4,12 +4,14 @@
     border-radius: 50%;
     overflow: hidden;
     border: 8px solid var(--muted-teal);
+    z-index: 1;
 }
 
 #picture-frame img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    z-index: 3;
 }
 
 i {
@@ -62,4 +64,15 @@ input {
     width: 50%;
     height: 1%;
     display: block;
+}
+
+#username {
+    color: var(--soft-ivory);
+    font-size: clamp(16px, 2vw, 24px);
+}
+
+#image-select {
+    width: 100%;
+    height: 100%;
+    z-index: -999;
 }

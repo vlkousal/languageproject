@@ -4,7 +4,6 @@ from django.utils.translation import gettext_lazy as _
 
 
 class User(AbstractUser):
-    profile_picture = models.CharField(max_length=512, null=True, blank=True)
     bio = models.CharField(max_length=256, blank=True)
     location = models.CharField(max_length=32, blank=True)
 

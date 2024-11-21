@@ -107,7 +107,6 @@ export class Word {
     // compares the words based on mode, null means the average of all words
     static sortByScore(words: Word[], mode: Mode): Word[] {
         if(mode == null) {
-            console.log("tohle neni pravda ale");
             words.sort((a, b) => {
                 if(a.getAverageScore() < b.getAverageScore()) return -1;
                 if(a.getAverageScore() > b.getAverageScore()) return 1;
@@ -115,7 +114,6 @@ export class Word {
             })
             return words;
         }
-        console.log("WF");
         words.sort((a, b) => {
             if (a.scores[mode] < b.scores[mode]) return -1;
             if (a.scores[mode] > b.scores[mode]) return 1;

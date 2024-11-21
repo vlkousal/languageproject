@@ -28,7 +28,6 @@ export class VocabTableComponent {
 
     ngOnChanges(changes: SimpleChanges): void {
         if(changes["mode"]) {
-            console.log(changes["mode"]);
             Word.sortByScore(this.set.words, this.mode);
             if(this.mode == null) {
                 this.averageScore = Math.floor(this.set.getAverageScore());

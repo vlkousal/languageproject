@@ -8,11 +8,35 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.utils.crypto import get_random_string
+from storage3.utils import StorageException
+
+from db_config import SUPABASE_URL, SUPABASE_KEY
 from .models import User, Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord, VocabularyUserRelationship
 import base64
 import easyocr
-import supabase
+from supabase import create_client, Client
 
+
+# handles the change of a user's avatar
+@api_view(["POST"])
+def update_profile_picture(request):
+    image: str = request.data.get("image")
+    user: User = get_user(request.data.get("token"))
+
+    if user is None:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    b = bytes(image.split(",")[1], encoding='utf-8')
+    image_data = base64.b64decode(b)
+
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    supabase.storage.from_("profile_pictures").upload(
+        path=user.username + ".jpg",
+        file=image_data,
+        file_options={"upsert": "true", "content-type": "image/jpeg", "xd": "rofl"},
+    )
+    response = supabase.storage.from_("profile_pictures").create_signed_url(user.username + ".jpg", expires_in=120)
+    return Response(status=status.HTTP_200_OK, data={"url": response["signedURL"]})
 
 @api_view(["POST"])
 def update_user_info(request):
@@ -46,7 +70,6 @@ def format_datetime_with_ordinal(datetime_object):
 def get_user_info(request):
     username: str = request.data.get("username")
     token: str = request.data.get("token")
-    print(token)
 
     try:
         user: User = User.objects.get(username=username)
@@ -61,10 +84,17 @@ def get_user_info(request):
 
     formatted_date: str = format_datetime_with_ordinal(user.date_joined)
 
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    try:
+        supa_response = supabase.storage.from_("profile_pictures").create_signed_url(user.username + ".jpg", expires_in=120)
+        picture_url: str or None = supa_response["signedURL"]
+    except StorageException:
+        picture_url = None
+
     data = {
         "username": username,
         "date_joined": formatted_date,
-        "profile_picture": user.profile_picture,
+        "profile_picture": picture_url,
         "bio": user.bio,
         "location": user.location,
         "isOwn": is_own
