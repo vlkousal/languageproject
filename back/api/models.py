@@ -77,3 +77,18 @@ class VocabularyUserRelationship(models.Model):
     def __str__(self):
         saved_status: str = "T" if self.saved else "F"
         return self.set.name + " - " + self.user.username + "(" + saved_status + ")"
+
+
+class ForumCategory(models.Model):
+    name = models.CharField(max_length=32)
+    supercategory = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
+
+
+class ForumThread(models.Model):
+    category = models.ForeignKey(ForumCategory, on_delete=models.CASCADE)
+
+
+class ForumPost(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_posted = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
