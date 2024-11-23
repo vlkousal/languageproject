@@ -23,6 +23,7 @@ with open("languages.txt", "r") as content:
 
 print("Added", counter, " langauges to the database.")
 
+"""
 basic_categories: List[str] = ["General", "Off-Topic", "News", "Suggestions & Ideas", "Languages"]
 languages_category_id = -1
 
@@ -42,3 +43,6 @@ except ObjectDoesNotExist:
 for language in Language.objects.all():
     if languages_category_id != -1:
         ForumCategory.objects.create(name=language.name, supercategory_id=languages_category_id)
+"""
+
+import GPT4all

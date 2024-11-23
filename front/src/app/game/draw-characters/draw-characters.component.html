@@ -9,16 +9,18 @@
 		<i id="score" class="fas fa-star">     {{ words[index].scores[Mode.DrawCharacters] }}</i>
 		<i id="lives" class="fas fa-heart">     {{ lives }}</i>
 	</div>
+
 	<div id="canvas-container">
 		<p id="correct">{{ words[index].correct }}</p>
 		<p id="phonetic" [style.visibility]="(localStorage.getItem('showPhonetic') != 'false' && !isFlipped) ? 'visible' : 'hidden'">{{ words[index].phonetic }}</p>
-		<canvas id="canvas" width="400" height="400"></canvas>
 
 		<div id="button-container">
-			<i class="fa fa-eraser" (click)="resetCanvas()"></i>
-			<i class="fa fa-check" (click)="checkDrawing()"></i>
+			<i class="fa fa-eraser" (click)="resetCanvas()" title="Clear (c)"></i>
+			<i class="fa fa-check" (click)="checkDrawing()" title="Check (Enter)"></i>
 			<i class="fa fa-headphones" (click)="SpeechUtils.speak(words[index].question)"></i>
 		</div>
+
+		<canvas id="canvas" width="600" height="600"></canvas>
 	</div>
 </div>
 

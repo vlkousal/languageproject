@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, HostListener, Output} from '@angular/core';
 import {GameComponent} from "../game-component/game.component";
 import {BACKEND, Mode} from "../../constants";
 import {SpeechUtils} from "../../speechutils";
@@ -39,6 +39,17 @@ export class DrawCharactersComponent extends GameComponent {
         super(Mode.DrawCharacters, cookieService);
     }
 
+    @HostListener("document:keydown", ["$event"])
+    handleKeyboardEvent(event: KeyboardEvent) {
+        if (event.key === 'c' || event.key === 'C') {
+            this.resetCanvas();
+        }
+
+        if (event.key === 'Enter') {
+            this.checkDrawing();
+        }
+    }
+
     resetCanvas(): void {
         const canvas = document.getElementById("canvas") as HTMLCanvasElement;
         const context = canvas.getContext("2d");
@@ -52,7 +63,7 @@ export class DrawCharactersComponent extends GameComponent {
         context.fillRect(0, 0, canvas.width, canvas.height);
 
         const characterScore: number = this.words[this.index].getModeScore(Mode.DrawCharacters);
-        if (characterScore < 75) {
+        if (characterScore < 70) {
             this.currentPassrate = this.HALF_HINT_PASSRATE;
             context.fillStyle = this.HINT_COLOR;
             context.fillText(this.words[this.index].question, 0, 170);
@@ -67,6 +78,7 @@ export class DrawCharactersComponent extends GameComponent {
                 ];
                 const choice: number = Utils.getRandomInteger(0, 3);
                 const randomOption: Coordinates = options[choice];
+                console.log(randomOption);
                 context.clearRect(randomOption.startX, randomOption.startY, randomOption.endX, randomOption.endY);
             }
         }

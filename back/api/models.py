@@ -3,16 +3,17 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
 
-class User(AbstractUser):
-    bio = models.CharField(max_length=256, blank=True)
-    location = models.CharField(max_length=32, blank=True)
-
-
 class Language(models.Model):
     name = models.CharField(max_length=64)
 
     def __str__(self):
         return self.name
+
+
+class User(AbstractUser):
+    bio = models.CharField(max_length=256, blank=True)
+    location = models.CharField(max_length=32, blank=True)
+    languages_of_interest = models.ManyToManyField(Language)
 
 
 class WordEntry(models.Model):
