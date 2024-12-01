@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, Output, SimpleChanges} from '@angular/core';
 import {Word} from "../../../word";
 import {Mode} from "../../constants";
-import {SpeechUtils} from "../../speechutils";
 import {VocabularySet} from "../../../vocabulary-set";
 
 @Component({
@@ -39,6 +38,5 @@ export class VocabTableComponent {
 
     protected readonly Word = Word;
     protected readonly Mode = Mode;
-    protected readonly SpeechUtils = SpeechUtils;
     protected readonly Math = Math;
 }

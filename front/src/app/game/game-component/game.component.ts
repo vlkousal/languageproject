@@ -1,11 +1,9 @@
 import {Component, Injectable, Input, OnInit} from '@angular/core';
 import {BACKEND, MAX_HEALTH, Mode, STREAK_FOR_HEALTH} from "../../constants";
 import {Utils} from "../../utils";
-import {SpeechUtils} from "../../speechutils";
 import {ApiTools} from "../../api-tools";
 import {Word} from "../../../word";
 import {CookieService} from "ngx-cookie";
-
 
 @Component({
   selector: 'app-game-component',
@@ -41,7 +39,7 @@ export class GameComponent implements OnInit {
     }
 
     async ngOnInit(): Promise<void> {
-        Utils.shuffleList(this.words);
+        this.weightedWordShuffle();
         Word.sortByScore(this.words, this.mode);
         this.wordsCopy = [...this.words];
         this.highScore = await ApiTools.getHighScore(this.id, this.mode, this.cookieService);
@@ -83,7 +81,7 @@ export class GameComponent implements OnInit {
     }
 
     resetStats(): void {
-        Utils.shuffleList(this.words);
+        this.weightedWordShuffle();
         this.showEnd = false;
         this.index = 0;
         this.setNewWord();
@@ -93,6 +91,14 @@ export class GameComponent implements OnInit {
         this.wrong = [];
         this.correctAnswers = 0;
         this.repeatingWrong = false;
+    }
+
+    weightedWordShuffle(): void {
+        const priorities: number[] = [];
+        this.words.forEach(item => {
+            priorities.push(Math.random() * (100 - item.getModeScore(this.mode)));
+        });
+        this.words.sort((a, b) => priorities[this.words.indexOf(a)] - priorities[this.words.indexOf(b)]);
     }
 
     sendResult(correct: boolean): void {
@@ -121,11 +127,9 @@ export class GameComponent implements OnInit {
             this.isFlipped = true;
             this.words[this.index] = new Word(currentWord.id, currentWord.scores, currentWord.correct,
                 currentWord.phonetic, currentWord.question, currentWord.flippedAnswers, currentWord.answers);
-            SpeechUtils.speak(this.words[this.index].question, true);
             return;
         }
         this.isFlipped = false;
-        SpeechUtils.speak(currentWord.question, false);
     }
 
     sendVocabSetResult(): void {

@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {BACKEND, FLAGS} from "../constants";
 import {VocabularySet} from "../../vocabulary-set";
 
+
 @Component({
     selector: 'app-index',
     templateUrl: './index.component.html',

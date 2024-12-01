@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Utils} from "../../utils";
-import {SpeechUtils} from "../../speechutils";
 import {FLAGS} from "../../constants";
 import {Word} from "../../../word";
 
@@ -37,7 +36,6 @@ export class GameSettingsComponent {
 
         const phonetic = localStorage.getItem("showPhonetic");
         this.showPhonetic = phonetic == "true";
-        this.languageNames = SpeechUtils.getVoices().sort();
         this.setLanguageVoice();
     }
 
@@ -47,12 +45,10 @@ export class GameSettingsComponent {
 
     testLanguageVoice(): void {
         const randomWord = Utils.getRandomElement(this.words);
-        SpeechUtils.speak(randomWord.question);
     }
 
     testEnglishVoice(): void {
         const randomWord = Utils.getRandomElement(this.words);
-        SpeechUtils.speak(randomWord.correct);
     }
 
     setLanguageVoice(): void {

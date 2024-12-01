@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {SpeechUtils} from "../../speechutils";
 import {Utils} from "../../utils";
 import {Word} from "../../../word";
 
@@ -20,7 +19,6 @@ export class FlashcardsComponent {
 
     ngOnInit(): void {
         Utils.shuffleList(this.words);
-        SpeechUtils.speak(this.words[this.currentIndex].question);
     }
 
     switchFlashcard(): void {
@@ -30,7 +28,6 @@ export class FlashcardsComponent {
         } else if(this.currentIndex >= this.words.length){
             this.currentIndex = 0;
         }
-        SpeechUtils.speak(this.words[this.currentIndex].question);
         this.isFlipped = false;
     }
 
@@ -40,10 +37,5 @@ export class FlashcardsComponent {
 
     toggleFlip(): void {
         this.isFlipped = !this.isFlipped;
-        if(this.isFlipped) {
-            SpeechUtils.speak(this.words[this.currentIndex].correct, true);
-        } else{
-            SpeechUtils.speak(this.words[this.currentIndex].question);
-        }
     }
 }

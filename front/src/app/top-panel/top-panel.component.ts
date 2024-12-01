@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {SpeechUtils} from "../speechutils";
 
 @Component({
   selector: 'app-top-panel',
@@ -17,6 +16,4 @@ export class TopPanelComponent {
         this.showSettings = !this.showSettings;
         this.settingsEmitter.emit();
     }
-
-    protected readonly SpeechUtils = SpeechUtils;
 }

@@ -10,7 +10,7 @@
 
 i {
     color: var(--soft-ivory);
-    font-size: clamp(20px, 2vw, 28px);
+    font-size: clamp(20px, 2vw, 44px);
 }
 
 #canvas-container {

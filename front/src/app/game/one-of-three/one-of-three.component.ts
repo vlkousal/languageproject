@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {Mode} from "../../constants";
-import {SpeechUtils} from "../../speechutils";
 import {GameSettingsComponent} from "../game-settings/game-settings.component";
 import {GameComponent} from "../game-component/game.component";
 import {Word} from "../../../word";
@@ -36,7 +35,6 @@ export class OneOfThreeComponent extends GameComponent {
             this.buttonColors[answerIndex] = "#fd7676";
             const correctIndex = currentWord.answers.indexOf(currentWord.correct);
             this.buttonColors[correctIndex] = "#59bd59";
-            SpeechUtils.speak(currentWord.correct, !this.isFlipped);
             this.allowAnswering = false;
             setTimeout(() => {
                 this.buttonColors[answerIndex] = "#F9F8EB";
@@ -58,12 +56,8 @@ export class OneOfThreeComponent extends GameComponent {
 
     speakQuestion(): void {
         const language: string | null = sessionStorage.getItem("language");
-        if(language != null) {
-            SpeechUtils.speak(this.words[this.index].question, this.isFlipped);
-        }
     }
 
-    protected readonly SpeechUtils = SpeechUtils;
     protected readonly GameSettingsComponent = GameSettingsComponent;
     protected readonly localStorage = localStorage;
     protected readonly Mode = Mode;

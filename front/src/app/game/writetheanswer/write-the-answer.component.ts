@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {SpeechUtils} from "../../speechutils";
 import {FormControl} from "@angular/forms";
 import {Mode} from "../../constants";
 import {GameComponent} from "../game-component/game.component";
@@ -30,7 +29,6 @@ export class WriteTheAnswerComponent extends GameComponent {
             this.evalCorrect();
         } else{
             this.evalWrong();
-            SpeechUtils.speak(currentWord.correct, !this.isFlipped);
         }
         this.writtenAnswer.setValue("");
 
@@ -47,9 +45,6 @@ export class WriteTheAnswerComponent extends GameComponent {
 
     speakQuestion(): void {
         const language: string | null = sessionStorage.getItem("language");
-        if(language != null) {
-            SpeechUtils.speak(this.words[this.index].question, this.isFlipped);
-        }
     }
 
     protected readonly localStorage = localStorage;

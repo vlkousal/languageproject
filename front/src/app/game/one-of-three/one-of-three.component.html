@@ -15,9 +15,9 @@
 			<button (click)="speakQuestion()">{{ words[index].question }}</button>
 		</div>
 		<p id="phonetic" [style.visibility]="(localStorage.getItem('showPhonetic') != 'false' && !isFlipped) ? 'visible' : 'hidden'">{{  words[index].phonetic }}</p>
-		<button [ngStyle]="{'background-color': buttonColors[0]}" (dblclick)="checkAnswer(0)" (click)="SpeechUtils.speak(words[index].answers[0], !isFlipped)"> {{ words[index].answers[0] }}</button>
-		<button [ngStyle]="{'background-color': buttonColors[1]}" (dblclick)="checkAnswer(1)" (click)="SpeechUtils.speak(words[index].answers[1], !isFlipped)">{{ words[index].answers[1] }}</button>
-		<button [ngStyle]="{'background-color': buttonColors[2]}" (dblclick)="checkAnswer(2)" (click)="SpeechUtils.speak(words[index].answers[2], !isFlipped)">{{ words[index].answers[2] }}</button>
+		<button [ngStyle]="{'background-color': buttonColors[0]}" (dblclick)="checkAnswer(0)"> {{ words[index].answers[0] }}</button>
+		<button [ngStyle]="{'background-color': buttonColors[1]}" (dblclick)="checkAnswer(1)">{{ words[index].answers[1] }}</button>
+		<button [ngStyle]="{'background-color': buttonColors[2]}" (dblclick)="checkAnswer(2)">{{ words[index].answers[2] }}</button>
 	</div>
 </div>
 

@@ -1,7 +1,6 @@
 import {Component, EventEmitter, HostListener, Output} from '@angular/core';
 import {GameComponent} from "../game-component/game.component";
 import {BACKEND, Mode} from "../../constants";
-import {SpeechUtils} from "../../speechutils";
 import {Word} from "../../../word";
 import {CookieService} from "ngx-cookie";
 import {Utils} from "../../utils";
@@ -98,9 +97,7 @@ export class DrawCharactersComponent extends GameComponent {
     }
 
     override setNewWord(): void {
-        const currentWord: Word = this.words[this.index];
         this.resetCanvas();
-        SpeechUtils.speak(currentWord.question, false);
     }
 
     async getDrawingResult(img: string): Promise<boolean> {
@@ -151,7 +148,6 @@ export class DrawCharactersComponent extends GameComponent {
         } else{
             this.evalCorrect();
         }
-        SpeechUtils.speak(currentWord.correct, true);
 
         context.fillText(currentWord.question, 0, 170);
         setTimeout(() => {
@@ -226,8 +222,6 @@ export class DrawCharactersComponent extends GameComponent {
         return {r, g, b};
     }
 
-
-    protected readonly SpeechUtils = SpeechUtils;
     protected readonly localStorage = localStorage;
     protected readonly Mode = Mode;
 }

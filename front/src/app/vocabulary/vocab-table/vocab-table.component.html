@@ -12,9 +12,9 @@
 
 		<tbody>
 		<tr *ngFor="let word of set.words">
-			<td (click)="SpeechUtils.speak(word.question)">{{ word.question }}</td>
-			<td (click)="SpeechUtils.speak(word.question)">{{ word.phonetic }}</td>
-			<td (click)="SpeechUtils.speak(word.correct, true)">{{ word.correct }}</td>
+			<td>{{ word.question }}</td>
+			<td>{{ word.phonetic }}</td>
+			<td>{{ word.correct }}</td>
 			<td>{{ Math.floor(word.getModeScore(mode)) }}</td>
 		</tr>
 		</tbody>
