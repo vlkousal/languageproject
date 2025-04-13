@@ -407,7 +407,7 @@ def set_vocabulary(vocab_set: VocabularySet, user: User, vocabulary: List[Dict[s
 # get all languages
 @api_view(["GET"])
 def get_languages(request):
-    lang_list = []
+    languages = {}
     for language in Language.objects.all():
-        lang_list.append(language.name)
-    return Response(data={"languages": lang_list}, status=status.HTTP_200_OK)
+        languages[language.name] = language.alpha2
+    return Response(data={"languages": languages}, status=status.HTTP_200_OK)

@@ -1,50 +1,49 @@
-Albanian
-Arabic
-Armenian
-Belarusian
-Bosnian
-Bulgarian
-Catalan
-Chinese (Mandarin)
-Chinese (Cantonese)
-Croatian
-Czech
-Danish
-Dutch
-Esperanto
-Estonian
-Filipino
-Finnish
-French
-Georgian
-German
-Greek
-Hawaiian
-Hindi
-Hungarian
-Icelandic
-Indonesian
-Irish
-Italian
-Japanese
-Korean
-Latin
-Latvian
-Lithuanian
-Luxembourgish
-Macedonian
-Mongolian
-Norwegian
-Polish
-Portuguese
-Romanian
-Russian
-Serbian
-Slovak
-Slovenian
-Spanish
-Swedish
-Thai
-Turkish
-Ukrainian
-Vietnamese
+Albanian, AL
+Arabic, SA
+Armenian, AM
+Belarusian, BY
+Bosnian, BA
+Bulgarian, BG
+Catalan, ES
+Mandarin, CN
+Cantonese, HK
+Croatian, HR
+Czech, CZ
+Danish, DK
+Dutch, NL
+Estonian, EE
+Filipino, PH
+Finnish, FI
+French, FR
+Georgian, GE
+German, DE
+Greek, GR
+Hawaiian, US
+Hindi, IN
+Hungarian, HU
+Icelandic, IS
+Indonesian, ID
+Irish, IE
+Italian, IT
+Japanese, JP
+Korean, KR
+Latin, VA
+Latvian, LV
+Lithuanian, LT
+Luxembourgish, LU
+Macedonian, MK
+Mongolian, MN
+Norwegian, NO
+Polish, PL
+Portuguese, PT
+Romanian, RO
+Russian, RU
+Serbian, RS
+Slovak, SK
+Slovenian, SI
+Spanish, ES
+Swedish, SE
+Thai, TH
+Turkish, TR
+Ukrainian, UA
+Vietnamese, VN

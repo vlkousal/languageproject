@@ -28,7 +28,7 @@ def update_profile_picture(request):
     supabase.storage.from_("profile_pictures").upload(
         path=user.username + ".jpg",
         file=image_data,
-        file_options={"upsert": "true", "content-type": "image/jpeg", "xd": "rofl"},
+        file_options={"upsert": "true", "content-type": "image/jpeg"},
     )
     response = supabase.storage.from_("profile_pictures").create_signed_url(user.username + ".jpg", expires_in=120)
     return Response(status=status.HTTP_200_OK, data={"url": response["signedURL"]})

@@ -7,19 +7,21 @@ from django.core.exceptions import ObjectDoesNotExist
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "languageproject_back.settings")
 django.setup()
 
-from api.models import Language, ForumCategory
+from api.models import Language
 
 
 counter: int = 0
 
 with open("languages.txt", "r") as content:
     for line in content.readlines():
-        language: str = line.strip()
-        fltr = Language.objects.filter(name=language)
+        line = line.strip()
+        language_name: str = line.split(", ")[0]
+        language_code: str = line.split(", ")[1]
+
+        fltr = Language.objects.filter(name=language_name)
         if len(fltr) == 0:
-            language: str = line.strip()
             counter += 1
-            Language.objects.create(name=language)
+            Language.objects.create(name=language_name, alpha2=language_code)
 
 print("Added", counter, " langauges to the database.")
 
@@ -44,5 +46,3 @@ for language in Language.objects.all():
     if languages_category_id != -1:
         ForumCategory.objects.create(name=language.name, supercategory_id=languages_category_id)
 """
-
-import GPT4all
