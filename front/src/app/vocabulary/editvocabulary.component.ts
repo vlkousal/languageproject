@@ -1,11 +1,10 @@
 import {Component} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {ActivatedRoute} from '@angular/router';
-import { FLAGS} from "../constants";
 import {ApiTools} from "../api-tools";
 import {Word} from "../../word";
 import {CookieService} from "ngx-cookie";
-import {VocabularySet} from "../../vocabulary-set";
+import {VocabularySet} from "../../VocabularySet";
 
 
 @Component({
@@ -31,8 +30,6 @@ export class EditVocabularyComponent {
         const vocabData = await ApiTools.getVocabJson(this.setID, this.cookieService);
         const parsed = JSON.parse(vocabData);
         this.set = new VocabularySet(parsed.name, this.setID, parsed.author, parsed.description,
-            FLAGS[parsed.first_language] + " " + parsed.first_language, [], true);
+            parsed.first_language, [], true);
     }
-
-    protected readonly FLAGS = FLAGS;
 }

@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import {BACKEND, FLAGS, Mode} from "../constants";
+import {BACKEND, Mode} from "../constants";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ApiTools} from "../api-tools";
 import {first} from "rxjs";
 import {Utils} from "../utils";
 import {Word} from "../../word";
 import {CookieService} from "ngx-cookie";
-import {VocabularySet} from "../../vocabulary-set";
+import {VocabularySet} from "../../VocabularySet";
 
 @Component({
     selector: 'app-vocabulary',
@@ -151,7 +151,6 @@ export class VocabularyComponent {
     }
 
     protected readonly first = first;
-    protected readonly FLAGS = FLAGS;
     protected readonly Mode = Mode;
     protected readonly Word = Word;
 }

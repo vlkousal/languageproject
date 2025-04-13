@@ -1,9 +1,9 @@
 import {Component, Input} from '@angular/core';
 import {FormControl} from "@angular/forms";
-import {FLAGS, State} from "../constants";
+import {BACKEND, Language} from "../constants";
 import {Word} from "../../word";
 import {ApiTools} from "../api-tools";
-import {VocabularySet} from "../../vocabulary-set";
+import {VocabularySet} from "../../VocabularySet";
 import {CookieService} from "ngx-cookie";
 
 interface WordType {
@@ -11,6 +11,13 @@ interface WordType {
     question: string;
     phonetic: string;
     correct: string;
+}
+
+enum State {
+    LANGUAGE_SELECTION = 0,
+    NAME_PAGE = 1,
+    WORD_PAGE = 2,
+    SUMMARY = 3
 }
 
 @Component({
@@ -21,18 +28,18 @@ interface WordType {
 export class CreateVocabularyComponent {
 
     feedback: string = "Please enter a name.";
-    languages: string[] = [];
+
+    languages: Language[] = [];
+    selectedLanguage: Language | null = null;
 
     name: FormControl<string> = new FormControl("") as FormControl<string>;
     description : FormControl<string> = new FormControl("") as FormControl<string>;
-
-    language: FormControl<string> = new FormControl("") as FormControl<string>;
 
     @Input() setID: number | null = null;
     words: Word[] = [];
 
     lastNameLength: number = 0;
-    state: State = State.NAME_PAGE;
+    state: State = State.LANGUAGE_SELECTION;
     isValid: boolean = false
     relevantWords: Set<Word> = new Set<Word>();
 
@@ -41,29 +48,30 @@ export class CreateVocabularyComponent {
     constructor(private cookieService: CookieService) { }
 
     async ngOnInit(): Promise<void> {
-        this.languages = await ApiTools.getLanguages();
-        if(this.languages.length != 0) {
-            const randomIndex: number = Math.floor(Math.random() * this.languages.length);
-            this.language.setValue(this.languages[randomIndex]);
-        }
+        this.languages = await this.getLanguages();
+        console.log(this.languages);
+
         if(this.setID != null) {
             const vocabData = await ApiTools.getVocabJson(this.setID, this.cookieService);
             const parsed = JSON.parse(vocabData);
             this.name.setValue(parsed.name);
             this.description.setValue(parsed.description);
-            this.language.setValue(FLAGS[parsed.first_language] + " " + parsed.first_language);
 
             parsed.vocabulary.forEach((word: WordType) => {
                 this.words.push(new Word(word.id, [], word.question, word.phonetic, word.correct, [], []));
             });
         }
         this.onInputChange();
-        await this.getRelevantWords();
+        //await this.getRelevantWords();
+    }
+
+    getSelectedLanguage(language: Language): void {
+        this.selectedLanguage = language;
     }
 
     onInputChange(): void {
-        this.set = new VocabularySet(this.getName(), -1, "", this.getDescription(),
-            this.getLanguage(), this.words, this.setID != null);
+        //this.set = new VocabularySet(this.getName(), -1, "", this.getDescription(),
+          //  this.getLanguage(), this.words, this.setID != null);
         const nameLength = this.getName().length;
         this.isValid = false;
 
@@ -75,6 +83,7 @@ export class CreateVocabularyComponent {
         this.isValid = true;
     }
 
+    /*
     async getRelevantWords(): Promise<void> {
         this.relevantWords = new Set<Word>();
         const parsed = JSON.parse(await ApiTools.getRelevantVocabulary(this.getLanguage()));
@@ -83,6 +92,7 @@ export class CreateVocabularyComponent {
             if(!this.relevantWords.has(word)) this.relevantWords.add(word);
         }
     }
+     */
 
     checkNamePage(): void {
         if(this.isValid) this.state = State.WORD_PAGE;
@@ -96,9 +106,26 @@ export class CreateVocabularyComponent {
         return this.description.getRawValue();
     }
 
-    // the flag and the space gets removed
-    getLanguage(): string {
-        return this.language.getRawValue();
+    async getLanguages() : Promise<Language[]> {
+        try {
+            const response = await fetch(BACKEND + 'api/getlanguages/', {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            if (!response.ok) {
+                throw new Error('Network response was not ok.');
+            }
+            const json = await response.json();
+            return Object.entries(json.languages).map(([name, alpha2]) => ({
+                name,
+                alpha2: alpha2 as string
+            }));
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
     }
 
     protected readonly State = State;

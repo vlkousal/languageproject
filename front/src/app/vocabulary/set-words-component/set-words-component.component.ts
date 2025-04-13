@@ -2,8 +2,8 @@ import {Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild
 import {Word} from "../../../word";
 import {Utils} from "../../utils";
 import {FormControl} from "@angular/forms";
-import {State} from "../../constants";
-import {VocabularySet} from "../../../vocabulary-set";
+import {VocabularySet} from "../../../VocabularySet";
+import {Language} from "../../constants";
 
 enum Category {
     TEXT = 0,
@@ -19,7 +19,7 @@ enum Category {
 export class SetWordsComponentComponent {
 
     @Input() set: VocabularySet | undefined;
-    @Input() language: string = "";
+    @Input() language: Language | null = null;
     @Input() relevantWords: Set<Word> = new Set<Word>();
     @Input() setID: number | null = null;
 
@@ -35,7 +35,6 @@ export class SetWordsComponentComponent {
     delimiter = new FormControl(";") as FormControl<string>;
     counter: number = 0;
     filteredRelevantWords: Set<Word> = new Set<Word>();
-    state: State = State.WORD_PAGE;
 
     constructor(private renderer: Renderer2) { }
 
@@ -101,7 +100,7 @@ export class SetWordsComponentComponent {
     showRelevant() {
         this.selectedCategory = Category.RELEVANT;
         this.filter.setValue("");
-        this.wordsFilter.setValue("");false
+        this.wordsFilter.setValue("");
         this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#5C8D89");
         this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#F9F8EB");
         this.renderer.setStyle(this.summaryButton.nativeElement, 'background-color', "#5C8D89");
@@ -208,5 +207,5 @@ export class SetWordsComponentComponent {
     }
 
     protected readonly Category = Category;
-    protected readonly State = State;
+    protected readonly console = console;
 }

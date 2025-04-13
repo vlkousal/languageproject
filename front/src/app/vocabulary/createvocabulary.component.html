@@ -1,3 +1,7 @@
+<div *ngIf="state == State.LANGUAGE_SELECTION">
+    <app-language-selection [languages]="languages" (onContinue)="state = state + 1; getSelectedLanguage($event)"></app-language-selection>
+</div>
+
 <div class="form" *ngIf="state == State.NAME_PAGE">
 		<label for="name">Name:</label>
 		<input (input)="onInputChange()" id="name" type="text" [formControl]="name" placeholder="The name of the set" required maxlength="48"/>
@@ -5,16 +9,11 @@
 		<label for="description">Description:</label>
 		<textarea (input)="onInputChange()" id="description" [formControl]="description" maxlength="256" placeholder="The description of the set (not required)"></textarea>
 
-		<label for="language">Language:</label>
-		<select id="language" [formControl]="language" (change)="getRelevantWords()">
-			<option *ngFor="let language of languages" [value]="language">{{language}}</option>
-		</select>
-
 		<p id="feedback" [ngStyle]="{ 'visibility': isValid ? 'hidden' : 'visible' }">{{ feedback }}</p>
 		<button (click)="checkNamePage()">Continue</button>
 </div>
 
 <app-set-words-component *ngIf="state == State.WORD_PAGE"
                          [relevantWords]="relevantWords"
-                         [language]="getLanguage()" (onGoBack)="state = State.NAME_PAGE"
+                         [language]="selectedLanguage" (onGoBack)="state = State.NAME_PAGE"
                          [set]="set" [setID]="setID"></app-set-words-component>

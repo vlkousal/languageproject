@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output, SimpleChanges} from '@angular/core';
 import {Word} from "../../../word";
 import {Mode} from "../../constants";
-import {VocabularySet} from "../../../vocabulary-set";
+import {VocabularySet} from "../../../VocabularySet";
 
 @Component({
   selector: 'app-vocab-table',

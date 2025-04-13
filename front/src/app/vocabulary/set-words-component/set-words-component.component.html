@@ -1,4 +1,4 @@
-<div id="container" *ngIf="state == State.WORD_PAGE">
+<div id="container">
 
 	<div class="top-buttons">
 		<button #textButton (click)="showText()">Text</button>
@@ -64,9 +64,6 @@
 
 	<div id="bottom-panel">
 		<i class="fas fa-arrow-left" (click)="onGoBack.emit()"></i>
-		<i class="fas fa-arrow-right" (click)="state = State.SUMMARY"></i>
+		<i class="fas fa-arrow-right" (click)="console.log('XD')"></i>
 	</div>
 </div>
-
-<app-vocabulary-creation-summary *ngIf="state == State.SUMMARY" (onGoBack)="state = State.WORD_PAGE" [set]="set!">
-</app-vocabulary-creation-summary>

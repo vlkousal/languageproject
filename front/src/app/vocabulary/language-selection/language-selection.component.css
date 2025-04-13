@@ -1,0 +1,42 @@
+.language-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.language-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--muted-teal);
+    background-color: var(--pastel-mint);
+    color: var(--muted-teal);
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.language-button.selected {
+    background-color: var(--soft-ivory);
+}
+
+.language-button:hover {
+    background-color: #e7f0ff;
+}
+
+.flag {
+    width: 36px;
+    height: 24px;
+    margin-bottom: 8px;
+}
+
+.language-label {
+    text-align: center;
+    word-break: break-word;
+}
