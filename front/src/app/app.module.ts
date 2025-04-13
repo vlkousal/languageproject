@@ -23,11 +23,12 @@ import { GameComponent } from './game/game-component/game.component';
 import { DrawCharactersComponent } from './game/draw-characters/draw-characters.component';
 import { VocabTableComponent } from './vocabulary/vocab-table/vocab-table.component';
 import {CookieModule} from "ngx-cookie";
-import { SetWordsComponentComponent } from './vocabulary/set-words-component/set-words-component.component';
+import { WordInputComponent } from './vocabulary/word-input/word-input.component';
 import { VocabularyCreationSummaryComponent } from './vocabulary/vocabulary-creation-summary/vocabulary-creation-summary.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { LanguageSelectionComponent } from './vocabulary/language-selection/language-selection.component';
 
 @NgModule({
     declarations: [
@@ -50,10 +51,11 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
         GameComponent,
         DrawCharactersComponent,
         VocabTableComponent,
-        SetWordsComponentComponent,
+        WordInputComponent,
         VocabularyCreationSummaryComponent,
         NotFoundComponent,
-        UserProfileComponent
+        UserProfileComponent,
+        LanguageSelectionComponent
     ],
     imports: [
         BrowserModule,

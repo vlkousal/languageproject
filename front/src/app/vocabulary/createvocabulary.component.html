@@ -1,6 +1,9 @@
-<div *ngIf="state == State.LANGUAGE_SELECTION">
-    <app-language-selection [languages]="languages" (onContinue)="state = state + 1; getSelectedLanguage($event)"></app-language-selection>
-</div>
+ <app-language-selection
+        *ngIf="state == State.LANGUAGE_SELECTION"
+        [languages]="languages"
+        (onContinue)="state = state + 1;
+        getSelectedLanguage($event)">
+    </app-language-selection>
 
 <div class="form" *ngIf="state == State.NAME_PAGE">
 		<label for="name">Name:</label>
@@ -13,7 +16,11 @@
 		<button (click)="checkNamePage()">Continue</button>
 </div>
 
-<app-set-words-component *ngIf="state == State.WORD_PAGE"
-                         [relevantWords]="relevantWords"
-                         [language]="selectedLanguage" (onGoBack)="state = State.NAME_PAGE"
-                         [set]="set" [setID]="setID"></app-set-words-component>
+<app-word-input
+    *ngIf="state == State.WORD_INPUT"
+    [relevantWords]="relevantWords"
+    [language]="selectedLanguage"
+    (onGoBack)="state = state - 1"
+    [set]="set"
+    [setID]="setID">
+</app-word-input>

@@ -12,11 +12,11 @@ enum Category {
 }
 
 @Component({
-  selector: 'app-set-words-component',
-  templateUrl: './set-words-component.component.html',
-  styleUrls: ['./set-words-component.component.css']
+  selector: 'app-word-input',
+  templateUrl: './word-input.component.html',
+  styleUrls: ['./word-input.component.css']
 })
-export class SetWordsComponentComponent {
+export class WordInputComponent {
 
     @Input() set: VocabularySet | undefined;
     @Input() language: Language | null = null;

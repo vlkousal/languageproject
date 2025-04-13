@@ -28,7 +28,8 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/flag-icons/css/flag-icons.min.css"
             ],
             "scripts": [],
             "serviceWorker": true,

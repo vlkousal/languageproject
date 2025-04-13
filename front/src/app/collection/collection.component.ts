@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from "@angular/router";
-import {BACKEND, FLAGS} from "../constants";
-import {VocabularySet} from "../../vocabulary-set";
+import {BACKEND} from "../constants";
+import {VocabularySet} from "../../VocabularySet";
 import {CookieService} from "ngx-cookie";
 
 @Component({
@@ -99,6 +99,4 @@ export class CollectionComponent {
             console.error("Couldn't delete the set!");
         })
     }
-
-    protected readonly FLAGS = FLAGS;
 }

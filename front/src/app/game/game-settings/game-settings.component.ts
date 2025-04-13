@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Utils} from "../../utils";
-import {FLAGS} from "../../constants";
 import {Word} from "../../../word";
 
 @Component({
@@ -75,6 +74,4 @@ export class GameSettingsComponent {
     onShowPhoneticChange(): void {
         localStorage.setItem("showPhonetic", String(this.showPhonetic));
     }
-
-    protected readonly FLAGS = FLAGS;
 }

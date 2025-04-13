@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SetWordsComponentComponent } from './set-words-component.component';
+import { WordInputComponent } from './word-input.component';
 
 describe('SetWordsComponentComponent', () => {
-  let component: SetWordsComponentComponent;
-  let fixture: ComponentFixture<SetWordsComponentComponent>;
+  let component: WordInputComponent;
+  let fixture: ComponentFixture<WordInputComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SetWordsComponentComponent]
+      declarations: [WordInputComponent]
     });
-    fixture = TestBed.createComponent(SetWordsComponentComponent);
+    fixture = TestBed.createComponent(WordInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

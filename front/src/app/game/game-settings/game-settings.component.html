@@ -14,13 +14,13 @@
 		</div>
 	</div>
 
-	<p class="language-name">{{ FLAGS[language]}}  {{ language }}</p>
+	<p class="language-name">{{ language }}</p>
 	<select [(ngModel)]="languageVoice" (change)="onLanguageVoiceChange()">
 		<option *ngFor="let language of languageNames" [value]="language">{{ language }}</option>
 	</select>
 	<button (click)="testLanguageVoice()">Test</button>
 
-	<p class="english-voice">{{ FLAGS["English"]}} English</p>
+	<p class="english-voice">English</p>
 	<select [(ngModel)]="englishVoice" (change)="onEnglishVoiceChange()">
 		<option *ngFor="let language of languageNames" [value]="language">{{ language }}</option>
 	</select>

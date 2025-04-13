@@ -15,8 +15,8 @@ interface WordType {
 
 enum State {
     LANGUAGE_SELECTION = 0,
-    NAME_PAGE = 1,
-    WORD_PAGE = 2,
+    WORD_INPUT = 1,
+    NAME_PAGE = 2,
     SUMMARY = 3
 }
 
@@ -95,7 +95,7 @@ export class CreateVocabularyComponent {
      */
 
     checkNamePage(): void {
-        if(this.isValid) this.state = State.WORD_PAGE;
+        if(this.isValid) this.state = State.WORD_INPUT;
     }
 
     getName(): string {

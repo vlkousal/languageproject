@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {BACKEND, FLAGS} from "../constants";
-import {VocabularySet} from "../../vocabulary-set";
+import {BACKEND} from "../constants";
+import {VocabularySet} from "../../VocabularySet";
 
 
 @Component({
@@ -19,7 +19,7 @@ export class IndexComponent {
             id: number;
             language: string;
         }) => {
-            this.sets.push(new VocabularySet(item.name, item.id, "", "",FLAGS[item.language], [], false));
+            this.sets.push(new VocabularySet(item.name, item.id, "", "", "", [], false));
         });
         this.debug = await this.getSets();
     }
