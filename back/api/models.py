@@ -55,10 +55,10 @@ class WordRecord(models.Model):
 
 class VocabularySetRecord(models.Model):
     class Mode(models.TextChoices):
-        ONE_OF_THREE = 0, _('One Of Three')
-        WRITE_THE_ANSWER = 1, _('Write The Answer')
-        FLASHCARDS = 2, _("Flashcards")
-        DRAW_CHARACTER = 3, _('Draw Characters')
+        ONE_OF_THREE = "0", _('One Of Three')
+        WRITE_THE_ANSWER = "1", _('Write The Answer')
+        FLASHCARDS = "2", _("Flashcards")
+        DRAW_CHARACTER = "3", _('Draw Characters')
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     set = models.ForeignKey(VocabularySet, on_delete=models.CASCADE)

@@ -4,3 +4,4 @@ django-cors-headers==4.4.0
 easyocr==1.7.2
 psycopg2-binary==2.9.10
 httpx[http2]==0.27.2
+supabase==2.15.0
