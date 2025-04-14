@@ -15,11 +15,9 @@ export class LanguageSelectionComponent {
 
     selectLanguage(lang: Language) {
         this.selectedLanguage = lang;
-        console.log('Vybral jsi jazyk:', lang);
     }
 
     goNext(): void {
         if(this.selectedLanguage != null) this.onContinue.emit(this.selectedLanguage);
     }
-
 }

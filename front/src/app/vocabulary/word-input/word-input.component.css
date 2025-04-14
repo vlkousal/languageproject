@@ -64,3 +64,25 @@ p {
     margin-right: 1%;
 }
 
+.main-layout {
+    display: flex;
+    flex-direction: row;
+}
+
+.side-panel {
+    background-color: var(--pastel-mint);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px;
+    gap: 10px;
+    border-right: 2px solid var(--muted-teal);
+}
+
+
+
+.side-panel button:hover {
+    background-color: var(--muted-teal);
+    color: white;
+}
+

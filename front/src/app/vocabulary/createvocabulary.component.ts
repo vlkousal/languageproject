@@ -39,7 +39,7 @@ export class CreateVocabularyComponent {
     words: Word[] = [];
 
     lastNameLength: number = 0;
-    state: State = State.LANGUAGE_SELECTION;
+    state: State = State.WORD_INPUT;
     isValid: boolean = false
     relevantWords: Set<Word> = new Set<Word>();
 
