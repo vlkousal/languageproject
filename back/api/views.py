@@ -408,15 +408,18 @@ def set_vocabulary(vocab_set: VocabularySet, user: User, vocabulary: List[Dict[s
 # get all languages
 @api_view(["GET"])
 def get_languages(request):
-    languages = {}
-    for language in Language.objects.all():
-        languages[language.name] = language.alpha2
+    languages = [
+        {"name": language.name, "alpha2": language.alpha2}
+        for language in Language.objects.all()
+    ]
     return Response(data={"languages": languages}, status=status.HTTP_200_OK)
+
 
 # GETs all vocabulary set categories
 @api_view(["GET"])
 def get_vocabulary_categories(request):
-    categories = {}
-    for category in VocabularySetCategory.objects.all():
-        categories[category.name] = category.fa_icon
+    categories = [
+        {"name": category.name, "iconName": category.fa_icon}
+        for category in VocabularySetCategory.objects.all()
+    ]
     return Response(data={"categories": categories}, status=status.HTTP_200_OK)

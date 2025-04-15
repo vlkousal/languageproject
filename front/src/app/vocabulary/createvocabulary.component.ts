@@ -149,10 +149,7 @@ export class CreateVocabularyComponent {
                 throw new Error('Network response was not ok.');
             }
             const json = await response.json();
-            return Object.entries(json.categories).map(([name, iconName]) => ({
-                name,
-                iconName: iconName as string
-            }));
+            return json.categories as Category[];
         } catch (error) {
             console.error('Error:', error);
             throw error;
