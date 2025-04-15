@@ -5,6 +5,8 @@ import {Word} from "../../word";
 import {ApiTools} from "../api-tools";
 import {VocabularySet} from "../../VocabularySet";
 import {CookieService} from "ngx-cookie";
+import { HttpClient } from '@angular/common/http';
+import {map, Observable} from "rxjs";
 
 interface WordType {
     id: number;
@@ -48,12 +50,11 @@ export class CreateVocabularyComponent {
 
     set: VocabularySet | undefined;
 
-    constructor(private cookieService: CookieService) { }
+    constructor(private cookieService: CookieService, private http: HttpClient) { }
 
     async ngOnInit(): Promise<void> {
-        this.languages = await this.getLanguages();
-        this.categories = await this.getVocabularyCategories();
-        console.log(this.languages);
+        this.getLanguages().subscribe(languages => this.languages = languages);
+        this.getVocabularyCategories().subscribe(categories => this.categories = categories);
 
         if(this.setID != null) {
             const vocabData = await ApiTools.getVocabJson(this.setID, this.cookieService);
@@ -115,45 +116,18 @@ export class CreateVocabularyComponent {
         return this.description.getRawValue();
     }
 
-    async getLanguages() : Promise<Language[]> {
-        try {
-            const response = await fetch(BACKEND + 'api/getlanguages/', {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-            if (!response.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            const json = await response.json();
-            return Object.entries(json.languages).map(([name, alpha2]) => ({
-                name,
-                alpha2: alpha2 as string
-            }));
-        } catch (error) {
-            console.error('Error:', error);
-            throw error;
-        }
+    getLanguages(): Observable<Language[]> {
+        return this.http.get<{ languages: Language[] }>(`${BACKEND}api/getlanguages/`)
+            .pipe(
+                map(response => response.languages)
+            )
     }
 
-    async getVocabularyCategories() : Promise<Category[]> {
-        try {
-            const response = await fetch(BACKEND + 'api/getvocabcategories/', {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-            if (!response.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            const json = await response.json();
-            return json.categories as Category[];
-        } catch (error) {
-            console.error('Error:', error);
-            throw error;
-        }
+    getVocabularyCategories(): Observable<Category[]> {
+        return this.http.get<{ categories: Category[] }>(`${BACKEND}api/getvocabcategories/`)
+            .pipe(
+                map(response => response.categories)
+            );
     }
 
     protected readonly State = State;
