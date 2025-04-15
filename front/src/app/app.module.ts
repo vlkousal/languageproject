@@ -30,6 +30,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { LanguageSelectionComponent } from './vocabulary/language-selection/language-selection.component';
 import { CategorySelectionComponent } from './vocabulary/category-selection/category-selection.component';
+import { VocabularyTextInputComponent } from './vocabulary/vocabulary-text-input/vocabulary-text-input.component';
 
 @NgModule({
     declarations: [
@@ -57,7 +58,8 @@ import { CategorySelectionComponent } from './vocabulary/category-selection/cate
         NotFoundComponent,
         UserProfileComponent,
         LanguageSelectionComponent,
-        CategorySelectionComponent
+        CategorySelectionComponent,
+        VocabularyTextInputComponent
     ],
     imports: [
         BrowserModule,

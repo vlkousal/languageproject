@@ -79,10 +79,33 @@ p {
     border-right: 2px solid var(--muted-teal);
 }
 
-
-
 .side-panel button:hover {
     background-color: var(--muted-teal);
     color: white;
 }
 
+.button-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--muted-teal);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.button-with-icon i {
+    width: 24px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.button-with-icon:hover {
+    background-color: #0056b3;
+}

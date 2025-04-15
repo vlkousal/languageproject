@@ -1,0 +1,20 @@
+<div class="text-area">
+    <textarea type="text"
+              class="numbered"
+              id="textarea"
+              required
+              (input)="onInputChange()"
+              [(ngModel)]="content">
+    </textarea>
+    <input type="file" (change)="onFileSelected($event)" />
+</div>
+
+<div class="filter">
+    <label for="delimiter">Delimiter: </label>
+    <input (input)="onInputChange()"
+           id="delimiter"
+           type="text"
+           required size="1"
+           [formControl]="delimiter"
+           [defaultValue]="';'">
+</div>

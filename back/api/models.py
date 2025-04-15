@@ -12,6 +12,7 @@ class Language(models.Model):
 
 
 class User(AbstractUser):
+    bio = models.CharField(max_length=256, blank=True)
     location = models.CharField(max_length=32, blank=True)
     languages_of_interest = models.ManyToManyField(Language)
 

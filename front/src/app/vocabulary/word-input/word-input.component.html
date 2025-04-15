@@ -1,17 +1,27 @@
 <div id="container" class="main-layout">
 
     <div class="side-panel">
-        <button #textButton (click)="showText()">Text</button>
-        <button #relevantButton (click)="showRelevant()">Suggestions</button>
-        <button #summaryButton (click)="showTable()">Summary</button>
+
+        <button class="button-with-icon" #textButton (click)="showText()">
+            <i class="fa-solid fa-pen-nib"></i>
+            <span>Write</span>
+        </button>
+
+        <button class="button-with-icon" #relevantButton (click)="showRelevant()">
+            <i class="fa-solid fa-clipboard-list"></i>
+            <span>Select</span>
+        </button>
+
+        <button class="button-with-icon" #summaryButton (click)="showTable()">
+            <i class="fa solid fa-magnifying-glass"></i>
+            <span>Preview</span>
+        </button>
     </div>
 
-    <div>
-        <div class="filter" *ngIf="selectedCategory == Category.TEXT">
-            <label for="delimiter">Delimiter: </label>
-            <input (input)="onInputChange()" id="delimiter" type="text" [formControl]="delimiter" required size="1" [defaultValue]="';'" style="width: 128px">
-        </div>
+    <app-vocabulary-text-input *ngIf="selectedCategory == Category.TEXT">
 
+    </app-vocabulary-text-input>
+    <div>
         <div class="filter" *ngIf="selectedCategory == Category.RELEVANT">
             <label for="filter">Filter: </label>
             <input (input)="onFilterChange()" id="filter" type="text" [formControl]="filter" style="width: 128px">
@@ -20,11 +30,6 @@
         <div class="filter" *ngIf="selectedCategory == Category.SUMMARY">
             <label for="filter">Filter: </label>
             <input (input)="onWordsFilterChange()" id="wordsFilter" type="text" [formControl]="wordsFilter" style="width: 128px">
-        </div>
-
-        <div class="text-area" *ngIf="selectedCategory == Category.TEXT">
-            <textarea (input)="onInputChange()" [(ngModel)]="content" type="text" class="numbered" id="textarea" required></textarea>
-            <input type="file" (change)="onFileSelected($event)" />
         </div>
 
         <div class="relevant-vocabulary" *ngIf="selectedCategory == Category.RELEVANT">

@@ -30,16 +30,18 @@
     background-color: #e7f0ff;
 }
 
-.flag {
-    width: 36px;
-    height: 24px;
-    margin-bottom: 8px;
-}
-
 .language-label {
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
+}
+
+i {
+    color: var(--muted-teal);
+}
+
+.language-button.selected i {
+    color: var(--medium-mint);
 }

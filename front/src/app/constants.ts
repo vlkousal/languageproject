@@ -22,3 +22,4 @@ export interface Category {
     iconName: string;
 }
 
+export const DEFAULT_DELIMETER = ",";

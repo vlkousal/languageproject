@@ -3,7 +3,7 @@ import {Word} from "../../../word";
 import {Utils} from "../../utils";
 import {FormControl} from "@angular/forms";
 import {VocabularySet} from "../../../VocabularySet";
-import {Language} from "../../constants";
+import {DEFAULT_DELIMETER, Language} from "../../constants";
 
 enum Category {
     TEXT = 0,
@@ -31,9 +31,10 @@ export class WordInputComponent {
     removedFromRelevant: Set<Word> = new Set<Word>();
 
     selectedCategory: Category = Category.TEXT;
-    content: string = "";
-    delimiter = new FormControl(";") as FormControl<string>;
-    counter: number = 0;
+
+    textContent: string = "";
+    delimeter: string = DEFAULT_DELIMETER;
+
     filteredRelevantWords: Set<Word> = new Set<Word>();
 
     constructor(private renderer: Renderer2) { }
@@ -47,11 +48,10 @@ export class WordInputComponent {
 
         if(this.set != null) {
             this.set.words.forEach((word: Word) => {
-                this.content += word.question + this.getDelimeter() + word.phonetic + this.getDelimeter() +
+                this.textContent += word.question + this.getDelimeter() + word.phonetic + this.getDelimeter() +
                     word.correct + "\n";
             });
         }
-        this.onInputChange();
     }
 
     onWordsFilterChange() {
@@ -115,33 +115,15 @@ export class WordInputComponent {
         this.renderer.setStyle(this.summaryButton.nativeElement, 'background-color', "#F9F8EB");
     }
 
-    onFileSelected(event: Event) {
-        const input = event.target as HTMLInputElement;
-        if(input == null || input.files == null) {
-            return;
-        }
-        const selectedFile = input.files[0];
-        const reader = new FileReader();
-
-        reader.onload = (e: ProgressEvent<FileReader>) => {
-            if(e.target != null && e.target.result != null) {
-                this.content = e.target.result.toString();
-                this.onInputChange();
-            }
-        };
-        reader.readAsText(selectedFile);
-    }
-
     addWord(word: Word) {
         if(this.set == undefined || this.set.words.includes(word)) return;
 
         const delimeter = this.getDelimeter();
-        if(this.content.charAt(this.content.length - 1) != "\n" &&
-            this.content.charAt(this.content.length - 1) != "") {
-            this.content += "\n";
+        if(this.textContent.charAt(this.textContent.length - 1) != "\n" &&
+            this.textContent.charAt(this.textContent.length - 1) != "") {
+            this.textContent += "\n";
         }
-        this.content += word.question + delimeter + word.phonetic + delimeter + word.correct + "\n";
-        this.onInputChange();
+        this.textContent += word.question + delimeter + word.phonetic + delimeter + word.correct + "\n";
         this.onWordsFilterChange();
         this.removedFromRelevant.add(word);
         this.relevantWords.delete(word);
@@ -149,15 +131,14 @@ export class WordInputComponent {
 
     removeWord(word: Word) {
         const delimiter: string = this.getDelimeter();
-        const lines: string[] = this.content.split("\n");
+        const lines: string[] = this.textContent.split("\n");
         const line: string = word.question + delimiter + word.phonetic + delimiter + word.correct;
-        this.content = "";
+        this.textContent = "";
         lines.forEach( (l) => {
             if(l != line && l != "") {
-                this.content += l + "\n";
+                this.textContent += l + "\n";
             }
         })
-        this.onInputChange();
         this.onWordsFilterChange();
 
         if(Word.containsWord(this.removedFromRelevant, word)) {
@@ -166,44 +147,12 @@ export class WordInputComponent {
         }
     }
 
-    isValidLine(line: string): boolean {
-        const splitLine: string[] = line.split(this.getDelimeter());
-        return splitLine.length == 3;
-    }
-
-    onInputChange(): void {
-        if(this.set == undefined) return;
-        this.counter = 0;
-        const lines: string[] = (this.content + "\n").split("\n");
-        const delimiter = this.getDelimeter();
-
-        if(this.content.length != 0) {
-            for(let i = 0; i < lines.length - 1; i++) {
-                const line: string = lines[i];
-                const word = new Word(0, [],  line.split(delimiter)[0],
-                line.split(delimiter)[1], line.split(delimiter)[2], [], []);
-
-                if(this.isValidLine(lines[i]) && word.question.length != 0 && word.correct.length != 0) {
-                    if(!this.set.words.includes(word)) {
-                        this.set.words.push(word);
-                        this.counter++;
-                    }
-                }
-            }
-        }
-        this.onWordsFilterChange();
-    }
-
     getFilter(): string {
       return this.filter.getRawValue();
     }
 
     getWordsFilter(): string {
         return this.wordsFilter.getRawValue();
-    }
-
-    getDelimeter(): string {
-        return this.delimiter.getRawValue();
     }
 
     protected readonly Category = Category;
