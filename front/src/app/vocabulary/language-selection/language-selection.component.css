@@ -43,3 +43,7 @@
     text-overflow: ellipsis;
     width: 100%;
 }
+
+#bottom-panel button {
+    width: 50%;
+}

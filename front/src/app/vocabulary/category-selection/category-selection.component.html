@@ -5,8 +5,8 @@
             [class.selected]="cat === selectedCategory"
             (click)="selectedCategory = cat;"
             class="language-button">
-            <span class="flag fi fi-{{lang.alpha2.toLowerCase()}}"></span>
-            <strong class="language-label">{{ lang.name }}</strong>
+            <i class="fas fa-{{ cat.iconName }}"></i>
+            <strong class="language-label">{{ cat.name }}</strong>
         </button>
     </div>
 

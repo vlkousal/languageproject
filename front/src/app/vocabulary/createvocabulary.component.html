@@ -7,8 +7,9 @@
 
  <app-category-selection
      *ngIf="state == State.CATEGORY_SELECTION"
-     [categories]=""
- >
+     [categories]="categories"
+     (onContinue)="state = state + 1;
+     getSelectedCategory($event)">
  </app-category-selection>
 
 <div class="form" *ngIf="state == State.NAME_PAGE">

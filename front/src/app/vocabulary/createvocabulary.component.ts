@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {FormControl} from "@angular/forms";
-import {BACKEND, Language} from "../constants";
+import {BACKEND, Category, Language} from "../constants";
 import {Word} from "../../word";
 import {ApiTools} from "../api-tools";
 import {VocabularySet} from "../../VocabularySet";
@@ -31,7 +31,9 @@ export class CreateVocabularyComponent {
     feedback: string = "Please enter a name.";
 
     languages: Language[] = [];
+    categories: Category[] = [];
     selectedLanguage: Language | null = null;
+    selectedCategory: Category | null = null;
 
     name: FormControl<string> = new FormControl("") as FormControl<string>;
     description : FormControl<string> = new FormControl("") as FormControl<string>;
@@ -40,7 +42,7 @@ export class CreateVocabularyComponent {
     words: Word[] = [];
 
     lastNameLength: number = 0;
-    state: State = State.WORD_INPUT;
+    state: State = 0;
     isValid: boolean = false
     relevantWords: Set<Word> = new Set<Word>();
 
@@ -50,6 +52,7 @@ export class CreateVocabularyComponent {
 
     async ngOnInit(): Promise<void> {
         this.languages = await this.getLanguages();
+        this.categories = await this.getVocabularyCategories();
         console.log(this.languages);
 
         if(this.setID != null) {
@@ -69,6 +72,11 @@ export class CreateVocabularyComponent {
     getSelectedLanguage(language: Language): void {
         this.selectedLanguage = language;
     }
+
+    getSelectedCategory(category: Category): void {
+        this.selectedCategory = category;
+    }
+
 
     onInputChange(): void {
         //this.set = new VocabularySet(this.getName(), -1, "", this.getDescription(),
@@ -122,6 +130,28 @@ export class CreateVocabularyComponent {
             return Object.entries(json.languages).map(([name, alpha2]) => ({
                 name,
                 alpha2: alpha2 as string
+            }));
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
+    }
+
+    async getVocabularyCategories() : Promise<Category[]> {
+        try {
+            const response = await fetch(BACKEND + 'api/getvocabcategories/', {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            if (!response.ok) {
+                throw new Error('Network response was not ok.');
+            }
+            const json = await response.json();
+            return Object.entries(json.categories).map(([name, iconName]) => ({
+                name,
+                iconName: iconName as string
             }));
         } catch (error) {
             console.error('Error:', error);
