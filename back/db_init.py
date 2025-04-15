@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "languageproject_back.settings")
 django.setup()
 
-from api.models import Language
+from api.models import Language, VocabularySetCategory
 
 
 counter: int = 0
@@ -24,6 +24,20 @@ with open("languages.txt", "r") as content:
             Language.objects.create(name=language_name, alpha2=language_code)
 
 print("Added", counter, " langauges to the database.")
+counter = 0
+
+with open("categories.txt", "r") as content:
+    for line in content.readlines():
+        line = line.strip()
+        category_name: str = line.split(", ")[0]
+        category_icon: str = line.split(", ")[1]
+
+        fltr = VocabularySetCategory.objects.filter(name=category_name, fa_icon=category_icon)
+        if len(fltr) == 0:
+            counter += 1
+            VocabularySetCategory.objects.create(name=category_name, fa_icon=category_icon)
+
+print("Added", counter, " vocabulary set categories to the database.")
 
 """
 basic_categories: List[str] = ["General", "Off-Topic", "News", "Suggestions & Ideas", "Languages"]

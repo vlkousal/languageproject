@@ -1,13 +1,13 @@
-General,
-Health,
-Clothing,
-Foods & Drinks,
-Home,
-School,
-Work,
-Travelling,
-City Life,
-Nature,
-Technology,
-Culture,
-Activities,
+General, globe
+Health, heart
+Clothing, shirt
+Foods & Drinks, utensils
+Home, house
+School, graduation-cap
+Work, briefcase
+Travelling, plane
+City Life, city
+Nature, tree
+Technology, microchip
+Culture, masks-theater
+Activities, person-running

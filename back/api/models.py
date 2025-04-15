@@ -12,7 +12,6 @@ class Language(models.Model):
 
 
 class User(AbstractUser):
-    bio = models.CharField(max_length=256, blank=True)
     location = models.CharField(max_length=32, blank=True)
     languages_of_interest = models.ManyToManyField(Language)
 
@@ -79,3 +78,11 @@ class VocabularyUserRelationship(models.Model):
     def __str__(self):
         saved_status: str = "T" if self.saved else "F"
         return self.set.name + " - " + self.user.username + "(" + saved_status + ")"
+
+
+class VocabularySetCategory(models.Model):
+    name = models.CharField(max_length=16)
+    fa_icon = models.CharField(max_length=16)
+
+    def __str__(self):
+        return self.name
