@@ -29,6 +29,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { LanguageSelectionComponent } from './vocabulary/language-selection/language-selection.component';
+import { CategorySelectionComponent } from './vocabulary/category-selection/category-selection.component';
 
 @NgModule({
     declarations: [
@@ -55,7 +56,8 @@ import { LanguageSelectionComponent } from './vocabulary/language-selection/lang
         VocabularyCreationSummaryComponent,
         NotFoundComponent,
         UserProfileComponent,
-        LanguageSelectionComponent
+        LanguageSelectionComponent,
+        CategorySelectionComponent
     ],
     imports: [
         BrowserModule,

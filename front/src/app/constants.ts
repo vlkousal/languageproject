@@ -17,3 +17,8 @@ export interface Language {
     alpha2: string;
 }
 
+export interface Category {
+    name: string;
+    iconName: string;
+}
+

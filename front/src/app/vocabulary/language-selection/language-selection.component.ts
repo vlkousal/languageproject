@@ -11,11 +11,9 @@ export class LanguageSelectionComponent {
     @Input() languages: Language[] | undefined;
 
     selectedLanguage: Language | null = null;
-    @Output() onContinue = new EventEmitter<Language>();
 
-    selectLanguage(lang: Language) {
-        this.selectedLanguage = lang;
-    }
+    @Output()
+    onContinue = new EventEmitter<Language>();
 
     goNext(): void {
         if(this.selectedLanguage != null) this.onContinue.emit(this.selectedLanguage);

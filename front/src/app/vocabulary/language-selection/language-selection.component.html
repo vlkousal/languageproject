@@ -3,7 +3,7 @@
         <button
             *ngFor="let lang of languages"
             [class.selected]="lang === selectedLanguage"
-            (click)="selectLanguage(lang)"
+            (click)="selectedLanguage = lang;"
             class="language-button">
             <span class="flag fi fi-{{lang.alpha2.toLowerCase()}}"></span>
             <strong class="language-label">{{ lang.name }}</strong>

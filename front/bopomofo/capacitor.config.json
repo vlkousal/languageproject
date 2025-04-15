@@ -1,0 +1,10 @@
+{
+  "appId": "net.kousal.bopomofo",
+  "appName": "Bopomofo",
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": false
+    }
+  }
+}

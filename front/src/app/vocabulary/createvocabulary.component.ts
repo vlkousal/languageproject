@@ -15,9 +15,10 @@ interface WordType {
 
 enum State {
     LANGUAGE_SELECTION = 0,
-    WORD_INPUT = 1,
-    NAME_PAGE = 2,
-    SUMMARY = 3
+    CATEGORY_SELECTION = 1,
+    WORD_INPUT = 2,
+    NAME_PAGE = 3,
+    SUMMARY = 4
 }
 
 @Component({

@@ -5,6 +5,12 @@
         getSelectedLanguage($event)">
     </app-language-selection>
 
+ <app-category-selection
+     *ngIf="state == State.CATEGORY_SELECTION"
+     [categories]=""
+ >
+ </app-category-selection>
+
 <div class="form" *ngIf="state == State.NAME_PAGE">
 		<label for="name">Name:</label>
 		<input (input)="onInputChange()" id="name" type="text" [formControl]="name" placeholder="The name of the set" required maxlength="48"/>

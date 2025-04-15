@@ -6,7 +6,8 @@ from django.utils import timezone
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import User, Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord, VocabularyUserRelationship
+from .models import (User, Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord,
+                     VocabularyUserRelationship, VocabularySetCategory)
 import base64
 import easyocr
 from .user_views import get_user
@@ -411,3 +412,11 @@ def get_languages(request):
     for language in Language.objects.all():
         languages[language.name] = language.alpha2
     return Response(data={"languages": languages}, status=status.HTTP_200_OK)
+
+# GETs all vocabulary set categories
+@api_view(["GET"])
+def get_vocabulary_categories(request):
+    categories = {}
+    for category in VocabularySetCategory.objects.all():
+        categories[category.name] = category.fa_icon
+    return Response(data={"categories": categories}, status=status.HTTP_200_OK)

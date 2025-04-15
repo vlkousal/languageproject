@@ -1,0 +1,16 @@
+<div id="container">
+    <div class="language-grid">
+        <button
+            *ngFor="let cat of categories"
+            [class.selected]="cat === selectedCategory"
+            (click)="selectedCategory = cat;"
+            class="language-button">
+            <span class="flag fi fi-{{lang.alpha2.toLowerCase()}}"></span>
+            <strong class="language-label">{{ lang.name }}</strong>
+        </button>
+    </div>
+
+    <div id="bottom-panel">
+        <button (click)="goNext()">Continue</button>
+    </div>
+</div>

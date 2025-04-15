@@ -41,5 +41,6 @@ urlpatterns = [
     path("api/checkimage/", api_views.check_image),
     path("api/getuserinfo/", user_views.get_user_info),
     path("api/updateuserinfo/", user_views.update_user_info),
-    path("api/updateprofilepicture/", user_views.update_profile_picture)
+    path("api/updateprofilepicture/", user_views.update_profile_picture),
+    path("api/getvocabcategories", api_views.get_vocabulary_categories)
 ]
