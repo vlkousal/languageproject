@@ -1,19 +1,28 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegisterComponent } from './register.component';
-import {BaseComponent} from "../base/base.component";
-import {ReactiveFormsModule} from "@angular/forms";
+import { BaseComponent } from "../base/base.component";
+import { ReactiveFormsModule, AbstractControl } from "@angular/forms";
 
 describe('RegisterComponent', () => {
     let component: RegisterComponent;
     let fixture: ComponentFixture<RegisterComponent>;
+    let username: AbstractControl;
+    let password: AbstractControl;
+    let password_again: AbstractControl;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [RegisterComponent, BaseComponent],
             imports: [ReactiveFormsModule]
         });
+
         fixture = TestBed.createComponent(RegisterComponent);
         component = fixture.componentInstance;
+
+        username = component.registerForm.get("username")!;
+        password = component.registerForm.get("password")!;
+        password_again = component.registerForm.get("password_again")!;
+
         fixture.detectChanges();
     });
 
@@ -22,74 +31,74 @@ describe('RegisterComponent', () => {
     });
 
     it("should fail as a username because it's too short", () => {
-        component.username.setValue("jmz");
-        component.password.setValue("validpa55word");
-        component.password_again.setValue("validpa55word");
+        username.setValue("jmz");
+        password.setValue("validpa55word");
+        password_again.setValue("validpa55word");
         component.onInputChange();
-        expect(component.isValid).toBeFalsy();
-    })
+        expect(component.isValid).toBeFalse();
+    });
 
     it("should fail as a username as it contains illegal chars", () => {
-        component.username.setValue("$[helloplease]");
-        component.password.setValue("validpa55word");
-        component.password_again.setValue("validpa55word");
+        username.setValue("$[helloplease]");
+        password.setValue("validpa55word");
+        password_again.setValue("validpa55word");
         component.onInputChange();
-        expect(component.isValid).toBeFalsy();
-    })
+        expect(component.isValid).toBeFalse();
+    });
 
     it("should fail as a username as it's too long", () => {
-        component.username.setValue("IMustNotFearFearIsTheMindKiller");
-        component.password.setValue("validpa55word");
-        component.password_again.setValue("validpa55word");
+        username.setValue("IMustNotFearFearIsTheMindKiller");
+        password.setValue("validpa55word");
+        password_again.setValue("validpa55word");
         component.onInputChange();
-        expect(component.isValid).toBeFalsy();
-    })
+        expect(component.isValid).toBeFalse();
+    });
 
     it("should fail because password wasn't written", () => {
-        component.username.setValue("vladko");
-        component.password.setValue("");
-        component.password_again.setValue("");
+        username.setValue("vladko");
+        password.setValue("");
+        password_again.setValue("");
         component.onInputChange();
-        expect(component.isValid).toBeFalsy();
-    })
+        expect(component.isValid).toBeFalse();
+    });
 
     it("should fail because password was too short", () => {
-        component.username.setValue("vogel");
-        component.password.setValue("538");
-        component.password_again.setValue("538");
+        username.setValue("vogel");
+        password.setValue("538");
+        password_again.setValue("538");
         component.onInputChange();
-        expect(component.isValid).toBeFalsy();
-    })
+        expect(component.isValid).toBeFalse();
+    });
 
     it("should fail because the password wasn't written again", () => {
-        component.username.setValue("vladko");
-        component.password.setValue("p8ssw0rd");
-        component.password_again.setValue("");
+        username.setValue("vladko");
+        password.setValue("p8ssw0rd");
+        password_again.setValue("");
         component.onInputChange();
-        expect(component.isValid).toBeFalsy();
-    })
+        expect(component.isValid).toBeFalse();
+    });
 
     it("should fail because the passwords don't match", () => {
-        component.username.setValue("vladko");
-        component.password.setValue("l3gitp8ssw0rd");
-        component.password_again.setValue("legitpassword");
+        username.setValue("vladko");
+        password.setValue("l3gitp8ssw0rd");
+        password_again.setValue("legitpassword");
         component.onInputChange();
-        expect(component.isValid).toBeFalsy();
-    })
+        expect(component.isValid).toBeFalse();
+    });
 
     it("should be completely legal", () => {
-        component.username.setValue("lmtp_protokol");
-        component.password.setValue("WalecParkFernetAK47");
-        component.password_again.setValue("WalecParkFernetAK47");
+        username.setValue("lmtp_protokol");
+        password.setValue("WalecParkFernetAK47");
+        password_again.setValue("WalecParkFernetAK47");
         component.onInputChange();
-        expect(component.isValid).toBeTruthy();
-    })
+        expect(component.isValid).toBeTrue();
+    });
 
     it("should be correct", () => {
-        component.username.setValue("lucas.smallhands");
-        component.password.setValue("l3gitp8ssw0rd");
-        component.password_again.setValue("l3gitp8ssw0rd");
+        username.setValue("lucas.smallhands");
+        password.setValue("l3gitp8ssw0rd");
+        password_again.setValue("l3gitp8ssw0rd");
         component.onInputChange();
-        expect(component.isValid).toBeTruthy();
-    })
+        expect(component.isValid).toBeTrue();
+    });
 });

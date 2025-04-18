@@ -11,7 +11,7 @@
 	</div>
 
 	<div id="question">
-		<button (click)="speakQuestion()">{{ words[index].question }}</button>
+		<button>{{ words[index].question }}</button>
 	</div>
 	<p id="phonetic" [style.visibility]="(localStorage.getItem('showPhonetic') != 'false' && !isFlipped) ? 'visible' : 'hidden'">{{  words[index].phonetic }}</p>
 	<input id="answer" [formControl]="writtenAnswer" (keydown.enter)="checkAnswer()" autofocus>

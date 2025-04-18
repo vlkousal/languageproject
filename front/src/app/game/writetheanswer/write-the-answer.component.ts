@@ -43,9 +43,5 @@ export class WriteTheAnswerComponent extends GameComponent {
         this.setNewWord();
     }
 
-    speakQuestion(): void {
-        const language: string | null = sessionStorage.getItem("language");
-    }
-
     protected readonly localStorage = localStorage;
 }

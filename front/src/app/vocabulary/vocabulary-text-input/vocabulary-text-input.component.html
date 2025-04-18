@@ -3,7 +3,6 @@
         type="text"
         class="numbered"
         id="textarea"
-        required
         (input)="onInputChange()"
         [(ngModel)]="content"
         placeholder="word{{ DEFAULT_DELIMETER}}phonetic{{ DEFAULT_DELIMETER}}translation"
@@ -13,7 +12,6 @@
         (input)="onInputChange()"
         id="delimiter"
         type="text"
-        required
         [formControl]="delimiter"
         maxlength="1"
         placeholder=","

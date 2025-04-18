@@ -3,6 +3,7 @@ textarea.numbered {
     font-size: 1rem;
     height: 85%;
     background-color: var(--pastel-mint);
+    border: none;
 }
 
 input {
