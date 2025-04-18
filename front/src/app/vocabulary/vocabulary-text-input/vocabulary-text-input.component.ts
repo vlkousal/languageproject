@@ -10,15 +10,34 @@ import {DEFAULT_DELIMETER} from "../../constants";
 })
 export class VocabularyTextInputComponent {
 
-    counter: number = 0;
-    delimiter = new FormControl(DEFAULT_DELIMETER) as FormControl<string>;
+    delimiter: FormControl<string> = new FormControl(DEFAULT_DELIMETER) as FormControl<string>;
     content: string = "";
-    words: Word[] = [];
+    words: Set<Word> = new Set<Word>();
 
+    onInputChange(): void {
+        this.words = new Set<Word>();
+        const lines: string[] = (this.content + "\n").split("\n");
+        const delimiter = this.delimiter.getRawValue();
 
-    onInputChange() {
-        console.log(this.content);
+        for(let i = 0; i < lines.length - 1; i++) {
+            if(!this.isValidLine(lines[i])) continue;
+            const line: string = lines[i];
+            const first: string = line.split(delimiter)[0].trim();
+            const phonetic: string = line.split(delimiter)[1].trim();
+            const second: string = line.split(delimiter)[2].trim();
+            const word = new Word(0, [],  first, phonetic, second, [], []);
+            if(this.isValidLine(lines[i]) && word.question.length != 0 && word.correct.length != 0) {
+                if(!this.words.has(word)) {
+                    this.words.add(word);
+                }
+            }
+        }
     }
-    
+
+    isValidLine(line: string): boolean {
+        const splitLine: string[] = line.split(this.delimiter.getRawValue());
+        return splitLine.length == 3;
+    }
+
     protected readonly DEFAULT_DELIMETER = DEFAULT_DELIMETER;
 }
