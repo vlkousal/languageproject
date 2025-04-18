@@ -21,17 +21,14 @@
     </div>
 
     <app-vocabulary-text-input *ngIf="selectedCategory == Category.TEXT" style="width: 100%; height: 100%;">
-
     </app-vocabulary-text-input>
+
+    <app-vocabulary-preview *ngIf="selectedCategory == Category.PREVIEW" style="width: 100%; height: 100%;">
+    </app-vocabulary-preview>
     <div>
         <div class="filter" *ngIf="selectedCategory == Category.RELEVANT">
             <label for="filter">Filter: </label>
             <input (input)="onFilterChange()" id="filter" type="text" [formControl]="filter" style="width: 128px">
-        </div>
-
-        <div class="filter" *ngIf="selectedCategory == Category.SUMMARY">
-            <label for="filter">Filter: </label>
-            <input (input)="onWordsFilterChange()" id="wordsFilter" type="text" [formControl]="wordsFilter" style="width: 128px">
         </div>
 
         <div class="relevant-vocabulary" *ngIf="selectedCategory == Category.RELEVANT">
@@ -50,23 +47,5 @@
                 </tr>
             </table>
         </div>
-
-        <div class="table-container" *ngIf="selectedCategory == Category.SUMMARY">
-            <table>
-                <tr>
-                    <th>First</th>
-                    <th>Phonetic</th>
-                    <th>Second</th>
-                    <th>Action</th>
-                </tr>
-                <tr *ngFor="let word of filteredWords">
-                    <td>{{ word.question }}</td>
-                    <td>{{ word.phonetic }}</td>
-                    <td>{{ word.correct }}</td>
-                    <td><button (click)="removeWord(word)" style="background-color: #ea6161">Remove</button></td>
-                </tr>
-            </table>
-        </div>
     </div>
-
 </div>

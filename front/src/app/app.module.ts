@@ -31,6 +31,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { LanguageSelectionComponent } from './vocabulary/language-selection/language-selection.component';
 import { CategorySelectionComponent } from './vocabulary/category-selection/category-selection.component';
 import { VocabularyTextInputComponent } from './vocabulary/vocabulary-text-input/vocabulary-text-input.component';
+import { VocabularyPreviewComponent } from './vocabulary/vocabulary-preview/vocabulary-preview.component';
 
 @NgModule({
     declarations: [
@@ -59,7 +60,8 @@ import { VocabularyTextInputComponent } from './vocabulary/vocabulary-text-input
         UserProfileComponent,
         LanguageSelectionComponent,
         CategorySelectionComponent,
-        VocabularyTextInputComponent
+        VocabularyTextInputComponent,
+        VocabularyPreviewComponent
     ],
     imports: [
         BrowserModule,

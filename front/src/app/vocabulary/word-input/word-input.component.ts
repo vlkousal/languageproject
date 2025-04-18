@@ -1,6 +1,5 @@
 import {Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild} from '@angular/core';
 import {Word} from "../../../word";
-import {Utils} from "../../utils";
 import {FormControl} from "@angular/forms";
 import {VocabularySet} from "../../../VocabularySet";
 import {DEFAULT_DELIMETER, Language} from "../../constants";
@@ -8,7 +7,7 @@ import {DEFAULT_DELIMETER, Language} from "../../constants";
 enum Category {
     TEXT = 0,
     RELEVANT = 1,
-    SUMMARY = 2
+    PREVIEW = 2
 }
 
 @Component({
@@ -25,9 +24,7 @@ export class WordInputComponent {
 
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
 
-    filteredWords: Word[] = [];
     filter: FormControl<string> = new FormControl("") as FormControl<string>;
-    wordsFilter: FormControl<string> = new FormControl("") as FormControl<string>;
     removedFromRelevant: Set<Word> = new Set<Word>();
 
     selectedCategory: Category = Category.TEXT;
@@ -41,7 +38,7 @@ export class WordInputComponent {
 
     @ViewChild('textButton', { static: true }) textButton!: ElementRef;
     @ViewChild('relevantButton', { static: true }) relevantButton!: ElementRef;
-    @ViewChild('summaryButton', { static: true }) summaryButton!: ElementRef;
+    @ViewChild('summaryButton', { static: true }) previewButton!: ElementRef;
 
     ngOnInit(): void {
         this.filteredRelevantWords = this.relevantWords;
@@ -54,65 +51,28 @@ export class WordInputComponent {
         }
     }
 
-    onWordsFilterChange() {
-        const filter: string = Utils.removeDiacritics(this.getWordsFilter());
-        if(filter.length != 0 && this.set != undefined) {
-            this.filteredWords = [];
-            this.set.words.forEach((word) => {
-                const correct = Utils.removeDiacritics(word.correct);
-                const phonetic = Utils.removeDiacritics(word.phonetic);
-                const question = Utils.removeDiacritics(word.question);
-                if(correct.includes(filter) || phonetic.includes(filter) || question.includes(filter)) {
-                    this.filteredWords.push(word);
-                }
-            })
-            return;
-        }
-        if(this.set != undefined) this.filteredWords = this.set.words;
-    }
-
-    onFilterChange() {
-        const filter = Utils.removeDiacritics(this.getFilter());
-        if(filter.length != 0) {
-            this.filteredRelevantWords = new Set<Word>();
-            this.relevantWords.forEach((word) => {
-                const correct = Utils.removeDiacritics(word.correct);
-                const phonetic = Utils.removeDiacritics(word.phonetic);
-                const question = Utils.removeDiacritics(word.question);
-                if(correct.includes(filter) || phonetic.includes(filter) || question.includes(filter)) {
-                    this.filteredRelevantWords.add(word);
-                }
-            });
-            return;
-        }
-        this.filteredRelevantWords = this.relevantWords;
-    }
-
     showText() {
         this.selectedCategory = Category.TEXT
         this.filter.setValue("");
-        this.wordsFilter.setValue("");
         this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#F9F8EB");
         this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#5C8D89");
-        this.renderer.setStyle(this.summaryButton.nativeElement, 'background-color', "#5C8D89");
+        this.renderer.setStyle(this.previewButton.nativeElement, 'background-color', "#5C8D89");
     }
 
     showRelevant() {
         this.selectedCategory = Category.RELEVANT;
         this.filter.setValue("");
-        this.wordsFilter.setValue("");
         this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#5C8D89");
         this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#F9F8EB");
-        this.renderer.setStyle(this.summaryButton.nativeElement, 'background-color', "#5C8D89");
+        this.renderer.setStyle(this.previewButton.nativeElement, 'background-color', "#5C8D89");
     }
 
     showTable() {
-        this.selectedCategory = Category.SUMMARY;
+        this.selectedCategory = Category.PREVIEW;
         this.filter.setValue("");
-        this.wordsFilter.setValue("");
         this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#5C8D89");
         this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#5C8D89");
-        this.renderer.setStyle(this.summaryButton.nativeElement, 'background-color', "#F9F8EB");
+        this.renderer.setStyle(this.previewButton.nativeElement, 'background-color', "#F9F8EB");
     }
 
     addWord(word: Word) {
@@ -124,7 +84,6 @@ export class WordInputComponent {
             this.textContent += "\n";
         }
         this.textContent += word.question + delimeter + word.phonetic + delimeter + word.correct + "\n";
-        this.onWordsFilterChange();
         this.removedFromRelevant.add(word);
         this.relevantWords.delete(word);
     }
@@ -139,20 +98,11 @@ export class WordInputComponent {
                 this.textContent += l + "\n";
             }
         })
-        this.onWordsFilterChange();
 
         if(Word.containsWord(this.removedFromRelevant, word)) {
             this.removedFromRelevant.delete(word);
             this.relevantWords.add(word);
         }
-    }
-
-    getFilter(): string {
-      return this.filter.getRawValue();
-    }
-
-    getWordsFilter(): string {
-        return this.wordsFilter.getRawValue();
     }
 
     getDelimeter(): string {
