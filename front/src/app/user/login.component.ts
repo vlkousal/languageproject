@@ -26,8 +26,8 @@ export class LoginComponent {
         if(!this.isValid) return;
 
         const data = {
-            username: this.username.getRawValue(),
-            password: this.password.getRawValue()
+            username: this.username.value,
+            password: this.password.value
         };
 
         fetch(BACKEND + 'api/login/', {
@@ -47,8 +47,8 @@ export class LoginComponent {
     }
 
     onInputChange(): void {
-        const username = this.username.getRawValue();
-        const password = this.password.getRawValue();
+        const username = this.username.value;
+        const password = this.password.value;
 
         this.isValid = /^[a-zA-Z0-9&-._]+$/.test(username) && username.length >= 4
             && username.length <= 16 && password.length >= 5;

@@ -17,7 +17,7 @@ export class VocabularyTextInputComponent {
     onInputChange(): void {
         this.words = new Set<Word>();
         const lines: string[] = (this.content + "\n").split("\n");
-        const delimiter = this.delimiter.getRawValue();
+        const delimiter = this.delimiter.value;
 
         for(let i = 0; i < lines.length - 1; i++) {
             if(!this.isValidLine(lines[i])) continue;
@@ -35,7 +35,7 @@ export class VocabularyTextInputComponent {
     }
 
     isValidLine(line: string): boolean {
-        const splitLine: string[] = line.split(this.delimiter.getRawValue());
+        const splitLine: string[] = line.split(this.delimiter.value);
         return splitLine.length == 3;
     }
 

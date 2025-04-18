@@ -42,11 +42,11 @@ export class WordInputComponent {
 
     ngOnInit(): void {
         this.filteredRelevantWords = this.relevantWords;
+        const delimiter: string = this.delimiter.value;
 
         if(this.set != null) {
             this.set.words.forEach((word: Word) => {
-                this.textContent += word.question + this.getDelimeter() + word.phonetic + this.getDelimeter() +
-                    word.correct + "\n";
+                this.textContent += word.question + delimiter + word.phonetic + delimiter + word.correct + "\n";
             });
         }
     }
@@ -78,7 +78,7 @@ export class WordInputComponent {
     addWord(word: Word) {
         if(this.set == undefined || this.set.words.includes(word)) return;
 
-        const delimeter = this.getDelimeter();
+        const delimeter = this.delimiter.value;
         if(this.textContent.charAt(this.textContent.length - 1) != "\n" &&
             this.textContent.charAt(this.textContent.length - 1) != "") {
             this.textContent += "\n";
@@ -89,7 +89,7 @@ export class WordInputComponent {
     }
 
     removeWord(word: Word) {
-        const delimiter: string = this.getDelimeter();
+        const delimiter: string = this.delimiter.value;
         const lines: string[] = this.textContent.split("\n");
         const line: string = word.question + delimiter + word.phonetic + delimiter + word.correct;
         this.textContent = "";
@@ -103,10 +103,6 @@ export class WordInputComponent {
             this.removedFromRelevant.delete(word);
             this.relevantWords.add(word);
         }
-    }
-
-    getDelimeter(): string {
-        return this.delimiter.getRawValue();
     }
 
     protected readonly Category = Category;

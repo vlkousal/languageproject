@@ -21,7 +21,7 @@ export class WriteTheAnswerComponent extends GameComponent {
     }
 
     checkAnswer(): void {
-        const answer: string = this.writtenAnswer.getRawValue();
+        const answer: string = this.writtenAnswer.value;
         const currentWord: Word = this.words[this.index];
         const isCorrect: boolean = currentWord.correct == answer;
         this.sendResult(isCorrect);

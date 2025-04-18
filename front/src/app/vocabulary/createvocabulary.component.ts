@@ -82,11 +82,12 @@ export class CreateVocabularyComponent {
     onInputChange(): void {
         //this.set = new VocabularySet(this.getName(), -1, "", this.getDescription(),
           //  this.getLanguage(), this.words, this.setID != null);
-        const nameLength = this.getName().length;
+        const name = this.name.value;
+        const nameLength = name.length;
         this.isValid = false;
 
         this.lastNameLength = nameLength;
-        if(this.getName().length == 0) {
+        if(name.length == 0) {
             this.feedback = "Please enter a name.";
             return;
         }
@@ -106,14 +107,6 @@ export class CreateVocabularyComponent {
 
     checkNamePage(): void {
         if(this.isValid) this.state = State.WORD_INPUT;
-    }
-
-    getName(): string {
-        return this.name.getRawValue();
-    }
-
-    getDescription(): string {
-        return this.description.getRawValue();
     }
 
     getLanguages(): Observable<Language[]> {
