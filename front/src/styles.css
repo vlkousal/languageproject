@@ -25,6 +25,7 @@ body {
     min-width: 300px;
     max-width: 800px;
     width: 70%;
+    height: 60%;
     border: 4px solid var(--muted-teal);
     text-align: center;
 }

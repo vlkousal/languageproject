@@ -1,0 +1,14 @@
+textarea.numbered {
+    resize: none;
+    font-size: 1rem;
+    height: 85%;
+    background-color: var(--pastel-mint);
+}
+
+input {
+    padding: 0.4rem;
+    font-size: 1rem;
+    width: 2%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

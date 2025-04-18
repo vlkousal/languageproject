@@ -33,7 +33,7 @@ export class WordInputComponent {
     selectedCategory: Category = Category.TEXT;
 
     textContent: string = "";
-    delimeter: string = DEFAULT_DELIMETER;
+    delimiter = new FormControl(DEFAULT_DELIMETER) as FormControl<string>;
 
     filteredRelevantWords: Set<Word> = new Set<Word>();
 
@@ -153,6 +153,10 @@ export class WordInputComponent {
 
     getWordsFilter(): string {
         return this.wordsFilter.getRawValue();
+    }
+
+    getDelimeter(): string {
+        return this.delimiter.getRawValue();
     }
 
     protected readonly Category = Category;
