@@ -1,16 +1,165 @@
+import base64
 from typing import List, Dict
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import get_object_or_404
-from django.utils import timezone
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from easyocr import easyocr
 from rest_framework import status
-from .models import (User, Language, VocabularySet, WordEntry, WordRecord, VocabularySetRecord,
-                     VocabularyUserRelationship, VocabularySetCategory)
-import base64
-import easyocr
-from .user_views import get_user
+from rest_framework.generics import get_object_or_404
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from users.models import User
+from users.views import get_user
+from vocabulary.models import Language, VocabularySetCategory, VocabularySet, WordEntry, VocabularySetRecord, \
+    WordRecord, VocabularyUserRelationship
+
+
+# get all languages
+@api_view(["GET"])
+def get_languages(request):
+    languages = [
+        {"name": language.name, "alpha2": language.alpha2}
+        for language in Language.objects.all()
+    ]
+    return Response(data={"languages": languages}, status=status.HTTP_200_OK)
+
+
+# GETs all vocabulary set categories
+@api_view(["GET"])
+def get_vocabulary_categories(request):
+    categories = [
+        {"name": category.name, "iconName": category.fa_icon}
+        for category in VocabularySetCategory.objects.all()
+    ]
+    return Response(data={"categories": categories}, status=status.HTTP_200_OK)
+
+@api_view(["POST"])
+def get_language_vocab(request):
+    language = request.data.get("language")
+
+    sets = VocabularySet.objects.filter(language__name=language)
+    words: List[Dict[str, str]] = []
+    for s in sets:
+        for word in s.vocabulary.all():
+            words.append({"word": word.word, "phonetic": word.phonetic, "translation": word.translation})
+    return Response(status=status.HTTP_200_OK, data={"words": words})
+
+
+# retuns
+@api_view(["GET"])
+def get_vocab_sets(request):
+    sets = VocabularySet.objects.all().order_by("-id")
+
+    data = [{"name": s.name, "id": s.id,
+             "language": s.language.name}
+            for s in sets]
+    return Response(data, status=status.HTTP_200_OK)
+
+
+# returns a requested /vocab/name vocabulary set
+@api_view(["POST"])
+def get_vocab(request):
+    token = request.data.get("token")
+    id = request.data.get("id")
+
+    try:
+        session = Session.objects.get(session_key=token)
+        username = session.session_data
+        is_logged_in = True
+    except ObjectDoesNotExist:
+        is_logged_in = False
+
+    if is_logged_in:
+        try:
+           user = User.objects.get(username=username)
+           is_logged_in = True
+        except ObjectDoesNotExist:
+            is_logged_in = False
+
+
+    try:
+        vocab = VocabularySet.objects.select_related(
+            'author', 'language').prefetch_related('vocabulary').get(id=id)
+    except VocabularySet.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    word_records = {}
+    if is_logged_in:
+        word_records = {
+            record.word_id: record for record in WordRecord.objects.filter(
+                user=user,
+                word__in=vocab.vocabulary.all()
+            )
+        }
+
+    words = []
+    for word in vocab.vocabulary.all():
+        # getting the scores
+        scores: List[int] = [-1 for _ in range(len(VocabularySetRecord.Mode.choices))]
+        if is_logged_in and word.id in word_records:
+            try:
+                record = word_records[word.id]
+                scores[int(VocabularySetRecord.Mode.ONE_OF_THREE.value)] = record.one_of_three_score
+                scores[int(VocabularySetRecord.Mode.WRITE_THE_ANSWER.value)] = record.write_the_answer_score
+                scores[int(VocabularySetRecord.Mode.DRAW_CHARACTER.value)] = record.draw_character_score
+            except ObjectDoesNotExist:
+                scores = [0 for _ in range(len(VocabularySetRecord.Mode.choices))]
+
+        word = {"question": word.word,
+                "phonetic": word.phonetic,
+                "correct": word.translation,
+                "id": word.id,
+                "scores": scores
+                }
+        words.append(word)
+
+    data = {
+        "name": vocab.name,
+        "author": vocab.author.username,
+        "description": vocab.description,
+        "language": vocab.language.name,
+        "vocabulary": words
+    }
+    return Response(data, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+def create_vocab(request):
+    token: str = request.data.get("token")
+    name: str = request.data.get("name")
+    description: str = request.data.get("description")
+    vocabulary: str = request.data.get("vocabulary")
+    category: str = request.data.get("category")
+
+    session = Session.objects.get(session_key=token)
+    if session is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    user = User.objects.get(username=session.session_data)
+    if user is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    language = Language.objects.get(name=request.data.get("language"))
+    category: VocabularySetCategory = VocabularySetCategory.objects.get(name=category)
+
+    vocab_set = VocabularySet.objects.create(author=user, name=name,
+    description=description, language=language, category=category)
+
+    set_vocabulary(vocab_set, user, vocabulary)
+    return Response("OK", status=status.HTTP_200_OK)
+
+
+# a help function that adds words to a newly created vocabulary set
+def set_vocabulary(vocab_set: VocabularySet, user: User, vocabulary: List[Dict[str, str]]):
+    for word in vocabulary:
+        # the same word might already exist
+        fltr = WordEntry.objects.filter(word=word["first"], phonetic=word["phonetic"],
+                                           translation=word["second"])
+        if len(fltr) > 0:
+            vocab_set.vocabulary.add(fltr.first())
+            continue
+        word = WordEntry.objects.create(contributor=user, word=word["first"], phonetic=word["phonetic"],
+                                        translation=word["second"])
+        vocab_set.vocabulary.add(word)
+    vocab_set.save()
 
 
 # checks the drawn character
@@ -258,170 +407,3 @@ def get_own_sets(request):
                     "language": vocab_set.language.name, "is_own": False}
         json["sets"].append(set_json)
     return Response(status=status.HTTP_200_OK, data=json)
-
-
-@api_view(['POST', "OPTIONS"])
-def check_token(request):
-    token = request.data.get('token')
-    try:
-        session = Session.objects.get(session_key=token)
-    except ObjectDoesNotExist:
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
-    username = session.session_data
-    return Response(data={"username": username }, status=status.HTTP_200_OK)
-
-
-def check_sessions():
-    for session in Session.objects.all():
-        if session.expire_date < timezone.now():
-            session.delete()
-
-
-@api_view(["POST"])
-def get_language_vocab(request):
-    language = request.data.get("language")
-
-    sets = VocabularySet.objects.filter(language__name=language)
-    words: List[Dict[str, str]] = []
-    for s in sets:
-        for word in s.vocabulary.all():
-            words.append({"word": word.word, "phonetic": word.phonetic, "translation": word.translation})
-    return Response(status=status.HTTP_200_OK, data={"words": words})
-
-
-# retuns
-@api_view(["GET"])
-def get_vocab_sets(request):
-    sets = VocabularySet.objects.all().order_by("-id")
-
-    data = [{"name": s.name, "id": s.id,
-             "language": s.language.name}
-            for s in sets]
-    return Response(data, status=status.HTTP_200_OK)
-
-
-# returns a requested /vocab/name vocabulary set
-@api_view(["POST"])
-def get_vocab(request):
-    token = request.data.get("token")
-    id = request.data.get("id")
-
-    try:
-        session = Session.objects.get(session_key=token)
-        username = session.session_data
-        is_logged_in = True
-    except ObjectDoesNotExist:
-        is_logged_in = False
-
-    if is_logged_in:
-        try:
-           user = User.objects.get(username=username)
-           is_logged_in = True
-        except ObjectDoesNotExist:
-            is_logged_in = False
-
-
-    try:
-        vocab = VocabularySet.objects.select_related(
-            'author', 'language').prefetch_related('vocabulary').get(id=id)
-    except VocabularySet.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    word_records = {}
-    if is_logged_in:
-        word_records = {
-            record.word_id: record for record in WordRecord.objects.filter(
-                user=user,
-                word__in=vocab.vocabulary.all()
-            )
-        }
-
-    words = []
-    for word in vocab.vocabulary.all():
-        # getting the scores
-        scores: List[int] = [-1 for _ in range(len(VocabularySetRecord.Mode.choices))]
-        if is_logged_in and word.id in word_records:
-            try:
-                record = word_records[word.id]
-                scores[int(VocabularySetRecord.Mode.ONE_OF_THREE.value)] = record.one_of_three_score
-                scores[int(VocabularySetRecord.Mode.WRITE_THE_ANSWER.value)] = record.write_the_answer_score
-                scores[int(VocabularySetRecord.Mode.DRAW_CHARACTER.value)] = record.draw_character_score
-            except ObjectDoesNotExist:
-                scores = [0 for _ in range(len(VocabularySetRecord.Mode.choices))]
-
-        word = {"question": word.word,
-                "phonetic": word.phonetic,
-                "correct": word.translation,
-                "id": word.id,
-                "scores": scores
-                }
-        words.append(word)
-
-    data = {
-        "name": vocab.name,
-        "author": vocab.author.username,
-        "description": vocab.description,
-        "language": vocab.language.name,
-        "vocabulary": words
-    }
-    return Response(data, status=status.HTTP_200_OK)
-
-
-@api_view(["POST"])
-def create_vocab(request):
-    token: str = request.data.get("token")
-    name: str = request.data.get("name")
-    description: str = request.data.get("description")
-    vocabulary: str = request.data.get("vocabulary")
-    category: str = request.data.get("category")
-
-    session = Session.objects.get(session_key=token)
-    if session is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    user = User.objects.get(username=session.session_data)
-    if user is None:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-
-    language = Language.objects.get(name=request.data.get("language"))
-    category: VocabularySetCategory = VocabularySetCategory.objects.get(name=category)
-
-    vocab_set = VocabularySet.objects.create(author=user, name=name,
-    description=description, language=language, category=category)
-
-    set_vocabulary(vocab_set, user, vocabulary)
-    return Response("OK", status=status.HTTP_200_OK)
-
-
-# a help function that adds words to a newly created vocabulary set
-def set_vocabulary(vocab_set: VocabularySet, user: User, vocabulary: List[Dict[str, str]]):
-    for word in vocabulary:
-        # the same word might already exist
-        fltr = WordEntry.objects.filter(word=word["first"], phonetic=word["phonetic"],
-                                           translation=word["second"])
-        if len(fltr) > 0:
-            vocab_set.vocabulary.add(fltr.first())
-            continue
-        word = WordEntry.objects.create(contributor=user, word=word["first"], phonetic=word["phonetic"],
-                                        translation=word["second"])
-        vocab_set.vocabulary.add(word)
-    vocab_set.save()
-
-
-# get all languages
-@api_view(["GET"])
-def get_languages(request):
-    languages = [
-        {"name": language.name, "alpha2": language.alpha2}
-        for language in Language.objects.all()
-    ]
-    return Response(data={"languages": languages}, status=status.HTTP_200_OK)
-
-
-# GETs all vocabulary set categories
-@api_view(["GET"])
-def get_vocabulary_categories(request):
-    categories = [
-        {"name": category.name, "iconName": category.fa_icon}
-        for category in VocabularySetCategory.objects.all()
-    ]
-    return Response(data={"categories": categories}, status=status.HTTP_200_OK)

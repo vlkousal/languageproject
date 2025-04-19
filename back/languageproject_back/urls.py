@@ -16,31 +16,31 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-import api.user_views as user_views
-import api.views as api_views
+import users.views as user_views
+import vocabulary.views as vocab_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/register/", user_views.register),
     path("api/login/", user_views.login),
-    path("api/getlanguages/", api_views.get_languages),
-    path("api/createvocab/", api_views.create_vocab),
-    path("api/getvocab/", api_views.get_vocab),
-    path("api/getvocabsets/", api_views.get_vocab_sets),
-    path("api/getlanguagevocab/", api_views.get_language_vocab),
-    path("api/checktoken/", api_views.check_token),
-    path("api/getownsets/", api_views.get_own_sets),
-    path("api/deleteset/", api_views.delete_set),
-    path("api/editvocab/", api_views.edit_vocab),
-    path("api/addresult/", api_views.add_result),
-    path("api/sendvocabresult/", api_views.send_vocab_result),
-    path("api/gethighscore/", api_views.get_high_score),
+    path("api/getlanguages/", vocab_views.get_languages),
+    path("api/createvocab/", vocab_views.create_vocab),
+    path("api/getvocab/", vocab_views.get_vocab),
+    path("api/getvocabsets/", vocab_views.get_vocab_sets),
+    path("api/getlanguagevocab/", vocab_views.get_language_vocab),
+    path("api/checktoken/", user_views.check_token),
+    path("api/getownsets/", vocab_views.get_own_sets),
+    path("api/deleteset/", vocab_views.delete_set),
+    path("api/editvocab/", vocab_views.edit_vocab),
+    path("api/addresult/", vocab_views.add_result),
+    path("api/sendvocabresult/", vocab_views.send_vocab_result),
+    path("api/gethighscore/", vocab_views.get_high_score),
     path("api/getusername/", user_views.get_username),
-    path("api/saveset/", api_views.save_set),
-    path("api/getsavestatus/", api_views.get_save_status),
+    path("api/saveset/", vocab_views.save_set),
+    path("api/getsavestatus/", vocab_views.get_save_status),
     path("api/logout/", user_views.logout),
-    path("api/checkimage/", api_views.check_image),
+    path("api/checkimage/", vocab_views.check_image),
     path("api/getuserinfo/", user_views.get_user_info),
     path("api/updateuserinfo/", user_views.update_user_info),
     path("api/updateprofilepicture/", user_views.update_profile_picture),
-    path("api/getvocabcategories/", api_views.get_vocabulary_categories)
+    path("api/getvocabcategories/", vocab_views.get_vocabulary_categories)
 ]

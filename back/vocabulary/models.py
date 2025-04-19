@@ -1,6 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+
+from languageproject_back import settings
+from users.models import User
 
 
 class Language(models.Model):
@@ -10,15 +12,8 @@ class Language(models.Model):
     def __str__(self):
         return self.name + "(" + self.alpha2 + ")"
 
-
-class User(AbstractUser):
-    bio = models.CharField(max_length=256, blank=True)
-    location = models.CharField(max_length=32, blank=True)
-    languages_of_interest = models.ManyToManyField(Language)
-
-
 class WordEntry(models.Model):
-    contributor = models.ForeignKey(User, on_delete=models.CASCADE)
+    contributor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     word = models.CharField(max_length=64)
     phonetic = models.CharField(max_length=64)
     translation = models.CharField(max_length=64)
@@ -38,7 +33,7 @@ class VocabularySetCategory(models.Model):
 class VocabularySet(models.Model):
     name = models.CharField(max_length=64)
     description = models.CharField(max_length=256)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     language = models.ForeignKey(Language, on_delete=models.CASCADE)
     category = models.ForeignKey(VocabularySetCategory, on_delete=models.CASCADE)
     vocabulary = models.ManyToManyField(WordEntry)
@@ -48,7 +43,7 @@ class VocabularySet(models.Model):
 
 
 class WordRecord(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     word = models.ForeignKey(WordEntry, on_delete=models.CASCADE)
 
     one_of_three_score = models.IntegerField(default=0)
@@ -70,7 +65,7 @@ class VocabularySetRecord(models.Model):
         FLASHCARDS = "2", _("Flashcards")
         DRAW_CHARACTER = "3", _('Draw Characters')
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     set = models.ForeignKey(VocabularySet, on_delete=models.CASCADE)
     mode = models.CharField(choices=Mode.choices, default=Mode.ONE_OF_THREE, max_length=16)
     date = models.DateTimeField(auto_now_add=True)
@@ -81,11 +76,10 @@ class VocabularySetRecord(models.Model):
 
 
 class VocabularyUserRelationship(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     set = models.ForeignKey(VocabularySet, on_delete=models.CASCADE)
     saved = models.BooleanField(default=False)
 
     def __str__(self):
         saved_status: str = "T" if self.saved else "F"
         return self.set.name + " - " + self.user.username + "(" + saved_status + ")"
-

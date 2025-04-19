@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "languageproject_back.settings")
 django.setup()
 
-from api.models import Language, VocabularySetCategory
+from vocabulary.models import Language, VocabularySetCategory
 
 
 counter: int = 0

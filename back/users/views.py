@@ -163,3 +163,19 @@ def logout(request):
 def generate_key():
     return get_random_string(40)
 
+@api_view(['POST', "OPTIONS"])
+def check_token(request):
+    token = request.data.get('token')
+    try:
+        session = Session.objects.get(session_key=token)
+    except ObjectDoesNotExist:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+    username = session.session_data
+    return Response(data={"username": username }, status=status.HTTP_200_OK)
+
+
+def check_sessions():
+    for session in Session.objects.all():
+        if session.expire_date < timezone.now():
+            session.delete()
+
