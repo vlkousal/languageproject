@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output, SimpleChanges} from '@angular/core';
-import {Word} from "../../../word";
+import {Word} from "../../../Word";
 import {Mode} from "../../constants";
 import {VocabularySet} from "../../../VocabularySet";
 

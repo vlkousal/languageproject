@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Word} from "../../../word";
 import {Utils} from "../../utils";
 import {FormControl} from "@angular/forms";
+import {WordInterface} from "../../constants";
 
 @Component({
   selector: 'app-vocabulary-preview',
@@ -10,10 +10,10 @@ import {FormControl} from "@angular/forms";
 })
 export class VocabularyPreviewComponent {
 
-    @Input() words: Set<Word> = new Set<Word>();
-    @Output() wordsChange = new EventEmitter<Set<Word>>();
+    @Input() words: Set<WordInterface> = new Set<WordInterface>();
+    @Output() wordsChange = new EventEmitter<Set<WordInterface>>();
 
-    filteredWords: Word[] = [];
+    filteredWords: WordInterface[] = [];
     wordsFilter: FormControl<string> = new FormControl("") as FormControl<string>;
 
     onWordsFilterChange(): void {
@@ -21,9 +21,9 @@ export class VocabularyPreviewComponent {
         if(filter.length != 0) {
             this.filteredWords = [];
             this.words.forEach((word) => {
-                const correct = Utils.removeDiacritics(word.correct);
+                const correct = Utils.removeDiacritics(word.first);
                 const phonetic = Utils.removeDiacritics(word.phonetic);
-                const question = Utils.removeDiacritics(word.question);
+                const question = Utils.removeDiacritics(word.second);
                 if(correct.includes(filter) || phonetic.includes(filter) || question.includes(filter)) {
                     this.filteredWords.push(word);
                 }
@@ -32,7 +32,7 @@ export class VocabularyPreviewComponent {
         }
     }
 
-    removeWord(word: Word): void {
+    removeWord(word: WordInterface): void {
         this.words.delete(word);
         this.wordsChange.emit(this.words);
     }

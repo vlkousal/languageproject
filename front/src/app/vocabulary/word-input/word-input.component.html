@@ -5,7 +5,7 @@
             <span>Write</span>
         </button>
 
-        <button class="button-with-icon" #uploadButton>
+        <button class="button-with-icon" #uploadButton (click)="showUpload()">
             <i class="fa solid fa-file"></i>
             <span>Upload</span>
         </button>
@@ -34,6 +34,12 @@
     [words]="words">
     </app-vocabulary-preview>
 
+    <app-vocabulary-file-upload *ngIf="selectedCategory == Category.UPLOAD" style="width: 100%; height: 100%;
+    overflow: scroll"
+    [words]=words
+    (onWordChange)="this.words = $event">
+    </app-vocabulary-file-upload>
+
     <div>
         <div class="filter" *ngIf="selectedCategory == Category.RELEVANT">
             <label for="filter">Filter: </label>
@@ -49,9 +55,9 @@
                     <th>Action</th>
                 </tr>
                 <tr *ngFor="let word of filteredRelevantWords">
-                    <td>{{ word.question }}</td>
+                    <td>{{ word.first }}</td>
                     <td>{{ word.phonetic }}</td>
-                    <td>{{ word.correct }}</td>
+                    <td>{{ word.second }}</td>
                     <td><button (click)="addWord(word)">Add</button></td>
                 </tr>
             </table>

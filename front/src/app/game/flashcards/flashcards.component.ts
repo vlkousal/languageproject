@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Utils} from "../../utils";
-import {Word} from "../../../word";
+import {Word} from "../../../Word";
 
 @Component({
   selector: 'app-flashcards',

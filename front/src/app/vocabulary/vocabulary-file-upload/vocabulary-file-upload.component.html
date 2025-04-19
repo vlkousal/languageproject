@@ -1,0 +1,34 @@
+<div *ngIf="!uploaded">
+    <div
+        class="upload-area"
+        (click)="fileInput.click()"
+        (drop)="onFileDrop($event)"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+    >
+        <input
+            #fileInput
+            type="file"
+            (change)="onFileSelected($event)"
+            style="display: none;"
+        >
+
+        <div id="upload-icon">
+            <i class="fas fa-file"></i>
+            <p>Select or drag a file</p>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="!uploaded">
+    <label for="delimiter">Delimiter</label>
+    <input id="delimiter" type="text" maxlength="1" [formControl]="delimiter">
+</div>
+
+<div *ngIf="uploaded">
+    <p>Found words: {{ uploadedWords.size }}</p>
+    <button (click)="this.uploaded = false;">Cancel</button>
+    <button (click)="onConfirm()">Confirm</button>
+    <app-vocabulary-preview [words]="uploadedWords"></app-vocabulary-preview>
+</div>
+

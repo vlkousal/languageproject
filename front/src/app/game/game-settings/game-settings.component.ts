@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Utils} from "../../utils";
-import {Word} from "../../../word";
+import {Word} from "../../../Word";
 
 @Component({
   selector: 'app-game-settings',
@@ -43,11 +42,11 @@ export class GameSettingsComponent {
     }
 
     testLanguageVoice(): void {
-        const randomWord = Utils.getRandomElement(this.words);
+        //const randomWord: WordInterface = Utils.getRandomElement(this.words);
     }
 
     testEnglishVoice(): void {
-        const randomWord = Utils.getRandomElement(this.words);
+        //const randomWord: WordInterface = Utils.getRandomElement(this.words);
     }
 
     setLanguageVoice(): void {

@@ -1,21 +1,20 @@
+<textarea
+    type="text"
+    class="numbered"
+    id="textarea"
+    (input)="onInputChange()"
+    [(ngModel)]="content"
+    placeholder="word{{ delimiter.value }}phonetic{{ delimiter.value }}translation">
+</textarea>
 
-    <textarea
-        type="text"
-        class="numbered"
-        id="textarea"
-        (input)="onInputChange()"
-        [(ngModel)]="content"
-        placeholder="word{{ DEFAULT_DELIMETER}}phonetic{{ DEFAULT_DELIMETER}}translation"
-    ></textarea>
-
-    <p>Valid words: {{ words.size }}</p>
-    <input
-        (input)="onInputChange()"
-        id="delimiter"
-        type="text"
-        [formControl]="delimiter"
-        maxlength="1"
-        placeholder=","
-    />
+<p>Valid words: {{ words.size }}</p>
+<input
+    (input)="onInputChange()"
+    id="delimiter"
+    type="text"
+    [formControl]="delimiter"
+    maxlength="1"
+    placeholder=","
+/>
 
 

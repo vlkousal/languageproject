@@ -2,7 +2,7 @@ import {Component, Injectable, Input, OnInit} from '@angular/core';
 import {BACKEND, MAX_HEALTH, Mode, STREAK_FOR_HEALTH} from "../../constants";
 import {Utils} from "../../utils";
 import {ApiTools} from "../../api-tools";
-import {Word} from "../../../word";
+import {Word} from "../../../Word";
 import {CookieService} from "ngx-cookie";
 
 @Component({

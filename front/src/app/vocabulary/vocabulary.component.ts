@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ApiTools} from "../api-tools";
 import {first} from "rxjs";
 import {Utils} from "../utils";
-import {Word} from "../../word";
+import {Word} from "../../Word";
 import {CookieService} from "ngx-cookie";
 import {VocabularySet} from "../../VocabularySet";
 

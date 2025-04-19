@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Word} from "../../../word";
 import {FormControl} from "@angular/forms";
-import {DEFAULT_DELIMETER} from "../../constants";
+import {DEFAULT_DELIMETER, WordInterface} from "../../constants";
+import {Utils} from "../../utils";
 
 @Component({
   selector: 'app-vocabulary-text-input',
@@ -10,8 +10,8 @@ import {DEFAULT_DELIMETER} from "../../constants";
 })
 export class VocabularyTextInputComponent {
 
-    @Input() words: Set<Word> = new Set<Word>();
-    @Output() wordsChange = new EventEmitter<Set<Word>>();
+    @Input() words: Set<WordInterface> = new Set<WordInterface>();
+    @Output() wordsChange = new EventEmitter<Set<WordInterface>>();
 
     delimiter: FormControl<string> = new FormControl(DEFAULT_DELIMETER) as FormControl<string>;
     content: string = "";
@@ -23,36 +23,13 @@ export class VocabularyTextInputComponent {
     writeCurrentWords(): void {
         for(const word of this.words.values()) {
             const delimiter = this.delimiter.value;
-            const wordString = word.question + delimiter + word.phonetic + delimiter + word.correct + "\n";
+            const wordString = word.first + delimiter + word.phonetic + delimiter + word.second + "\n";
             this.content += wordString;
         }
     }
 
     onInputChange(): void {
-        this.words = new Set<Word>();
-        const lines: string[] = (this.content + "\n").split("\n");
-        const delimiter = this.delimiter.value;
-
-        for(let i = 0; i < lines.length - 1; i++) {
-            if(!this.isValidLine(lines[i])) continue;
-            const line: string = lines[i];
-            const first: string = line.split(delimiter)[0].trim();
-            const phonetic: string = line.split(delimiter)[1].trim();
-            const second: string = line.split(delimiter)[2].trim();
-            const word = new Word(0, [],  first, phonetic, second, [], []);
-            if(this.isValidLine(lines[i]) && word.question.length != 0 && word.correct.length != 0) {
-                if(!this.words.has(word)) {
-                    this.words.add(word);
-                }
-            }
-        }
+        this.words = Utils.parseTextToVocabulary(this.content, this.delimiter.value);
         this.wordsChange.emit(this.words);
     }
-
-    isValidLine(line: string): boolean {
-        const splitLine: string[] = line.split(this.delimiter.value);
-        return splitLine.length == 3;
-    }
-
-    protected readonly DEFAULT_DELIMETER = DEFAULT_DELIMETER;
 }

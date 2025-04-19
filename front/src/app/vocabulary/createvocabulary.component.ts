@@ -1,19 +1,10 @@
 import {Component, Input} from '@angular/core';
 import {FormControl} from "@angular/forms";
-import {BACKEND, Category, Language} from "../constants";
-import {Word} from "../../word";
-import {ApiTools} from "../api-tools";
+import {BACKEND, Category, Language, WordInterface} from "../constants";
 import {VocabularySet} from "../../VocabularySet";
 import {CookieService} from "ngx-cookie";
 import { HttpClient } from '@angular/common/http';
 import {map, Observable} from "rxjs";
-
-interface WordType {
-    id: number;
-    question: string;
-    phonetic: string;
-    correct: string;
-}
 
 enum State {
     LANGUAGE_SELECTION = 0,
@@ -40,12 +31,12 @@ export class CreateVocabularyComponent {
     description : FormControl<string> = new FormControl("") as FormControl<string>;
 
     @Input() setID: number | null = null;
-    words: Set<Word> = new Set<Word>();
+    words: Set<WordInterface> = new Set<WordInterface>();
 
     lastNameLength: number = 0;
-    state: State = State.LANGUAGE_SELECTION;
+    state: State = State.WORD_INPUT;
     isValid: boolean = false
-    relevantWords: Set<Word> = new Set<Word>();
+    relevantWords: Set<WordInterface> = new Set<WordInterface>();
 
     set: VocabularySet | undefined;
 
@@ -55,23 +46,26 @@ export class CreateVocabularyComponent {
         this.getLanguages().subscribe(languages => this.languages = languages);
         this.getVocabularyCategories().subscribe(categories => this.categories = categories);
 
+        /*
         if(this.setID != null) {
             const vocabData = await ApiTools.getVocabJson(this.setID, this.cookieService);
             const parsed = JSON.parse(vocabData);
             this.name.setValue(parsed.name);
             this.description.setValue(parsed.description);
 
-            parsed.vocabulary.forEach((word: WordType) => {
+            parsed.vocabulary.forEach((word: WordInterface) => {
+                this.words.add({word.})
                 this.words.add(new Word(word.id, [], word.question, word.phonetic, word.correct, [], []));
             });
         }
+         */
         this.onInputChange();
         //await this.getRelevantWords();
     }
 
     onInputChange(): void {
         //this.set = new VocabularySet(this.getName(), -1, "", this.getDescription(),
-          //  this.getLanguage(), this.words, this.setID != null);
+        //  this.getLanguage(), this.words, this.setID != null);
         const name = this.name.value;
         const nameLength = name.length;
         this.isValid = false;
@@ -112,7 +106,6 @@ export class CreateVocabularyComponent {
     onCreate(): void {
         if(this.words.size == 0){
             this.feedback = "You need at least one valid word.";
-            console.log("ajo vlastne...");
             return;
         }
 
@@ -140,7 +133,7 @@ export class CreateVocabularyComponent {
     getVocabularyJSON(): { first: string; phonetic: string; second: string }[] {
         const json: { first: string; phonetic: string; second: string }[] = [];
         this.words.forEach(word => {
-            json.push({"first": word.question, "phonetic": word.phonetic, "second": word.correct});
+            json.push({"first": word.first, "phonetic": word.phonetic, "second": word.second});
         });
         return json;
     }

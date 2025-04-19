@@ -2,7 +2,7 @@ import {Component, EventEmitter, Output} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {Mode} from "../../constants";
 import {GameComponent} from "../game-component/game.component";
-import {Word} from "../../../word";
+import {Word} from "../../../Word";
 import {CookieService} from "ngx-cookie";
 
 @Component({

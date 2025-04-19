@@ -1,7 +1,7 @@
 import {Component, EventEmitter, HostListener, Output} from '@angular/core';
 import {GameComponent} from "../game-component/game.component";
 import {BACKEND, Mode} from "../../constants";
-import {Word} from "../../../word";
+import {Word} from "../../../Word";
 import {CookieService} from "ngx-cookie";
 import {Utils} from "../../utils";
 

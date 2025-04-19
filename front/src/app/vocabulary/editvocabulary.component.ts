@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {ActivatedRoute} from '@angular/router';
 import {ApiTools} from "../api-tools";
-import {Word} from "../../word";
+import {Word} from "../../Word";
 import {CookieService} from "ngx-cookie";
 import {VocabularySet} from "../../VocabularySet";
 

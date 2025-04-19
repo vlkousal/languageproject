@@ -22,7 +22,7 @@ export interface Category {
     iconName: string;
 }
 
-export interface Word {
+export interface WordInterface {
     first: string;
     phonetic: string;
     second: string;

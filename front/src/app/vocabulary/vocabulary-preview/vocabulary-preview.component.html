@@ -6,8 +6,8 @@
 <div class="card-grid">
     <div class="card" *ngFor="let word of words">
         <i class="fas fa-trash remove-icon" (click)="removeWord(word)"></i>
-        <div class="card-item"><strong>{{ word.question }}</strong></div>
+        <div class="card-item"><strong>{{ word.first }}</strong></div>
         <div class="card-item">{{ word.phonetic }}</div>
-        <div class="card-item"><strong>{{ word.correct }}</strong></div>
+        <div class="card-item"><strong>{{ word.second }}</strong></div>
     </div>
 </div>

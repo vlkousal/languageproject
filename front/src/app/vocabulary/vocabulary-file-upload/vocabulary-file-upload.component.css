@@ -1,0 +1,25 @@
+.upload-area {
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+    height: 100%;
+    background-color: var(--medium-mint);
+}
+
+.upload-area.dragover {
+    background-color: var(--pastel-mint);
+}
+
+#upload-icon {
+    font-size: 30px;
+}
+
+#upload-icon i {
+    margin-top: 10%;
+    scale: 3;
+}
+
+#delimiter {
+    width: 20px;
+}

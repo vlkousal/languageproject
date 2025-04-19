@@ -1,4 +1,5 @@
-import {Word} from "../word";
+import {WordInterface} from "./constants";
+import {Word} from "../Word";
 
 export class Utils {
 
@@ -46,5 +47,29 @@ export class Utils {
 
     static removeDiacritics(inputString: string): string {
         return inputString.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    static parseTextToVocabulary(content: string, delimiter: string): Set<WordInterface> {
+        const words = new Set<WordInterface>();
+        const lines: string[] = (content + "\n").split("\n");
+
+        for(let i = 0; i < lines.length - 1; i++) {
+            if(!Utils.isValidLine(lines[i], delimiter)) continue;
+            const line: string = lines[i];
+            const first: string = line.split(delimiter)[0].trim();
+            const phonetic: string = line.split(delimiter)[1].trim();
+            const second: string = line.split(delimiter)[2].trim();
+
+            const word: WordInterface = {first, phonetic, second};
+            if(Utils.isValidLine(lines[i], delimiter) && word.first.length != 0 && word.second.length != 0) {
+                words.add(word);
+            }
+        }
+        return words;
+    }
+
+    static isValidLine(line: string, delimiter: string): boolean {
+        const splitLine: string[] = line.split(delimiter);
+        return splitLine.length == 3;
     }
 }

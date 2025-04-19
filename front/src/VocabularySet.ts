@@ -1,4 +1,4 @@
-import {Word} from "./word";
+import {Word} from "./Word";
 import {Mode} from "./app/constants";
 
 export class VocabularySet {
