@@ -43,36 +43,8 @@ export class WordInputComponent {
         this.filteredRelevantWords = this.relevantWords;
     }
 
-    showText() {
-        this.selectedCategory = Category.TEXT
-        this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#F9F8EB");
-        this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#5C8D89");
-        this.renderer.setStyle(this.previewButton.nativeElement, 'background-color', "#5C8D89");
-        this.renderer.setStyle(this.uploadButton.nativeElement, 'background-color', "#5C8D89");
-    }
-
-    showRelevant() {
-        this.selectedCategory = Category.RELEVANT;
-        this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#5C8D89");
-        this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#F9F8EB");
-        this.renderer.setStyle(this.previewButton.nativeElement, 'background-color', "#5C8D89");
-        this.renderer.setStyle(this.uploadButton.nativeElement, 'background-color', "#5C8D89");
-    }
-
-    showTable() {
-        this.selectedCategory = Category.PREVIEW;
-        this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#5C8D89");
-        this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#5C8D89");
-        this.renderer.setStyle(this.previewButton.nativeElement, 'background-color', "#F9F8EB");
-        this.renderer.setStyle(this.uploadButton.nativeElement, 'background-color', "#5C8D89");
-    }
-
-    showUpload(): void {
-        this.selectedCategory = Category.UPLOAD;
-        this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#5C8D89");
-        this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#5C8D89");
-        this.renderer.setStyle(this.previewButton.nativeElement, 'background-color', "#5C8D89");
-        this.renderer.setStyle(this.uploadButton.nativeElement, 'background-color', "#F9F8EB");
+    setActiveCategory(category: Category): void {
+        this.selectedCategory = category;
     }
 
     addWord(word: WordInterface) {

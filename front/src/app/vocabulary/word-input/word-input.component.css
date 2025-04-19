@@ -82,6 +82,11 @@ p {
     font-size: 18px;
 }
 
-.button-with-icon:hover {
-    background-color: #0056b3;
+.button-with-icon.active {
+    background-color: var(--soft-ivory);
+    color: var(--muted-teal);
+}
+
+.button-with-icon.active i {
+    color: var(--muted-teal);
 }

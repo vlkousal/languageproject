@@ -1,22 +1,30 @@
 <div id="container" class="main-layout">
     <div class="side-panel">
-        <button class="button-with-icon" #textButton (click)="showText()">
+        <button class="button-with-icon"
+                [class.active]="selectedCategory === Category.TEXT "
+                (click)="selectedCategory = Category.TEXT">
             <i class="fa-solid fa-pen-nib"></i>
             <span>Write</span>
         </button>
 
-        <button class="button-with-icon" #uploadButton (click)="showUpload()">
-            <i class="fa solid fa-file"></i>
+        <button class="button-with-icon"
+                [class.active]="selectedCategory === Category.UPLOAD"
+                (click)="selectedCategory = Category.UPLOAD">
+            <i class="fa-solid fa-file"></i>
             <span>Upload</span>
         </button>
 
-        <button class="button-with-icon" #relevantButton (click)="showRelevant()">
+        <button class="button-with-icon"
+                [class.active]="selectedCategory === Category.RELEVANT"
+                (click)="selectedCategory = Category.RELEVANT">
             <i class="fa-solid fa-clipboard-list"></i>
             <span>Select</span>
         </button>
 
-        <button class="button-with-icon" #summaryButton (click)="showTable()">
-            <i class="fa solid fa-magnifying-glass"></i>
+        <button class="button-with-icon"
+                [class.active]="selectedCategory === Category.PREVIEW"
+                (click)="selectedCategory = Category.PREVIEW">
+            <i class="fa-solid fa-magnifying-glass"></i>
             <span>Preview</span>
         </button>
 
