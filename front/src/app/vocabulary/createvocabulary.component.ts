@@ -34,7 +34,7 @@ export class CreateVocabularyComponent {
     words: Set<WordInterface> = new Set<WordInterface>();
 
     lastNameLength: number = 0;
-    state: State = State.WORD_INPUT;
+    state: State = State.LANGUAGE_SELECTION;
     isValid: boolean = false
     relevantWords: Set<WordInterface> = new Set<WordInterface>();
 
@@ -114,6 +114,7 @@ export class CreateVocabularyComponent {
             name: this.name.value,
             description: this.description.value,
             language: this.selectedLanguage?.name,
+            category: this.selectedCategory?.name,
             vocabulary: this.getVocabularyJSON()
         }
 

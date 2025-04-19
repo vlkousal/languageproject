@@ -27,15 +27,24 @@ class WordEntry(models.Model):
         return self.word + " - " + self.phonetic + " - " + self.translation
 
 
+class VocabularySetCategory(models.Model):
+    name = models.CharField(max_length=16)
+    fa_icon = models.CharField(max_length=16)
+
+    def __str__(self):
+        return self.name
+
+
 class VocabularySet(models.Model):
     name = models.CharField(max_length=64)
     description = models.CharField(max_length=256)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    language = models.ForeignKey(Language, on_delete=models.CASCADE, related_name="set_first_language")
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
+    category = models.ForeignKey(VocabularySetCategory, on_delete=models.CASCADE)
     vocabulary = models.ManyToManyField(WordEntry)
 
     def __str__(self):
-        return self.name + ", URL: /" + self.url
+        return self.name
 
 
 class WordRecord(models.Model):
@@ -80,10 +89,3 @@ class VocabularyUserRelationship(models.Model):
         saved_status: str = "T" if self.saved else "F"
         return self.set.name + " - " + self.user.username + "(" + saved_status + ")"
 
-
-class VocabularySetCategory(models.Model):
-    name = models.CharField(max_length=16)
-    fa_icon = models.CharField(max_length=16)
-
-    def __str__(self):
-        return self.name

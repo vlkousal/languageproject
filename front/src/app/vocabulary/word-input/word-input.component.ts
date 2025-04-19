@@ -18,16 +18,14 @@ export class WordInputComponent {
 
     @Input() language: Language | null = null;
     @Input() relevantWords: Set<WordInterface> = new Set<WordInterface>();
-    @Input() setID: number | null = null;
     @Input() words: Set<WordInterface> = new Set<WordInterface>();
 
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
     @Output() onContinue: EventEmitter<Set<WordInterface>> = new EventEmitter();
 
-    filter: FormControl<string> = new FormControl("") as FormControl<string>;
     removedFromRelevant: Set<WordInterface> = new Set<WordInterface>();
 
-    selectedCategory: Category = Category.UPLOAD;
+    selectedCategory: Category = Category.TEXT;
 
     textContent: string = "";
     delimiter = new FormControl(DEFAULT_DELIMETER) as FormControl<string>;
@@ -47,7 +45,6 @@ export class WordInputComponent {
 
     showText() {
         this.selectedCategory = Category.TEXT
-        this.filter.setValue("");
         this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#F9F8EB");
         this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#5C8D89");
         this.renderer.setStyle(this.previewButton.nativeElement, 'background-color', "#5C8D89");
@@ -56,7 +53,6 @@ export class WordInputComponent {
 
     showRelevant() {
         this.selectedCategory = Category.RELEVANT;
-        this.filter.setValue("");
         this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#5C8D89");
         this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#F9F8EB");
         this.renderer.setStyle(this.previewButton.nativeElement, 'background-color', "#5C8D89");
@@ -65,7 +61,6 @@ export class WordInputComponent {
 
     showTable() {
         this.selectedCategory = Category.PREVIEW;
-        this.filter.setValue("");
         this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#5C8D89");
         this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#5C8D89");
         this.renderer.setStyle(this.previewButton.nativeElement, 'background-color', "#F9F8EB");
@@ -74,7 +69,6 @@ export class WordInputComponent {
 
     showUpload(): void {
         this.selectedCategory = Category.UPLOAD;
-        this.filter.setValue("");
         this.renderer.setStyle(this.textButton.nativeElement, 'background-color', "#5C8D89");
         this.renderer.setStyle(this.relevantButton.nativeElement, 'background-color', "#5C8D89");
         this.renderer.setStyle(this.previewButton.nativeElement, 'background-color', "#5C8D89");

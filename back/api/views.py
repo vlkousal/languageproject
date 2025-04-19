@@ -367,17 +367,13 @@ def get_vocab(request):
     return Response(data, status=status.HTTP_200_OK)
 
 
-@api_view(["POST", "PUT"])
+@api_view(["POST"])
 def create_vocab(request):
     token: str = request.data.get("token")
     name: str = request.data.get("name")
     description: str = request.data.get("description")
-    vocabulary = request.data.get("vocabulary")
-
-    print(token)
-    print(name)
-    print(description)
-    print(vocabulary)
+    vocabulary: str = request.data.get("vocabulary")
+    category: str = request.data.get("category")
 
     session = Session.objects.get(session_key=token)
     if session is None:
@@ -387,9 +383,10 @@ def create_vocab(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     language = Language.objects.get(name=request.data.get("language"))
+    category: VocabularySetCategory = VocabularySetCategory.objects.get(name=category)
 
     vocab_set = VocabularySet.objects.create(author=user, name=name,
-    description=description, language=language)
+    description=description, language=language, category=category)
 
     set_vocabulary(vocab_set, user, vocabulary)
     return Response("OK", status=status.HTTP_200_OK)
