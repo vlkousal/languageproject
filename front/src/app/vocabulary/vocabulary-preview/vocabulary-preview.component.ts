@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Word} from "../../../word";
 import {Utils} from "../../utils";
 import {FormControl} from "@angular/forms";
@@ -10,11 +10,13 @@ import {FormControl} from "@angular/forms";
 })
 export class VocabularyPreviewComponent {
 
+    @Input() words: Set<Word> = new Set<Word>();
+    @Output() wordsChange = new EventEmitter<Set<Word>>();
+
     filteredWords: Word[] = [];
-    words: Word[] = [];
     wordsFilter: FormControl<string> = new FormControl("") as FormControl<string>;
 
-    onWordsFilterChange() {
+    onWordsFilterChange(): void {
         const filter: string = Utils.removeDiacritics(this.wordsFilter.value);
         if(filter.length != 0) {
             this.filteredWords = [];
@@ -28,6 +30,10 @@ export class VocabularyPreviewComponent {
             })
             return;
         }
-        this.filteredWords = this.words;
+    }
+
+    removeWord(word: Word): void {
+        this.words.delete(word);
+        this.wordsChange.emit(this.words);
     }
 }

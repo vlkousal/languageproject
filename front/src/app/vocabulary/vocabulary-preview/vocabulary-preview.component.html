@@ -1,21 +1,13 @@
 <div class="filter">
-    <label for="filter">Filter: </label>
+    <label>Filter: </label>
     <input (input)="onWordsFilterChange()" id="wordsFilter" type="text" [formControl]="wordsFilter" style="width: 128px">
 </div>
 
-<div class="table-container">
-    <table>
-        <tr>
-            <th>First</th>
-            <th>Phonetic</th>
-            <th>Second</th>
-            <th>Action</th>
-        </tr>
-        <tr *ngFor="let word of filteredWords">
-            <td>{{ word.question }}</td>
-            <td>{{ word.phonetic }}</td>
-            <td>{{ word.correct }}</td>
-            <td><button (click)="removeWord(word)" style="background-color: #ea6161">Remove</button></td>
-        </tr>
-    </table>
+<div class="card-grid">
+    <div class="card" *ngFor="let word of words">
+        <i class="fas fa-trash remove-icon" (click)="removeWord(word)"></i>
+        <div class="card-item"><strong>{{ word.question }}</strong></div>
+        <div class="card-item">{{ word.phonetic }}</div>
+        <div class="card-item"><strong>{{ word.correct }}</strong></div>
+    </div>
 </div>

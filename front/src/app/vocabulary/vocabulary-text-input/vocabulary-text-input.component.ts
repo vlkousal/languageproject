@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Word} from "../../../word";
 import {FormControl} from "@angular/forms";
 import {DEFAULT_DELIMETER} from "../../constants";
@@ -10,9 +10,23 @@ import {DEFAULT_DELIMETER} from "../../constants";
 })
 export class VocabularyTextInputComponent {
 
+    @Input() words: Set<Word> = new Set<Word>();
+    @Output() wordsChange = new EventEmitter<Set<Word>>();
+
     delimiter: FormControl<string> = new FormControl(DEFAULT_DELIMETER) as FormControl<string>;
     content: string = "";
-    words: Set<Word> = new Set<Word>();
+
+    ngOnInit(): void {
+        this.writeCurrentWords();
+    }
+
+    writeCurrentWords(): void {
+        for(const word of this.words.values()) {
+            const delimiter = this.delimiter.value;
+            const wordString = word.question + delimiter + word.phonetic + delimiter + word.correct + "\n";
+            this.content += wordString;
+        }
+    }
 
     onInputChange(): void {
         this.words = new Set<Word>();
@@ -32,6 +46,7 @@ export class VocabularyTextInputComponent {
                 }
             }
         }
+        this.wordsChange.emit(this.words);
     }
 
     isValidLine(line: string): boolean {

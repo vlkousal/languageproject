@@ -1,0 +1,43 @@
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    padding: 16px;
+}
+
+.card-item {
+    margin-bottom: 8px;
+}
+
+.remove-button {
+    background-color: #ea6161;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.remove-button:hover {
+    background-color: #c94a4a;
+}
+
+.card {
+    position: relative;
+    background-color: var(--pastel-mint);
+    border: 2px solid var(--muted-teal);
+    border-radius: 8px;
+    padding: 4px 4px 4px 4px;
+}
+
+.remove-icon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: #ea6161;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.remove-icon:hover {
+    color: #c94a4a;
+}

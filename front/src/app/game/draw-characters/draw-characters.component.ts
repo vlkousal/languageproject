@@ -77,7 +77,6 @@ export class DrawCharactersComponent extends GameComponent {
                 ];
                 const choice: number = Utils.getRandomInteger(0, 3);
                 const randomOption: Coordinates = options[choice];
-                console.log(randomOption);
                 context.clearRect(randomOption.startX, randomOption.startY, randomOption.endX, randomOption.endY);
             }
         }

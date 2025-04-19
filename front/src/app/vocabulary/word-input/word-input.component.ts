@@ -17,7 +17,6 @@ enum Category {
 })
 export class WordInputComponent {
 
-    @Input() set: VocabularySet | undefined;
     @Input() language: Language | null = null;
     @Input() relevantWords: Set<Word> = new Set<Word>();
     @Input() setID: number | null = null;
@@ -28,6 +27,8 @@ export class WordInputComponent {
     removedFromRelevant: Set<Word> = new Set<Word>();
 
     selectedCategory: Category = Category.TEXT;
+
+    words: Set<Word> = new Set<Word>();
 
     textContent: string = "";
     delimiter = new FormControl(DEFAULT_DELIMETER) as FormControl<string>;
@@ -42,13 +43,6 @@ export class WordInputComponent {
 
     ngOnInit(): void {
         this.filteredRelevantWords = this.relevantWords;
-        const delimiter: string = this.delimiter.value;
-
-        if(this.set != null) {
-            this.set.words.forEach((word: Word) => {
-                this.textContent += word.question + delimiter + word.phonetic + delimiter + word.correct + "\n";
-            });
-        }
     }
 
     showText() {
@@ -76,8 +70,6 @@ export class WordInputComponent {
     }
 
     addWord(word: Word) {
-        if(this.set == undefined || this.set.words.includes(word)) return;
-
         const delimeter = this.delimiter.value;
         if(this.textContent.charAt(this.textContent.length - 1) != "\n" &&
             this.textContent.charAt(this.textContent.length - 1) != "") {
@@ -86,23 +78,6 @@ export class WordInputComponent {
         this.textContent += word.question + delimeter + word.phonetic + delimeter + word.correct + "\n";
         this.removedFromRelevant.add(word);
         this.relevantWords.delete(word);
-    }
-
-    removeWord(word: Word) {
-        const delimiter: string = this.delimiter.value;
-        const lines: string[] = this.textContent.split("\n");
-        const line: string = word.question + delimiter + word.phonetic + delimiter + word.correct;
-        this.textContent = "";
-        lines.forEach( (l) => {
-            if(l != line && l != "") {
-                this.textContent += l + "\n";
-            }
-        })
-
-        if(Word.containsWord(this.removedFromRelevant, word)) {
-            this.removedFromRelevant.delete(word);
-            this.relevantWords.add(word);
-        }
     }
 
     protected readonly Category = Category;
