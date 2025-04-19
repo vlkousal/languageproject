@@ -1,7 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild} from '@angular/core';
 import {Word} from "../../../word";
 import {FormControl} from "@angular/forms";
-import {VocabularySet} from "../../../VocabularySet";
 import {DEFAULT_DELIMETER, Language} from "../../constants";
 
 enum Category {
@@ -20,15 +19,15 @@ export class WordInputComponent {
     @Input() language: Language | null = null;
     @Input() relevantWords: Set<Word> = new Set<Word>();
     @Input() setID: number | null = null;
+    @Input() words: Set<Word> = new Set<Word>();
 
     @Output() onGoBack: EventEmitter<void> = new EventEmitter();
+    @Output() onContinue: EventEmitter<Set<Word>> = new EventEmitter();
 
     filter: FormControl<string> = new FormControl("") as FormControl<string>;
     removedFromRelevant: Set<Word> = new Set<Word>();
 
     selectedCategory: Category = Category.TEXT;
-
-    words: Set<Word> = new Set<Word>();
 
     textContent: string = "";
     delimiter = new FormControl(DEFAULT_DELIMETER) as FormControl<string>;

@@ -20,7 +20,6 @@ enum State {
     CATEGORY_SELECTION = 1,
     WORD_INPUT = 2,
     NAME_PAGE = 3,
-    SUMMARY = 4
 }
 
 @Component({
@@ -41,10 +40,10 @@ export class CreateVocabularyComponent {
     description : FormControl<string> = new FormControl("") as FormControl<string>;
 
     @Input() setID: number | null = null;
-    words: Word[] = [];
+    words: Set<Word> = new Set<Word>();
 
     lastNameLength: number = 0;
-    state: State = State.WORD_INPUT;
+    state: State = State.LANGUAGE_SELECTION;
     isValid: boolean = false
     relevantWords: Set<Word> = new Set<Word>();
 
@@ -63,21 +62,12 @@ export class CreateVocabularyComponent {
             this.description.setValue(parsed.description);
 
             parsed.vocabulary.forEach((word: WordType) => {
-                this.words.push(new Word(word.id, [], word.question, word.phonetic, word.correct, [], []));
+                this.words.add(new Word(word.id, [], word.question, word.phonetic, word.correct, [], []));
             });
         }
         this.onInputChange();
         //await this.getRelevantWords();
     }
-
-    getSelectedLanguage(language: Language): void {
-        this.selectedLanguage = language;
-    }
-
-    getSelectedCategory(category: Category): void {
-        this.selectedCategory = category;
-    }
-
 
     onInputChange(): void {
         //this.set = new VocabularySet(this.getName(), -1, "", this.getDescription(),
@@ -105,10 +95,6 @@ export class CreateVocabularyComponent {
     }
      */
 
-    checkNamePage(): void {
-        if(this.isValid) this.state = State.WORD_INPUT;
-    }
-
     getLanguages(): Observable<Language[]> {
         return this.http.get<{ languages: Language[] }>(`${BACKEND}api/getlanguages/`)
             .pipe(
@@ -121,6 +107,42 @@ export class CreateVocabularyComponent {
             .pipe(
                 map(response => response.categories)
             );
+    }
+
+    onCreate(): void {
+        if(this.words.size == 0){
+            this.feedback = "You need at least one valid word.";
+            console.log("ajo vlastne...");
+            return;
+        }
+
+        const json = {
+            token: this.cookieService.get("token"),
+            name: this.name.value,
+            description: this.description.value,
+            language: this.selectedLanguage?.name,
+            vocabulary: this.getVocabularyJSON()
+        }
+
+        fetch(BACKEND + "api/createvocab/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(json),
+        }).then(async response => {
+            if(response.ok) {
+                return;
+            }
+        })
+    }
+
+    getVocabularyJSON(): { first: string; phonetic: string; second: string }[] {
+        const json: { first: string; phonetic: string; second: string }[] = [];
+        this.words.forEach(word => {
+            json.push({"first": word.question, "phonetic": word.phonetic, "second": word.correct});
+        });
+        return json;
     }
 
     protected readonly State = State;

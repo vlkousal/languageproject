@@ -374,6 +374,11 @@ def create_vocab(request):
     description: str = request.data.get("description")
     vocabulary = request.data.get("vocabulary")
 
+    print(token)
+    print(name)
+    print(description)
+    print(vocabulary)
+
     session = Session.objects.get(session_key=token)
     if session is None:
         return Response(status=status.HTTP_400_BAD_REQUEST)

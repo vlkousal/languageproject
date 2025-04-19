@@ -22,4 +22,10 @@ export interface Category {
     iconName: string;
 }
 
+export interface Word {
+    first: string;
+    phonetic: string;
+    second: string;
+}
+
 export const DEFAULT_DELIMETER = ",";

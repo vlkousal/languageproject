@@ -22,7 +22,7 @@
 
 	<div id="bottom-panel">
 		<i id="left-arrow" class="fas fa-arrow-left" (click)="onGoBack.emit()"></i>
-		<button *ngIf="!set.isOwn" (click)="onCreate()">Create</button>
+		<button *ngIf="!set.isOwn">Create</button>
 		<button *ngIf="set.isOwn" (click)="onEdit()">Edit</button>
 	</div>
 </div>

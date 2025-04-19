@@ -13,7 +13,7 @@ export class LanguageSelectionComponent {
     selectedLanguage: Language | null = null;
 
     @Output()
-    onContinue = new EventEmitter<Language>();
+    onContinue: EventEmitter<Language> = new EventEmitter<Language>();
 
     goNext(): void {
         if(this.selectedLanguage != null) this.onContinue.emit(this.selectedLanguage);

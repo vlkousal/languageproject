@@ -1,9 +1,13 @@
 <div id="container" class="main-layout">
-
     <div class="side-panel">
         <button class="button-with-icon" #textButton (click)="showText()">
             <i class="fa-solid fa-pen-nib"></i>
             <span>Write</span>
+        </button>
+
+        <button class="button-with-icon" #uploadButton>
+            <i class="fa solid fa-file"></i>
+            <span>Upload</span>
         </button>
 
         <button class="button-with-icon" #relevantButton (click)="showRelevant()">
@@ -17,7 +21,7 @@
         </button>
 
         <i class="fas fa-arrow-left" (click)="onGoBack.emit()"></i>
-        <i class="fas fa-arrow-right" (click)="console.log('XD')"></i>
+        <i class="fas fa-arrow-right" (click)="onContinue.emit(words)"></i>
     </div>
 
     <app-vocabulary-text-input *ngIf="selectedCategory == Category.TEXT" style="width: 100%; height: 100%;"
